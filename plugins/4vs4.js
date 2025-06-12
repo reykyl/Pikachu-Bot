@@ -1,59 +1,29 @@
-const partidas = {};
+import makeWASocket, { useMultiFileAuthState } from '@whiskeysockets/baileys';
+import P from 'pino';
 
-const EMOJI_TITULAR = '❤️';
-const EMOJI_SUPLENTE = '👍';
-const MAX_TITULARES = 4;
-const MAX_SUPLENTES = 2;
+const { state, saveCreds } = await useMultiFileAuthState('auth');
 
-function generarMensaje(titulares, suplentes) {
-    const t = titulares.map((u, i) => `${i === 0 ? '👑' : '🥷🏻'} ┇ @${u.split('@')[0]}`);
-    const s = suplentes.map(u => `🥷🏻 ┇ @${u.split('@')[0]}`);
-    while (t.length < MAX_TITULARES) t.push('🥷🏻 ┇');
-    while (s.length < MAX_SUPLENTES) s.push('🥷🏻 ┇');
-    return `
-╭──────⚔──────╮
-           4 𝐕𝐒 4 
-           *COMPE*
-╰──────⚔──────╯
+const sock = makeWASocket({
+  printQRInTerminal: true,
+  auth: state,
+  logger: P({ level: 'silent' }),
+});
 
-𝗘𝗦𝗖𝗨𝗔𝗗𝗥𝗔 1
+sock.ev.on('creds.update', saveCreds);
 
-${t.join('\n')}
+// Captura reacciones
+sock.ev.on('messages.reaction', async (reaction) => {
+  const emoji = reaction.text;
+  const user = reaction.key.participant;
+  const msgId = reaction.key.id;
+  const chat = reaction.key.remoteJid;
 
-ㅤʚ 𝐒𝐔𝐏𝐋𝐄𝐍𝐓𝐄:
-${s.join('\n')}
+  console.log(`🔥 Reacción detectada: ${emoji} de ${user} en ${chat} sobre mensaje ${msgId}`);
 
-*Reacciona con:*
-❤️ para titular
-👍 para suplente`.trim();
-}
-
-const handler = async (m, { conn }) => {
-    if (!m.isGroup) throw 'Este comando solo funciona en grupos.';
-
-    const chat = m.chat;
-    partidas[chat] = {
-        titulares: [],
-        suplentes: [],
-        finalizado: false,
-        msgId: null,
-        msgKey: null
-    };
-
-    const texto = generarMensaje([], []);
-    const enviado = await conn.sendMessage(chat, {
-        text: texto,
-        mentions: [],
-    });
-
-    partidas[chat].msgId = enviado.key.id;
-    partidas[chat].msgKey = enviado.key;
-};
-
-handler.help = ['4vs4'];
-handler.tags = ['V/S'];
-handler.command = ['4vs4'];
-handler.group = true;
-
-export default handler;
-export { partidas, EMOJI_TITULAR, EMOJI_SUPLENTE, MAX_TITULARES, MAX_SUPLENTES, generarMensaje };
+  // ✉️ Enviar respuesta en el mismo chat
+  const texto = `Recibí tu reacción ${emoji}, @${user.split('@')[0]} 👀`;
+  await sock.sendMessage(chat, {
+    text: texto,
+    mentions: [user]
+  });
+});
