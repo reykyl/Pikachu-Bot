@@ -50,9 +50,9 @@ const handler = async (m, { conn }) => {
     partidas[chat].msgKey = enviado.key;
 };
 
-handler.help = ['compe'];
-handler.tags = ['group'];
-handler.command = ['compe'];
+handler.help = ['4vs4'];
+handler.tags = ['V/S'];
+handler.command = ['4vs4'];
 handler.group = true;
 
 export default handler;
