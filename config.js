@@ -18,13 +18,6 @@ global.confirmCode = ''
 
 global.owner = [
   ['50433191934', '🜲 Propietario 🜲', true],
-  ['573154062343', 'https', true],
-  ['59169739411'],
-  ['5216633900512', 'BrayanOFC', true],
-  ['584146277368', 'Barboza', true],
-  ['51920227615', 'ᴬⁿᵍᵉˡⁱᵗʰᵒ ᵒᶠⁱᶜⁱᵃˡ', true],
-  ['584123989549', 'anuar', true],
-  ['526633900512', '👻desconocido', true],
 ];
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
 
@@ -39,8 +32,8 @@ global.baileys = '@whiskeysockets/baileys'
 global.languaje = 'Español'
 global.vs = '2.2.0'
 global.vsJB = '5.0'
-global.nameqr = '𝕂𝕚𝕣𝕚𝕥𝕠 𝕓𝕠𝕥 𝕄𝔻'
-global.namebot = '𝐤𝐢𝐫𝐢𝐭𝐨 𝐌𝐃'
+global.nameqr = 'pikachu-Bot'
+global.namebot = 'pikachu-Bit'
 global.sessions = 'Sessions'
 global.jadi = 'JadiBots' 
 global.kiritoJadibts = true
