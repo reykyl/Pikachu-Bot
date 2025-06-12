@@ -486,11 +486,10 @@ return false
 
 import handleReaction from './lib/reaction-listener.js';
 
-conn.ev.on('messages.reaction', async ({ reaction }) => {
-  const emoji = reaction.text;
-  const user = reaction.key.participant;
-  const msgId = reaction.key.id;
-  const chat = reaction.key.remoteJid;
-
-  handleReaction({ conn, emoji, user, chat, msgId });
+// En el evento de reacciones (esto depende de tu framework de Baileys):
+conn.ev.on('messages.reaction', async (reaction) => {
+  const { key, sender, reaction: emoji } = reaction;
+  const chat = key.remoteJid;
+  const msgId = key.id;
+  await handleReaction({ conn, emoji, user: sender, chat, msgId });
 });
