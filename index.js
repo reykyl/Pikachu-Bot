@@ -481,16 +481,16 @@ return phoneUtil.isValidNumber(parsedNumber)
 return false
 }}
 
-conn.ev.on('messages.reaction', async ({ key, reaction, messageID, text }) => {
-  const emoji = text;
-  const user = key.participant;
-  const chat = key.remoteJid;
-  const msgId = key.id;
 
-  console.log(`🔥 Reacción detectada: ${emoji} de ${user} en ${chat} sobre mensaje ${msgId}`);
 
-  // Puedes importar tu lógica personalizada desde un plugin aquí
-  import('./lib/reaction-listener.js').then(mod => {
-    mod.default({ conn, emoji, user, chat, msgId });
-  });
+
+import handleReaction from './lib/reaction-listener.js';
+
+conn.ev.on('messages.reaction', async ({ reaction }) => {
+  const emoji = reaction.text;
+  const user = reaction.key.participant;
+  const msgId = reaction.key.id;
+  const chat = reaction.key.remoteJid;
+
+  handleReaction({ conn, emoji, user, chat, msgId });
 });
