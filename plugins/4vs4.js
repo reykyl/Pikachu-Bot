@@ -21,8 +21,8 @@ function generarMensaje(titulares = [], suplentes = []) {
 const handler = async (m, { conn }) => {
   const chat = m.chat;
 
-  if (partidas[chat] && !partidas[chat].finalizado) {
-    return m.reply('⚠️ Ya hay una partida en curso en este chat.');
+  //if (partidas[chat] && !partidas[chat].finalizado) {
+    //return m.reply('⚠️ Ya hay una partida en curso en este chat.');
   }
 
   const titulares = [];
