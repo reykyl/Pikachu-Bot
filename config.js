@@ -14,8 +14,7 @@ import moment from 'moment-timezone';
 // ┃╰━╯┃┃━╋━━┃┃┃┃┃╰━╯┃╭╮┃┃╭╮┫╭╮┃┃
 // ╰━━━┻━━┻━━┻╯╰╯╰━━━┻╯╰┻┻╯╰┻╯╰┻╯
 
-/* BETA: Para evitar escribir el número del bot manualmente.
-   Aplica sólo para opción 2 (código de texto de 8 dígitos). */
+
 global.botNumberCode = ' 50488198573'; // Ej: +573218138672
 global.confirmCode = '';
 
