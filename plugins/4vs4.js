@@ -14,27 +14,17 @@ function generarMensaje(titulares = [], suplentes = []) {
   return `*╭━[ 𝙋𝘼𝙍𝙏𝙄𝘿𝘼 𝟰𝙫𝟰 - 𝐂𝐎𝐌𝐏𝐄 ]━⬣*\n\n` +
          `*📌 Titulares:*\n${lista(titulares, MAX_TITULARES)}\n\n` +
          `*📌 Suplentes:*\n${lista(suplentes, MAX_SUPLENTES)}\n\n` +
-         `❤️ = Titular\n👍 = Suplente\n\n` +
+         `${EMOJI_TITULAR} = Titular\n${EMOJI_SUPLENTE} = Suplente\n\n` +
          `*Esperando reacciones...*`;
 }
 
 const handler = async (m, { conn }) => {
   const chat = m.chat;
-
-  // Descomenta si quieres evitar múltiples partidas
-  // if (partidas[chat] && !partidas[chat].finalizado) {
-  //   return m.reply('⚠️ Ya hay una partida en curso en este chat.');
-  // }
-
   const titulares = [];
   const suplentes = [];
 
   const texto = generarMensaje(titulares, suplentes);
-
-  const enviado = await conn.sendMessage(chat, {
-    text: texto,
-    mentions: [],
-  });
+  const enviado = await conn.sendMessage(chat, { text: texto, mentions: [] });
 
   partidas[chat] = {
     msgId: enviado.key.id,
@@ -52,5 +42,13 @@ handler.help = ['4vs4'];
 handler.tags = ['juegos'];
 handler.command = ['4vs4'];
 
-export { partidas, EMOJI_TITULAR, EMOJI_SUPLENTE, MAX_TITULARES, MAX_SUPLENTES, generarMensaje };
+export {
+  partidas,
+  EMOJI_TITULAR,
+  EMOJI_SUPLENTE,
+  MAX_TITULARES,
+  MAX_SUPLENTES,
+  generarMensaje,
+};
+
 export default handler;
