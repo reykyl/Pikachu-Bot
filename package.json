@@ -18,16 +18,16 @@
 "eslint": "eslint .",
 "eslintfix": "eslint --fix ."
 },
-"homepage": "https://github.com/deylin-eliac/Kirito-Bot-MD",
+"homepage": "https://github.com/Deylin-Eliac/Pikachu-Bot",
 "author": {
 "name": "Deylin"
 },
 "repository": {
 "type": "git",
-"url": "git+https://github.com/deylin-eliac/Kirito-Bot-MD.git"
+"url": "git+https://github.com/Deylin-Eliac/Pikachu-Bot.git"
 },
 "bugs": {
-"url": "https://github.com/deylin-eliac/Kirito-Bot-MD/issues"
+"url":https://github.com/Deylin-Eliac/Pikachu-Bot/issues"
 },
 "license": "GPL-3.0-or-later",
 "dependencies": {
