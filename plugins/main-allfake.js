@@ -110,8 +110,8 @@ global.fake = { contextInfo: { isForwarded: true, forwardedNewsletterMessageInfo
 
 
 global.icono = [ 
-'https://files.catbox.moe/8qtxyw.jpg',
-'https://files.catbox.moe/kgq1br.jpg'
+'https://kirito-bot-md.vercel.app/IMG-20250606-WA0167.jpg',
+'https://kirito-bot-md.vercel.app/catalogo.jpg'
 ].getRandom()
 
 global.rcanal = { contextInfo: { isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: channelRD.id, serverMessageId: 100, newsletterName: channelRD.name, }, externalAdReply: { showAdAttribution: true, title: packname, body: dev, mediaUrl: null, description: null, previewType: "PHOTO", thumbnailUrl: icono, sourceUrl: redes, mediaType: 1, renderLargerThumbnail: false }, }, }}
