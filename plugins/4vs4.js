@@ -63,9 +63,9 @@ const handler = async (msg, { conn, args }) => {
   await conn.sendMessage(chatId, { react: { text: '🎮', key: msg.key } });
 
   const participantes = meta.participants.filter(p => p.id !== conn.user.id);
-  if (participantes.length < 12) {
+  if (participantes.length < 2) {
     return conn.sendMessage(chatId, {
-      text: "⚠️ Se necesitan al menos *12 usuarios* para formar 2 escuadras y suplentes."
+      text: "⚠️ Se necesitan al menos *2 usuarios* para formar 2 escuadras y suplentes."
     }, { quoted: msg });
   }
 
