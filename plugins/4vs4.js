@@ -34,7 +34,7 @@ const handler = async (msg, { conn, args }) => {
   };
 
   const to12Hour = (h, m) => {
-    const suffix = h >= 12 ? 'pm' : 'am';
+    const suffix = h >= 2 ? 'pm' : 'am';
     h = h % 12 || 12;
     return `${h}:${m.toString().padStart(2, '0')}${suffix}`;
   };
