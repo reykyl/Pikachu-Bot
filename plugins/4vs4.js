@@ -51,5 +51,5 @@ handler.help = ['4vs4'];
 handler.tags = ['juegos'];
 handler.command = ['4vs4'];
 
-export { partidas, EMOJI_TITULAR, EMOJI_SUPLENTE, MAX_TITULARES, MAX_SUPLENTES, generarMensaje };
-export default handler;
+await conn.sendMessage(chat, { react: { text: EMOJI_TITULAR, key: enviado.key } });
+await conn.sendMessage(chat, { react: { text: EMOJI_SUPLENTE, key: enviado.key } });
