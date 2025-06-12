@@ -30,7 +30,7 @@ ${s.join('\n')}
 👍 para suplente`.trim();
 }
 
-// Comando .compe
+// Comando .4vs4
 const handler = async (m, { conn }) => {
     if (!m.isGroup) throw 'Este comando solo funciona en grupos.';
 
@@ -44,7 +44,10 @@ const handler = async (m, { conn }) => {
     };
 
     const texto = generarMensaje([], []);
-    const enviado = await conn.sendMessage(chat, { text: texto });
+    const enviado = await conn.sendMessage(chat, {
+        text: texto,
+        mentions: [],
+    });
 
     partidas[chat].msgId = enviado.key.id;
     partidas[chat].msgKey = enviado.key;
@@ -57,45 +60,5 @@ handler.group = true;
 
 export default handler;
 
-// Middleware de reacciones (funciona como before.js o listener global)
-export async function before(m, { conn }) {
-    if (!m.isGroup || !m.messageStubType) return;
-
-    const chat = m.key.remoteJid;
-    const id = m.key.id;
-    const emoji = m.messageStubParameters?.[0];
-    const user = m.participant;
-
-    const partida = partidas[chat];
-    if (!partida || partida.msgId !== id || partida.finalizado) return;
-    if (!emoji || (emoji !== EMOJI_TITULAR && emoji !== EMOJI_SUPLENTE)) return;
-
-    const yaEnLista = partida.titulares.includes(user) || partida.suplentes.includes(user);
-    if (yaEnLista) return;
-
-    if (emoji === EMOJI_TITULAR && partida.titulares.length < MAX_TITULARES) {
-        partida.titulares.push(user);
-    } else if (emoji === EMOJI_SUPLENTE && partida.suplentes.length < MAX_SUPLENTES) {
-        partida.suplentes.push(user);
-    } else {
-        return; // No se puede agregar más
-    }
-
-    const completo = partida.titulares.length === MAX_TITULARES && partida.suplentes.length === MAX_SUPLENTES;
-    if (completo) {
-        partida.finalizado = true;
-        return; // No se borra ni se manda nuevo mensaje
-    }
-
-    // Borrar mensaje anterior
-    await conn.sendMessage(chat, { delete: partida.msgKey });
-
-    const texto = generarMensaje(partida.titulares, partida.suplentes);
-    const enviado = await conn.sendMessage(chat, {
-        text: texto,
-        mentions: [...partida.titulares, ...partida.suplentes]
-    });
-
-    partida.msgId = enviado.key.id;
-    partida.msgKey = enviado.key;
-}
+// Exportamos partidas para el listener
+export { partidas, EMOJI_TITULAR, EMOJI_SUPLENTE, MAX_TITULARES, MAX_SUPLENTES, generarMensaje };
