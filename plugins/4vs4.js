@@ -8,14 +8,12 @@ const MAX_SUPLENTES = 2;
 function generarMensaje(titulares, suplentes) {
     const t = titulares.map((u, i) => `${i === 0 ? '👑' : '🥷🏻'} ┇ @${u.split('@')[0]}`);
     const s = suplentes.map(u => `🥷🏻 ┇ @${u.split('@')[0]}`);
-
-    while (t.length < MAX_TITULARES) t.push('⚡ ┇');
-    while (s.length < MAX_SUPLENTES) s.push('⚡ ┇');
-
+    while (t.length < MAX_TITULARES) t.push('🥷🏻 ┇');
+    while (s.length < MAX_SUPLENTES) s.push('🥷🏻 ┇');
     return `
 ╭──────⚔──────╮
-           4 𝐕𝐄𝐑𝐒𝐔𝐒 4 
-              *COMPE*
+           4 𝐕𝐒 4 
+           *COMPE*
 ╰──────⚔──────╯
 
 𝗘𝗦𝗖𝗨𝗔𝗗𝗥𝗔 1
@@ -30,7 +28,6 @@ ${s.join('\n')}
 👍 para suplente`.trim();
 }
 
-// Comando .4vs4
 const handler = async (m, { conn }) => {
     if (!m.isGroup) throw 'Este comando solo funciona en grupos.';
 
@@ -59,6 +56,4 @@ handler.command = ['4vs4'];
 handler.group = true;
 
 export default handler;
-
-// Exportamos partidas para el listener
 export { partidas, EMOJI_TITULAR, EMOJI_SUPLENTE, MAX_TITULARES, MAX_SUPLENTES, generarMensaje };
