@@ -21,9 +21,10 @@ function generarMensaje(titulares = [], suplentes = []) {
 const handler = async (m, { conn }) => {
   const chat = m.chat;
 
-  //if (partidas[chat] && !partidas[chat].finalizado) {
-    //return m.reply('⚠️ Ya hay una partida en curso en este chat.');
-  }
+  // Descomenta si quieres evitar múltiples partidas
+  // if (partidas[chat] && !partidas[chat].finalizado) {
+  //   return m.reply('⚠️ Ya hay una partida en curso en este chat.');
+  // }
 
   const titulares = [];
   const suplentes = [];
@@ -44,7 +45,8 @@ const handler = async (m, { conn }) => {
   };
 
   await conn.sendMessage(chat, { react: { text: EMOJI_TITULAR, key: enviado.key } });
-await conn.sendMessage(chat, { react: { text: EMOJI_SUPLENTE, key: enviado.key } });
+  await conn.sendMessage(chat, { react: { text: EMOJI_SUPLENTE, key: enviado.key } });
+};
 
 handler.help = ['4vs4'];
 handler.tags = ['juegos'];
