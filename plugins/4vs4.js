@@ -1,10 +1,10 @@
-export const partidas = {};
-export const EMOJI_TITULAR = '❤️';
-export const EMOJI_SUPLENTE = '👍';
-export const MAX_TITULARES = 4;
-export const MAX_SUPLENTES = 4;
+const partidas = {};
+const EMOJI_TITULAR = '❤️';
+const EMOJI_SUPLENTE = '👍';
+const MAX_TITULARES = 4;
+const MAX_SUPLENTES = 4;
 
-export function generarMensaje(titulares = [], suplentes = []) {
+function generarMensaje(titulares = [], suplentes = []) {
   const lista = (arr, total) =>
     Array.from({ length: total }, (_, i) => {
       const user = arr[i];
@@ -18,42 +18,38 @@ export function generarMensaje(titulares = [], suplentes = []) {
          `*Esperando reacciones...*`;
 }
 
-export default {
-  command: ['4vs4'],
-  tags: ['juegos'],
-  help: ['4vs4'],
-  description: 'Organiza partida 4 vs 4',
-  async handler(m, { conn }) {
-    const chat = m.chat;
+const handler = async (m, { conn }) => {
+  const chat = m.chat;
 
-    if (partidas[chat] && !partidas[chat].finalizado) {
-      return m.reply('⚠️ Ya hay una partida en curso en este chat.');
-    }
-
-    const titulares = [];
-    const suplentes = [];
-
-    const texto = generarMensaje(titulares, suplentes);
-
-    const enviado = await conn.sendMessage(chat, {
-      text: texto,
-      mentions: [],
-    });
-
-    partidas[chat] = {
-      msgId: enviado.key.id,
-      msgKey: enviado.key,
-      titulares,
-      suplentes,
-      finalizado: false,
-    };
-
-    // Opcional: agregar automáticamente las reacciones al mensaje inicial
-    await conn.sendMessage(chat, {
-      react: { text: EMOJI_TITULAR, key: enviado.key }
-    });
-    await conn.sendMessage(chat, {
-      react: { text: EMOJI_SUPLENTE, key: enviado.key }
-    });
+  if (partidas[chat] && !partidas[chat].finalizado) {
+    return m.reply('⚠️ Ya hay una partida en curso en este chat.');
   }
+
+  const titulares = [];
+  const suplentes = [];
+
+  const texto = generarMensaje(titulares, suplentes);
+
+  const enviado = await conn.sendMessage(chat, {
+    text: texto,
+    mentions: [],
+  });
+
+  partidas[chat] = {
+    msgId: enviado.key.id,
+    msgKey: enviado.key,
+    titulares,
+    suplentes,
+    finalizado: false,
+  };
+
+  await conn.sendMessage(chat, { react: { text: EMOJI_TITULAR, key: enviado.key } });
+  await conn.sendMessage(chat, { react: { text: EMOJI_SUPLENTE, key: enviado.key } });
 };
+
+handler.help = ['4vs4'];
+handler.tags = ['juegos'];
+handler.command = ['4vs4'];
+
+export { partidas, EMOJI_TITULAR, EMOJI_SUPLENTE, MAX_TITULARES, MAX_SUPLENTES, generarMensaje };
+export default handler;
