@@ -490,7 +490,7 @@ conn.ev.on('messages.reaction', async ({ key, reaction, messageID, text }) => {
   console.log(`🔥 Reacción detectada: ${emoji} de ${user} en ${chat} sobre mensaje ${msgId}`);
 
   // Puedes importar tu lógica personalizada desde un plugin aquí
-  import('./plugins/reaccion-handler.js').then(mod => {
+  import('./lib/reaction-listener.js').then(mod => {
     mod.default({ conn, emoji, user, chat, msgId });
   });
 });
