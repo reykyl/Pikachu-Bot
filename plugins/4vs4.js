@@ -19,7 +19,7 @@ const MAX_SUPLENTES = 2;
 function generarMensaje(titulares, suplentes) {
     const t = titulares.map((u, i) => `${i === 0 ? '⚡' : '🥷🏻'} ┇ @${u.split('@')[0]}`);
     const s = suplentes.map(u => `🥷🏻 ┇ @${u.split('@')[0]}`);
-    while (t.length < MAX_TITULARES) t.push('🥷🏻 ┇');
+    while (t.length < MAX_TITULARES) t.push('⚡ ┇');
     while (s.length < MAX_SUPLENTES) s.push('🥷🏻 ┇');
     return `
 ╭──────⚔──────╮
