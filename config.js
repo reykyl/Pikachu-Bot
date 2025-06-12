@@ -59,7 +59,7 @@ global.gp1 = 'https://chat.whatsapp.com/F8KwM3rVqkS9HhR5msoRqQ';
 global.comunidad1 = global.gp1;
 global.channel = 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m';
 global.channel2 = 'https://whatsapp.com/channel/0029VayQwPsFnSzESZJ9Us3z';
-global.md = 'https://github.com/Deylin-Eliac/Kirito-Bot-MD';
+global.md = 'https://github.com/Deylin-Eliac/Pikachu-Bot';
 global.correo = 'deylibaquedano801@gmail.com';
 global.cn = global.channel;
 
