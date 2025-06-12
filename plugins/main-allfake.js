@@ -1,4 +1,3 @@
-// 📦 Importaciones
 import pkg from '@whiskeysockets/baileys'
 import fs from 'fs'
 import fetch from 'node-fetch'
@@ -9,7 +8,6 @@ const { generateWAMessageFromContent, prepareWAMessageMedia, proto } = pkg
 var handler = m => m
 handler.all = async function (m) {
 
-// 🌐 Función Global para obtener Buffers
 global.getBuffer = async function getBuffer(url, options) {
 try {
 options ? options : {}
@@ -46,7 +44,7 @@ global.canalIdM = ["120363365444927738@newsletter", "120363365444927738@newslett
 global.canalNombreM = ["⚡️𝙋𝙞𝙠𝙖𝙘𝙝𝙪-𝘽𝙤𝙩 ⚡ 𝘾𝙝𝙖𝙣𝙣𝙚𝙡", "⚡️𝙋𝙞𝙠𝙖𝙘𝙝𝙪-𝘽𝙤𝙩 ⚡"]
 global.channelRD = await getRandomChannel()
 
-// 📆 Fechas y Hora
+//fechas
 global.d = new Date(new Date + 3600000)
 global.locale = 'es'
 global.dia = d.toLocaleDateString(locale, {weekday: 'long'})
@@ -73,18 +71,18 @@ global.waitt = global.wait
 global.waittt = global.wait
 global.waitttt = global.wait
 
-global.code = 'https://chat.whatsapp.com/IjpqfWuWYVfG9cDgR0AnKn'
+global.code = 'https://chat.whatsapp.com/IjpqfWuWYVfG9cDgR0AnKn';
 
-// 🔗 Enlaces Importantes
+//Enlaces
 var canal = 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'  
-let canal2 = canal
+let canal2 = 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
 var git = 'https://github.com/Deylin-Eliac'
-var github = 'https://github.com/Deylin-Eliac/Pikachu-Bot' 
+var github = 'https://github.com/Deylin-Eliac/Kirito-Bot-MD' 
 let correo = 'deylibaquedano801@gmail.com'
 
 global.redes = [canal, canal2, git, github, correo].getRandom()
 
-// 🖼 Imagen Aleatoria
+//Imagen
 let category = "imagen"
 const db = './src/database/db.json'
 const db_ = JSON.parse(fs.readFileSync(db))
@@ -94,65 +92,39 @@ const response = await fetch(randomlink)
 const rimg = await response.buffer()
 global.icons = rimg
 
-// 🌇 Mensaje según la hora
-var ase = new Date(); var hour = ase.getHours(); switch(hour){
-case 0:
-case 1:
-case 2:
-case 18:
-case 19:
-case 20:
-case 21:
-case 22:
-case 23:
-hour = 'Buenas noches 🌙'; break
-case 3:
-case 4:
-case 5:
-case 6:
-case 7:
-case 8:
-case 9:
-hour = 'Buenos días 🌅'; break
-case 10:
-case 11:
-case 12:
-case 13:
-hour = 'Buen día ☀️'; break
-case 14:
-case 15:
-case 16:
-case 17:
-hour = 'Buenas tardes 🌆'; break
-}
-global.saludo = hour
+//• ↳ ◜𝑻𝑰𝑬𝑴𝑷𝑶 𝑹𝑷𝑮◞ • ⚔
+var ase = new Date(); var hour = ase.getHours(); switch(hour){ case 0: hour = 'Lɪɴᴅᴀ Nᴏᴄʜᴇ 🌃'; break; case 1: hour = 'Lɪɴᴅᴀ Nᴏᴄʜᴇ 🌃'; break; case 2: hour = 'Lɪɴᴅᴀ Nᴏᴄʜᴇ 🌃'; break; case 3: hour = 'Lɪɴᴅᴀ Mᴀɴ̃ᴀɴᴀ 🌄'; break; case 4: hour = 'Lɪɴᴅᴀ Mᴀɴ̃ᴀɴᴀ 🌄'; break; case 5: hour = 'Lɪɴᴅᴀ Mᴀɴ̃ᴀɴᴀ 🌄'; break; case 6: hour = 'Lɪɴᴅᴀ Mᴀɴ̃ᴀɴᴀ 🌄'; break; case 7: hour = 'Lɪɴᴅᴀ Mᴀɴ̃ᴀɴᴀ 🌅'; break; case 8: hour = 'Lɪɴᴅᴀ Mᴀɴ̃ᴀɴᴀ 🌄'; break; case 9: hour = 'Lɪɴᴅᴀ Mᴀɴ̃ᴀɴᴀ 🌄'; break; case 10: hour = 'Lɪɴᴅᴏ Dɪᴀ 🌤'; break; case 11: hour = 'Lɪɴᴅᴏ Dɪᴀ 🌤'; break; case 12: hour = 'Lɪɴᴅᴏ Dɪᴀ 🌤'; break; case 13: hour = 'Lɪɴᴅᴏ Dɪᴀ 🌤'; break; case 14: hour = 'Lɪɴᴅᴀ Tᴀʀᴅᴇ 🌆'; break; case 15: hour = 'Lɪɴᴅᴀ Tᴀʀᴅᴇ 🌆'; break; case 16: hour = 'Lɪɴᴅᴀ Tᴀʀᴅᴇ 🌆'; break; case 17: hour = 'Lɪɴᴅᴀ Tᴀʀᴅᴇ 🌆'; break; case 18: hour = 'Lɪɴᴅᴀ Nᴏᴄʜᴇ 🌃'; break; case 19: hour = 'Lɪɴᴅᴀ Nᴏᴄʜᴇ 🌃'; break; case 20: hour = 'Lɪɴᴅᴀ Nᴏᴄʜᴇ 🌃'; break; case 21: hour = 'Lɪɴᴅᴀ Nᴏᴄʜᴇ 🌃'; break; case 22: hour = 'Lɪɴᴅᴀ Nᴏᴄʜᴇ 🌃'; break; case 23: hour = 'Lɪɴᴅᴀ Nᴏᴄʜᴇ 🌃'; break;}
+global.saludo = hour;
 
-// 🧍 Tags
-global.nombre = m.pushName || 'Entrenador'
+//tags
+global.nombre = m.pushName || 'Anónimo'
 global.taguser = '@' + m.sender.split("@s.whatsapp.net")
 var more = String.fromCharCode(8206)
 global.readMore = more.repeat(850)
 
-// 🧾 Fake Contacto
-let pp = null; try { pp = await conn.profilePictureUrl('50433191934@s.whatsapp.net', 'image') } catch (e) { pp = null } 
-global.fkontak = { key: {participant: `0@s.whatsapp.net`, ...(m.chat ? { remoteJid: `120363402481697721@g.us` } : {}) }, 
-message: { 'contactMessage': { 'displayName': `Deylin ✨`, 'vcard': `BEGIN:VCARD\nVERSION:3.0\nN:XL;Deylin✨,;;;\nFN:Deylin\nitem1.TEL;waid=50433191934:50433191934\nitem1.X-ABLabel:Ponsel\nEND:VCARD`, 'jpegThumbnail': pp ? await (await fetch(pp)).buffer() : null, thumbnail: null, sendEphemeral: true }}}
+//Fakes
+let pp = null; try { pp = await conn.profilePictureUrl('50433191934@s.whatsapp.net', 'image') } catch (e) { pp = null } global.fkontak = { key: {participant: `0@s.whatsapp.net`, ...(m.chat ? { remoteJid: `120363402481697721@g.us` } : {}) }, message: { 'contactMessage': { 'displayName': `Deylin creador ✨`, 'vcard': `BEGIN:VCARD\nVERSION:3.0\nN:XL;Deylin creador✨,;;;\nFN:Deylin creador\nitem1.TEL;waid=50433191934:50433191934\nitem1.X-ABLabel:Ponsel\nEND:VCARD`, 'jpegThumbnail': pp ? await (await fetch(pp)).buffer() : null, thumbnail: null, sendEphemeral: true }}}
 
-global.fake = { contextInfo: { isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: channelRD.id, newsletterName: channelRD.name, serverMessageId: -1 }}}, { quoted: m }
+global.fake = { contextInfo: { isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: channelRD.id, newsletterName: channelRD.name, serverMessageId: -1 }
+}}, { quoted: m }
 
-global.icono = [
-'https://files.catbox.moe/8qtxyw.jpg',
-'https://files.catbox.moe/kgq1br.jpg'
+
+global.icono = [ 
+'https://i.postimg.cc/RFdNynN5/IMG-20250315-WA0122.jpg',
+'https://i.postimg.cc/RFdNynN5/IMG-20250315-WA0122.jpg',
+'https://i.postimg.cc/RFdNynN5/IMG-20250315-WA0122.jpg',
+'https://i.postimg.cc/3JjzVC0N/IMG-20250318-WA0969.jpg',
+'https://i.postimg.cc/3JjzVC0N/IMG-20250318-WA0969.jpg',
+'https://i.postimg.cc/3JjzVC0N/IMG-20250318-WA0969.jpg'
 ].getRandom()
 
 global.rcanal = { contextInfo: { isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: channelRD.id, serverMessageId: 100, newsletterName: channelRD.name, }, externalAdReply: { showAdAttribution: true, title: packname, body: dev, mediaUrl: null, description: null, previewType: "PHOTO", thumbnailUrl: icono, sourceUrl: redes, mediaType: 1, renderLargerThumbnail: false }, }, }}
 
 export default handler
 
-// 🔁 Funciones auxiliares
 function pickRandom(list) {
 return list[Math.floor(Math.random() * list.length)]
-}
+  }
 
 async function getRandomChannel() {
 let randomIndex = Math.floor(Math.random() * canalIdM.length)
