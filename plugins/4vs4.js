@@ -64,7 +64,7 @@ const handler = async (msg, { conn, args }) => {
   const participantes = meta.participants.filter(p => p.id !== conn.user.id);
   if (participantes.length < 12) {
     return conn.sendMessage(chatId, {
-      text: "⚠️ Necesitas al menos *12 jugadores* para formar escuadras y suplentes."
+      //text: "⚠️ Necesitas al menos *12 jugadores* para formar escuadras y suplentes."
     }, { quoted: msg });
   }
 
