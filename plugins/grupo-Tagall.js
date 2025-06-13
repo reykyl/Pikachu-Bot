@@ -25,7 +25,7 @@ const handler = async (m, { isOwner, isAdmin, conn, text, participants, args, co
   }
 
   const mensaje = args.join` `;
-  const info = mensaje ? `╰🧭 *Mensaje:* ${mensaje}` : "╰⚠️ *Invocación general de Pikachu!*";
+  const info = mensaje ? `╰🧭 *Mensaje:* ${mensaje}` : "╰⚠️ *Invocación general de Pika-bot: los administradores te necesitan.*";
 
   let texto = `
 ╭─〔⚡ 𝐏𝐈𝐊𝐀𝐋𝐋 ⚡〕──⬣
