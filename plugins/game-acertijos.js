@@ -7,12 +7,11 @@ let handler = async (m, { conn, command }) => {
     let acertijos = JSON.parse(fs.readFileSync('./src/database/acertijos.json'))
     let acertijo = acertijos[Math.floor(Math.random() * acertijos.length)]
 
-    
-    let res = await conn.reply(m.chat, `🧠 *Adivina este acertijo:*\n\n${acertijo.question}\n\n_Responde citando este mensaje_`, m, rcanal)
-    
-    global.acertijosActivos[m.chat] = {
+    await conn.reply(m.chat, `🧠 *Adivina este acertijo:*\n\n${acertijo.question}\n\n_Responde con la respuesta, no es necesario citar el mensaje._`, m, rcanal)
+
+    global.acertijosActivos[m.sender] = {
       acertijo,
-      msgId: res.key.id,
+      intentos: 2,
       responded: false
     }
     return
@@ -22,29 +21,30 @@ let handler = async (m, { conn, command }) => {
 handler.before = async (m, { conn }) => {
   global.acertijosActivos = global.acertijosActivos || {}
 
-  
-  if (!m.quoted) return
-
-  
-  let juego = global.acertijosActivos[m.chat]
+  let juego = global.acertijosActivos[m.sender]
   if (!juego || juego.responded) return
-
-  
-  if (m.quoted.id !== juego.msgId) return
 
   let respuestaUsuario = m.text.trim().toLowerCase()
   let respuestaCorrecta = juego.acertijo.response.trim().toLowerCase()
 
-  let mensaje = respuestaUsuario === respuestaCorrecta
-    ? `✅ *¡Correcto!* ${m.name} lo ha adivinado: *${juego.acertijo.response}*`
-    : `❌ *Incorrecto*, ${m.name}.\nLa respuesta era: *${juego.acertijo.response}*`
-
-  juego.responded = true
-  await conn.reply(m.chat, mensaje, m.quoted, { mentions: [m.sender] })
+  if (respuestaUsuario === respuestaCorrecta) {
+    juego.responded = true
+    delete global.acertijosActivos[m.sender]
+    return conn.reply(m.chat, `✅ *¡Correcto!* ${m.name} lo ha adivinado: *${juego.acertijo.response}*`, m, { mentions: [m.sender] })
+  } else {
+    juego.intentos--
+    if (juego.intentos <= 0) {
+      juego.responded = true
+      delete global.acertijosActivos[m.sender]
+      return conn.reply(m.chat, `❌ *Incorrecto.*\nLa respuesta correcta era: *${juego.acertijo.response}*`, m)
+    } else {
+      return conn.reply(m.chat, `❌ *Incorrecto.* Te quedan ${juego.intentos} intento(s).`, m)
+    }
+  }
 }
 
-handler.help = ['acertijo']
+handler.help = ['acertijo', 'acertijos']
 handler.tags = ['juegos']
-handler.command = ['acertijo']
+handler.command = ['acertijo', 'acertijos']
 
 export default handler
