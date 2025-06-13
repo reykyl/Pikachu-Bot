@@ -1,4 +1,4 @@
-// downloader tiktok by Fantom5700
+// downloader tiktok by Fantom5700 x nagi 
 import axios from 'axios';
 
 let handler = async (m, { conn, text }) => {
