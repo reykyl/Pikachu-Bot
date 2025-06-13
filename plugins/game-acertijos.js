@@ -1,36 +1,50 @@
 import fs from 'fs'
 
-let handler = async (m, { conn, command, args, text }) => {
+let handler = async (m, { conn, command }) => {
   global.acertijosActivos = global.acertijosActivos || {}
 
   if (command === 'acertijo') {
     let acertijos = JSON.parse(fs.readFileSync('./src/database/acertijos.json'))
     let acertijo = acertijos[Math.floor(Math.random() * acertijos.length)]
-    global.acertijosActivos[m.sender] = acertijo
 
-    return conn.reply(m.chat, `🧠 *Adivina este acertijo:*\n\n${acertijo.question}\n\n_Responde con_ *.responder tu_respuesta*`, m, rcanal)
-  }
-
-  if (command === 'responder') {
-    if (!text) return conn.reply(m.chat, '❗ Escribe tu respuesta.\nEjemplo: *.responder una piña*', m, rcanal)
-
-    let acertijo = global.acertijosActivos[m.sender]
-    if (!acertijo) return conn.reply(m.chat, '❌ No tienes ningún acertijo pendiente.\nUsa *.acertijo* para jugar.', m, rcanal)
-
-    let respuestaUsuario = text.trim().toLowerCase()
-    let respuestaCorrecta = acertijo.response.trim().toLowerCase()
-
-    let mensaje = respuestaUsuario === respuestaCorrecta
-      ? '✅ ¡Correcto! Eres todo un genio 🧠'
-      : `❌ Incorrecto...\nLa respuesta correcta era: *${acertijo.response}*`
-
-    delete global.acertijosActivos[m.sender]
-    return conn.reply(m.chat, mensaje, m, rcanal)
+    
+    let res = await conn.reply(m.chat, `🧠 *Adivina este acertijo:*\n\n${acertijo.question}\n\n_Responde citando este mensaje_`, m, rcanal)
+    
+    global.acertijosActivos[m.chat] = {
+      acertijo,
+      msgId: res.key.id,
+      responded: false
+    }
+    return
   }
 }
 
-handler.help = ['acertijo', 'responder']
+handler.before = async (m, { conn }) => {
+  global.acertijosActivos = global.acertijosActivos || {}
+
+  
+  if (!m.quoted) return
+
+  
+  let juego = global.acertijosActivos[m.chat]
+  if (!juego || juego.responded) return
+
+  
+  if (m.quoted.id !== juego.msgId) return
+
+  let respuestaUsuario = m.text.trim().toLowerCase()
+  let respuestaCorrecta = juego.acertijo.response.trim().toLowerCase()
+
+  let mensaje = respuestaUsuario === respuestaCorrecta
+    ? `✅ *¡Correcto!* ${m.name} lo ha adivinado: *${juego.acertijo.response}*`
+    : `❌ *Incorrecto*, ${m.name}.\nLa respuesta era: *${juego.acertijo.response}*`
+
+  juego.responded = true
+  await conn.reply(m.chat, mensaje, m.quoted, { mentions: [m.sender] })
+}
+
+handler.help = ['acertijo']
 handler.tags = ['juegos']
-handler.command = ['acertijo', 'responder']
+handler.command = ['acertijo']
 
 export default handler
