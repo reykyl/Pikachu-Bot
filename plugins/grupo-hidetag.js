@@ -9,11 +9,11 @@ import * as fs from 'fs'
 
 var handler = async (m, { conn, text, participants, isOwner, isAdmin }) => {
 
-  // ⚠️ Validación inicial
-  if (!m.quoted && !text) return conn.reply(m.chat, `⚡ Debes enviar un texto para hacer un tag.`, m, rcanal);
+  
+  //if (!m.quoted && !text) return conn.reply(m.chat, `⚡ Debes enviar un texto para hacer un tag.`, m, rcanal);
 
   try { 
-    let users = participants.map(u => conn.decodeJid(u.id)) // ⚡ Todos listos para ser mencionados
+    let users = participants.map(u => conn.decodeJid(u.id)) 
 
     let tagText = text ? text : (m.quoted && m.quoted.text ? m.quoted.text : "*¡Pika Pika saludos!* ⚡")
 
@@ -68,12 +68,12 @@ var handler = async (m, { conn, text, participants, isOwner, isAdmin }) => {
   }
 }
 
-// 📘 Comandos de ayuda
+
 handler.help = ['hidetag']
 handler.tags = ['grupo']
 handler.command = ['hidetag', 'notificar', 'notify', 'tag']
 handler.group = true
 handler.admin = true
 
-// 🐭 Exportar handler para brillar como Pikachu
+
 export default handler
