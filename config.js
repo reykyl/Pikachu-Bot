@@ -28,7 +28,7 @@ global.confirmCode = ''
 
 // ⚙️ PROPIETARIO Y STAFF
 global.owner = [
-  ['525649896365', 'Richetti', true],
+  ['5215649896365', 'Angel', true],
  
 ];
 
