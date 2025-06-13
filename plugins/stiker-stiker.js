@@ -40,7 +40,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
       if (isUrl(args[0])) {
         stiker = await sticker(false, args[0], global.packsticker, global.packsticker2)
       } else {
-        return m.reply(`*[❗𝐈𝐍𝐅𝐎❗] 𝙴𝙻 𝙴𝙽𝙻𝙰𝙲𝙴 / 𝚄𝚁𝙻 / 𝙻𝙸𝙽𝙺 𝙽𝙾 𝙴𝚂 𝚅𝙰𝙻𝙸𝙳𝙰.*` , m, rcanal);
+        return m.reply(`*[❗𝐈𝐍𝐅𝐎❗] 𝙴𝙻 𝙴𝙽𝙻𝙰𝙲𝙴 / 𝚄𝚁𝙻 / 𝙻𝙸𝙽𝙺 𝙽𝙾 𝙴𝚂 𝚅𝙰𝙻𝙸𝙳𝙰.*`, m, rcanal);
       }
     }
   } finally {
