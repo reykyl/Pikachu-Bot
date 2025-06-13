@@ -3,15 +3,17 @@ import * as fs from 'fs'
 
 var handler = async (m, { conn, text, participants, isOwner, isAdmin }) => {
 
+  const pikaEmoji = '⚡'
+  const pikaTag = `${pikaEmoji} *¡Pika Pika Notificación!* ${pikaEmoji}`
+  const footer = `\n\n> 𝙀𝙣𝙫𝙞𝙖𝙙𝙤 𝙥𝙤𝙧 ⚡ 𝑷𝒊𝒌𝒂𝒄𝒉𝒖 ⚡`
 
-  if (!m.quoted && !text) return conn.reply(m.chat, `${emoji} Debes enviar un texto para hacer un tag.`, m, rcanal);
+  if (!m.quoted && !text) return conn.reply(m.chat, `${pikaEmoji} ¡Debes enviar un texto para notificar!`, m)
 
   try { 
     let users = participants.map(u => conn.decodeJid(u.id))
+    let tagText = text ? text : (m.quoted?.text || "*¡Pika saludos!* ⚡")
 
-    let tagText = text ? text : (m.quoted && m.quoted.text ? m.quoted.text : "*Hola!!*")
-
-    let newText = `${tagText}\n\n> 𝐤𝐢𝐫𝐢𝐭𝐨-𝐁𝐨𝐭 𝐌𝐃`
+    let newText = `${pikaTag}\n\n${tagText}${footer}`
 
     let q = m.quoted ? m.quoted : m || m.text || m.sender
     let c = m.quoted ? await m.getQuotedObj() : m.msg || m.text || m.sender
@@ -29,18 +31,15 @@ var handler = async (m, { conn, text, participants, isOwner, isAdmin }) => {
     await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
 
   } catch {  
-    /**
-    [ By @NeKosmic || https://github.com/NeKosmic/ ]
-    **/  
     let users = participants.map(u => conn.decodeJid(u.id))
     let quoted = m.quoted ? m.quoted : m
     let mime = (quoted.msg || quoted).mimetype || ''
     let isMedia = /image|video|sticker|audio/.test(mime)
     let more = String.fromCharCode(8206)
     let masss = more.repeat(850)
-    let tagText = text ? text : (m.quoted && m.quoted.text ? m.quoted.text : "*Hola!!*")
+    let tagText = text ? text : (m.quoted?.text || "*¡Pika saludos!* ⚡")
 
-    let htextos = `${tagText}\n\n> 𝐤𝐢𝐫𝐢𝐭𝐨-𝐁𝐨𝐭 𝐌𝐃`
+    let htextos = `${pikaTag}\n\n${tagText}${footer}`
 
     if ((isMedia && quoted.mtype === 'imageMessage') && htextos) {
       var mediax = await quoted.download?.()
@@ -50,24 +49,36 @@ var handler = async (m, { conn, text, participants, isOwner, isAdmin }) => {
       conn.sendMessage(m.chat, { video: mediax, mentions: users, mimetype: 'video/mp4', caption: htextos }, { quoted: null })
     } else if ((isMedia && quoted.mtype === 'audioMessage') && htextos) {
       var mediax = await quoted.download?.()
-      conn.sendMessage(m.chat, { audio: mediax, mentions: users, mimetype: 'audio/mp4', fileName: `Hidetag.mp3` }, { quoted: null })
+      conn.sendMessage(m.chat, { audio: mediax, mentions: users, mimetype: 'audio/mp4', fileName: `HidetagPika.mp3` }, { quoted: null })
     } else if ((isMedia && quoted.mtype === 'stickerMessage') && htextos) {
       var mediax = await quoted.download?.()
       conn.sendMessage(m.chat, { sticker: mediax, mentions: users }, { quoted: null })
     } else {
       await conn.relayMessage(
         m.chat, 
-        { extendedTextMessage: { text: `${masss}\n${htextos}\n`, contextInfo: { mentionedJid: users, externalAdReply: { thumbnail: icons, sourceUrl: redes } } } }, 
+        { extendedTextMessage: { 
+            text: `${masss}\n${htextos}\n`, 
+            contextInfo: { 
+              mentionedJid: users,
+              externalAdReply: {
+                title: '¡Pika Notificación!',
+                body: 'Powered by Pikachu ⚡',
+                thumbnailUrl: 'https://i.imgur.com/9b1ZpMP.png', // imagen de Pikachu
+                sourceUrl: 'https://whatsapp.com/channel/0029VbB46nl2ER6dZac6Nd1o'
+              } 
+            } 
+          } 
+        }, 
         {}
       )
     }
   }
 }
+
 handler.help = ['hidetag']
 handler.tags = ['grupo']
 handler.command = ['hidetag', 'notificar', 'notify', 'tag']
 handler.group = true
 handler.admin = true
-
 
 export default handler
