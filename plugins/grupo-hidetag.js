@@ -63,7 +63,7 @@ var handler = async (m, { conn, text, participants, isOwner, isAdmin }) => {
               externalAdReply: {
                 title: '¡Pika Notificación!',
                 body: 'Powered by Pikachu ⚡',
-                thumbnailUrl: 'https://i.imgur.com/9b1ZpMP.png', // imagen de Pikachu
+                thumbnailUrl: 'https://kirito-bot-md.vercel.app/IMG-20250606-WA0167.jpg, 
                 sourceUrl: 'https://whatsapp.com/channel/0029VbB46nl2ER6dZac6Nd1o'
               } 
             } 
