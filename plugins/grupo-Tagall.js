@@ -1,24 +1,57 @@
-const wm = '𝑷𝒊𝒌𝒂𝒄𝒉𝒖 𝑩𝒐𝒕'; // Define aquí el nombre de tu bot o el texto que quieras mostrar como firma
+const handler = async (m, { isOwner, isAdmin, conn, text, participants, args, command, usedPrefix }) => {
+  if (usedPrefix.toLowerCase() === 'a') return;
 
-const handler = async (m, {isOwner, isAdmin, conn, text, participants, args, command, usedPrefix}) => {
-  if (usedPrefix == 'a' || usedPrefix == 'A') return;
+  const customEmoji = global.db?.data?.chats?.[m.chat]?.customEmoji || '⚡';
+  m.react(customEmoji);
+
   if (!(isAdmin || isOwner)) {
     global.dfail('admin', m, conn);
-    throw false;
+    return;
   }
-  const pesan = args.join` `;
-  const oi = `${pesan}`;
-  let teks = `𝑷𝑰𝑲𝑨𝑪𝑯𝑼 𝑻𝑬 𝑵𝑬𝑪𝑬𝑺𝑰𝑻𝑨 🟡 .\n\nMensaje: ${oi}\n\n`;
-  for (const mem of participants) {
-    teks += `⚡ @${mem.id.split('@')[0]}\n`;
+
+  const countryFlags = {
+    "1": "🇺🇸", "34": "🇪🇸", "44": "🇬🇧", "49": "🇩🇪", "52": "🇲🇽", "54": "🇦🇷", "55": "🇧🇷", "56": "🇨🇱", "57": "🇨🇴", "58": "🇻🇪", "60": "🇲🇾",
+    "91": "🇮🇳", "92": "🇵🇰", "93": "🇦🇫", "94": "🇱🇰", "95": "🇲🇲", "98": "🇮🇷", "213": "🇩🇿", "351": "🇵🇹", "593": "🇪🇨", "595": "🇵🇾",
+    "591": "🇧🇴", "51": "🇵🇪", "507": "🇵🇦", "507": "🇵🇦", "598": "🇺🇾", "505": "🇳🇮", "502": "🇬🇹", "503": "🇸🇻", "504": "🇭🇳",
+    "506": "🇨🇷", "506": "🇨🇷", "507": "🇵🇦", "998": "🇺🇿", "380": "🇺🇦", "7": "🇷🇺", "81": "🇯🇵", "82": "🇰🇷", "86": "🇨🇳"
+  };
+
+  function getPrefix(number) {
+    for (let i = 4; i >= 1; i--) {
+      const sub = number.slice(0, i);
+      if (countryFlags[sub]) return sub;
+    }
+    return "🔍";
   }
-  teks += `${wm}\n\n`; // Se agrega la firma wm aquí
-  conn.sendMessage(m.chat, {text: teks, mentions: participants.map((a) => a.id)} );
+
+  const mensaje = args.join` `;
+  const info = mensaje ? `╰🧭 *Mensaje:* ${mensaje}` : "╰⚠️ *Invocación general de Pikachu!*";
+
+  let texto = `
+╭─〔⚡ 𝐏𝐈𝐊𝐀𝐋𝐋 ⚡〕──⬣
+│ 🧑‍🤝‍🧑 *Miembros:* ${participants.length}
+│ 🏷️ *Grupo:* ${await conn.getName(m.chat)}
+${info}
+╰────⬣\n`;
+
+  for (const miembro of participants) {
+    const number = miembro.id.split('@')[0];
+    const prefix = getPrefix(number);
+    const flag = countryFlags[prefix] || "🌐";
+    texto += `⚡ ${flag} @${number}\n`;
+  }
+
+  texto += `\n🔋 𝐄𝐧𝐞𝐫𝐠í𝐚 𝐋𝐢𝐛𝐞𝐫𝐚𝐝𝐚 ⚡\n✨ *by Pikachu™* 🧃`;
+
+  await conn.sendMessage(m.chat, {
+    text: texto.trim(),
+    mentions: participants.map(p => p.id)
+  }, { quoted: m });
 };
 
-handler.help = ['tagall <mensaje>', 'invocar <mensaje>'];
-handler.tags = ['group'];
-handler.command = /^(tagall|invocar|invocacion|todos|Pikachus|invocación)$/i;
-handler.admin = true;
+handler.help = ['todos <mensaje>'];
+handler.tags = ['grupo'];
+handler.command = ['tagall', 'todos'];
 handler.group = true;
+
 export default handler;
