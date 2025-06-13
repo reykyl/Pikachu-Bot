@@ -1,4 +1,4 @@
-// creado por Fantom5700
+// creado por Fantom5700 function de comando te deja reaccionar con letras en canales
 
 const font2 = {
   a: '🅐', b: '🅑', c: '🅒', d: '🅓', e: '🅔', f: '🅕', g: '🅖',
