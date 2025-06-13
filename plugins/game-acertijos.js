@@ -4,7 +4,7 @@ let handler = async (m, { conn, command, args, text }) => {
   global.acertijosActivos = global.acertijosActivos || {}
 
   if (command === 'acertijo') {
-    let acertijos = JSON.parse(fs.readFileSync('./acertijos.json'))
+    let acertijos = JSON.parse(fs.readFileSync('./src/database/acertijos.json'))
     let acertijo = acertijos[Math.floor(Math.random() * acertijos.length)]
     global.acertijosActivos[m.sender] = acertijo
 
