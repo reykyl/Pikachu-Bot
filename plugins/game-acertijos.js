@@ -43,8 +43,8 @@ handler.before = async (m, { conn }) => {
   }
 }
 
-handler.help = ['acertijo', 'acertijos']
+handler.help = ['acertijo']
 handler.tags = ['juegos']
-handler.command = ['acertijo', 'acertijos']
+handler.command = ['acertijo']
 
 export default handler
