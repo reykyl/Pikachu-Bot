@@ -29,7 +29,7 @@ global.confirmCode = ''
 // ⚙️ PROPIETARIO Y STAFF
 global.owner = [
 ['50433191934', '🔰 Creador 🔰', true],
-['5215649896365', 'Angel', true],
+['525649896365', 'Angel', true],
 //['numero', 'nombre', true],
 ];
 
