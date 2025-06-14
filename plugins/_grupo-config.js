@@ -2,14 +2,18 @@
 //https://github.com/deylin-eliac 
 //➤  no quites créditos
 
-let handler = async (m, { conn, args, participants, groupMetadata, usedPrefix, command }) => {
+let handler = async (m, { conn, args, participants, groupMetadata, usedPrefix, command, isBotAdmin, isAdmin }) => {
   const icono = 'https://files.catbox.moe/hnif5j.jpg'; 
   const emoji = '⚡';
   const emoji2 = '🔒';
   const group = m.chat;
   const totalMembers = participants.length;
 
+  
   if (command === 'link' || command === 'enlace') {
+    //if (!isAdmin) return conn.reply(m.chat, `${emoji2} *Solo los admins pueden usar este comando, entrenador.*`, m);
+    if (!isBotAdmin) return conn.reply(m.chat, `${emoji2} *Necesito ser admin para sacar el enlace del grupo.*`, m);
+    
     const link = 'https://chat.whatsapp.com/' + await conn.groupInviteCode(group);
     await conn.reply(m.chat, 
 `*⚡🌩️──『 𝑳𝑰𝑵𝑲 𝑷𝑰𝑲𝑨𝑪𝑯𝑼 』──🌩️⚡*
@@ -25,7 +29,11 @@ ${link}
     return;
   }
 
+  
   if (command === 'del' || command === 'delete') {
+    if (!isAdmin) return conn.reply(m.chat, `${emoji2} *Solo los admins pueden eliminar mensajes.*`, m);
+    if (!isBotAdmin) return conn.reply(m.chat, `${emoji2} *Debo ser admin para poder eliminar mensajes.*`, m);
+
     if (!m.quoted) return conn.reply(m.chat, `${emoji} Por favor, cita el mensaje que deseas eliminar.`, m);
     try {
       let delet = m.message.extendedTextMessage.contextInfo.participant;
@@ -36,7 +44,11 @@ ${link}
     }
   }
 
+  
   if (command === 'group' || command === 'grupo') {
+    if (!isAdmin) return conn.reply(m.chat, `${emoji2} *Solo los admins pueden configurar el grupo.*`, m);
+    if (!isBotAdmin) return conn.reply(m.chat, `${emoji2} *Necesito ser admin para cambiar la configuración del grupo.*`, m);
+
     const isClose = {
       'open': 'not_announcement',
       'close': 'announcement',
@@ -71,10 +83,6 @@ ${link}
 handler.help = ['link', 'group open / close', 'del', 'delete'];
 handler.tags = ['grupo'];
 handler.command = ['link', 'enlace', 'group', 'grupo', 'del', 'delete'];
-
-
 handler.group = true;
-handler.botAdmin = (m) => ['group', 'grupo', 'del', 'delete'].includes(m.command);
-handler.admin = (m) => ['group', 'grupo', 'del', 'delete'].includes(m.command);
 
 export default handler;
