@@ -28,7 +28,8 @@ global.confirmCode = ''
 
 // ⚙️ PROPIETARIO Y STAFF
 global.owner = [
-['50433191934' '🔰 Creador 🔰', true]
+['50433191934', '🔰 Creador 🔰', true],
+//['numero', 'nombre', true],
 ];
 global.mods = ['50433191934'];
 global.suittag = ['50433191934'];
