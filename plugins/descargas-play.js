@@ -97,7 +97,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
           previewType: 0,
           mediaUrl: url,
           sourceUrl: url,
-          thumbnailUrl: "https://tu-imagen.com/pikachu-bot.jpg",
+          thumbnail: thumb,
           renderLargerThumbnail: true
         }
       }
@@ -122,7 +122,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
             title: title,
             body: `Duración: ${timestamp} | Vistas: ${vistas}`,
             sourceUrl: url,
-            thumbnail: thumb,
+            thumbnailUrl: "https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/refs/heads/main/src/IMG-20250613-WA0194.jpg",
             renderLargerThumbnail: true
           }
         }
