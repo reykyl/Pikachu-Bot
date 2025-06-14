@@ -12,7 +12,7 @@ let handler = async (m, { conn, args, participants, groupMetadata, usedPrefix, c
   
   if (command === 'link' || command === 'enlace') {
     //if (!isAdmin) return conn.reply(m.chat, `${emoji2} *Solo los admins pueden usar este comando, entrenador.*`, m);
-    if (!isBotAdmin) return conn.reply(m.chat, `${emoji2} *Necesito ser admin para sacar el enlace del grupo.*`, m);
+    if (!isBotAdmin) return conn.reply(m.chat, `${emojis} *Necesito ser admin para sacar el enlace del grupo.*`, m, rcanal);
     
     const link = 'https://chat.whatsapp.com/' + await conn.groupInviteCode(group);
     await conn.reply(m.chat, 
@@ -31,8 +31,8 @@ ${link}
 
   
   if (command === 'del' || command === 'delete') {
-    if (!isAdmin) return conn.reply(m.chat, `*〘 ${comando} 〙 requiere permisos de administrador. Acceso denegado.*`, m);
-    if (!isBotAdmin) return conn.reply(m.chat, `*〘 ${comando} 〙 requiere permisos de administrador. Acceso denegado.*`, m);
+    if (!isAdmin) return conn.reply(m.chat, `${emojis} *Solo los admins pueden usar este comando, entrenador.*`, m, rcanal);
+    if (!isBotAdmin) return conn.reply(m.chat, ` ${emojis} *Necesito ser admin para sacar el enlace del grupo.*`, m, rcanal);
 
     if (!m.quoted) return conn.reply(m.chat, `${emoji} Por favor, cita el mensaje que deseas eliminar.`, m);
     try {
@@ -46,8 +46,8 @@ ${link}
 
   
   if (command === 'group' || command === 'grupo') {
-    if (!isAdmin) return conn.reply(m.chat, `${emoji2} *Solo los admins pueden configurar el grupo.*`, m);
-    if (!isBotAdmin) return conn.reply(m.chat, `${emoji2} *Necesito ser admin para cambiar la configuración del grupo.*`, m);
+    if (!isAdmin) return conn.reply(m.chat, `${emojis} *Solo los admins pueden configurar el grupo.*`, m, rcanal);
+    if (!isBotAdmin) return conn.reply(m.chat, `${emojis} *Necesito ser admin para cambiar la configuración del grupo.*`, m, rcanal);
 
     const isClose = {
       'open': 'not_announcement',
