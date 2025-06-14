@@ -32,7 +32,7 @@ ${link}
   
   if (command === 'del' || command === 'delete') {
     if (!isAdmin) return conn.reply(m.chat, `${emoji2} *Solo los admins pueden eliminar mensajes.*`, m);
-    if (!isBotAdmin) return conn.reply(m.chat, `${emoji2} *Debo ser admin para poder eliminar mensajes.*`, m);
+    if (!isBotAdmin) return conn.reply(m.chat, `*〘 ${comando} 〙 requiere permisos de administrador. Acceso denegado.*`, m);
 
     if (!m.quoted) return conn.reply(m.chat, `${emoji} Por favor, cita el mensaje que deseas eliminar.`, m);
     try {
