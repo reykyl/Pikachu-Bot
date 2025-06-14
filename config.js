@@ -31,6 +31,8 @@ global.owner = [
 ['50433191934', '🔰 Creador 🔰', true],
 //['numero', 'nombre', true],
 ];
+
+//si no saben no toquen gracias 🫂 
 global.mods = ['50433191934'];
 global.suittag = ['50433191934'];
 global.prems = [];
