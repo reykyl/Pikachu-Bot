@@ -1,89 +1,159 @@
-import pkg from 'sanzy-spotifydl'
-let { downloadTrack, downloadAlbum, search } = pkg
-import fetch from 'node-fetch'
-import pkg2 from 'fluid-spotify.js'
-let { Spotify } = pkg2
+import axios from 'axios';
+import fetch from 'node-fetch';
+import search from 'yt-search';
+const userMessages = new Map();
+const userRequests = {};
 
-let handler = async (m, { conn, text }) => {
- if (!text) throw `🚩 Ingresa el enlace de algún Track, PlayList o Álbum de Spotify.`; 
- let isSpotifyUrl = text.match(/^(https:\/\/open\.spotify\.com\/(album|track|playlist)\/[a-zA-Z0-9]+)/i);
- if (!isSpotifyUrl && !text) throw `🚩 Ingresa el enlace de algún Track, Playlist o Álbum de Spotify.`
-let user = global.db.data.users[m.sender]
-await m.react('🕓')
+let handler = async (m, { conn, text, usedPrefix, command }) => {
+if (!text) throw `*🤔 ¿Que esta buscando? ingresa el nombre para descargar sus música de Spotify, Ejemplo:* ${usedPrefix + command} ozuna`;
+if (userRequests[m.sender]) return await conn.reply(m.chat, `⚠️ Hey @${m.sender.split('@')[0]} pendejo, ya estás descargando una canción 🙄\nEspera a que termine tu descarga actual antes de pedir otra. 👆`, userMessages.get(m.sender) || m)
+userRequests[m.sender] = true;
+m.react(`⌛`);
 try {
-if (isSpotifyUrl) {
-if (isSpotifyUrl[2] === 'album') {
-let album = await downloadAlbum(isSpotifyUrl[0])
-let img = await (await fetch(`${album.metadata.cover}`)).buffer()
-let txt = `*乂  S P O T I F Y  -  D O W N L O A D*\n\n`
-    txt += `        ✩  *Album* : ${album.metadata.title}\n`
-    txt += `        ✩   *Artista* :${album.metadata.artists}\n`
-    txt += `        ✩   *Publicado* : ${album.metadata.releaseDate}\n`   
-    txt += `        ✩   *Tracks totales* : ${album.trackList.length}\n\n`   
-    txt += `*- ↻ se esta se enviando tu musica. . .*`
-await conn.sendFile(m.chat, img, 'thumbnail.jpg', txt, m)
-for (let i = 0; i < album.trackList.length; i++) {
-await conn.sendFile(m.chat, album.trackList[i].audioBuffer, album.trackList[i].metadata.name + '.mp3', null, m, false, { mimetype: 'audio/mpeg', asDocument: user.useDocument })
-await m.react('✅')
-}
-} else if (isSpotifyUrl[2] === 'track') {
-let track = await downloadTrack(isSpotifyUrl[0])
-let dlspoty = track.audioBuffer
-let img = await (await fetch(`${track.imageUrl}`)).buffer()
-let txt = `*乂  S P O T I F Y  -  D O W N L O A D*\n\n`
-    txt += `        ✩   *Título* : ${track.title}\n`
-    txt += `        ✩   *Artista* : ${track.artists}\n`
-    txt += `        ✩   *Duración* : ${track.duration}\n`
-    txt += `        ✩   *Album* : ${track.album.name}\n`                 
-    txt += `        ✩   *Publicado* : ${track.album.releasedDate}\n\n`   
-    txt += `*- ↻ El audio se esta enviando espera un momento, soy lenta. . .*`
-await conn.sendFile(m.chat, img, 'thumbnail.jpg', txt, m)
-await conn.sendFile(m.chat, dlspoty, track.title + '.mp3', null, m, false, { mimetype: 'audio/mpeg', asDocument: user.useDocument })
-await m.react('✅')
-} else if (isSpotifyUrl[2] === 'playlist') {
-let infos = new Spotify({
-clientID: "7fb26a02133d463da465671222b9f19b",
-clientSecret: "d4e6f8668f414bb6a668cc5c94079ca1",
-})
-let playlistId = isSpotifyUrl[0].split('/').pop()
-let playlistInfoByID = await infos.getPlaylist(playlistId)
-let tracks = playlistInfoByID.tracks.items
-let img = await (await fetch(`${playlistInfoByID.images[0].url}`)).buffer()
-let txt = `*乂  S P O T I F Y  -  D O W N L O A D*\n\n`
-    txt += `        ✩   *Playlist* : ${playlistInfoByID.name}\n`
-    txt += `        ✩   *Tracks totales* : ${tracks.length}\n\n`
-    txt += `*- ↻ Los audios se estan enviando espera un momento, soy lenta. . .*`
-await conn.sendFile(m.chat, img, 'thumbnail.jpg', txt, m)
-let target = m.chat
-if (m.isGroup && tracks.length > 20) {
-target = m.sender;
-}
-for (let i = 0; i < tracks.length; i++) {
-let track = await downloadTrack(tracks[i].track.external_urls.spotify)
-await conn.sendFile(m.chat, track.audioBuffer, tracks[i].track.name + '.mp3', null, m, false, { mimetype: 'audio/mpeg', asDocument: user.useDocument })
-await m.react('✅')
+const msgError = await tr("No se encontraron resultados para esa búsqueda");
+const titlte = await tr("Título");
+const artist = await tr("Artista");
+const albunn = await tr("Álbum");
+const durationn = await tr("Duración");
+const Public = await tr("Publicado");
+const msgEspere = await tr("Enviando canción Aguarde un momento...");
+
+const spotify = await fetch(`${apis}/search/spotify?q=${text}`);
+const song = await spotify.json();
+if (!song.data || song.data.length === 0) throw '⚠️ ' + msgError;
+const track = song.data[0];
+const spotifyMessage = `*• ${titlte}:* ${track.title}\n*• ${artist}:* ${track.artist}\n*• ${albunn}:* ${track.album}\n*• ${durationn}:* ${track.duration}\n*• ${Public}:* ${track.publish}\n\n> 🚀 *${msgEspere}*`;
+const message = await conn.sendMessage(m.chat, { text: spotifyMessage, 
+contextInfo: {
+forwardingScore: 1,
+isForwarded: true,
+externalAdReply: {
+showAdAttribution: true,
+containsAutoReply: true,
+renderLargerThumbnail: true,
+title: track.title,
+body: msgEspere,
+mediaType: 1,
+thumbnailUrl: track.image,
+mediaUrl: track.url,
+sourceUrl: track.url
+}}}, { quoted: m });
+userMessages.set(m.sender, message);
+
+const downloadAttempts = [async () => {
+const res = await fetch(`https://api.siputzx.my.id/api/d/spotify?url=${track.url}`);
+const data = await res.json();
+return data.data.download;
+},
+async () => {
+const res = await fetch(`${apis}/download/spotifydl?url=${track.url}`);
+const data = await res.json();
+return data.data.url;
+}];
+
+let downloadUrl = null;
+for (const attempt of downloadAttempts) {
+try {
+downloadUrl = await attempt();
+if (downloadUrl) break; 
+} catch (err) {
+console.error(`Error in attempt: ${err.message}`);
+continue; 
 }}
-} else {
-let searchTrack = await downloadTrack(text)
-let dlspoty = searchTrack.audioBuffer
-let img = await (await fetch(`${searchTrack.imageUrl}`)).buffer()
-let txt = `*乂  S P O T I F Y  -  D O W N L O A D*\n\n`
-    txt += `        ✩   *Título* : ${searchTrack.title}\n`
-    txt += `        ✩   *Artista* : ${searchTrack.artists}\n`
-    txt += `        ✩   *Duración* : ${searchTrack.duration}\n`
-    txt += `        ✩   *Album* : ${searchTrack.album.name}\n`                 
-    txt += `        ✩   *Publicado* : ${searchTrack.album.releasedDate}\n\n`   
-    txt += `*- ↻ El audio se esta enviando espera un momento, soy lenta. . .*`
-await conn.sendFile(m.chat, img, 'thumbnail.jpg', txt, m)
-await conn.sendFile(m.chat, dlspoty, searchTrack.title + '.mp3', null, m, false, { mimetype: 'audio/mpeg', asDocument: user.useDocument })
-await m.react('✅')
-}  
-} catch {
-await m.react('✖️')
-}}
-handler.tags = ['downloader']
-handler.help = ['spotify']
-handler.command = ['spotify']
-//handler.limit = 1
-handler.register = true
-export default handler
+
+if (!downloadUrl) throw new Error(await tr('No se pudo descargar la canción desde ninguna API'));
+await conn.sendMessage(m.chat, { audio: { url: downloadUrl }, fileName: `${track.title}.mp3`, mimetype: 'audio/mpeg'}, { quoted: m });
+m.react('✅️');
+} catch (e) {
+m.reply(`\`\`\`⚠️ ${await tr("OCURRIO UN ERROR")} ⚠️\`\`\`\n\n> *${await tr("Reporta el siguiente error a mi creador con el comando:")}* #report\n\n>>> ${e} <<<< `)    
+console.log(e);
+m.react('❌');
+handler.limit = false;
+} finally {
+delete userRequests[m.sender];
+}};
+handler.help = ['spotify'];
+handler.tags = ['downloader'];
+handler.command = /^(spotify|music)$/i;
+handler.register = true;
+handler.limit = 1;
+
+export default handler;
+
+async function spotifyxv(query) {
+  let token = await tokens();
+  try {
+    let response = await axios({
+      method: 'get',
+      url: 'https://api.spotify.com/v1/search?q=' + query + '&type=track',
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    });
+    const tracks = response.data.tracks.items;
+    const results = tracks.map((track) => ({
+      name: track.name,
+      artista: track.artists.map((artist) => artist.name),
+      album: track.album.name,
+      duracion: timestamp(track.duration_ms),
+      url: track.external_urls.spotify,
+      imagen: track.album.images.length ? track.album.images[0].url : '',
+    }));
+    return results;
+  } catch (error) {
+    console.error(`Error en spotifyxv: ${error}`);
+    return [];
+  }
+}
+
+async function tokens() {
+  try {
+    const response = await axios({
+      method: 'post',
+      url: 'https://accounts.spotify.com/api/token',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: 'Basic ' + Buffer.from('acc6302297e040aeb6e4ac1fbdfd62c3:0e8439a1280a43aba9a5bc0a16f3f009').toString('base64'),
+      },
+      data: 'grant_type=client_credentials',
+    });
+    return response.data.access_token;
+  } catch (error) {
+    console.error(`Error en tokens: ${error}`);
+    throw new Error('No se pudo obtener el token de acceso');
+  }
+}
+
+function timestamp(time) {
+  const minutes = Math.floor(time / 60000);
+  const seconds = Math.floor((time % 60000) / 1000);
+  return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+}
+
+async function getBuffer(url, options) {
+  try {
+    options = options || {};
+    const res = await axios({
+      method: 'get',
+      url,
+      headers: {
+        DNT: 1,
+        'Upgrade-Insecure-Request': 1,
+      },
+      ...options,
+      responseType: 'arraybuffer',
+    });
+    return res.data;
+  } catch (err) {
+    return err;
+  }
+}
+
+async function getTinyURL(text) {
+  try {
+    let response = await axios.get(`https://tinyurl.com/api-create.php?url=${text}`);
+    return response.data;
+  } catch (error) {
+    return text;
+  }
+}
