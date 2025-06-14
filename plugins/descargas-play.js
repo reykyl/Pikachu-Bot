@@ -118,7 +118,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
           externalAdReply: {
             showAdAttribution: true,
             mediaType: 2,
-            //mediaUrl: url,
+            mediaUrl: url,
             //title: title,
             //body: `Duración: ${timestamp} | Vistas: ${vistas}`,
             sourceUrl: url,
