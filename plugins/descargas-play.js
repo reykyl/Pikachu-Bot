@@ -97,7 +97,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
           previewType: 0,
           mediaUrl: url,
           sourceUrl: url,
-          thumbnail: thumb,
+          thumbnailUrl: "https://tu-imagen.com/pikachu-bot.jpg",
           renderLargerThumbnail: true
         }
       }
