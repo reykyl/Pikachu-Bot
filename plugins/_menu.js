@@ -69,7 +69,7 @@ const users = [...new Set([
     }));
 
     let menuText = `
-╭═══════〔 ⚡ 𝙋𝙄𝙆𝘼𝘾𝙃𝙐 - 𝘽𝙊𝙏 ⚡ 〕═══════╮
+╭════〔 ⚡ 𝙋𝙄𝙆𝘼𝘾𝙃𝙐 - 𝘽𝙊𝙏 ⚡ 〕════╮
 │ 🧃 *Usuario:* @${userId.split('@')[0]}
 │ ⚡ *Tipo:* ${(conn.user.jid == global.conn.user.jid ? 'Principal 🅥' : 'Prem Bot 🅑')}
 │ 🌐 *Modo actual:* ${mode}
@@ -77,7 +77,7 @@ const users = [...new Set([
 │ ⏱️ *Tiempo activo:* ${uptime}
 │ 💾 *Comandos:* ${totalCommands}
 │ 🤖 *Sub-Bots activos:* ${users.length}
-╰═════════════════════════════╯
+╰════════════════════════════╯
 🎮 *📋 COMANDOS DISPONIBLES 📋* ⚡
 ${readMore}
 
