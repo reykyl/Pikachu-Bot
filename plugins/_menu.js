@@ -80,6 +80,7 @@ const users = [...new Set([
 ╰═════════════════════════════╯
 
 🎮 *📋 COMANDOS DISPONIBLES 📋* ⚡
+${readMore}
 
 ${Object.keys(tags).map(tag => {
   const commandsForTag = help.filter(menu => menu.tags.includes(tag));
