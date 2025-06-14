@@ -1,3 +1,6 @@
+/*Código creado por Angel, no quitar créditos.
+By bot Pikachu*/
+
 import fetch from 'node-fetch'
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
