@@ -9,7 +9,6 @@ let handler = async (m, { conn, args, participants, groupMetadata, usedPrefix, c
   const group = m.chat;
   const totalMembers = participants.length;
 
-  
   if (command === 'link' || command === 'enlace') {
     const link = 'https://chat.whatsapp.com/' + await conn.groupInviteCode(group);
     await conn.reply(m.chat, 
@@ -22,34 +21,31 @@ let handler = async (m, { conn, args, participants, groupMetadata, usedPrefix, c
 ${link}
 
 🐭 ¡Pikachu dice que lo compartas con los mejores entrenadores! ⚡`, 
-m, { detectLink: true });
+    m, { detectLink: true });
     return;
   }
 
-
-if (command === 'del' || command === 'delete') {
-if (!m.quoted) return conn.reply(m.chat, `${emoji} Por favor, cita el mensaje que deseas eliminar.`, m)
-try {
-let delet = m.message.extendedTextMessage.contextInfo.participant
-let bang = m.message.extendedTextMessage.contextInfo.stanzaId
-return conn.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: false, id: bang, participant: delet }})
-} catch {
-return conn.sendMessage(m.chat, { delete: m.quoted.vM.key })
-}}
-   }
-
-
-
-  const isClose = {
-    'open': 'not_announcement',
-    'close': 'announcement',
-    'abierto': 'not_announcement',
-    'cerrado': 'announcement',
-    'on': 'not_announcement',
-    'off': 'announcement'
-  }[(args[0] || '').toLowerCase()];
+  if (command === 'del' || command === 'delete') {
+    if (!m.quoted) return conn.reply(m.chat, `${emoji} Por favor, cita el mensaje que deseas eliminar.`, m);
+    try {
+      let delet = m.message.extendedTextMessage.contextInfo.participant;
+      let bang = m.message.extendedTextMessage.contextInfo.stanzaId;
+      return conn.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: false, id: bang, participant: delet }});
+    } catch {
+      return conn.sendMessage(m.chat, { delete: m.quoted.vM.key });
+    }
+  }
 
   if (command === 'group' || command === 'grupo') {
+    const isClose = {
+      'open': 'not_announcement',
+      'close': 'announcement',
+      'abierto': 'not_announcement',
+      'cerrado': 'announcement',
+      'on': 'not_announcement',
+      'off': 'announcement'
+    }[(args[0] || '').toLowerCase()];
+
     if (!isClose) {
       return conn.reply(m.chat, 
 `${emoji} *Opciones válidas para configurar el grupo:*
@@ -75,8 +71,10 @@ return conn.sendMessage(m.chat, { delete: m.quoted.vM.key })
 handler.help = ['link', 'group open / close', 'del', 'delete'];
 handler.tags = ['grupo'];
 handler.command = ['link', 'enlace', 'group', 'grupo', 'del', 'delete'];
+
+
 handler.group = true;
-handler.botAdmin = true;
-handler.admin = true;
+handler.botAdmin = (m) => ['group', 'grupo', 'del', 'delete'].includes(m.command);
+handler.admin = (m) => ['group', 'grupo', 'del', 'delete'].includes(m.command);
 
 export default handler;
