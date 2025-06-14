@@ -103,8 +103,8 @@ ${commandsForTag.map(menu => menu.help.map(help =>
 `.trim();
 
     // no tocar 
-    const imageUrls = 'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/refs/heads/main/src/IMG-20250613-WA0194.jpg';
-    let selectedImage = imageUrls[Math.floor(Math.random() * imageUrls.length)];
+    const imageUrls = 'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/IMG-20250613-WA0194.jpg'; // corrige "refs/heads"
+let selectedImage = imageUrls;
 
     await m.react('👑');
 
