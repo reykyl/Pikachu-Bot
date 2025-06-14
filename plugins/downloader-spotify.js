@@ -1,5 +1,5 @@
 /*Código creado por Angel, no quitar créditos.
-By bot Pikachu*/.
+By bot Pikachu*/
 
 import fetch from 'node-fetch'
 
