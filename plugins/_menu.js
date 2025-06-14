@@ -78,13 +78,12 @@ const users = [...new Set([
 │ 💾 *Comandos:* ${totalCommands}
 │ 🤖 *Sub-Bots activos:* ${users.length}
 ╰═════════════════════════════╯
-
 🎮 *📋 COMANDOS DISPONIBLES 📋* ⚡
 ${readMore}
 
 ${Object.keys(tags).map(tag => {
   const commandsForTag = help.filter(menu => menu.tags.includes(tag));
-  if (commandsForTag.length === 0) return '';
+  if (commandsForTag.length === 0) return ''; 
 
   return `
 ╭─🧃 *${tags[tag]}* ${getRandomEmoji()}
@@ -94,17 +93,12 @@ ${commandsForTag.map(menu => menu.help.map(help =>
 ╰────────────────────────────╯`
 }).filter(text => text !== '').join('\n')}
 
-
-
-
-🧃 *Gracias por usar a Pikachu-Bot*
-🔗 *Síguenos en nuestras redes: ${redes || 'https://whatsapp.com/channel/0029VbB46nl2ER6dZac6Nd1o'}*
-⚡ *By:* Deylin - ${botname}
+*👑 © Powered by Deylin - ${botname}*
 `.trim();
 
     // no tocar 
-    const imageUrls = 'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/IMG-20250613-WA0194.jpg'; // corrige "refs/heads"
-let selectedImage = imageUrls;
+    const imageUrls = 'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/IMG-20250613-WA0194.jpg';
+    let selectedImage = imageUrls[Math.floor(Math.random() * imageUrls.length)];
 
     await m.react('👑');
 
@@ -151,5 +145,19 @@ function clockString(ms) {
   let m = Math.floor(ms / 60000) % 60;
   let s = Math.floor(ms / 1000) % 60;
   return [h, m, s].map(v => v.toString().padStart(2, 0)).join(':');
+}
+
+function getRandomEmoji() {
+  const emojis = ['👑', '🔥', '🌟', '⚡'];
+  return emojis[Math.floor(Math.random() * emojis.length)];
+}
+
+function getLevelProgress(exp, min, max, length = 10) {
+  if (exp < min) exp = min;
+  if (exp > max) exp = max;
+  let progress = Math.floor(((exp - min) / (max - min)) * length);
+  progress = Math.max(0, Math.min(progress, length)); 
+  let bar = '█'.repeat(progress) + '░'.repeat(length - progress);
+  return `[${bar}]`;
 }
 
