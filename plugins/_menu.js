@@ -102,7 +102,7 @@ ${commandsForTag.map(menu => menu.help.map(help =>
 `.trim();
 
     // no tocar 
-    const imageUrls = 'https://raw.githubusercontent.com/Deylin-Eliac/kirito-bot-MD/main/src/catalogo.jpg';
+    const imageUrls = 'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/refs/heads/main/src/IMG-20250613-WA0194.jpg';
     let selectedImage = imageUrls[Math.floor(Math.random() * imageUrls.length)];
 
     await m.react('👑');
@@ -152,16 +152,3 @@ function clockString(ms) {
   return [h, m, s].map(v => v.toString().padStart(2, 0)).join(':');
 }
 
-function getRandomEmoji() {
-  const emojis = ['👑', '🔥', '🌟', '⚡'];
-  return emojis[Math.floor(Math.random() * emojis.length)];
-}
-
-function getLevelProgress(exp, min, max, length = 10) {
-  if (exp < min) exp = min;
-  if (exp > max) exp = max;
-  let progress = Math.floor(((exp - min) / (max - min)) * length);
-  progress = Math.max(0, Math.min(progress, length)); 
-  let bar = '█'.repeat(progress) + '░'.repeat(length - progress);
-  return `[${bar}]`;
-}
