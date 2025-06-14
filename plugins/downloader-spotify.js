@@ -2,6 +2,9 @@
 By bot Pikachu*/
 
 import fetch from 'node-fetch'
+import yts from "yt-search";
+import axios from "axios";
+
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
 if (!text) throw m.reply(`⚡ Por favor, ingresa el nombre de una canción de Spotify.`
