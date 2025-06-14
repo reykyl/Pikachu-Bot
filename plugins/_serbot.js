@@ -63,7 +63,7 @@ let rtx2 = `╭───────────────⚡
 🐭 *¡Pikachu quiere evitar que te banneen por sobrecarga eléctrica!*  
 `;
 
-let imagenUrl = 'https://github.com/Deylin-Eliac/Pikachu-Bot/blob/main/src%2Fcatalogo.jpg';
+let imagenUrl = 'src/catalogo.jpg';
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
