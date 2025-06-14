@@ -63,11 +63,12 @@ const ddownr = {
 
 const handler = async (m, { conn, text, usedPrefix, command }) => {
   await m.react('⚡️');
-  try {
-    if (!text.trim()) {
-      return conn.reply(m.chat, "*Ｏ(≧∇≦)Ｏ🧃* *Pikachu-Bot* | Dime el nombre de la canción que estás buscando, ¡Pika!", m, rcanal);
-    }
 
+  if (!text.trim()) {
+    return conn.reply(m.chat, "*Ｏ(≧∇≦)Ｏ🧃* *Pikachu-Bot* | Dime el nombre de la canción que estás buscando, ¡Pika!", m, rcanal);
+  }
+
+  try {
     const search = await yts(text);
     if (!search.all.length) {
       return m.reply("*(>_<)🧃* Pikachu no encontró nada con ese nombre...");
@@ -105,30 +106,33 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
     await m.react('🎧');
     await conn.reply(m.chat, infoMessage, m, JT);
 
+    // Audio (play/yta/ytmp3)
     if (["play", "yta", "ytmp3"].includes(command)) {
-  const api = await ddownr.download(url, "mp3");
+      const api = await ddownr.download(url, "mp3");
 
-  const doc = {
-    audio: { url: api.downloadUrl },
-    mimetype: 'audio/mpeg',
-    fileName: `${title}.mp3`,
-    contextInfo: {
-      externalAdReply: {
-        showAdAttribution: true,
-        mediaType: 2,
-        mediaUrl: url,
-        title: title,
-        body: `Duración: ${timestamp} | Vistas: ${vistas}`,
-        sourceUrl: url,
-        thumbnail: thumb,
-        renderLargerThumbnail: true
-      }
+      const doc = {
+        audio: { url: api.downloadUrl },
+        mimetype: 'audio/mpeg',
+        fileName: `${title}.mp3`,
+        contextInfo: {
+          externalAdReply: {
+            showAdAttribution: true,
+            mediaType: 2,
+            mediaUrl: url,
+            title: title,
+            body: `Duración: ${timestamp} | Vistas: ${vistas}`,
+            sourceUrl: url,
+            thumbnail: thumb,
+            renderLargerThumbnail: true
+          }
+        }
+      };
+
+      return await conn.sendMessage(m.chat, doc, { quoted: m });
     }
-  };
 
-  await conn.sendMessage(m.chat, doc, { quoted: m });
-}
-    } else if (["play2", "ytv", "ytmp4"].includes(command)) {
+    // Video (play2/ytv/ytmp4)
+    if (["play2", "ytv", "ytmp4"].includes(command)) {
       const sources = [
         `https://api.siputzx.my.id/api/d/ytmp4?url=${url}`,
         `https://api.zenkey.my.id/api/download/ytmp4?apikey=zenkey&url=${url}`,
@@ -162,11 +166,10 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
       if (!success) {
         return m.reply("❌ Pikachu no pudo encontrar un enlace válido para descargar.");
       }
-    } else {
-      throw "❌ ¡Ese comando no lo conozco, pika!";
     }
 
   } catch (error) {
+    console.error("❌ Error:", error);
     return m.reply(`⚠️ Ocurrió un error eléctrico: ${error.message}`);
   }
 };
