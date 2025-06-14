@@ -1,5 +1,5 @@
 //© código creado por Deylin 
-//https://github.com/deylinqff
+//https://github.com/Deylin-eliac 
 //➤  no quites creditos 
 
 import { WAMessageStubType } from '@whiskeysockets/baileys'
@@ -29,12 +29,12 @@ export async function before(m, { conn, participants, groupMetadata }) {
   let date = new Date().toLocaleString("es-ES", { timeZone: "America/Mexico_City" });
 
   let pais = obtenerPais(who);
-  let ppUser = 'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/refs/heads/main/src/IMG-20250613-WA0194.jpg'
+  let ppUser = 'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/refs/heads/main/src/IMG-20250613-WA0194.jpg';
 
   try {
     ppUser = await conn.profilePictureUrl(who, 'image');
   } catch (e) {
-    // Si falla, se mantiene la imagen por defecto
+    
   }
 
   let frasesBienvenida = [
