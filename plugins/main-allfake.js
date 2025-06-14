@@ -64,7 +64,7 @@ global.emoji2 = '*(≧▽≦)*'
 global.emoji3 = '*(^・ω・^ )*'
 global.emoji4 = '*ฅ՞•ﻌ•՞ฅ*'
 global.emoji5 = '*⚡˙Ⱉ˙ฅ*'
-global.emoji = [emoji0, emoji2, emoji3, emoji4, emoji5].getRandom()
+global.emojis = [emoji0, emoji2, emoji3, emoji4, emoji5].getRandom()
 
 global.wait = '⚡ *Espera un momento entrenador...*'
 global.waitt = global.wait
