@@ -4,7 +4,7 @@ By bot Pikachu*/
 import fetch from 'node-fetch'
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
-if (!text) throw m.reply(`${pikachu} ¡Pika Pika! , m, rcanal);`
+if (!text) throw m.reply(`💨 Por favor, ingresa el nombre de una canción de Spotify., m, rcanal);`
 await m.react('🕒');
 let ouh = await fetch(`https://api.nekorinn.my.id/downloader/spotifyplay?q=${text}`)
 let gyh = await ouh.json()
