@@ -1,5 +1,5 @@
 //© código creado por Deylin 
-//https://github.com/deylinqff
+//https://github.com/deylin-eliac 
 //➤  no quites créditos
 
 let handler = async (m, { conn, args, participants, groupMetadata, usedPrefix, command }) => {
@@ -25,6 +25,19 @@ ${link}
 m, { detectLink: true });
     return;
   }
+
+
+if (command === 'del' || command === 'delete') {
+if (!m.quoted) return conn.reply(m.chat, `${emoji} Por favor, cita el mensaje que deseas eliminar.`, m)
+try {
+let delet = m.message.extendedTextMessage.contextInfo.participant
+let bang = m.message.extendedTextMessage.contextInfo.stanzaId
+return conn.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: false, id: bang, participant: delet }})
+} catch {
+return conn.sendMessage(m.chat, { delete: m.quoted.vM.key })
+}}
+   }
+
 
 
   const isClose = {
@@ -59,9 +72,9 @@ m, { detectLink: true });
   }
 };
 
-handler.help = ['link', 'group open / close'];
+handler.help = ['link', 'group open / close', 'del', 'delete'];
 handler.tags = ['grupo'];
-handler.command = ['link', 'enlace', 'group', 'grupo'];
+handler.command = ['link', 'enlace', 'group', 'grupo', 'del', 'delete'];
 handler.group = true;
 handler.botAdmin = true;
 handler.admin = true;
