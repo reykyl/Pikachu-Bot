@@ -5,6 +5,7 @@ import ws from 'ws';
 
 let tags = {
   'anime': 'ANIME',
+  'juegos': 'JUEGOS',
   'main': 'INFO',
   'search': 'SEARCH',
   'game': 'GAME',
