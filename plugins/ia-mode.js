@@ -1,6 +1,6 @@
 import fetch from 'node-fetch'
 
-var handler = async (m, { text, usedPrefix, command, args }) => {
+var handler = async (m, { text, command, args }) => {
   if (!text) return conn.reply(m.chat, `✨ Ingrese una petición para que Mode IA lo responda.`, m)
   try {
     await m.react('✨')
@@ -17,14 +17,11 @@ var handler = async (m, { text, usedPrefix, command, args }) => {
   }
 }
 
-handler.command = ['modeia', 'mode', 'ia']
+
+handler.command = /^(@ia|@modeia|@mode|modeia|mode|ia)$/i
 handler.help = ['modeia']
 handler.tags = ['ai']
 handler.group = true
-
-
-handler.customPrefix = /^(@ia|@modeia|@mode)/i
-handler.command = new RegExp 
-handler.nonPrefix = true 
+handler.nonPrefix = true // Permite sin prefijo
 
 export default handler
