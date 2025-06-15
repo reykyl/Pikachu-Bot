@@ -3,16 +3,17 @@ let WAMessageStubType = (await import('@whiskeysockets/baileys')).default
 export async function before(m, { conn, participants, groupMetadata }) {
   if (!m.messageStubType || !m.isGroup) return
 
+
   const fkontak = {
     key: {
       remoteJid: "status@broadcast",
       fromMe: false,
-      id: "pikachu-bot"
+      id: "kirito-bot"
     },
     message: {
       contactMessage: {
-        displayName: "PikachuBot",
-        vcard: `BEGIN:VCARD\nVERSION:3.0\nN:Pikachu;Bot;;;\nFN:PikachuBot Oficial\nORG:PikachuBot Team;\nTEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nEMAIL;type=INTERNET:soporte@pikachubot.net\nEND:VCARD`
+        displayName: "KiritoBot",
+        vcard: `BEGIN:VCARD\nVERSION:3.0\nN:Kirito;Bot;;;\nFN:KiritoBot Oficial\nORG:KiritoBot Team;\nTEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nEMAIL;type=INTERNET:soporte@kiritobot.net\nEND:VCARD`
       }
     },
     participant: "0@s.whatsapp.net"
@@ -22,18 +23,19 @@ export async function before(m, { conn, participants, groupMetadata }) {
   let usuario = `@${m.sender.split`@`[0]}`
   let pp = await conn.profilePictureUrl(m.chat, 'image').catch(_ => null) || 'catalogo.jpg'
 
-  const borde = "⚡━━━━━━━━━━━━━━⚡"
-  const medio = "│  ⚡ PikachuBot ⚡"
-  const fin =   "⚡━━━━━━━━━━━━━━⚡"
+
+  const borde = "╭───────────────╮"
+  const medio = "│    *Pikachu* 🧃"
+  const fin =   "╰───────────────╯"
 
   let nombre = `${borde}\n${medio}\n╰➤ ${usuario} \ncambió el nombre del grupo.\n   Nuevo nombre: *${m.messageStubParameters[0]}*\n${fin}`
   let foto = {
     image: { url: pp },
-    caption: `${borde}\n${medio}\n╰➤ ${usuario} \nactualizó la foto del grupo.\n   ¡Una nueva aventura eléctrica comienza!\n${fin}`,
+    caption: `${borde}\n${medio}\n╰➤ ${usuario} \nactualizó la foto del grupo.\n   ¡Una nueva etapa comienza!\n${fin}`,
     mentions: [m.sender]
   }
   let edit = `${borde}\n${medio}\n╰➤ ${usuario} \nmodificó la configuración del grupo.\n   Ahora *${m.messageStubParameters[0] == 'on' ? 'solo admins' : 'todos'}* pueden editar info.\n${fin}`
-  let newlink = `${borde}\n${medio}\n╰➤ ${usuario} \nrestableció el enlace del grupo.\n   ¡Cuídalo como si fuera una Pokébola legendaria!\n${fin}`
+  let newlink = `${borde}\n${medio}\n╰➤ ${usuario} \nrestableció el enlace del grupo.\n   ¡No lo compartas con cualquiera!\n${fin}`
   let status = `${borde}\n${medio}\n╰➤ El grupo fue *${m.messageStubParameters[0] == 'on' ? 'cerrado' : 'abierto'}* por ${usuario}.\n   Ahora *${m.messageStubParameters[0] == 'on' ? 'solo admins' : 'todos'}* pueden enviar mensajes.\n${fin}`
   let admingp = `${borde}\n${medio}\n╰➤ *@${m.messageStubParameters[0].split`@`[0]}* ahora es *admin*.\n   Acción realizada por ${usuario}\n${fin}`
   let noadmingp = `${borde}\n${medio}\n╰➤ *@${m.messageStubParameters[0].split`@`[0]}* ya no es *admin*.\n   Acción realizada por ${usuario}\n${fin}`
