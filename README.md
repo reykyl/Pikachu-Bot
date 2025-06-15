@@ -32,3 +32,4 @@
 git clone https://github.com/Deylin-Eliac/Pikachu-Bot
 cd Pikachu-Bot
 npm install
+npm start
