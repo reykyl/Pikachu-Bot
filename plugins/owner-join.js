@@ -4,14 +4,14 @@ let handler = async (m, { conn, text, isOwner }) => {
     if (!text) return m.reply(`${emoji} Debes enviar una invitación para que *${botname}* se una al grupo.`);
 
     let match = text.match(linkRegex);
-    if (!match) return m.reply(`${emoji} Enlace de invitación no válido.`);
+    if (!match) return m.reply(`${emojis} Enlace de invitación no válido.`);
 
     let [, code] = match;
 
     if (isOwner) {
         try {
             let groupId = await conn.groupAcceptInvite(code);
-            m.reply(`${emoji} Me he unido exitosamente al grupo.`);
+            m.reply(`${emojis} Me he unido exitosamente al grupo.`);
 
 
             await conn.sendMessage(groupId, { text: '🚀 Llegó papá 😎' });
@@ -31,7 +31,7 @@ let handler = async (m, { conn, text, isOwner }) => {
             m.reply(msg);
         }
     } else {
-        let message = `${emoji} Invitación a un grupo:\n${text}\n\nPor: @${m.sender.split('@')[0]}`;
+        let message = `${emojis} Invitación a un grupo:\n${text}\n\nPor: @${m.sender.split('@')[0]}`;
         await conn.sendMessage(`${suittag}@s.whatsapp.net`, { text: message, mentions: [m.sender] }, { quoted: m });
         m.reply(`${emoji} El link del grupo ha sido enviado, gracias por tu invitación. ฅ^•ﻌ•^ฅ`);
     }
