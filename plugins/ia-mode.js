@@ -18,9 +18,3 @@ var handler = async (m, { text, usedPrefix, command }) => {
 }
 
 
-handler.help = ['update', 'actualizar'];
-handler.customPrefix = /^(t|.t)$/i
-handler.command = new RegExp
-handler.rowner = true;
-
-export default handler;
