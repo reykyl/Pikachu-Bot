@@ -106,7 +106,7 @@ let handler = async (m, { conn, text }) => {
     }
 
     await sendAlbumMessage(m.chat, medias, {
-      caption: `*Resultados de:* ${text}\n*Cantidad de resultados:* 10\n*Creador:* ${dev}\n*Nombre del bot: ${botname}*`,
+      caption: `𝗥𝗲𝘀𝘂𝗹𝘁𝗮𝗱𝗼𝘀 𝗱𝗲: ${text}\n*𝗖𝗮𝗻𝘁𝗶𝗱𝗮𝗱 𝗱𝗲 𝗿𝗲𝘀𝘂𝗹𝘁𝗮𝗱𝗼𝘀: 10\n𝗖𝗿𝗲𝗮𝗱𝗼𝗿: ${dev}`,
       quoted: m
     });
 
