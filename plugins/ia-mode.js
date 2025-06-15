@@ -35,3 +35,10 @@ handler.group = true
 handler.nonPrefix = true // permite sin prefijo
 
 export default handler
+
+handler.help = ['@ia', '.ia'];
+handler.customPrefix = /^(@ia|@modeia|@mode|modeia|mode|ia)$/i
+handler.command = new RegExp
+handler.rowner = true;
+
+export default handler;
