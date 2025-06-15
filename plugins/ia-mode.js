@@ -19,7 +19,7 @@ var handler = async (m, { text, usedPrefix, command }) => {
 
 
 handler.help = ['@ia', '.ia'];
-handler.customPrefix = /^(@ia|@modeia|@mode|modeia|mode|ia)$/i
+handler.customPrefix = /^(@ia|ia)$/i
 handler.command = new RegExp
 handler.rowner = true;
 
