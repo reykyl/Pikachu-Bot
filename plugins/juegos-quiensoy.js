@@ -1,3 +1,6 @@
+// creador por brayan X clarita 
+// https://github.com/El-brayan502 
+
 const juegos = [
   {
     pregunta: '🐭 Soy un Pokémon eléctrico amarillo muy famoso',
