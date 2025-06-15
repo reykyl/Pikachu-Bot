@@ -13,7 +13,7 @@ const handler = async (m, { text, args }) => {
     .replace(/^(@ia|@modeia|@mode|modeia|mode|ia)\s*/i, '')
     .trim()
 
-  if (!text) return conn.reply(m.chat, `✨ Ingrese una petición para que Mode IA lo responda.`, m)
+  if (!prompt) return conn.reply(m.chat, `✨ Ingrese una petición para que Mode IA lo responda.`, m)
 
   try {
     await m.react('✨')
@@ -26,7 +26,6 @@ const handler = async (m, { text, args }) => {
     await conn.reply(m.chat, `💢 Mode IA no puede responder a esa pregunta.`, m)
   }
 }
-
 
 
 handler.help = ['@ia', '.ia'];
