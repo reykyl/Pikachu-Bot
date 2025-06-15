@@ -1,6 +1,6 @@
 <h1 align="center">⚡ Pikachu-Bot ⚡</h1>
 <p align="center">
-  <img src="https://media.tenor.com/6b-fZLVQSeQAAAAC/pikachu.gif" width="250" alt="Pikachu Bot" />
+  <img src="https://d.uguu.se/roosKOCc.gif" width="250" alt="Pikachu Bot" />
 </p>
 <p align="center">
   Bot de WhatsApp multi-función con comandos de música, stickers, juegos, administración y mucho más. Basado en <b>Baileys MD</b>.
