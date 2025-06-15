@@ -56,7 +56,7 @@ global.packname = '🧃 Pikachu-Bot MD';
 global.botname = '⚡ Pikachu-Bot ⚡';
 global.wm = 'Pikachu-MD';
 global.author = 'Creado por ⚡ Deylin';
-global.dev = '© Desarrollado por 🧠 Deylin';
+global.dev = '© Desarrollado por Deylin';
 global.textbot = 'Pikachu-Bot • Potenciado por Deylin';
 global.etiqueta = 'Team Pikachu ⚡';
 
