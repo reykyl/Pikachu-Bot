@@ -1,8 +1,34 @@
-<a href="https://fontmeme.com/pokemon-font/"><img src="https://fontmeme.com/permalink/250613/cd94991f14ea1a6abbf6634f6d7e3e9b.png" alt="pokemon-font" border="0"></a>
-
-<img src="https://media.giphy.com/media/12r4pHjvAOv48o/giphy.gif" alt="GIF" width="250" height="200"/>
+<h1 align="center">⚡ Pikachu-Bot ⚡</h1>
+<p align="center">
+  <img src="https://media.tenor.com/6b-fZLVQSeQAAAAC/pikachu.gif" width="250" alt="Pikachu Bot" />
+</p>
+<p align="center">
+  Bot de WhatsApp multi-función con comandos de música, stickers, juegos, administración y mucho más. Basado en <b>Baileys MD</b>.
 </p>
 
-<div align="center">
+---
 
-## [![PIKACHU](https://readme-typing-svg.herokuapp.com?font=Road+Rage&color=FFA500&lines=Bienvenido+al+repositorio+del+bot+de+WhatsApp+Pikachu;Creado+por+Deylin+Eliac)](https://bit.ly/2VM4lxF)
+## 🚀 Características
+
+✅ Compatible con Multi-Device  
+✅ Sistema de comandos modular  
+✅ Soporte para Stickers, Juegos, Descargas, Herramientas  
+✅ Admin de grupos, Bienvenidas/Despedidas  
+✅ Comandos automáticos y personalizados  
+✅ Fácil de instalar y editar
+
+---
+
+## 📦 Instalación rápida
+
+### 🧠 Requisitos
+- Node.js v18+
+- Git
+- ffmpeg, imagemagick
+- Número de WhatsApp con código QR
+
+### 🖥️ Clonar y configurar
+```bash
+git clone https://github.com/Deylin-Eliac/Pikachu-Bot
+cd Pikachu-Bot
+npm install
