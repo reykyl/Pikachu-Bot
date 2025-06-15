@@ -20,7 +20,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
 
   let chat = global.db.data.chats[m.chat]
   let usuario = `@${m.sender.split`@`[0]}`
-  let pp = await conn.profilePictureUrl(m.chat, 'image').catch(_ => null) || 'https://files.catbox.moe/xr2m6u.jpg'
+  let pp = await conn.profilePictureUrl(m.chat, 'image').catch(_ => null) || 'catalogo.jpg'
 
   const borde = "⚡━━━━━━━━━━━━━━⚡"
   const medio = "│  ⚡ PikachuBot ⚡"
