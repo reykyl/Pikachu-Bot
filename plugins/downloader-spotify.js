@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const { Spotify } = require('canvafy');
 const handler = async (m, { conn, args, usedPrefix, command }) => {
   if (!args.length) return m.reply(`masukkan judul lagu nya 🙄 contoh : ${usedPrefix + command} night changes`);
-  const query = args.join(' ');
+  const query = args.join('y');
   const searchUrl = `https://zenz.biz.id/search/spotify?query=${encodeURIComponent(query)}`;
   try {
     const res = await fetch(searchUrl);
