@@ -30,7 +30,7 @@ global.confirmCode = ''
 global.owner = [
 ['50433191934', '🔰 Creador 🔰', true],
 ['5215649896365', 'Angel', true],
-['573001533523', '🧃', true],
+['573001533523', 'BʀᴀʏᴀɴXD', true],
 //['numero', 'nombre', true],
 ];
 
