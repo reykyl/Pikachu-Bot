@@ -1,12 +1,17 @@
 import fetch from 'node-fetch'
 
-var handler = async (m, { text, usedPrefix, command }) => {
-  if (!text) return conn.reply(m.chat, `${emoji} Ingrese una petición para que Mode IA lo responda.`, m, rcanal)
+const emoji = '🤖' // Define el emoji
+const rcanal = null // Ajusta si tienes un valor para esto (puedes quitarlo si no lo usas)
+
+var handler = async (m, { text }) => {
+  const prompt = text || m.text?.replace(/^@ia/i, '').trim()
+
+  if (!prompt) return conn.reply(m.chat, `${emoji} Ingrese una petición para que Mode IA lo responda.`, m, rcanal)
   try {
     await m.react('🌟')
     conn.sendPresenceUpdate('composing', m.chat)
 
-    let response = await fetch(`https://mode-ia.onrender.com/mode-ia?prompt=${encodeURIComponent(text)}`)
+    let response = await fetch(`https://mode-ia.onrender.com/mode-ia?prompt=${encodeURIComponent(prompt)}`)
     let data = await response.json()
 
     if (!data.response) throw 'Sin respuesta válida'
@@ -17,4 +22,14 @@ var handler = async (m, { text, usedPrefix, command }) => {
   }
 }
 
+// Acepta solo `.ia` como comando con prefijo
+handler.command = ['ia']
+// Y también permite sin prefijo cuando se usa `@ia`
+handler.customPrefix = /^@ia/i
+handler.nonPrefix = true
 
+handler.help = ['ia']
+handler.tags = ['ai']
+handler.group = true
+
+export default handler
