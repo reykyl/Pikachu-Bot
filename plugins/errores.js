@@ -7,7 +7,7 @@ var handler = async (m, { usedPrefix, command }) => {
         conn.sendPresenceUpdate('composing', m.chat);
 
         const dirs = ['./plugins'];
-        let response = `${emoji} *Revisión de Syntax Errors:*\n\n`;
+        let response = `${emojis} *Revisión de Syntax Errors:*\n\n`;
         let hasErrors = false;
 
         for (const pluginsDir of dirs) {
@@ -18,7 +18,7 @@ var handler = async (m, { usedPrefix, command }) => {
                     await import(path.resolve(pluginsDir, file));
                 } catch (error) {
                     hasErrors = true;
-                    response += `${emoji} *Error en:* ${file} (${pluginsDir})\n`;
+                    response += `${emojis} *Error en:* ${file} (${pluginsDir})\n`;
                     if (error.loc) {
                         response += `*Línea:* ${error.loc.line}, *Columna:* ${error.loc.column}\n`;
                     }
@@ -28,7 +28,7 @@ var handler = async (m, { usedPrefix, command }) => {
         }
 
         if (!hasErrors) {
-            response += `${emoji} ¡Todo está en orden! No se detectaron errores de sintaxis.`;
+            response += `${emojis} ¡Todo está en orden! No se detectaron errores de sintaxis.`;
         }
 
         await conn.reply(m.chat, response, m, rcanal);
