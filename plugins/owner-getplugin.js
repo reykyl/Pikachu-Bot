@@ -1,3 +1,7 @@
+/*creador por angel xd
+(Brayan se la come)*/
+
+
 import cp, {exec as _exec} from 'child_process';
 import {promisify} from 'util';
 import fs from 'fs';
