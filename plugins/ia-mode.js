@@ -25,25 +25,6 @@ handlerPrefix.command = ['modeia', 'mode', 'ia']
 handlerPrefix.help = ['modeia']
 handlerPrefix.tags = ['ai']
 handlerPrefix.group = true
-
-// Handler 2: sin prefijo, con @mención (@ia, @mode)
-var handlerMention = async (m, { args, text }) => {
-  if (!text) return
-  if (!/^@(?:ia|modeia|mode)/i.test(m.text)) return
-
-  try {
-    await m.react('✨')
-    conn.sendPresenceUpdate('composing', m.chat)
-    let cleanText = m.text.replace(/^@(?:ia|modeia|mode)/i, '').trim()
-    if (!cleanText) return conn.reply(m.chat, `✨ Ingrese una petición para que Mode IA lo responda.`, m)
-    let reply = await callModeIA(cleanText)
-    await m.reply(reply)
-  } catch (e) {
-    await m.react('🌟')
-    await conn.reply(m.chat, `💢 Mode IA no puede responder a esa pregunta.`, m)
-  }
-}
-
 handlerMention.command = new RegExp // evita conflicto
 handlerMention.customPrefix = /^@(?:ia|modeia|mode)/i
 handlerMention.nonPrefix = true
