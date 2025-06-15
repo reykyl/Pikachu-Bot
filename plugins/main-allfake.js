@@ -59,11 +59,11 @@ global.done = '✅'
 global.error = '✖️'
 global.msm = '⚠️'
 
-global.emoji0 = '*⚡*'
-global.emoji2 = '*(≧▽≦)*'
-global.emoji3 = '*(^・ω・^ )*'
-global.emoji4 = '*ฅ՞•ﻌ•՞ฅ*'
-global.emoji5 = '*⚡˙Ⱉ˙ฅ*'
+global.emoji0 = '*Ｏ(≧∇≦)Ｏ 🧃*'
+global.emoji2 = '*(≧▽≦) 🧃*'
+global.emoji3 = '*(◕‿◕) 🧃*'
+global.emoji4 = '*(ुŏ̥̥ŏ̥̥) 🧃*'
+global.emoji5 = '*ᰔᩚ ( ᜊ°-° )ᜊ  .ᐟ .ᐟ 🧃*'
 global.emojis = [emoji0, emoji2, emoji3, emoji4, emoji5].getRandom()
 
 global.wait = '⚡ *Espera un momento entrenador...*'
