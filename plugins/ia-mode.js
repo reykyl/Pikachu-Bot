@@ -23,7 +23,7 @@ handler.tags = ['ai']
 handler.group = true
 
 
-handler.customPrefix = /^(@ia|ia|modeia|mode)/i
+handler.customPrefix = /^(@ia|@modeia|@mode)/i
 handler.command = new RegExp 
 handler.nonPrefix = true 
 
