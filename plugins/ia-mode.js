@@ -19,7 +19,6 @@ var handler = async (m, { text, usedPrefix, command }) => {
 
 
 handler.command = ['ia']
-handler.customPrefix = /^@ia/i
 handler.help = ['ia']
 handler.tags = ['ai']
 handler.group = true
