@@ -17,10 +17,10 @@ var handler = async (m, { text, usedPrefix, command, args }) => {
   }
 }
 
-/*handler.command = ['modeia', 'mode', 'ia']
+handler.command = ['modeia', 'mode', 'ia']
 handler.help = ['modeia']
 handler.tags = ['ai']
-handler.group = true*/
+handler.group = true
 
 handler.customPrefix = /^(@ia|.ia|@modeia|.modeia|@mode|.mode|)/i
 handler.command = new RegExp 
