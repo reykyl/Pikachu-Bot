@@ -11,20 +11,10 @@ let handler = async (m, { conn, text, isOwner }) => {
     if (isOwner) {
         try {
             let groupId = await conn.groupAcceptInvite(code);
-            m.reply(`${emojis} Solicitud enviada para unirme al grupo.`);
+            m.reply(`${emojis} Me he unido exitosamente al grupo.`);
 
-            
-            await new Promise(res => setTimeout(res, 3000));
 
-            
-            let metadata = await conn.groupMetadata(groupId);
-            let isMember = metadata.participants.some(p => p.id === conn.user.id);
-
-            if (isMember) {
-                await conn.sendMessage(groupId, { text: '🚀 Llegó papá 😎' });
-            } else {
-                console.log('[INFO] Aún no soy miembro del grupo (esperando aprobación).');
-            }
+            await conn.sendMessage(groupId, { text: '🚀 Llegó papá 😎' });
 
         } catch (err) {
             console.error('[ERROR AL UNIRSE AL GRUPO]', err);
