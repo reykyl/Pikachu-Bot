@@ -9,7 +9,7 @@ if (args.length >= 1) {
 text = args.slice(0).join(" ");
 } else if (m.quoted && m.quoted.text) {
 text = m.quoted.text;
-} else return conn.reply(m.chat, `⚡ Te Faltó El Texto!`, m, rcanal);
+} else return conn.reply(m.chat, `*ᰔᩚ ( ᜊ°-° )ᜊ  .ᐟ .ᐟ 🧃* *_Usa correctamente el comando entrenador, Pika Pika ⚡_*`, m, rcanal);
 if (!text) return conn.reply(m.chat, `⚡ Te Faltó El Texto!`, m, rcanal);
 const who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender; 
 const mentionRegex = new RegExp(`@${who.split('@')[0].replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*`, 'g');
