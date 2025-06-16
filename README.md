@@ -1,7 +1,7 @@
 <h1 align="center">⚡ Pikachu-Bot ⚡</h1>
 <p align="center">
 
-  <img src="https://d.uguu.se/roosKOCc.gif" width="250" alt="Pikachu Bot" />
+  <img src="https://d.uguu.se/roosKOCc.gif" 
 </p>
 
 <p align="center">
