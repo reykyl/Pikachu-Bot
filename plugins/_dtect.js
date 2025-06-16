@@ -8,13 +8,72 @@ let usuario = `@${m.sender.split`@`[0]}`
 let pp = await conn.profilePictureUrl(m.chat, 'image').catch(_ => null) || `${catalogo}` 
 
 let nombre, foto, edit, newlink, status, admingp, noadmingp
-nombre = `*${usuario}*\n✎ Ha cambiado el nombre del grupo\n\n⍰ Ahora el grupo se llama:\n${m.messageStubParameters[0]}*`
-foto = `*${usuario}*\n♛ Ha cambiado la imagen de:\n*${groupMetadata.subject}*`
-edit = `*${usuario}*\n✯ Ha permitido que ${m.messageStubParameters[0] == 'on' ? 'solo admins' : 'todos'} puedan configurar el grupo`
-newlink = `✫ El enlace del grupo ha sido restablecido por:\n*» ${usuario}*`
-status = `El grupo ha sido ${m.messageStubParameters[0] == 'on' ? '*cerrado 🔒*' : '*abierto 🔓*'} Por *${usuario}*\n\n💬 Ahora ${m.messageStubParameters[0] == 'on' ? '*solo admins*' : '*todos*'} pueden enviar mensaje`
-admingp = `*@${m.messageStubParameters[0].split`@`[0]}* Ahora es admin del grupo ☻\n\n💫 Acción hecha por:\n*» ${usuario}*`
-noadmingp =  `*@${m.messageStubParameters[0].split`@`[0]}* Deja de ser admin del grupo ☹\n\n💫 Acción hecha por:\n*» ${usuario}*`
+
+nombre = `
+⚡️ *¡Cambio de nombre!*
+🐭 Entrenador: *${usuario}*
+✏️ Ha renombrado el grupo con su PokéPluma.
+
+📛 Nuevo nombre:
+*「 ${m.messageStubParameters[0]} 」*
+🔁 ¡Un nuevo capítulo comienza!
+`
+
+foto = `
+🖼️ *¡Cambio de imagen!*
+🐭 *${usuario}* ha lanzado un *Ataque Estilo* sobre:
+📍 *${groupMetadata.subject}*
+
+✨ ¡La imagen del grupo ha evolucionado!
+`
+
+edit = `
+🛠️ *¡Permisos actualizados!*
+🧑‍🏫 Entrenador: *${usuario}*
+
+⚙️ Configuración del grupo:
+${m.messageStubParameters[0] == 'on' 
+  ? '🔒 Solo *Entrenadores Élite* (admins) pueden modificar la configuración.'
+  : '🔓 *Todos los miembros* pueden usar el PokéMenú de configuración.'
+}
+`
+
+newlink = `
+🔗 *¡Nuevo enlace generado!*
+👨‍💼 Entrenador: *${usuario}*
+🌐 Ha utilizado *Corte* y restablecido el camino al gimnasio.
+
+🚪 Nuevo acceso al grupo disponible.
+¡Atrapa la invitación si puedes!
+`
+
+status = `
+📢 *Estado del grupo actualizado*
+
+🔁 Acción realizada por: *${usuario}*
+🎮 Estado actual:
+${m.messageStubParameters[0] == 'on' 
+  ? '🔒 El grupo está *cerrado* — solo los Entrenadores Élite pueden hablar.'
+  : '🔓 El grupo está *abierto* — todos los entrenadores pueden participar.'
+}
+🎤 ¡Que comiencen las batallas de palabras!
+`
+
+admingp = `
+🧢 *¡Subida de rango!*
+🎖️ *@${m.messageStubParameters[0].split`@`[0]}* ha evolucionado a *Entrenador Élite (Admin)*
+
+👑 Acción autorizada por: *${usuario}*
+⚡ ¡Que aproveche su nuevo poder con sabiduría!
+`
+
+noadmingp = `
+❌ *¡Cambio de rol!*
+😿 *@${m.messageStubParameters[0].split`@`[0]}* ha perdido su rango de *Entrenador Élite*
+
+📉 Acción realizada por: *${usuario}*
+🍃 Volvió a su forma base.
+`
 
 if (chat.detect && m.messageStubType == 21) {
 await conn.sendMessage(m.chat, { text: nombre, mentions: [m.sender] }, { quoted: fkontak })   
