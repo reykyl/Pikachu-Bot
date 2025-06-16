@@ -1,10 +1,10 @@
 import { execSync } from 'child_process';
 
-let handler = async (m, { conn, args, command }) => {
+let handler = async (m, { conn, args }) => {
   const mensajeTexto = m.text?.toLowerCase()
 
-  // Comandos aceptados con o sin prefijo
-  const isMatch = /^(update|actualizar)$/i.test(command || '') || /^(update|actualizar)$/i.test(mensajeTexto)
+  // Comandos aceptados sin o con prefijo
+  const isMatch = /^(update|actualizar)$/i.test(mensajeTexto);
   if (!isMatch) return;
 
   try {
@@ -43,8 +43,8 @@ let handler = async (m, { conn, args, command }) => {
 };
 
 handler.help = ['update', 'actualizar'];
-handler.command = ['update', 'actualizar']; // Prefijo
 handler.tags = ['owner'];
 handler.rowner = true;
+// ❌ Ya no pongas handler.command
 
 export default handler;
