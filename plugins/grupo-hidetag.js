@@ -1,26 +1,19 @@
 let handler = async (m, { conn, participants, isAdmin, isOwner }) => {
   const texto = m.text || ''
-  const comandos = ['n', 'notify', 'notificar', 'hidetag', 'tag']
+  const match = texto.trim().match(/^[./!]?(\w+)\s?(.*)/i)
+  if (!match) return
 
-  const usado = comandos.find(c =>
-    texto.toLowerCase().startsWith(c + ' ') ||
-    texto.toLowerCase() === c ||
-    texto.toLowerCase().startsWith('.' + c + ' ') ||
-    texto.toLowerCase() === '.' + c ||
-    texto.toLowerCase().startsWith('/' + c + ' ') ||
-    texto.toLowerCase() === '/' + c ||
-    texto.toLowerCase().startsWith('!' + c + ' ') ||
-    texto.toLowerCase() === '!' + c
-  )
-
-  if (!usado) return
+  const comando = match[1]?.toLowerCase()
+  const contenido = match[2]?.trim()
+  const comandosValidos = ['n', 'notify', 'notificar', 'hidetag', 'tag']
+  if (!comandosValidos.includes(comando)) return
 
   if (!isAdmin && !isOwner) {
     return conn.reply(m.chat, '🚫 Este comando es solo para *admins*.', m)
   }
 
   const users = participants.map(p => p.id)
-  let mensaje = texto.replace(new RegExp(`^[./!\\s]*${usado}`, 'i'), '').trim()
+  let mensaje = contenido
 
   if (!mensaje && m.quoted) {
     mensaje = m.quoted.text || m.quoted.caption || '*📎 Archivo multimedia*'
@@ -36,7 +29,8 @@ let handler = async (m, { conn, participants, isAdmin, isOwner }) => {
 
 handler.group = true
 handler.admin = true
-handler.customPrefix = /^[./!]?((n|notify|notificar|hidetag|tag))( |$)/i
+handler.customPrefix = /^[./!]?(\w+)/i
+handler.command = new RegExp('^$') // Necesario para que se registre como "sin comando estándar"
 handler.exp = 0
 
 export default handler
