@@ -88,7 +88,7 @@ let imagenUrl = 'src/catalogo.jpg';
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-const kiritoJBOptions = {}
+const pikaJBOptions = {}
 if (global.conns instanceof Array) console.log()
 else global.conns = []
 let handler = async (m, { conn, args, usedPrefix, command, isOwner }) => {
@@ -105,18 +105,18 @@ return m.reply(`${emoji2} No se han encontrado espacios para *Sub-Bots* disponib
 }*/
 let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
 let id = `${who.split`@`[0]}`  //conn.getName(who)
-let pathkiritoJadiBot = path.join(`./${jadi}/`, id)
-if (!fs.existsSync(pathkiritoJadiBot)){
-fs.mkdirSync(pathkiritoJadiBot, { recursive: true })
+let pathpikaJadiBot = path.join(`./${jadi}/`, id)
+if (!fs.existsSync(pathpikaJadiBot)){
+fs.mkdirSync(pathpikaJadiBot, { recursive: true })
 }
-kiritoJBOptions.pathkiritoJadiBot = pathkiritoJadiBot
-kiritoJBOptions.m = m
-kiritoJBOptions.conn = conn
-kiritoJBOptions.args = args
-kiritoJBOptions.usedPrefix = usedPrefix
-kiritoJBOptions.command = command
-kiritoJBOptions.fromCommand = true
-kiritoJadiBot(kiritoJBOptions)
+pikaJBOptions.pathpikaJadiBot = pathpikaJadiBot
+pikatoJBOptions.m = m
+pikatoJBOptions.conn = conn
+pikaJBOptions.args = args
+pikaJBOptions.usedPrefix = usedPrefix
+pikaJBOptions.command = command
+pikaJBOptions.fromCommand = true
+pikaJadiBot(pikaJBOptions)
 global.db.data.users[m.sender].Subs = new Date * 1
 } 
 handler.help = ['qr', 'code']
@@ -124,8 +124,8 @@ handler.tags = ['serbot']
 handler.command = ['qr', 'code', 'serbot']
 export default handler 
 
-export async function kiritoJadiBot(options) {
-let { pathkiritoJadiBot, m, conn, args, usedPrefix, command } = options
+export async function pikaJadiBot(options) {
+let { pathpikaJadiBot, m, conn, args, usedPrefix, command } = options
 if (command === 'code') {
 command = 'qr'; 
 args.unshift('code')}
