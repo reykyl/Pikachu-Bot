@@ -1,46 +1,70 @@
-
 import fetch from 'node-fetch';
+
+// === Textos personalizables ===
+const TEXTS = {
+    usage: (prefix, cmd) => 
+        `*⚡ Usa bien el comando:*\n> *${prefix + cmd} <texto>*\n\n_Ejemplo:_\n${prefix + cmd} soy un brat`,
+
+    tooLong: (max, length) => 
+        `❗ *Texto demasiado largo* (máx. ${max} caracteres)\n\nTu texto tiene *${length}* caracteres.`,
+
+    errorGeneric: '*❌ Ocurrió un error inesperado al generar el sticker.*',
+
+    errorTimeout: '*⏱️ La API tardó demasiado en responder.*',
+
+    errorTip: '_Tip: Revisa tu conexión o intenta más tarde._',
+
+    errorDetail: (msg) => `🔧 *Detalle técnico:* ${msg}`
+};
+
+const MAX_TEXTO = 40;
 
 const handler = async (m, { conn, args, usedPrefix, command }) => {
     try {
         if (!args[0]) {
-            return conn.reply(m.chat, 
-                `*Ｏ(≧∇≦)Ｏ 🧃* *Entrenador! Usa bien el comando para hacerte un pika Brat ⚡*.`, m, rcanal); 
-                m);
+            return conn.reply(m.chat, TEXTS.usage(usedPrefix, command), m);
         }
 
-        const text = encodeURIComponent(args.join(" "));
-        const apiUrl = `https://api.siputzx.my.id/api/m/brat?text=${text}`;
+        const inputText = args.join(' ').trim();
 
-        // Reacción de espera
-        await conn.sendMessage(m.chat, { react: { text: '🗣️', key: m.key } });
+        if (inputText.length > MAX_TEXTO) {
+            return conn.reply(m.chat, TEXTS.tooLong(MAX_TEXTO, inputText.length), m);
+        }
 
-        // Obtener el sticker
-        const stickerResponse = await fetch(apiUrl);
-        if (!stickerResponse.ok) throw new Error('Error al generar el sticker');
+        const apiUrl = `https://api.siputzx.my.id/api/m/brat?text=${encodeURIComponent(inputText)}`;
 
-        // Enviar el sticker de forma limpia
+        await conn.sendMessage(m.chat, { react: { text: '⚡', key: m.key } });
+
+        const res = await fetch(apiUrl, { timeout: 10000 });
+        if (!res.ok) throw new Error(`API falló (${res.status})`);
+
+        const buffer = await res.buffer();
+
         await conn.sendMessage(m.chat, {
-            sticker: { url: apiUrl },
-            packname: 'Barboza',  // Nombre que aparecerá al ver info
-            author: conn.getName(m.sender) // Muestra el nombre del creador
+            sticker: buffer,
+            packname: 'Barboza',
+            author: await conn.getName(m.sender)
         }, { quoted: m });
 
-        // Reacción de éxito
         await conn.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
 
     } catch (err) {
-        console.error(err);
-        // Reacción de error
+        console.error('[ERROR EN /brat]', err);
+
+        const msgError = err.message.includes('timeout')
+            ? TEXTS.errorTimeout
+            : TEXTS.errorGeneric;
+
         await conn.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
-        await conn.reply(m.chat, 
-            `> 𝘖𝘤𝘶𝘳𝘳𝘪ó 𝘶𝘯 𝘦𝘳𝘳𝘰𝘳 𝘢𝘭 𝘨𝘦𝘯𝘦𝘳𝘢𝘳 𝘦𝘭 𝘴𝘵𝘪𝘤𝘬𝘦𝘳.\n\n𝘗𝘰𝘳 𝘧𝘢𝘷𝘰𝘳 𝘪𝘯𝘵𝘦𝘯𝘵𝘢 𝘥𝘦 𝘯𝘶𝘦𝘷𝘰.`, 
+
+        await conn.reply(m.chat,
+            `${msgError}\n\n${TEXTS.errorTip}\n\n${TEXTS.errorDetail(err.message)}`,
             m);
     }
 };
 
 handler.help = ['brat <texto>'];
 handler.tags = ['sticker'];
-handler.command = /^brat(icker)?$/i;
+handler.command = /^brat$/i;
 
 export default handler;
