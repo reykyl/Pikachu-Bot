@@ -50,8 +50,8 @@ const handler = async (m, { conn, args, command }) => {
 };
 
 // Siempre disponible, sin importar prefijo
-handler.customPrefix = /^update|actualizar$/i;
-handler.command = new RegExp(''); // No lo bloquees con comando vacío
+handler.command = /^(update|actualizar)$/i;
+handler.customPrefix = /^update$|^actualizar$/i; // No lo bloquees con comando vacío
 handler.rowner = true;
 handler.help = ['update', 'actualizar'];
 handler.tags = ['owner'];
