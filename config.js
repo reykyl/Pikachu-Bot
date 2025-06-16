@@ -49,7 +49,7 @@ global.nameqr = 'Pikachu-Bot';
 global.namebot = 'Pikachu-Bit';
 global.sessions = 'Sessions';
 global.jadi = 'JadiBots';
-global.kiritoJadibts = true;
+global.pikaJadibts = true;
 
 // ✨ DATOS DE ESTILO Y METADATOS
 global.packname = '🧃 Pikachu-Bot MD';
