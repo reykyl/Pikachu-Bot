@@ -1,16 +1,16 @@
-var handler = async (m, { conn, participants }) => {
+var handler = async (m, { conn, participants, usedPrefix, command }) => {
     const pikachu = 'Ｏ(≧∇≦)Ｏ🧃';
     const sadchu = 'Ｏ(≧∇≦)Ｏ🧃';
 
-    const text = m.body?.toLowerCase()?.trim(); // texto sin prefijo
-
-    // Lista de comandos válidos sin prefijo
+    const texto = m.body?.toLowerCase()?.trim();
     const comandosSinPrefijo = ['kick', 'echar', 'hechar', 'sacar', 'ban'];
 
-    // Si el texto no está en la lista, no hacer nada
-    if (!comandosSinPrefijo.includes(text.split(' ')[0])) return;
+    // Detectar si el mensaje se debe ejecutar con o sin prefijo
+    const comandoDetectado = texto?.split(' ')[0]?.replace(usedPrefix, '');
 
-    if (!m.mentionedJid[0] && !m.quoted) {
+    if (!comandosSinPrefijo.includes(comandoDetectado)) return;
+
+    if (!m.mentionedJid?.[0] && !m.quoted) {
         return conn.reply(m.chat, `${pikachu} ¡Pika Pika! Debes mencionar a alguien para expulsarlo del grupo.`, m, rcanal);
     }
 
@@ -35,9 +35,10 @@ var handler = async (m, { conn, participants }) => {
     conn.reply(m.chat, `${pikachu} ¡Pika Pika! Usuario eliminado con un Impactrueno.`, m, rcanal);
 };
 
-// Este ya no usa .command
-// Así que no necesitas handler.command = ...
-
+// Solo para ayudar a bots con prefijos (como .kick)
+handler.help = ['kick'];
+handler.tags = ['grupo'];
+handler.command = /^kick|echar|hechar|sacar|ban$/i;
 handler.admin = true;
 handler.group = true;
 handler.register = true;
