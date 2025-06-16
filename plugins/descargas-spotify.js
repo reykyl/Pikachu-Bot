@@ -10,7 +10,7 @@ return conn.reply(m.chat, `*Espera un momento estoy buscando...*`, m, rcanal);
 let ouh = await fetch(`https://api.nekorinn.my.id/downloader/spotifyplay?q=${text}`)
 let gyh = await ouh.json()
 
-      const doc = {
+      /*const doc = {
         audio: { url: gyh.result.downloadUrl },
         mimetype: 'audio/mpeg',
         fileName: `${title}.mp3`,
@@ -26,7 +26,7 @@ let gyh = await ouh.json()
             renderLargerThumbnail: true
           }
         }
-      };
+      };*/
 
 
      await conn.sendMessage(m.chat, { audio: { url: gyh.result.downloadUrl }, externalAdReply: {
