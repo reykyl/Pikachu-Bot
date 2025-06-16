@@ -35,10 +35,12 @@ Número de WhatsApp con escaneo de código QR
 
 🖥️ Clonar y ejecutar
 
+```bash
 git clone https://github.com/Deylin-Eliac/Pikachu-Bot
 cd Pikachu-Bot
 npm install
 npm start
+```
 
 
 ---
