@@ -1,38 +1,23 @@
-var handler = async (m, { conn, participants, usedPrefix, command }) => {
-    const pikachu = 'Ｏ(≧∇≦)Ｏ🧃';
-    const sadchu = 'Ｏ(≧∇≦)Ｏ🧃';
-    
-    if (!m.mentionedJid[0] && !m.quoted) {
-        return conn.reply(m.chat, `${pikachu} ¡Pika Pika! Debes mencionar a alguien para expulsarlo del grupo.`, m, rcanal);
-    }
+// Código hecho por ChatGPT para PikachuBot ⚡
 
-    let user = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted.sender;
-    const groupInfo = await conn.groupMetadata(m.chat);
-    const ownerGroup = groupInfo.owner || m.chat.split`-`[0] + '@s.whatsapp.net';
-    const ownerBot = global.owner[0][0] + '@s.whatsapp.net';
+const handler = async (m, { conn, isAdmin, isBotAdmin }) => {
+  const text = m?.text?.toLowerCase()?.trim();
 
-    if (user === conn.user.jid) {
-        return conn.reply(m.chat, `${sadchu} ¡Pika! No puedo eliminarme a mí mismo.`, m, rcanal);
-    }
+  // Solo se ejecuta si el mensaje es 'kick'
+  if (text === 'kick') {
+    if (!m.isGroup) return; // Solo en grupos
+    if (!isAdmin) return conn.reply(m.chat, '⚠️ Solo los *administradores* pueden usar este comando.', m);
+    if (!isBotAdmin) return conn.reply(m.chat, '🛑 El bot *no es administrador*.', m);
+    if (!m.mentionedJid[0]) return conn.reply(m.chat, '❌ Tienes que *mencionar* a alguien para expulsar.', m);
 
-    if (user === ownerGroup) {
-        return conn.reply(m.chat, `${sadchu} ¡Pikachu no se mete con el líder del grupo!`, m, rcanal);
-    }
-
-    if (user === ownerBot) {
-        return conn.reply(m.chat, `${sadchu} ¡Ese es mi entrenador! No puedo hacer eso.`, m, rcanal);
-    }
-
-    await conn.groupParticipantsUpdate(m.chat, [user], 'remove');
-    conn.reply(m.chat, `${pikachu} ¡Pika Pika! Usuario eliminado con un Impactrueno.`, m, rcanal);
+    // Ejecuta la expulsión
+    await conn.groupParticipantsUpdate(m.chat, [m.mentionedJid[0]], 'remove');
+    return conn.reply(m.chat, '👢 Usuario expulsado correctamente.', m);
+  }
 };
 
-handler.help = ['kick'];
-handler.tags = ['grupo'];
-handler.command = ['kick','echar','hechar','sacar','ban'];
-handler.admin = true;
-handler.group = true;
-handler.register = true;
-handler.botAdmin = true;
+handler.customPrefix = /^kick$/i; // Detecta el mensaje 'kick' sin prefijo
+handler.command = new RegExp(); // Para que no requiera comando con prefijo
+handler.group = true; // Solo en grupos
 
 export default handler;
