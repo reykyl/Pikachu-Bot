@@ -5,10 +5,7 @@ let handler = async (m, { conn }) => {
         const start = Date.now();
 
         const info = `
-╭━━〔 *↻ Reinicio del Bot ↷* 〕━━⬣
-┃ 
-╰━━━━━━━━━━━━━━━━━━⬣
-*↻* Reiniciando, espera unos segundos...
+*↻ Reinicio del Bot ↷*
         `.trim();
 
         await conn.reply(m.chat, info, m);
