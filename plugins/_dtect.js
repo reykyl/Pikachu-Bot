@@ -13,7 +13,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
     message: {
       contactMessage: {
         displayName: "Pikachu",
-        vcard: `BEGIN:VCARD\nVERSION:3.0\nN:Kirito;Bot;;;\nFN:KiritoBot Oficial\nORG:KiritoBot Team;\nTEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nEMAIL;type=INTERNET:soporte@kiritobot.net\nEND:VCARD`
+        vcard: `BEGIN:VCARD\nVERSION:3.0\nN:Kirito;Bot;;;\nFN:Pikachu-bot Oficial\nORG: Pikachu-bot Team;\nTEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nEMAIL;type=INTERNET:soporte@Pikachu-bot.net\nEND:VCARD`
       }
     },
     participant: "0@s.whatsapp.net"
