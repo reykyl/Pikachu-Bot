@@ -1,3 +1,6 @@
+/código hecho por Angel para Pikachu Bot/
+
+
 import fetch from 'node-fetch';
 
 // === Textos personalizables ===
