@@ -28,7 +28,7 @@ let handler = async (m, { conn, text }) => {
         let stiker = await sticker(buffer, false, global.botname, global.nombre);
 
         if (stiker) {
-            return conn.sendFile(m.chat, stiker, 'sticker.webp', '', m, rcanal);
+            return conn.sendFile(m.chat, stiker, 'sticker.webp', '', m);
         } else {
             throw new Error("No se pudo generar el sticker.");
         }
