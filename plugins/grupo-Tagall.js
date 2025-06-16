@@ -93,9 +93,9 @@ ${listaUsuarios}
   }, { quoted: m });
 };
 
-// Con este truco ya no necesitas prefijo
+
 handler.command = /^$/; 
-handler.customPrefix = /^(\W*)?(tagall|todos)$/i; 
+handler.customPrefix = ['tagall', 'todos']; 
 handler.group = true;
 
 export default handler;
