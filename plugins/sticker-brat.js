@@ -34,4 +34,18 @@ const handler = async (m, { conn, args, usedPrefix, command }) => {
 
     } catch (err) {
         console.error('❌ Pikachu falló:', err);
-        await conn.sendMessage(m.chat, { react: { text: '❌', key:
+        await conn.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+
+        await conn.reply(
+            m.chat,
+            '⚠️ Pikachu no pudo crear el sticker... prueba con otro texto~',
+            m
+        );
+    }
+};
+
+handler.help = ['brat <texto>'];
+handler.tags = ['sticker'];
+handler.command = /^brat(icker)?$/i;
+
+export default handler;
