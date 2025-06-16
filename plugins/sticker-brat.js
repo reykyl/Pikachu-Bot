@@ -31,8 +31,7 @@ let handler = async (m, { conn, text, command, usedPrefix }) => {
         const buffer = await fetchSticker(text);
         const stiker = await sticker(buffer, false, botname, nombre);
 
-        if (stiker) {
-            return conn.sendFile(m.chat, stiker, 'sticker.webp', '', m);
+       if (stiker) conn.sendFile(m.chat, stiker, 'sticker.webp', ``,m, true, { contextInfo: { 'forwardingScore': 200, 'isForwarded': false, externalAdReply:{ showAdAttribution: false, title: packname, body: `${botname}`, mediaType: 2, sourceUrl: redes, thumbnail: catalogo}}}, { quoted: m })
         } else {
             throw new Error("No se pudo generar el sticker.");
         }
