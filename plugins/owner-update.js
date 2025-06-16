@@ -12,7 +12,7 @@ const handler = async (m, { conn, args, command }) => {
   if (m.react) m.react(emoji);
 
   try {
-    await conn.reply(m.chat, '⚙️ Actualizando el bot, por favor espera unos segundos...', m);
+    await conn.reply(m.chat, '🌶️ Actualizando el bot, por favor espera unos segundos...', m);
 
     const output = execSync(`git pull ${args.join(' ')}`.trim()).toString().trim();
 
