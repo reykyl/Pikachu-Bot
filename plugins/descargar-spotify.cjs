@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+/*const fetch = require('node-fetch');
 const { Spotify } = require('canvafy');
 const handler = async (m, { conn, args, usedPrefix, command }) => {
   if (!args.length) return m.reply(`masukkan judul lagu nya ⚡ contoh : ${usedPrefix + command} night changes`);
@@ -72,3 +72,24 @@ handler.help = ['spotify', 'spot'];
 handler.tags = ['audio'];
 handler.command = /^spotify|spot$/i;
 module.exports = handler;
+*/
+
+/*Hecho por Angel brou*/
+
+
+import fetch from 'node-fetch'
+
+let handler = async (m, { conn, text, usedPrefix, command }) => {
+if (!text)  m.reply(`⚡ Por favor, ingresa el nombre de una canción de Spotify.`);
+await m.react('🕒');
+let ouh = await fetch(`https://api.nekorinn.my.id/downloader/spotifyplay?q=${text}`)
+let gyh = await ouh.json()
+
+await conn.sendMessage(m.chat, { audio: { url: gyh.result.downloadUrl }, mimetype: 'audio/mpeg' }, { quoted: m });
+await m.react('✅');
+}
+handler.help = ['spotify *<texto>*']
+handler.tags = ['descargas']
+handler.command = ['spotify']
+
+export default handler
