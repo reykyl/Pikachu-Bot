@@ -1,90 +1,50 @@
-/* Código optimizado por Angel para Pikachu Bot */
-
 import fetch from 'node-fetch';
-import AbortController from 'abort-controller';
-
-// === Textos personalizables ===
-const TEXTS = {
-    usage: (prefix, cmd) =>
-        `*⚡ Usa bien el comando:*\n> *${prefix + cmd} <texto>*\n\n_Ejemplo:_\n${prefix + cmd} soy un brat`,
-
-    tooLong: (max, length) =>
-        `❗ *Texto demasiado largo* (máx. ${max} caracteres)\n\nTu texto tiene *${length}* caracteres.`,
-
-    errorGeneric: '*❌ Ocurrió un error inesperado al generar el sticker.*',
-    errorTimeout: '*⏱️ La API tardó demasiado en responder.*',
-    errorTip: '_Tip: Revisa tu conexión o intenta más tarde._',
-    errorDetail: (msg) => `🔧 *Detalle técnico:* ${msg}`
-};
-
-const MAX_TEXTO = 40;
-const STICKER_CACHE = new Map(); // Cache en memoria: texto => Buffer
-let USAGE_COUNT = 0; // Contador de uso
 
 const handler = async (m, { conn, args, usedPrefix, command }) => {
-    const start = Date.now(); // Tiempo inicial
-
     try {
-        const inputText = args.join(' ').trim();
-
-        if (!inputText)
-            return conn.reply(m.chat, TEXTS.usage(usedPrefix, command), m);
-
-        if (inputText.length > MAX_TEXTO)
-            return conn.reply(m.chat, TEXTS.tooLong(MAX_TEXTO, inputText.length), m);
-
-        await conn.sendMessage(m.chat, { react: { text: '⚡', key: m.key } });
-
-        let buffer;
-
-        // Verificamos si ya existe en la cache
-        if (STICKER_CACHE.has(inputText)) {
-            buffer = STICKER_CACHE.get(inputText);
-            console.log(`✅ Usando sticker cacheado para: "${inputText}"`);
-        } else {
-            const apiUrl = `https://api.siputzx.my.id/api/m/brat?text=${encodeURIComponent(inputText)}`;
-
-            const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 10000);
-
-            let res;
-            try {
-                res = await fetch(apiUrl, { signal: controller.signal });
-            } finally {
-                clearTimeout(timeout);
-            }
-
-            if (!res.ok) throw new Error(`API falló (${res.status})`);
-
-            buffer = await res.buffer();
-            STICKER_CACHE.set(inputText, buffer); // Guardar en cache
+        // ¡Pika! ¿No escribiste nada? Entonces no hay sticker 🙁
+        if (!args[0]) {
+            return conn.reply(
+                m.chat,
+                `> 🧠 𝘌𝘴𝘤𝘳𝘪𝘣𝘦 𝘶𝘯 𝘵𝘦𝘹𝘵𝘰 𝘱𝘢𝘳𝘢 𝘤𝘰𝘯𝘷𝘦𝘳𝘵𝘪𝘳 𝘦𝘯 𝘴𝘵𝘪𝘤𝘬𝘦𝘳.\n\n💬 𝘌𝘫𝘦𝘮𝘱𝘭𝘰:\n${usedPrefix + command} hola bola`, 
+                m
+            );
         }
 
-        await conn.sendMessage(m.chat, {
-            sticker: buffer,
-            packname: 'Barboza',
-            author: await conn.getName(m.sender)
-        }, { quoted: m });
+        const text = encodeURIComponent(args.join(' '));
+        const apiUrl = `https://api.dikiotw.my.id/api/sticker/attp?text=${text}`;
 
+        // ⚡ Pika espera un momentito... estoy generando magia
+        await conn.sendMessage(m.chat, { react: { text: '⏳', key: m.key } });
+
+        // 🧃 Pika-pull... llamando a la fábrica de stickers
+        const res = await fetch(apiUrl, { timeout: 10000 });
+        if (!res.ok) throw new Error(`API falló: ${res.status}`);
+        const json = await res.json();
+        if (!json.result) throw new Error('Pikachu no entendió la respuesta 😢');
+
+        const stickerUrl = json.result;
+
+        // ✨ Pikachu lanza el sticker con todo el flow
+        await conn.sendMessage(
+            m.chat,
+            {
+                sticker: { url: stickerUrl },
+                packname: 'Barboza',
+                author: await conn.getName(m.sender)
+            },
+            { quoted: m }
+        );
+
+        // ✅ ¡Pikachu dice que salió perfecto!
         await conn.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
 
-        USAGE_COUNT++;
-        console.log(`📊 [STATS] /brat usado ${USAGE_COUNT} veces.`);
-        console.log(`⏱️ Tiempo de ejecución: ${Date.now() - start}ms`);
-
     } catch (err) {
-        console.error('[ERROR EN /brat]', err);
-
-        const isTimeout = err.name === 'AbortError' || err.message.includes('timeout');
-        const msgError = isTimeout ? TEXTS.errorTimeout : TEXTS.errorGeneric;
-
+        console.error('❌ Pika-error:', err);
+        // 💥 Pikachu se cayó... pero se levanta
         await conn.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
 
-        await conn.reply(m.chat,
-            `${msgError}\n\n${TEXTS.errorTip}\n\n${TEXTS.errorDetail(err.message)}`,
-            m
-        );
-    }
-};
-
-export default handler;
+        // 🥺 Pikachu lo intentó, pero no pudo esta vez
+        await conn.reply(
+            m.chat,
+            '> ⚠️ 𝘖𝘰𝘰𝘩... 𝘱𝘢𝘳𝘦𝘤𝘦 𝘲𝘶𝘦 𝘩𝘶𝘣𝘰 𝘶𝘯 𝘧𝘢𝘭𝘭
