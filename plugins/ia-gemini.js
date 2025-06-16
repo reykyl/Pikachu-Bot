@@ -34,8 +34,8 @@ let handler = async (m, { text, usedPrefix, command }) => {
   }
 }
 
-handler.command = ['ia']
-handler.help = ['ia <texto>']
+handler.command = ['gemini']
+handler.help = ['gemini <texto>']
 handler.tags = ['ai']
 handler.group = false 
 
