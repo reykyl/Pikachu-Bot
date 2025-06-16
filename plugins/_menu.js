@@ -1,4 +1,4 @@
-// no tocar 
+/* // no tocar 
 
 import { xpRange } from '../lib/levelling.js'
 import ws from 'ws';
@@ -162,4 +162,4 @@ function getLevelProgress(exp, min, max, length = 10) {
   let bar = '█'.repeat(progress) + '░'.repeat(length - progress);
   return `[${bar}]`;
 }
-
+*/
