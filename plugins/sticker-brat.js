@@ -25,7 +25,7 @@ let handler = async (m, { conn, text }) => {
         return conn.sendMessage(m.chat, {
             text: `*${emojis} Por favor ingresa el texto para hacer un sticker.*
 
-*Ejemplo: ${prefix + command} ${botname}"`,
+*Ejemplo: ${/ + command} ${botname}"`,
         }, { quoted: m });
     }
 
