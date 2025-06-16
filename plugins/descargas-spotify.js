@@ -1,6 +1,8 @@
 /* Hecho por Angel Brou mejorado por Deylin*/
 
-import fetch from 'node-fetch';
+import fetch from "node-fetch";
+import yts from "yt-search";
+import axios from "axios";
 
 let handler = async (m, { conn, text }) => {
   if (!text) return conn.reply(m.chat, `⚡ Por favor, ingresa el nombre de una canción de Spotify.`, m, rcanal);
