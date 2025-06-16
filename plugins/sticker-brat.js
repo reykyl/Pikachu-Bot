@@ -12,7 +12,7 @@ const fetchSticker = async (text, attempt = 1) => {
         return response.data;
     } catch (error) {
         if (error.response?.status === 429 && attempt <= 3) {
-            const retryAfter = error.response.headers['retry-after'] || 5;
+            const retryAfter = parseInt(error.response.headers['retry-after'] || '5');
             await delay(retryAfter * 1000);
             return fetchSticker(text, attempt + 1);
         }
@@ -20,12 +20,19 @@ const fetchSticker = async (text, attempt = 1) => {
     }
 };
 
-let handler = async (m, { conn, text }) => {
-    if (!text) return conn.reply(m.chat, `${emojis} *Uso incorrecto del comando.*\n\nEjemplo, ${usedPrefix + command} ${botname}`, m, rcanal)
+let handler = async (m, { conn, text, command, usedPrefix }) => {
+    const emoji = emojis,
+    const botname = global.botname,
+    const nombre = global.nombre,
+    const errorMsg = msm,
+
+    if (!text) {
+        return conn.reply(m.chat, `${emoji} *Uso incorrecto del comando.*\n\n📌 Ejemplo:\n${usedPrefix + command} hola`, m);
+    }
 
     try {
         const buffer = await fetchSticker(text);
-        let stiker = await sticker(buffer, false, global.botname, global.nombre);
+        const stiker = await sticker(buffer, false, botname, nombre);
 
         if (stiker) {
             return conn.sendFile(m.chat, stiker, 'sticker.webp', '', m);
@@ -35,7 +42,7 @@ let handler = async (m, { conn, text }) => {
     } catch (error) {
         console.error(error);
         return conn.sendMessage(m.chat, {
-            text: `${msm} Ocurrió un error: ${error.message}`,
+            text: `${errorMsg} *Ocurrió un error:* ${error.message}`,
         }, { quoted: m });
     }
 };
