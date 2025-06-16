@@ -22,17 +22,15 @@ const fetchSticker = async (text, attempt = 1) => {
 
 let handler = async (m, { conn, text }) => {
     if (!text) {
-        return conn.sendMessage(m.chat, {
-            text: `${emojis} Por favor ingresa el texto para hacer un sticker.`,
-        }, { quoted: m });
-    }
+        return m.replay(m.chat, {
+            text: `${emojis} Por favor ingresa el texto para hacer un sticker.\n\n\n *Ejemplo:* .brat ${botname} `, m, rcanal);
 
     try {
         const buffer = await fetchSticker(text);
         let stiker = await sticker(buffer, false, global.botname, global.nombre);
 
         if (stiker) {
-            return conn.sendFile(m.chat, stiker, 'sticker.webp', '', m);
+            return conn.sendFile(m.chat, stiker, 'sticker.webp', '', m, rcanal);
         } else {
             throw new Error("No se pudo generar el sticker.");
         }
