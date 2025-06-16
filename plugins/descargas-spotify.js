@@ -10,7 +10,7 @@ return conn.reply(m.chat, `*Espera un momento estoy buscando...*`, m, rcanal);
 let ouh = await fetch(`https://api.nekorinn.my.id/downloader/spotifyplay?q=${text}`)
 let gyh = await ouh.json()
 
-      const doc = {
+     /* const doc = {
   audio: { url: gyh.result.downloadUrl },
   mimetype: 'audio/mpeg',
   fileName: `${title}.mp3`,
@@ -26,9 +26,24 @@ let gyh = await ouh.json()
       renderLargerThumbnail: true
     }
   }
-};
+};*/
 
-await conn.sendMessage(m.chat, doc, { quoted: m });
+
+
+//await conn.sendMessage(m.chat, doc, { quoted: m });
+
+let resImg = await fetch(res.imagen)
+let thumbb = await resImg.buffer()
+let { videos } = await search(res.name)
+let q = '128kbps'
+let v = videos[0].url
+let yt = await youtubedl(v).catch(async (_) => await youtubedlv2(v))
+let dl_url = await yt.audio[q].download()
+let ttl = await yt.title
+let size = await yt.audio[q].fileSizeH
+let img = await getBuffer(res.imagen)
+conn.sendMessage(m.chat, { audio: { url: dl_url }, fileName: `${ttl}.mp3`, mimetype: 'audio/mpeg' }, { quoted: m })
+await conn.sendMessage(m.chat, {text: info, contextInfo: {forwardingScore: 9999999, isForwarded: true, "externalAdReply": {"showAdAttribution": true, "containsAutoReply": true, "renderLargerThumbnail": true, "title": global.wm, "containsAutoReply": true, "mediaType": 1, "thumbnail": img, "thumbnailUrl": img, "mediaUrl": shortURL, "sourceUrl": shortURL}}}, {quoted: fkontak});
 await m.react('✅');
 }
 handler.help = ['spotify *<texto>*']
