@@ -1,23 +1,33 @@
-// Código hecho por ChatGPT para PikachuBot ⚡
-
 const handler = async (m, { conn, isAdmin, isBotAdmin }) => {
-  const text = m?.text?.toLowerCase()?.trim();
+  const text = m.text?.toLowerCase()?.trim();
 
-  // Solo se ejecuta si el mensaje es 'kick'
   if (text === 'kick') {
-    if (!m.isGroup) return; // Solo en grupos
-    if (!isAdmin) return conn.reply(m.chat, '⚠️ Solo los *administradores* pueden usar este comando.', m);
-    if (!isBotAdmin) return conn.reply(m.chat, '🛑 El bot *no es administrador*.', m);
-    if (!m.mentionedJid[0]) return conn.reply(m.chat, '❌ Tienes que *mencionar* a alguien para expulsar.', m);
+    if (!m.isGroup) return; // Ignora fuera de grupos
 
-    // Ejecuta la expulsión
-    await conn.groupParticipantsUpdate(m.chat, [m.mentionedJid[0]], 'remove');
-    return conn.reply(m.chat, '👢 Usuario expulsado correctamente.', m);
+    if (!isAdmin) {
+      return conn.reply(m.chat, '⚠️ Este comando solo lo pueden usar *administradores*.', m);
+    }
+
+    if (!isBotAdmin) {
+      return conn.reply(m.chat, '🛑 El bot no tiene permisos de administrador.', m);
+    }
+
+    if (!m.mentionedJid || m.mentionedJid.length === 0) {
+      return conn.reply(m.chat, '❌ Debes *mencionar a alguien* para expulsar.', m);
+    }
+
+    try {
+      await conn.groupParticipantsUpdate(m.chat, [m.mentionedJid[0]], 'remove');
+      return conn.reply(m.chat, '👢 Usuario expulsado correctamente.', m);
+    } catch (e) {
+      console.error(e);
+      return conn.reply(m.chat, '🚫 No pude expulsar al usuario. Verifica si el bot tiene permisos o si estás mencionando correctamente.', m);
+    }
   }
 };
 
-handler.customPrefix = /^kick$/i; // Detecta el mensaje 'kick' sin prefijo
-handler.command = new RegExp(); // Para que no requiera comando con prefijo
-handler.group = true; // Solo en grupos
+handler.customPrefix = /^kick$/i;
+handler.command = new RegExp(); // sin prefijo
+handler.group = true;
 
 export default handler;
