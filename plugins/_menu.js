@@ -38,7 +38,7 @@ const tags = {
   'custom': 'CUSTOM'
 }
 
-let handler = async (m, { conn, usedPrefix: _p }) => {
+let handler = async (m, { conn }) => {
   const texto = m.text?.toLowerCase()
   if (!/^menu|menú|allmenu$/i.test(texto)) return
 
@@ -53,7 +53,7 @@ let handler = async (m, { conn, usedPrefix: _p }) => {
 
     const users = [...new Set((global.conns || []).filter(conn => conn.user && conn.ws?.socket?.readyState !== ws.CLOSED))]
 
-    const { exp, level } = global.db.data.users[userId]
+    const { exp, level } = user
     const { min, xp, max } = xpRange(level, global.multiplier)
 
     const help = Object.values(global.plugins).filter(p => !p.disabled).map(p => ({
@@ -83,7 +83,7 @@ ${readMore}
 
       menuText += `\n╭─🧃 *${tags[tag]}* ${getRandomEmoji()}\n`
       menuText += comandos.map(menu => menu.help.map(cmd =>
-        `│ ✦ ${_p}${cmd}${menu.limit ? ' ◜⭐◞' : ''}${menu.premium ? ' ◜🪪◞' : ''}`
+        `│ ✦ ${cmd}${menu.limit ? ' ◜⭐◞' : ''}${menu.premium ? ' ◜🪪◞' : ''}`
       ).join('\n')).join('\n')
       menuText += `\n╰────────────────────────────╯`
     }
@@ -122,7 +122,7 @@ ${readMore}
   }
 }
 
-// ACTIVA el sin prefijo
+// ACTIVADO sin prefijo
 handler.customPrefix = /^menu|menú|allmenu$/i
 handler.command = new RegExp
 export default handler
