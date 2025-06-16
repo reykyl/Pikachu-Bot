@@ -24,14 +24,12 @@ const MAX_TEXTO = 40;
 const handler = async (m, { conn, args, usedPrefix, command }) => {
     try {
         if (!args[0]) {
-            await conn.copyNForward(m.chat, rcanal, true); // 🟡 Reenviar canal antes del uso incorrecto
             return conn.reply(m.chat, TEXTS.usage(usedPrefix, command), m);
         }
 
         const inputText = args.join(' ').trim();
 
         if (inputText.length > MAX_TEXTO) {
-            await conn.copyNForward(m.chat, rcanal, true); // 🟡 Reenviar canal antes del texto largo
             return conn.reply(m.chat, TEXTS.tooLong(MAX_TEXTO, inputText.length), m);
         }
 
@@ -44,7 +42,6 @@ const handler = async (m, { conn, args, usedPrefix, command }) => {
 
         const buffer = await res.buffer();
 
-        await conn.copyNForward(m.chat, rcanal, true); // 🟡 Reenviar canal antes del sticker
         await conn.sendMessage(m.chat, {
             sticker: buffer,
             packname: 'Barboza',
@@ -62,20 +59,5 @@ const handler = async (m, { conn, args, usedPrefix, command }) => {
 
         await conn.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
 
-        await conn.copyNForward(m.chat, rcanal, true); // 🟡 Reenviar canal antes del fallo
         await conn.reply(m.chat,
-            '〇(≧▽≦)〇🥤 La conversión ha fallado, intenta enviar primero imagen/video/gif y luego responde con el comando.',
-            m);
-
-        await conn.copyNForward(m.chat, rcanal, true); // 🟡 Otra vez antes del detalle técnico
-        await conn.reply(m.chat,
-            `${msgError}\n\n${TEXTS.errorTip}\n\n${TEXTS.errorDetail(err.message)}`,
-            m);
-    }
-};
-
-handler.help = ['brat <texto>'];
-handler.tags = ['sticker'];
-handler.command = /^brat$/i;
-
-export default handler;
+            `${msgError}\n\n${TEXTS.errorTip
