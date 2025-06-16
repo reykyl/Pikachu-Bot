@@ -23,7 +23,7 @@ const fetchSticker = async (text, attempt = 1) => {
 let handler = async (m, { conn, text }) => {
     if (!text) {
         return conn.sendMessage(m.chat, {
-            text: `*${emoji} Por favor ingresa el texto para hacer un sticker.*
+            text: `*${emojis} Por favor ingresa el texto para hacer un sticker.*
 
 *Ejemplo: ${prefix + command} ${botname}"`,
         }, { quoted: m });
