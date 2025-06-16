@@ -1,4 +1,4 @@
-/*Código original By deylen,
+/*Código original By deylin,
 mejorado por Angel*/
 
 
