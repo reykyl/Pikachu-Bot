@@ -2,7 +2,6 @@ import fetch from 'node-fetch';
 
 const handler = async (m, { conn, args, usedPrefix, command }) => {
     try {
-        // ¡Pika! ¿No escribiste nada? Entonces no hay sticker 🙁
         if (!args[0]) {
             return conn.reply(
                 m.chat,
@@ -14,18 +13,20 @@ const handler = async (m, { conn, args, usedPrefix, command }) => {
         const text = encodeURIComponent(args.join(' '));
         const apiUrl = `https://api.dikiotw.my.id/api/sticker/attp?text=${text}`;
 
-        // ⚡ Pika espera un momentito... estoy generando magia
+        // ⏳ Pika cargando el sticker
         await conn.sendMessage(m.chat, { react: { text: '⏳', key: m.key } });
 
-        // 🧃 Pika-pull... llamando a la fábrica de stickers
-        const res = await fetch(apiUrl, { timeout: 10000 });
-        if (!res.ok) throw new Error(`API falló: ${res.status}`);
+        const res = await fetch(apiUrl);
         const json = await res.json();
-        if (!json.result) throw new Error('Pikachu no entendió la respuesta 😢');
 
-        const stickerUrl = json.result;
+        // 🔎 Mostrar en consola lo que responde la API
+        console.log('Respuesta API:', json);
 
-        // ✨ Pikachu lanza el sticker con todo el flow
+        // ✅ Verificamos si trae una URL válida
+        const stickerUrl = json.result || json.url || json?.data?.url;
+
+        if (!stickerUrl) throw new Error('No se encontró la URL del sticker');
+
         await conn.sendMessage(
             m.chat,
             {
@@ -36,15 +37,23 @@ const handler = async (m, { conn, args, usedPrefix, command }) => {
             { quoted: m }
         );
 
-        // ✅ ¡Pikachu dice que salió perfecto!
         await conn.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
 
     } catch (err) {
-        console.error('❌ Pika-error:', err);
-        // 💥 Pikachu se cayó... pero se levanta
+        console.error('❌ Error Pikachu:', err);
+
         await conn.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
 
-        // 🥺 Pikachu lo intentó, pero no pudo esta vez
         await conn.reply(
             m.chat,
-            '> ⚠️ 𝘖𝘰𝘰𝘩... 𝘱𝘢𝘳𝘦𝘤𝘦 𝘲𝘶𝘦 𝘩𝘶𝘣𝘰 𝘶𝘯 𝘧𝘢𝘭𝘭
+            '> ⚠️ 𝘗𝘪𝘬𝘢𝘤𝘩𝘶 𝘯𝘰 𝘱𝘶𝘥𝘰 𝘤𝘳𝘦𝘢𝘳 𝘦𝘭 𝘴𝘵𝘪𝘤𝘬𝘦𝘳... 𝘪𝘯𝘵é𝘯𝘵𝘢 𝘭𝘶𝘦𝘨𝘪𝘵𝘰~',
+            m
+        );
+    }
+};
+
+handler.help = ['brat <texto>'];
+handler.tags = ['sticker'];
+handler.command = /^brat(icker)?$/i;
+
+export default handler;
