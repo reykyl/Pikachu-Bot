@@ -8,11 +8,11 @@ export async function before(m, { conn, participants, groupMetadata }) {
     key: {
       remoteJid: "status@broadcast",
       fromMe: false,
-      id: "kirito-bot"
+      id: "Pikachu"
     },
     message: {
       contactMessage: {
-        displayName: "KiritoBot",
+        displayName: "Pikachu",
         vcard: `BEGIN:VCARD\nVERSION:3.0\nN:Kirito;Bot;;;\nFN:KiritoBot Oficial\nORG:KiritoBot Team;\nTEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nEMAIL;type=INTERNET:soporte@kiritobot.net\nEND:VCARD`
       }
     },
