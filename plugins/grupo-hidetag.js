@@ -20,11 +20,8 @@ let handler = async (m, { conn, participants, isAdmin, isOwner }) => {
   }
 
   const users = participants.map(p => p.id)
-
-  // Quitar el comando del mensaje
   let mensaje = texto.replace(new RegExp(`^[./!\\s]*${usado}`, 'i'), '').trim()
 
-  // Si no hay texto y hay mensaje citado
   if (!mensaje && m.quoted) {
     mensaje = m.quoted.text || m.quoted.caption || '*📎 Archivo multimedia*'
   }
@@ -39,7 +36,6 @@ let handler = async (m, { conn, participants, isAdmin, isOwner }) => {
 
 handler.group = true
 handler.admin = true
-handler.command = /^$/ // no usa comandos por defecto
 handler.customPrefix = /^[./!]?((n|notify|notificar|hidetag|tag))( |$)/i
 handler.exp = 0
 
