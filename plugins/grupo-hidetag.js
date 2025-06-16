@@ -2,7 +2,6 @@ let handler = async (m, { conn, participants, isAdmin, isOwner }) => {
   const texto = m.text || ''
   const comandos = ['n', 'notify', 'notificar', 'hidetag', 'tag']
 
-  // Detectar si comienza con algún comando
   const usado = comandos.find(c =>
     texto.toLowerCase().startsWith(c + ' ') ||
     texto.toLowerCase() === c ||
@@ -18,12 +17,20 @@ let handler = async (m, { conn, participants, isAdmin, isOwner }) => {
     return conn.reply(m.chat, '🚫 Este comando es solo para *admins*.', m)
   }
 
-  // Extraer mensaje limpio
-  const mensaje = texto.replace(new RegExp(`^[./!\\s]*${usado}`, 'i'), '').trim() 
-    || (m.quoted?.text || '') 
-    || '*¡Pika Pika saludos!* ⚡'
-
   const users = participants.map(p => p.id)
+
+  // Extraer mensaje: texto limpio o mensaje citado, incluso si es multimedia
+  let mensaje = texto.replace(new RegExp(`^[./!\\s]*${usado}`, 'i'), '').trim()
+
+  if (!mensaje && m.quoted) {
+    if (m.quoted.text) {
+      mensaje = m.quoted.text
+    } else {
+      mensaje = '*📎 Archivo enviado*'
+    }
+  }
+
+  if (!mensaje) mensaje = '*¡Pika Pika saludos!* ⚡'
 
   await conn.sendMessage(m.chat, {
     text: mensaje + '\n\n> ⚡ 𝙋𝙞𝙠𝙖𝙘𝙝𝙪-𝘽𝙤𝙩 𝙈𝘿 ⚡',
