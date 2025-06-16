@@ -1,48 +1,39 @@
-import fs from 'fs';
-import path from 'path';
+var handler = async (m, { conn, participants, usedPrefix, command }) => {
+    
 
-var handler = async (m, { usedPrefix, command }) => {
-    try {
-        await m.react('🔎'); 
-        conn.sendPresenceUpdate('composing', m.chat);
-
-        const dirs = ['./plugins'];
-        let response = `${emojis} *Revisión de Syntax Errors:*\n\n`;
-        let hasErrors = false;
-
-        for (const pluginsDir of dirs) {
-            const files = fs.readdirSync(pluginsDir).filter(file => file.endsWith('.js'));
-
-            for (const file of files) {
-                try {
-                    await import(path.resolve(pluginsDir, file));
-                } catch (error) {
-                    hasErrors = true;
-                    response += `${emojis} *Error en:* ${file} (${pluginsDir})\n`;
-                    if (error.loc) {
-                        response += `*Línea:* ${error.loc.line}, *Columna:* ${error.loc.column}\n`;
-                    }
-                    response += `${error.message}\n\n`;
-                }
-            }
-        }
-
-        if (!hasErrors) {
-            response += `${emojis} ¡Todo está en orden! No se detectaron errores de sintaxis.`;
-        }
-
-        await conn.reply(m.chat, response, m, rcanal);
-        await m.react('🔥');
-    } catch (err) {
-        await m.react('✖️'); 
-        console.error(err);
-        conn.reply(m.chat, '🚩 *Ocurrió un fallo al verificar los plugins.*', m, rcanal);
+    if (!m.mentionedJid[0] && !m.quoted) {
+        return conn.reply(m.chat, `${emojis} ¡Pika! Debes mencionar a un entrenador para expulsarlo del grupo.`, m);
     }
+
+    let user = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted.sender;
+
+    const groupInfo = await conn.groupMetadata(m.chat);
+    const ownerGroup = groupInfo.owner || m.chat.split`-`[0] + '@s.whatsapp.net';
+    const ownerBot = global.owner[0][0] + '@s.whatsapp.net';
+
+    if (user === conn.user.jid) {
+        return conn.reply(m.chat, `${emojis} ¡Pikachu no se puede autoeliminar!`, m);
+    }
+
+    if (user === ownerGroup) {
+        return conn.reply(m.chat, `${emojis} ¡Ese es el maestro Pokémon del grupo, no puedo expulsarlo!`, m);
+    }
+
+    if (user === ownerBot) {
+        return conn.reply(m.chat, `${emojis} ¡Ese es el dueño del bot Pikachu, no puedo atacarlo!`, m);
+    }
+
+    await conn.groupParticipantsUpdate(m.chat, [user], 'remove');
+
+    conn.reply(m.chat, `${emojis} ¡Pika Pika! Un entrenador ha sido expulsado del gimnasio.`, m);
 };
 
-handler.command = ['errores'];
-handler.help = ['errores'];
-handler.tags = ['tools'];
+handler.help = ['kick'];
+handler.tags = ['grupo'];
+handler.command = ['kick','echar','hechar','sacar','ban'];
+handler.admin = true;
+handler.group = true;
 handler.register = true;
+handler.botAdmin = true;
 
 export default handler;
