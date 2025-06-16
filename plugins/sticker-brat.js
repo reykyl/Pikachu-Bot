@@ -5,7 +5,7 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 const fetchSticker = async (text, attempt = 1) => {
     try {
-        const response = await axios.get(`https://api.siputzx.my.id/api/m/brat`, {
+        const response = await axios.get(`https://kepolu-brat.hf.space/brat`, {
             params: { q: text },
             responseType: 'arraybuffer',
         });
@@ -25,7 +25,7 @@ let handler = async (m, { conn, text }) => {
         return conn.sendMessage(m.chat, {
             text: `*${emojis} Por favor ingresa el texto para hacer un sticker.*
 
-*Ejemplo: ${/ + command} ${botname}"`,
+*Ejemplo: ${prefix + command} ${botname}"`,
         }, { quoted: m });
     }
 
