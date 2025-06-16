@@ -34,6 +34,7 @@ let handler = async (m, { conn, text }) => {
           mediaUrl: url,
           title: title,
           body: `Duración: ${duration} | Reproducciones: ${views.toLocaleString()}`,
+          texto: `El sistema puede dar resultados no relacionados con tu búsqueda`,
           sourceUrl: url,
           thumbnailUrl: thumbnail || "https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/refs/heads/main/src/IMG-20250613-WA0194.jpg",
           renderLargerThumbnail: true
