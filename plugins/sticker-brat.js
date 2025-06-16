@@ -9,7 +9,7 @@ const handler = async (m, { conn, args, usedPrefix, command }) => {
         }
 
         const text = encodeURIComponent(args.join(" "));
-        const apiUrl = `https://kepolu-brat.hf.space/brat`;
+        const apiUrl = `https://api.fgmods.xyz/api/maker/carbon?text=${text}&apikey=elrebelde21`;
 
         // Reacción de espera
         await conn.sendMessage(m.chat, { react: { text: '⏳', key: m.key } });
