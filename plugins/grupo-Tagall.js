@@ -94,8 +94,9 @@ ${listaUsuarios}
 };
 
 
-handler.command = /^$/; 
-handler.customPrefix = ['tagall', 'todos']; 
+handler.command = ['tagall', 'todos']; ; 
+handler.help = ['tagall', 'todos']; 
+handler.tag = ['grupo']; 
 handler.group = true;
 
 export default handler;
