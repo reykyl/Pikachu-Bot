@@ -1,26 +1,26 @@
 let handler = async (m, { conn, participants, isAdmin, isOwner }) => {
-  const body = m.text || ''
-  const texto = body.trim().toLowerCase()
-
-  // Detectar comandos sin prefijo (n, notify, tag...)
+  const texto = m.text || ''
   const comandos = ['n', 'notify', 'notificar', 'hidetag', 'tag']
-  const usado = comandos.find(c => 
-    texto.startsWith(c + ' ') ||
-    texto === c ||
-    texto.startsWith('.' + c) ||
-    texto.startsWith('/' + c) ||
-    texto.startsWith('!' + c)
+
+  // Detectar si comienza con algún comando
+  const usado = comandos.find(c =>
+    texto.toLowerCase().startsWith(c + ' ') ||
+    texto.toLowerCase() === c ||
+    texto.toLowerCase().startsWith('.' + c + ' ') ||
+    texto.toLowerCase() === '.' + c ||
+    texto.toLowerCase().startsWith('/' + c + ' ') ||
+    texto.toLowerCase() === '/' + c
   )
 
-  if (!usado) return // no es un comando válido
+  if (!usado) return
 
   if (!isAdmin && !isOwner) {
     return conn.reply(m.chat, '🚫 Este comando es solo para *admins*.', m)
   }
 
-  // Extraer mensaje
-  const mensaje = body.replace(new RegExp(`^[./!\\s]*${usado}`, 'i'), '').trim()
-    || m.quoted?.text 
+  // Extraer mensaje limpio
+  const mensaje = texto.replace(new RegExp(`^[./!\\s]*${usado}`, 'i'), '').trim() 
+    || (m.quoted?.text || '') 
     || '*¡Pika Pika saludos!* ⚡'
 
   const users = participants.map(p => p.id)
@@ -31,12 +31,9 @@ let handler = async (m, { conn, participants, isAdmin, isOwner }) => {
   }, { quoted: m })
 }
 
-// Requisitos
 handler.group = true
 handler.admin = true
-handler.command = /^$/  // para que no se registre con comandos tradicionales
-
-// Esto es CLAVE para que funcione SIN prefijo:
+handler.command = /^$/ // no usa comandos normales
 handler.customPrefix = /^[./!/]?(n|notify|notificar|hidetag|tag)/i
 handler.exp = 0
 
