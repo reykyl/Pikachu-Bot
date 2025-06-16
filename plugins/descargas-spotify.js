@@ -9,7 +9,26 @@ await m.react('🕒');
 let ouh = await fetch(`https://api.nekorinn.my.id/downloader/spotifyplay?q=${text}`)
 let gyh = await ouh.json()
 
-await conn.sendMessage(m.chat, { audio: { url: gyh.result.downloadUrl }, mimetype: 'audio/mpeg' }, { quoted: m });
+      const doc = {
+        audio: { url: api.downloadUrl },
+        mimetype: 'audio/mpeg',
+        fileName: `${title}.mp3`,
+        contextInfo: {
+          externalAdReply: {
+            showAdAttribution: true,
+            mediaType: 2,
+            mediaUrl: url,
+            title: title,
+            body: `Duración: ${timestamp} | Vistas: ${vistas}`,
+            sourceUrl: url,
+            thumbnailUrl: "https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/refs/heads/main/src/IMG-20250613-WA0194.jpg",
+            renderLargerThumbnail: true
+          }
+        }
+      };
+
+
+      return await conn.sendMessage(m.chat, doc, { quoted: m });
 await m.react('✅');
 }
 handler.help = ['spotify *<texto>*']
