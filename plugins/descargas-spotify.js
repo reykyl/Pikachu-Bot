@@ -21,6 +21,7 @@ let handler = async (m, { conn, text }) => {
     if (!search.videos || search.videos.length === 0) throw '❌ No se encontró un video relacionado.';
 
     const videoInfo = search.videos[0];
+    const info = `El sistema puede dar resultados no relacionados con tu búsqueda`,
     const { title, thumbnail, timestamp: duration, views, ago, url } = videoInfo;
 
     const doc = {
@@ -34,7 +35,7 @@ let handler = async (m, { conn, text }) => {
           mediaUrl: url,
           title: title,
           body: `Duración: ${duration} | Reproducciones: ${views.toLocaleString()}`,
-          texto: `El sistema puede dar resultados no relacionados con tu búsqueda`,
+          info: info,
           sourceUrl: url,
           thumbnailUrl: thumbnail || "https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/refs/heads/main/src/IMG-20250613-WA0194.jpg",
           renderLargerThumbnail: true
