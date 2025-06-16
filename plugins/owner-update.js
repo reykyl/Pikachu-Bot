@@ -38,7 +38,7 @@ let handler = async (m, { conn, args }) => {
 };
 
 handler.help = ['update', 'actualizar'];
-handler.customPrefix = /^(update|actualizar)$/i
+handler.command = ['update', 'actualizar']
 handler.command = new RegExp
 handler.rowner = true;
 
