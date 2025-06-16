@@ -1,4 +1,4 @@
-*/código hecho por Angel para Pikachu Bot*/
+/*código hecho por Angel para Pikachu Bot*/
 
 
 import fetch from 'node-fetch';
