@@ -1,40 +1,46 @@
-// Comando sin prefijo: "kick" - Expulsa a un usuario mencionado
+var handler = async (m, { conn, participants }) => {
+    const pikachu = 'Ｏ(≧∇≦)Ｏ🧃';
+    const sadchu = 'Ｏ(≧∇≦)Ｏ🧃';
 
-const handler = async (m, { conn, isAdmin, isBotAdmin }) => {
-  const text = m?.text?.toLowerCase()?.trim();
+    const text = m.body?.toLowerCase()?.trim(); // texto sin prefijo
 
-  if (!m.isGroup || !text) return;
+    // Lista de comandos válidos sin prefijo
+    const comandosSinPrefijo = ['kick', 'echar', 'hechar', 'sacar', 'ban'];
 
-  // Detecta solo si el texto es 'kick' exactamente
-  if (text === 'kick') {
-    if (!isAdmin) {
-      return conn.reply(m.chat, '⚠️ Este comando solo lo pueden usar *admins*.', m);
+    // Si el texto no está en la lista, no hacer nada
+    if (!comandosSinPrefijo.includes(text.split(' ')[0])) return;
+
+    if (!m.mentionedJid[0] && !m.quoted) {
+        return conn.reply(m.chat, `${pikachu} ¡Pika Pika! Debes mencionar a alguien para expulsarlo del grupo.`, m, rcanal);
     }
 
-    if (!isBotAdmin) {
-      return conn.reply(m.chat, '🛑 El bot no es *admin*, no puedo expulsar a nadie.', m);
+    let user = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted.sender;
+    const groupInfo = await conn.groupMetadata(m.chat);
+    const ownerGroup = groupInfo.owner || m.chat.split`-`[0] + '@s.whatsapp.net';
+    const ownerBot = global.owner[0][0] + '@s.whatsapp.net';
+
+    if (user === conn.user.jid) {
+        return conn.reply(m.chat, `${sadchu} ¡Pika! No puedo eliminarme a mí mismo.`, m, rcanal);
     }
 
-    if (!m.mentionedJid || m.mentionedJid.length === 0) {
-      return conn.reply(m.chat, '❌ Debes *mencionar a alguien* para expulsar.\nEjemplo:\n*kick @usuario*', m);
+    if (user === ownerGroup) {
+        return conn.reply(m.chat, `${sadchu} ¡Pikachu no se mete con el líder del grupo!`, m, rcanal);
     }
 
-    const user = m.mentionedJid[0];
-
-    try {
-      await conn.groupParticipantsUpdate(m.chat, [user], 'remove');
-      return conn.reply(m.chat, '👢 Usuario expulsado exitosamente.', m);
-    } catch (e) {
-      console.log('[❌ ERROR AL EXPULSAR]', e);
-      return conn.reply(m.chat, '🚫 No pude expulsar al usuario. Asegúrate que no sea admin.', m);
+    if (user === ownerBot) {
+        return conn.reply(m.chat, `${sadchu} ¡Ese es mi entrenador! No puedo hacer eso.`, m, rcanal);
     }
-  }
+
+    await conn.groupParticipantsUpdate(m.chat, [user], 'remove');
+    conn.reply(m.chat, `${pikachu} ¡Pika Pika! Usuario eliminado con un Impactrueno.`, m, rcanal);
 };
 
-// Detecta solo el mensaje "kick", sin prefijo
-handler.customPrefix = /^kick$/i;
-handler.command = new RegExp(); // comando vacío para no requerir prefijo
-handler.group = true; // Solo en grupos
-handler.register = true; // Opcional: para mostrar en lista
+// Este ya no usa .command
+// Así que no necesitas handler.command = ...
+
+handler.admin = true;
+handler.group = true;
+handler.register = true;
+handler.botAdmin = true;
 
 export default handler;
