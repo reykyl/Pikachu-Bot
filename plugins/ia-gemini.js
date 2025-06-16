@@ -15,26 +15,38 @@ let handler = async (m, { text, usedPrefix, command }) => {
     conn.sendPresenceUpdate('composing', m.chat)
 
     let base64Image = null
+    let mimeType = null
+
     if (hasImage) {
       const stream = await downloadContentFromMessage(q, 'image')
       let buffer = Buffer.from([])
       for await (const chunk of stream) {
         buffer = Buffer.concat([buffer, chunk])
       }
+
       base64Image = `data:${mime};base64,${buffer.toString('base64')}`
+      mimeType = mime
     }
 
-    const res = await fetch('https://tu-api-que-acepte-imagenes.com/api', {
+    const body = {
+      prompts: text ? [text] : [],
+      imageBase64List: base64Image ? [base64Image] : [],
+      mimeTypes: mimeType ? [mimeType] : [],
+      temperature: 0.7
+    }
+
+    const res = await fetch('https://g-mini-ia.vercel.app/api/gemini', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        image: base64Image, 
-        prompt: text,
-      })
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
     })
 
     const data = await res.json()
-    const respuesta = data?.result || data?.response || '❌ No hubo respuesta válida.'
+
+    const respuesta = data?.candidates?.[0]?.content?.parts?.[0]?.text
+    if (!respuesta) throw '❌ No se recibió respuesta válida de la IA.'
 
     await m.reply(respuesta.trim())
 
