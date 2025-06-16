@@ -1,10 +1,10 @@
 import { execSync } from 'child_process';
 
-let handler = async (m, { conn, args }) => {
-  const mensajeTexto = m.text?.toLowerCase()
+let handler = async (m, { conn, args, command }) => {
+  const mensajeTexto = m.text?.toLowerCase() || '';
 
-  // Comandos aceptados sin o con prefijo
-  const isMatch = /^(update|actualizar)$/i.test(mensajeTexto);
+  // Detectar comando con o sin prefijo
+  const isMatch = /^(update|actualizar)$/i.test(command || '') || /^(update|actualizar)$/i.test(mensajeTexto);
   if (!isMatch) return;
 
   try {
@@ -44,7 +44,7 @@ let handler = async (m, { conn, args }) => {
 
 handler.help = ['update', 'actualizar'];
 handler.tags = ['owner'];
+handler.command = /^update|actualizar$/i; // Esto permite prefijo o sin prefijo si tu bot lo soporta
 handler.rowner = true;
-// ❌ Ya no pongas handler.command
 
 export default handler;
