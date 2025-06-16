@@ -1,6 +1,8 @@
 const handler = async (m, { isOwner, isAdmin, conn, text, participants, args }) => {
   const mensajeTexto = m.text?.toLowerCase();
-  if (!/^(tagall|todos)$/i.test(mensajeTexto)) return;
+  
+  // Acepta "tagall", "todos", o cualquier texto que comience con eso
+  if (!/^(tagall|todos)(\s|$)/i.test(mensajeTexto)) return;
 
   const customEmoji = global.db?.data?.chats?.[m.chat]?.customEmoji || '⚡';
   m.react?.(customEmoji);
@@ -11,9 +13,9 @@ const handler = async (m, { isOwner, isAdmin, conn, text, participants, args }) 
   }
 
   const countryFlags = {
-    "52": "🇲🇽", "54": "🇦🇷", "55": "🇧🇷", "57": "🇨🇴", "58": "🇻🇪", "51": "🇵🇪", "591": "🇧🇴", "593": "🇪🇨", "595": "🇵🇾",
-    "598": "🇺🇾", "507": "🇵🇦", "502": "🇬🇹", "503": "🇸🇻", "504": "🇭🇳", "505": "🇳🇮", "506": "🇨🇷"
-    // Puedes dejar todos los países, acorté aquí para ejemplo
+    "52": "🇲🇽", "54": "🇦🇷", "55": "🇧🇷", "57": "🇨🇴", "58": "🇻🇪",
+    "51": "🇵🇪", "591": "🇧🇴", "593": "🇪🇨", "595": "🇵🇾", "598": "🇺🇾",
+    "507": "🇵🇦", "502": "🇬🇹", "503": "🇸🇻", "504": "🇭🇳", "505": "🇳🇮", "506": "🇨🇷"
   };
 
   function getPrefix(number) {
@@ -51,9 +53,9 @@ ${info}
   }, { quoted: m });
 };
 
-// Esto hace que funcione SIN prefijo
-handler.customPrefix = /^(tagall|todos)$/i;
-handler.command = new RegExp; // ← vacío para evitar doble ejecución
+// Soporte sin prefijo
+handler.customPrefix = /^(tagall|todos)/i;
+handler.command = /^$/; // Evita doble ejecución por sistema normal
 handler.group = true;
 
 export default handler;
