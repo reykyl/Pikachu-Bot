@@ -1,7 +1,11 @@
+/*Código original By dylen,
+mejorado por Angel*/
+
+
 const handler = async (m, { isOwner, isAdmin, conn, text, participants, args, command }) => {
   const mensajeTexto = m.text?.toLowerCase() || '';
 
-  // Detectar si es 'tagall' o 'todos', con o sin prefijo
+  
   if (!/^(\W*)?(tagall|todos)$/.test(mensajeTexto.trim())) return;
 
   const customEmoji = global.db?.data?.chats?.[m.chat]?.customEmoji || '⚡';
