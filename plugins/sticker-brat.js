@@ -5,7 +5,7 @@ const handler = async (m, { conn, args, usedPrefix, command }) => {
     try {
         if (!args[0]) {
             return conn.reply(m.chat, 
-                `*Ｏ(≧∇≦)Ｏ 🧃* *Entrenador! Usa bien el comando para hacerte un pika Brat ⚡*.`, 
+                `*Ｏ(≧∇≦)Ｏ 🧃* *Entrenador! Usa bien el comando para hacerte un pika Brat ⚡*.`,, m, rcanal); 
                 m);
         }
 
