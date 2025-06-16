@@ -1,19 +1,53 @@
-import fetch from 'node-fetch';
+import { sticker } from '../lib/sticker.js';
+import axios from 'axios';
 
-const API_MAIN = 'https://api.siputzx.my.id/api/m/brat';
-const TIMEOUT = 10000; // 10 segundos
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-const fetchWithTimeout = async (url, timeout = TIMEOUT) => {
-    return Promise.race([
-        fetch(url),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Tiempo de espera agotado 🕒')), timeout))
-    ]);
+const fetchSticker = async (text, attempt = 1) => {
+    try {
+        const response = await axios.get(`https://api.siputzx.my.id/api/m/brat`, {
+            params: { q: text },
+            responseType: 'arraybuffer',
+        });
+        return response.data;
+    } catch (error) {
+        if (error.response?.status === 429 && attempt <= 3) {
+            const retryAfter = error.response.headers['retry-after'] || 5;
+            await delay(retryAfter * 1000);
+            return fetchSticker(text, attempt + 1);
+        }
+        throw error;
+    }
 };
 
-const handler = async (m, { conn, args, usedPrefix, command }) => {
-    const pikaReact = (emoji) => conn.sendMessage(m.chat, { react: { text: emoji, key: m.key } });
-    const pikaReply = (text) => conn.reply(m.chat, text, m);
+let handler = async (m, { conn, text }) => {
+    if (!text) {
+        return conn.sendMessage(m.chat, {
+            text: `*${emoji} Por favor ingresa el texto para hacer un sticker.*
 
-    const texto = args.join(" ").trim();
-    if (!texto) {
-        return pikaReply(`> ⚡
+*Ejemplo: ${prefix + command} ${botname}"`,
+        }, { quoted: m });
+    }
+
+    try {
+        const buffer = await fetchSticker(text);
+        let stiker = await sticker(buffer, false, global.botname, global.nombre);
+
+        if (stiker) {
+            return conn.sendFile(m.chat, stiker, 'sticker.webp', '', m);
+        } else {
+            throw new Error("No se pudo generar el sticker.");
+        }
+    } catch (error) {
+        console.error(error);
+        return conn.sendMessage(m.chat, {
+            text: `${msm} Ocurrió un error: ${error.message}`,
+        }, { quoted: m });
+    }
+};
+
+handler.command = ['brat'];
+handler.tags = ['sticker'];
+handler.help = ['brat *<texto>*'];
+
+export default handler;
