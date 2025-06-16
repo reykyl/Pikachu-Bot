@@ -94,8 +94,8 @@ ${listaUsuarios}
 };
 
 // Con este truco ya no necesitas prefijo
-handler.command = /^$/; // Desactiva el uso tradicional de comandos con prefijo
-handler.customPrefix = /^(\W*)?(tagall|todos)$/i; // Detecta 'tagall' o 'todos' con o sin prefijo
+handler.command = /^$/; 
+handler.customPrefix = /^(\W*)?(tagall|todos)$/i; 
 handler.group = true;
 
 export default handler;
