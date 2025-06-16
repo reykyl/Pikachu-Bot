@@ -2,8 +2,11 @@ var handler = async (m, { conn, participants, usedPrefix, command }) => {
     const texto = m.text?.trim().toLowerCase() || '';
     const comandos = ['kick', 'echar', 'hechar', 'sacar', 'ban'];
 
-    const coincidencia = comandos.find(cmd => texto.startsWith(usedPrefix + cmd) || texto.startsWith(cmd));
-    if (!coincidencia) return;
+    // Asegurarse que el mensaje comienza con uno de los comandos válidos (con o sin prefijo)
+    const coincidencia = comandos.find(cmd => 
+        texto.startsWith(usedPrefix + cmd) || texto.startsWith(cmd)
+    );
+    if (!coincidencia) return; // Si no hay coincidencia, no hacer nada
 
     const pikachu = 'Ｏ(≧∇≦)Ｏ🧃';
     const sadchu = 'Ｏ(≧∇≦)Ｏ🧃';
@@ -13,10 +16,13 @@ var handler = async (m, { conn, participants, usedPrefix, command }) => {
     }
 
     let user = m.mentionedJid?.[0] || m.quoted.sender;
+
+    // Obtener información del grupo
     const groupInfo = await conn.groupMetadata(m.chat);
-    const ownerGroup = groupInfo.owner || m.chat.split`-`[0] + '@s.whatsapp.net';
+    const ownerGroup = groupInfo.owner || (m.chat.split`-`[0] + '@s.whatsapp.net');
     const ownerBot = global.owner?.[0]?.[0] + '@s.whatsapp.net';
 
+    // Restricciones
     if (user === conn.user.jid) {
         return conn.reply(m.chat, `${sadchu} ¡Pika! No puedo eliminarme a mí mismo.`, m);
     }
@@ -29,10 +35,12 @@ var handler = async (m, { conn, participants, usedPrefix, command }) => {
         return conn.reply(m.chat, `${sadchu} ¡Ese es mi entrenador! No puedo hacer eso.`, m);
     }
 
+    // Expulsión
     try {
         await conn.groupParticipantsUpdate(m.chat, [user], 'remove');
         conn.reply(m.chat, `${pikachu} ¡Pika Pika! Usuario eliminado con un Impactrueno. ⚡`, m);
     } catch (e) {
+        console.error(e);
         conn.reply(m.chat, `${sadchu} No pude eliminarlo. ¿Seguro que soy administrador?`, m);
     }
 };
@@ -40,7 +48,7 @@ var handler = async (m, { conn, participants, usedPrefix, command }) => {
 // Configuración del comando
 handler.help = ['kick'];
 handler.tags = ['grupo'];
-handler.command = /^.*/; // Captura todos los mensajes
+handler.command = /^([^\s]+)$/i; // Captura mensajes de una sola "palabra"
 handler.admin = true;
 handler.group = true;
 handler.register = true;
