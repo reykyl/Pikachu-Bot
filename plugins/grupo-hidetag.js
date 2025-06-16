@@ -8,7 +8,9 @@ let handler = async (m, { conn, participants, isAdmin, isOwner }) => {
     texto.toLowerCase().startsWith('.' + c + ' ') ||
     texto.toLowerCase() === '.' + c ||
     texto.toLowerCase().startsWith('/' + c + ' ') ||
-    texto.toLowerCase() === '/' + c
+    texto.toLowerCase() === '/' + c ||
+    texto.toLowerCase().startsWith('!' + c + ' ') ||
+    texto.toLowerCase() === '!' + c
   )
 
   if (!usado) return
@@ -19,15 +21,12 @@ let handler = async (m, { conn, participants, isAdmin, isOwner }) => {
 
   const users = participants.map(p => p.id)
 
-  // Extraer mensaje: texto limpio o mensaje citado, incluso si es multimedia
+  // Quitar el comando del mensaje
   let mensaje = texto.replace(new RegExp(`^[./!\\s]*${usado}`, 'i'), '').trim()
 
+  // Si no hay texto y hay mensaje citado
   if (!mensaje && m.quoted) {
-    if (m.quoted.text) {
-      mensaje = m.quoted.text
-    } else {
-      mensaje = '*📎 Archivo enviado*'
-    }
+    mensaje = m.quoted.text || m.quoted.caption || '*📎 Archivo multimedia*'
   }
 
   if (!mensaje) mensaje = '*¡Pika Pika saludos!* ⚡'
@@ -40,8 +39,8 @@ let handler = async (m, { conn, participants, isAdmin, isOwner }) => {
 
 handler.group = true
 handler.admin = true
-handler.command = /^$/ // no usa comandos normales
-handler.customPrefix = /^[./!/]?(n|notify|notificar|hidetag|tag)/i
+handler.command = /^$/ // no usa comandos por defecto
+handler.customPrefix = /^[./!]?((n|notify|notificar|hidetag|tag))( |$)/i
 handler.exp = 0
 
 export default handler
