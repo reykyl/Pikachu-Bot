@@ -1,41 +1,25 @@
-import { generateWAMessageFromContent } from '@whiskeysockets/baileys'
+let handler = async (m, { conn, participants, isAdmin, isOwner }) => {
+  const text = m.text?.trim() || ''
+  const comandos = ['n', 'notify', 'notificar', 'hidetag', 'tag']
+  
+  // Detectar si el mensaje comienza con algún comando permitido
+  const cmd = comandos.find(c => text.toLowerCase().startsWith(c) || text.toLowerCase().startsWith('.' + c))
+  if (!cmd) return // No ejecutar si no es uno de los comandos válidos
 
-const handler = async (m, { conn, participants, isAdmin, isOwner }) => {
-  const texto = m.text?.trim()
-  if (!texto) return
+  if (!isAdmin && !isOwner) return conn.reply(m.chat, '⚠️ Este comando es solo para *admins*.', m)
 
-  const comandos = ['hidetag', 'notify', 'notificar', 'tag', 'n']
-  const regex = new RegExp(`^[./!\\s]*(${comandos.join('|')})(\\s+.*)?$`, 'i')
+  // Quitar el comando del texto para dejar solo el mensaje
+  const mensaje = text.replace(new RegExp(`^[./!\\s]*${cmd}`, 'i'), '').trim() || m.quoted?.text || '*¡Pika Pika saludos!* ⚡'
+  const mencionados = participants.map(p => p.id)
 
-  // Verifica si es uno de los comandos válidos con o sin prefijo
-  const match = texto.match(regex)
-  if (!match) return
-
-  // Validación de permisos
-  if (!isAdmin && !isOwner) {
-    return conn.reply(m.chat, '⚠️ Este comando es solo para *admins*.', m)
-  }
-
-  // Texto a enviar (parte después del comando)
-  const body = match[2]?.trim() || (m.quoted?.text || '*¡Pika Pika saludos!* ⚡')
-  const mensaje = `${body}\n\n> ⚡ 𝙋𝙞𝙠𝙖𝙘𝙝𝙪-𝘽𝙤𝙩 𝙈𝘿 ⚡`
-
-  const users = participants.map(p => p.id)
-
-  const msg = generateWAMessageFromContent(m.chat, {
-    extendedTextMessage: {
-      text: mensaje,
-      contextInfo: {
-        mentionedJid: users
-      }
-    }
-  }, { userJid: conn.user.id })
-
-  await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
+  await conn.sendMessage(m.chat, {
+    text: mensaje + '\n\n> ⚡ 𝙋𝙞𝙠𝙖𝙘𝙝𝙪-𝘽𝙤𝙩 𝙈𝘿 ⚡',
+    mentions: mencionados
+  }, { quoted: m })
 }
 
 handler.group = true
 handler.admin = true
-handler.command = /^$/ // evita que el sistema tradicional lo capture
+handler.command = /^$/ // sin prefijo
 
 export default handler
