@@ -3,48 +3,58 @@ import { execSync } from 'child_process';
 let handler = async (m, { conn, args, command }) => {
   const mensajeTexto = m.text?.toLowerCase() || '';
 
-  // Detectar comando con o sin prefijo
+  // Aceptar comandos con o sin prefijo
   const isMatch = /^(update|actualizar)$/i.test(command || '') || /^(update|actualizar)$/i.test(mensajeTexto);
   if (!isMatch) return;
 
-  try {
-    await conn.reply(m.chat, '⚡ Actualizando el bot, por favor espere...', m);
+  // Reacción visual si está habilitado
+  const emoji = global.db?.data?.chats?.[m.chat]?.customEmoji || '⚡';
+  m.react?.(emoji);
 
-    const output = execSync('git pull' + (args.length ? ' ' + args.join(' ') : '')).toString();
-    let response = output.includes('Already up to date')
-      ? '🧃 El bot ya está actualizado.'
-      : `🧃 Se han aplicado actualizaciones:\n\n${output}`;
+  try {
+    await conn.reply(m.chat, '⚙️ Actualizando el bot, por favor espera unos segundos...', m);
+
+    // Ejecutar git pull
+    const output = execSync('git pull' + (args.length ? ' ' + args.join(' ') : '')).toString().trim();
+
+    let response = '';
+    if (output.includes('Already up to date')) {
+      response = '✅ El bot ya está actualizado. No se encontraron cambios.';
+    } else {
+      response = `✅ Bot actualizado correctamente:\n\n\`\`\`\n${output}\n\`\`\``;
+    }
 
     await conn.reply(m.chat, response, m);
   } catch (error) {
     try {
-      const status = execSync('git status --porcelain').toString().trim();
-      if (status) {
-        const conflictedFiles = status.split('\n').filter(line =>
+      const statusOutput = execSync('git status --porcelain').toString().trim();
+
+      if (statusOutput) {
+        const conflictedFiles = statusOutput.split('\n').filter(line =>
           !line.includes('pikachuSession/') &&
           !line.includes('.cache/') &&
           !line.includes('tmp/')
         );
 
         if (conflictedFiles.length > 0) {
-          const conflictMsg = `⚠️ Conflictos detectados en los siguientes archivos:\n\n` +
-            conflictedFiles.map(f => '• ' + f.slice(3)).join('\n') +
-            `\n\n🔹 Para solucionar esto, reinstala el bot o actualiza manualmente.`;
+          const msg = `⚠️ Conflictos detectados en:\n\n` +
+            conflictedFiles.map(f => `• ${f.slice(3)}`).join('\n') +
+            `\n\n🔧 Resuélvelo manualmente o reinstala el bot.`;
 
-          return await conn.reply(m.chat, conflictMsg, m);
+          return await conn.reply(m.chat, msg, m);
         }
       }
     } catch (statusError) {
-      console.error(statusError);
+      console.error('Error al verificar estado git:', statusError);
     }
 
-    await conn.reply(m.chat, `❌ Error al actualizar: ${error.message || 'Error desconocido.'}`, m);
+    await conn.reply(m.chat, `❌ Error al actualizar:\n\n${error.message || error}`, m);
   }
 };
 
 handler.help = ['update', 'actualizar'];
 handler.tags = ['owner'];
-handler.command = /^update|actualizar$/i; // Esto permite prefijo o sin prefijo si tu bot lo soporta
+handler.command = /^update|actualizar$/i;
 handler.rowner = true;
 
 export default handler;
