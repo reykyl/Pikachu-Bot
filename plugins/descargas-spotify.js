@@ -10,7 +10,7 @@ let ouh = await fetch(`https://api.nekorinn.my.id/downloader/spotifyplay?q=${tex
 let gyh = await ouh.json()
 
       const doc = {
-        audio: { url: gyh api.downloadUrl },
+        audio: { url: gyh.result.downloadUrl },
         mimetype: 'audio/mpeg',
         fileName: `${title}.mp3`,
         contextInfo: {
@@ -36,3 +36,6 @@ handler.tags = ['descargas']
 handler.command = ['spotify']
 
 export default handler
+
+
+
