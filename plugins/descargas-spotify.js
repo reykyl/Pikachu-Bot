@@ -3,10 +3,10 @@
 import fetch from 'node-fetch';
 
 let handler = async (m, { conn, text }) => {
-  if (!text) return conn.reply(m.chat, `⚡ Por favor, ingresa el nombre de una canción de Spotify.`, m);
+  if (!text) return conn.reply(m.chat, `⚡ Por favor, ingresa el nombre de una canción de Spotify.`, m, rcanal);
   
   await m.react('🕒');
-  conn.reply(m.chat, `*🎧 Buscando tu canción en Spotify...*`, m);
+  conn.reply(m.chat, `*🎧 Buscando tu canción en Spotify...*`, m, rcanal);
   
   try {
     let res = await fetch(`https://api.nekorinn.my.id/downloader/spotifyplay?q=${encodeURIComponent(text)}`);
@@ -14,7 +14,10 @@ let handler = async (m, { conn, text }) => {
 
     if (!gyh.result || !gyh.result.downloadUrl) throw '❌ No se encontró ninguna canción.';
 
-    const { title, url, thumbnail, duration, playcount } = gyh.result;
+        const videoInfo = search.all[0];
+    const { title, thumbnail, timestamp, views, ago, url } = videoInfo;
+    const vistas = formatViews(views);
+    const thumb = (await conn.getFile(thumbnail))?.data;
     const doc = {
       audio: { url: gyh.result.downloadUrl },
       mimetype: 'audio/mpeg',
@@ -39,7 +42,7 @@ let handler = async (m, { conn, text }) => {
   } catch (e) {
     console.error(e);
     await m.react('❌');
-    conn.reply(m.chat, '🚫 Hubo un error al buscar la canción.', m);
+    conn.reply(m.chat, '🚫 Hubo un error al buscar la canción.', m, rcanal);
   }
 };
 
