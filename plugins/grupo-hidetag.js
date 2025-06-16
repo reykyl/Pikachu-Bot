@@ -11,22 +11,29 @@ let handler = async (m, { conn, participants, isAdmin, isOwner }) => {
 
   const users = participants.map(p => p.id)
 
-  // Extraer el mensaje quitando el comando
   const mensaje = texto.replace(new RegExp(`^[./!]?${comando}`, 'i'), '').trim() ||
-                  m.quoted?.text || 
-                  m.quoted?.caption || 
+                  m.quoted?.text ||
+                  m.quoted?.caption ||
                   '*¡Pika Pika saludos!* ⚡'
 
+  // Enviar mensaje con menciones
   await conn.sendMessage(m.chat, {
     text: mensaje + '\n\n> ⚡ 𝙋𝙞𝙠𝙖𝙘𝙝𝙪-𝘽𝙤𝙩 𝙈𝘿 ⚡',
     mentions: users
   }, { quoted: m })
+
+  // Borrar mensaje del admin
+  try {
+    await conn.sendMessage(m.chat, { delete: m.key })
+  } catch (e) {
+    console.error('❌ No se pudo borrar el mensaje:', e)
+  }
 }
 
 handler.group = true
 handler.admin = true
 handler.customPrefix = /^[./!]?([a-z]+)/i
-handler.command = () => false // Para forzar solo customPrefix
+handler.command = () => false // No usa comandos estándar
 handler.exp = 0
 
 export default handler
