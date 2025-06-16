@@ -77,7 +77,7 @@ global.code = 'https://chat.whatsapp.com/IjpqfWuWYVfG9cDgR0AnKn';
 var canal = 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'  
 let canal2 = 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
 var git = 'https://github.com/Deylin-Eliac'
-var github = 'https://github.com/Deylin-Eliac/Kirito-Bot-MD' 
+var github = 'https://github.com/Deylin-Eliac/Pikachu-bot' 
 let correo = 'deylibaquedano801@gmail.com'
 
 global.redes = [canal, canal2, git, github, correo].getRandom()
