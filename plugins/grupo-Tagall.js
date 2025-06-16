@@ -1,9 +1,8 @@
 const handler = async (m, { isOwner, isAdmin, conn, text, participants, args, command }) => {
-  const mensajeTexto = m.text?.toLowerCase();
+  const mensajeTexto = m.text?.toLowerCase() || '';
 
-  // Detectar comando con o sin prefijo
-  const isMatch = /^(tagall|todos)$/i.test(command || '') || /^(tagall|todos)$/i.test(mensajeTexto);
-  if (!isMatch) return;
+  // Detectar si es 'tagall' o 'todos', con o sin prefijo
+  if (!/^(\W*)?(tagall|todos)$/.test(mensajeTexto.trim())) return;
 
   const customEmoji = global.db?.data?.chats?.[m.chat]?.customEmoji || '⚡';
   m.react?.(customEmoji);
@@ -32,31 +31,35 @@ const handler = async (m, { isOwner, isAdmin, conn, text, participants, args, co
     ? `╰🧭 *Mensaje:* ${mensaje}`
     : "╰⚠️ *Invocación general de Pika-bot: los administradores te necesitan.*";
 
-  let texto = `
+  let listaUsuarios = participants.map(miembro => {
+    const number = miembro.id.replace(/\D/g, '');
+    const prefix = getPrefix(number);
+    const flag = countryFlags[prefix] || "🌐";
+    return `⚡ ${flag} @${number}`;
+  }).join('\n');
+
+  const texto = `
 ╭─〔⚡ 𝐏𝐈𝐊𝐀𝐋𝐋 ⚡〕──⬣
 │ 🧑‍🤝‍🧑 *Miembros:* ${participants.length}
 │ 🏷️ *Grupo:* ${await conn.getName(m.chat)}
 ${info}
-╰────⬣\n`;
+╰────⬣
 
-  for (const miembro of participants) {
-    const number = miembro.id.split('@')[0];
-    const prefix = getPrefix(number);
-    const flag = countryFlags[prefix] || "🌐";
-    texto += `⚡ ${flag} @${number}\n`;
-  }
+${listaUsuarios}
 
-  texto += `\n🔋 𝐄𝐧𝐞𝐫𝐠í𝐚 𝐋𝐢𝐛𝐞𝐫𝐚𝐝𝐚 ⚡\n✨ *by Pikachu™* 🧃`;
+🔋 𝐄𝐧𝐞𝐫𝐠í𝐚 𝐋𝐢𝐛𝐞𝐫𝐚𝐝𝐚 ⚡
+✨ *by Pikachu™* 🧃
+  `.trim();
 
   await conn.sendMessage(m.chat, {
-    text: texto.trim(),
+    text: texto,
     mentions: participants.map(p => p.id)
   }, { quoted: m });
 };
 
-// Soporte para ambos: con y sin prefijo
-handler.command = /^(tagall|todos)$/i;
-handler.customPrefix = /^(tagall|todos)$/i;
+// Con este truco ya no necesitas prefijo
+handler.command = /^$/; // Desactiva el uso tradicional de comandos con prefijo
+handler.customPrefix = /^(\W*)?(tagall|todos)$/i; // Detecta 'tagall' o 'todos' con o sin prefijo
 handler.group = true;
 
 export default handler;
