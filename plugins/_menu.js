@@ -38,9 +38,11 @@ const tags = {
   'custom': 'CUSTOM'
 }
 
-let handler = async (m, { conn }) => {
+let handler = async (m, { conn, command }) => {
   const texto = m.text?.toLowerCase()
-  if (!/^menu|menú|allmenu$/i.test(texto)) return
+
+  // Acepta sin prefijo y con prefijo
+  if (!/^\.?(menu|menú|allmenu)$/i.test(texto)) return
 
   try {
     const userId = m.mentionedJid?.[0] || m.sender
@@ -122,11 +124,13 @@ ${readMore}
   }
 }
 
-// ACTIVADO sin prefijo
-handler.customPrefix = /^menu|menú|allmenu$/i
-handler.command = new RegExp
+// 💡 Funciona con prefijo y sin prefijo
+handler.customPrefix = /^\.?(menu|menú|allmenu)$/i
+handler.command = /^menu|menú|allmenu$/i
+
 export default handler
 
+// Extras
 const more = String.fromCharCode(8206)
 const readMore = more.repeat(4001)
 
