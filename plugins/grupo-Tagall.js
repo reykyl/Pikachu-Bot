@@ -96,7 +96,7 @@ ${listaUsuarios}
 
 handler.command = ['tagall', 'todos']; ; 
 handler.help = ['tagall', 'todos']; 
-handler.tag = ['grupo']; 
+handler.tags = ['grupo']; 
 handler.group = true;
 
 export default handler;
