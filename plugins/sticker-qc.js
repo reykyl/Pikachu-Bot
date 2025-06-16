@@ -1,3 +1,4 @@
+/*Creado por Angel*/
 
 
 import { sticker } from '../lib/sticker.js';
