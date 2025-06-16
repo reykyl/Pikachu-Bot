@@ -2,21 +2,17 @@ var handler = async (m, { conn, participants, usedPrefix, command }) => {
     const texto = m.text?.trim().toLowerCase() || '';
     const comandos = ['kick', 'echar', 'hechar', 'sacar', 'ban'];
 
-    // Verifica si el texto inicia con alguno de los comandos con o sin prefijo
     const coincidencia = comandos.find(cmd => texto.startsWith(usedPrefix + cmd) || texto.startsWith(cmd));
     if (!coincidencia) return;
 
     const pikachu = 'Ｏ(≧∇≦)Ｏ🧃';
     const sadchu = 'Ｏ(≧∇≦)Ｏ🧃';
 
-    // Requiere mención o respuesta a mensaje
     if (!m.mentionedJid?.length && !m.quoted) {
         return conn.reply(m.chat, `${pikachu} ¡Pika Pika! Debes mencionar a alguien para expulsarlo del grupo.`, m);
     }
 
     let user = m.mentionedJid?.[0] || m.quoted.sender;
-
-    // Evita expulsar al bot, al owner del grupo o al owner del bot
     const groupInfo = await conn.groupMetadata(m.chat);
     const ownerGroup = groupInfo.owner || m.chat.split`-`[0] + '@s.whatsapp.net';
     const ownerBot = global.owner?.[0]?.[0] + '@s.whatsapp.net';
@@ -44,7 +40,7 @@ var handler = async (m, { conn, participants, usedPrefix, command }) => {
 // Configuración del comando
 handler.help = ['kick'];
 handler.tags = ['grupo'];
-handler.command = /^$/; // No usamos esta detección directa
+handler.command = /^.*/; // Captura todos los mensajes
 handler.admin = true;
 handler.group = true;
 handler.register = true;
