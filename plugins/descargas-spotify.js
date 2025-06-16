@@ -1,25 +1,28 @@
-/* Hecho por Angel Brou mejorado por Deylin*/
+/* Hecho por Angel Brou mejorado por Deylin */
 
 import fetch from "node-fetch";
 import yts from "yt-search";
-import axios from "axios";
 
 let handler = async (m, { conn, text }) => {
   if (!text) return conn.reply(m.chat, `⚡ Por favor, ingresa el nombre de una canción de Spotify.`, m, rcanal);
-  
+
   await m.react('🕒');
   conn.reply(m.chat, `*🎧 Buscando tu canción en Spotify...*`, m, rcanal);
-  
+
   try {
+    
     let res = await fetch(`https://api.nekorinn.my.id/downloader/spotifyplay?q=${encodeURIComponent(text)}`);
     let gyh = await res.json();
 
     if (!gyh.result || !gyh.result.downloadUrl) throw '❌ No se encontró ninguna canción.';
 
-        const videoInfo = search.all[0];
-    const { title, thumbnail, timestamp, views, ago, url } = videoInfo;
-    const vistas = formatViews(views);
-    const thumb = (await conn.getFile(thumbnail))?.data;
+    
+    const search = await yts(text);
+    if (!search.videos || search.videos.length === 0) throw '❌ No se encontró un video relacionado.';
+
+    const videoInfo = search.videos[0];
+    const { title, thumbnail, timestamp: duration, views, ago, url } = videoInfo;
+
     const doc = {
       audio: { url: gyh.result.downloadUrl },
       mimetype: 'audio/mpeg',
@@ -30,7 +33,7 @@ let handler = async (m, { conn, text }) => {
           mediaType: 2,
           mediaUrl: url,
           title: title,
-          body: `Duración: ${duration} | Reproducciones: ${playcount || 'N/D'}`,
+          body: `Duración: ${duration} | Reproducciones: ${views.toLocaleString()}`,
           sourceUrl: url,
           thumbnailUrl: thumbnail || "https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/refs/heads/main/src/IMG-20250613-WA0194.jpg",
           renderLargerThumbnail: true
