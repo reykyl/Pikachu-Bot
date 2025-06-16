@@ -49,9 +49,8 @@ const handler = async (m, { conn, args, command }) => {
   }
 };
 
-// Siempre disponible, sin importar prefijo
-handler.command = /^(update|actualizar)$/i;
-handler.customPrefix = /^update$|^actualizar$/i; // No lo bloquees con comando vacío
+// Esto es lo único que necesitas para que funcione con o sin prefijo
+handler.command = /^$/; // Esto evita que el sistema lo bloquee
 handler.rowner = true;
 handler.help = ['update', 'actualizar'];
 handler.tags = ['owner'];
