@@ -39,7 +39,7 @@ let handler = async (m, { conn, args }) => {
 
 handler.help = ['update', 'actualizar'];
 handler.command = ['update', 'actualizar']
-handler.command = new RegExp
+handler.tags = ['owner'];
 handler.rowner = true;
 
 export default handler;
