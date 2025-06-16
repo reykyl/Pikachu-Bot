@@ -7,6 +7,7 @@ let tags = {
   'anime': 'ANIME',
   'juegos': 'JUEGOS',
   'main': 'INFO',
+  'ia': 'IA',
   'search': 'SEARCH',
   'game': 'GAME',
   'serbot': 'SUB BOTS',
