@@ -76,7 +76,7 @@ global.gp1 = 'https://chat.whatsapp.com/F8KwM3rVqkS9HhR5msoRqQ'
 global.comunidad1 = 'https://chat.whatsapp.com/F8KwM3rVqkS9HhR5msoRqQ'
 global.channel = 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
 global.channel2 = 'https://whatsapp.com/channel/0029VayQwPsFnSzESZJ9Us3z'
-global.md = 'https://github.com/Deylin-Eliac/Kirito-Bot-MD'
+global.md = 'https://github.com/Deylin-Eliac/Pikachu-bot'
 global.correo = 'deylibaquedano801@gmail.com'
 global.cn ='https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m';
 
