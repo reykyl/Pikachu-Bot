@@ -40,6 +40,31 @@ END:VCARD
     m.chat,
     { contacts: { displayName: name, contacts: [{ vcard }] } },
     { quoted: fkontak }
+
+
+    await conn.sendMessage(m.chat, {
+      displayName: name,
+      contacts: [{ vcard }] } },
+      contextInfo: {
+        mentionedJid: [m.sender],
+        isForwarded: true,
+        forwardedNewsletterMessageInfo: {
+          newsletterJid: channelRD.id,
+          newsletterName: channelRD.name,
+          serverMessageId: -1,
+        },
+        forwardingScore: 999,
+        externalAdReply: {
+          title: textbot,
+          body: dev,
+          thumbnailUrl: catalogo,
+          sourceUrl: redes,
+          mediaType: 1,
+          showAdAttribution: true,
+          renderLargerThumbnail: true,
+        },
+      },
+    }, { quoted: m })
   );
 }
 
