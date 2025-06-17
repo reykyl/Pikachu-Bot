@@ -36,10 +36,10 @@ END:VCARD
   `.trim();
 
 
-  await conn.sendMessage(
+ /* await conn.sendMessage(
     m.chat,
     { contacts: { displayName: name, contacts: [{ vcard }] } },
-    { quoted: fkontak }
+    { quoted: fkontak }*/
 
 
     await conn.sendMessage(m.chat, {
