@@ -1,17 +1,14 @@
 let handler = async (m, { conn, text, quoted }) => {
-  if (!text.includes('|')) {
-    return m.reply(`Uso correcto:\n\n➡️ Si respondes una imagen:\n.editenlace <url> | <título> | <descripción>\n\n➡️ Sin responder imagen:\n.editenlace <url> | <título> | <descripción> | <url imagen>`)
+  if (!text.includes('|') && !quoted?.isImage) {
+    return m.reply(`Uso correcto:\n.enlace <url> | <título> | <descripción> | <url imagen>\n\nO responde a una imagen y usa:\n.enlace <url> | <título> | <descripción>`)
   }
 
   let url, title, body, thumbnail
 
-  if (quoted?.isImage) {
-    const parts = text.split('|').map(v => v.trim())
-    if (parts.length < 3) {
-      return m.reply('Faltan datos. Usa: <url> | <título> | <descripción>')
-    }
-
-    [url, title, body] = parts
+  if (quoted?.isImage && text.includes('|')) {
+    // Si responde a una imagen y usa texto
+    [url, title, body] = text.split('|').map(v => v.trim())
+    if (!url || !title || !body) return m.reply('Faltan datos. Usa: <url> | <título> | <descripción>')
 
     try {
       thumbnail = await quoted.download()
@@ -20,13 +17,13 @@ let handler = async (m, { conn, text, quoted }) => {
     }
 
   } else {
-    const parts = text.split('|').map(v => v.trim())
-    if (parts.length < 4) {
-      return m.reply('Faltan datos. Usa: <url> | <título> | <descripción> | <url imagen>')
-    }
-
-    [url, title, body, thumbnailUrl] = parts
-    thumbnail = undefined // Se usará thumbnailUrl directamente en el mensaje
+    // Si no responde a imagen, usa URL de imagen
+    let [u, t, b, thumbUrl] = text.split('|').map(v => v.trim())
+    if (!u || !t || !b || !thumbUrl) return m.reply('Faltan datos. Usa: <url> | <título> | <descripción> | <url imagen>')
+    url = u
+    title = t
+    body = b
+    thumbnail = undefined // Usará thumbnailUrl
   }
 
   const doc = {
@@ -41,8 +38,8 @@ let handler = async (m, { conn, text, quoted }) => {
         sourceUrl: url,
         renderLargerThumbnail: true,
         ...(thumbnail
-          ? { thumbnail } // Si respondió imagen
-          : { thumbnailUrl }) // Si usó una URL de imagen
+          ? { thumbnail } // Si respondió a imagen, usa el buffer
+          : { thumbnailUrl: text.split('|')[3]?.trim() }) // Si no, usa URL
       }
     }
   }
@@ -50,8 +47,8 @@ let handler = async (m, { conn, text, quoted }) => {
   await conn.sendMessage(m.chat, doc, { quoted: m })
 }
 
-handler.help = ['editenlace']
+handler.help = ['th']
 handler.tags = ['tools']
-handler.command = ['editenlace']
+handler.command = ['th']
 
 export default handler
