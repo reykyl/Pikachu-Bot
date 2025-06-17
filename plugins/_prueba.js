@@ -1,11 +1,29 @@
-let handler = async (m, { conn, text }) => {
-  if (!text.includes('|')) {
-    return m.reply(`Uso correcto:\n.enlace <url> | <título> | <descripción> | <url imagen>\n\nEjemplo:\n.enlace https://example.com | Mi Título | Esta es una descripción | https://miweb.com/imagen.jpg`)
+let handler = async (m, { conn, text, quoted }) => {
+  if (!text.includes('|') && !quoted?.isImage) {
+    return m.reply(`Uso correcto:\n.enlace <url> | <título> | <descripción> | <url imagen>\n\nO responde a una imagen y usa:\n.enlace <url> | <título> | <descripción>`)
   }
 
-  let [url, title, body, thumbnailUrl] = text.split('|').map(v => v.trim())
-  if (!url || !title || !body || !thumbnailUrl) {
-    return m.reply('Faltan datos. Asegúrate de incluir los 4 parámetros separados por |')
+  let url, title, body, thumbnail
+
+  if (quoted?.isImage && text.includes('|')) {
+    
+    [url, title, body] = text.split('|').map(v => v.trim())
+    if (!url || !title || !body) return m.reply('Faltan datos. Usa: <url> | <título> | <descripción>')
+
+    try {
+      thumbnail = await quoted.download()
+    } catch (e) {
+      return m.reply('No se pudo descargar la imagen respondida.')
+    }
+
+  } else {
+    
+    let [u, t, b, thumbUrl] = text.split('|').map(v => v.trim())
+    if (!u || !t || !b || !thumbUrl) return m.reply('Faltan datos. Usa: <url> | <título> | <descripción> | <url imagen>')
+    url = u
+    title = t
+    body = b
+    thumbnail = undefined // Usará thumbnailUrl
   }
 
   const doc = {
@@ -16,10 +34,12 @@ let handler = async (m, { conn, text }) => {
         mediaType: 1,
         title: title,
         body: body,
-        thumbnailUrl: thumbnailUrl,
         mediaUrl: url,
         sourceUrl: url,
         renderLargerThumbnail: true,
+        ...(thumbnail
+          ? { thumbnail } // Si respondió a imagen, usa el buffer
+          : { thumbnailUrl: text.split('|')[3]?.trim() }) // Si no, usa URL
       }
     }
   }
@@ -27,51 +47,8 @@ let handler = async (m, { conn, text }) => {
   await conn.sendMessage(m.chat, doc, { quoted: m })
 }
 
-handler.help = ['editenlace']
+handler.help = ['enlace']
 handler.tags = ['tools']
-handler.command = ['editenlace']
+handler.command = ['enlace']
 
 export default handler
-
-
-/*import uploadFile from '../lib/uploadFile.js'
-import uploadImage from '../lib/uploadImage.js'
-import fetch from 'node-fetch'
-
-let handler = async (m) => {
-  let q = m.quoted ? m.quoted : m
-  let mime = (q.msg || q).mimetype || ''
-  if (!mime) return conn.reply(m.chat, '🍃 Responde a una *Imagen* o *Vídeo.*', m)
-  try {
-  let media = await q.download()
-  let isTele = /image\/(png|jpe?g|gif)|video\/mp4/.test(mime)
-  let link = await (isTele ? uploadImage : uploadFile)(media)
-  let img = await (await fetch(`${link}`)).buffer()
-  let txt = `乂  *L I N K - C A T B O X*  乂\n\n`
-      txt += `*» Enlace* : ${link}\n`
-      txt += `*» Tamaño* : ${formatBytes(media.length)}\n`
-      txt += `*» Expiración* : ${isTele ? 'No expira' : 'Desconocido'}\n\n`
-      txt += `> *${dev}*`
-
-await conn.reply(m.chat, txt, m, rcanal)
-} catch (e) {
-await conn.reply(m.chat, '⚠︎ *Error:* ' + e, m)
-}}
-handler.help = ['tourl2']
-handler.tags = ['tools']
-handler.command = ['tourl2', 'catbox']
-export default handler
-
-function formatBytes(bytes) {
-  if (bytes === 0) {
-    return '0 B';
-  }
-  const sizes = ['B', 'KB', 'MB', 'GB', 'TB']
-  const i = Math.floor(Math.log(bytes) / Math.log(1024))
-  return `${(bytes / 1024 ** i).toFixed(2)} ${sizes[i]}`;
-}
-
-async function shortUrl(url) {
-        let res = await fetch(`https://tinyurl.com/api-create.php?url=${url}`)
-        return await res.text()
-}*/
