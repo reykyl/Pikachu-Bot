@@ -34,15 +34,6 @@ X-WA-BIZ-NAME:${name}
 X-WA-BIZ-DESCRIPTION:${about}
 END:VCARD`.trim();
 
-  // Define datos para externalAdReply (puedes personalizarlos)
-  /*const textbot = 'Kirito-Bot-MD';
-  const dev = 'Creado por Deylin';
-  const catalogo = 'https://telegra.ph/file/7be1fa05579652ef0c9b2.jpg'; // URL de imagen
-  const redes = 'https://whatsapp.com/channel/0029VbB46nl2ER6dZac6Nd1o';
-  const channelRD = {
-    id: '120363185595123456@newsletter',
-    name: 'Canal Oficial'
-  };*/
 
   await conn.sendMessage(
     m.chat,
