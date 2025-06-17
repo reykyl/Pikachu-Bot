@@ -1,5 +1,6 @@
 // Código creado por Deylin
-// https://github.com/deylinqff
+// https://github.com/Deylin-eliac 
+// codigo creado para https://github.com/Deylin-eliac/Pikachu-bot 
 // No quites créditos
 
 import PhoneNumber from 'awesome-phonenumber';
