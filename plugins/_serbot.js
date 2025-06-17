@@ -110,8 +110,8 @@ if (!fs.existsSync(pathpikaJadiBot)){
 fs.mkdirSync(pathpikaJadiBot, { recursive: true })
 }
 pikaJBOptions.pathpikaJadiBot = pathpikaJadiBot
-pikatoJBOptions.m = m
-pikatoJBOptions.conn = conn
+pika JBOptions.m = m
+pikaJBOptions.conn = conn
 pikaJBOptions.args = args
 pikaJBOptions.usedPrefix = usedPrefix
 pikaJBOptions.command = command
