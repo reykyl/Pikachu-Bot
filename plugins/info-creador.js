@@ -6,13 +6,12 @@ import PhoneNumber from 'awesome-phonenumber';
 
 async function handler(m, { conn }) {
   m.react('🧃');
+  
   const numCreador = '50433191934';
   const ownerJid = numCreador + '@s.whatsapp.net';
-
   const name = await conn.getName(ownerJid) || 'Deylin';
   const about = (await conn.fetchStatus(ownerJid).catch(() => {}))?.status || `Hola, mucho gusto. Soy Deylin.`;
   const empresa = 'Deylin - Servicios Tecnológicos';
-
 
   const vcard = `
 BEGIN:VCARD
@@ -32,28 +31,34 @@ X-ABLabel:Correo Electrónico
 X-ABLabel:Teléfono de contacto
 X-WA-BIZ-NAME:${name}
 X-WA-BIZ-DESCRIPTION:${about}
-END:VCARD
-  `.trim();
+END:VCARD`.trim();
 
+  // Define datos para externalAdReply (puedes personalizarlos)
+  const textbot = 'Kirito-Bot-MD';
+  const dev = 'Creado por Deylin';
+  const catalogo = 'https://telegra.ph/file/7be1fa05579652ef0c9b2.jpg'; // URL de imagen
+  const redes = 'https://whatsapp.com/channel/0029VbB46nl2ER6dZac6Nd1o';
+  const channelRD = {
+    id: '120363185595123456@newsletter',
+    name: 'Canal Oficial'
+  };
 
- /* await conn.sendMessage(
+  await conn.sendMessage(
     m.chat,
-    { contacts: { displayName: name, contacts: [{ vcard }] } },
-    { quoted: fkontak }*/
-
-
-    await conn.sendMessage(m.chat, {
-      displayName: name,
-      contacts: [{ vcard }] } },
+    {
+      contacts: {
+        displayName: name,
+        contacts: [{ vcard }]
+      },
       contextInfo: {
         mentionedJid: [m.sender],
         isForwarded: true,
+        forwardingScore: 999,
         forwardedNewsletterMessageInfo: {
           newsletterJid: channelRD.id,
           newsletterName: channelRD.name,
           serverMessageId: -1,
         },
-        forwardingScore: 999,
         externalAdReply: {
           title: textbot,
           body: dev,
@@ -63,8 +68,9 @@ END:VCARD
           showAdAttribution: true,
           renderLargerThumbnail: true,
         },
-      },
-    }, { quoted: m })
+      }
+    },
+    { quoted: m }
   );
 }
 
