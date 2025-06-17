@@ -4,7 +4,7 @@
 
 import PhoneNumber from 'awesome-phonenumber';
 
-async function handler(m, { conn }) {
+let handler = async (m, { conn }) => {
   m.react('🧃');
   
   const numCreador = '50433191934';
