@@ -7,6 +7,7 @@ import PhoneNumber from 'awesome-phonenumber';
 let handler = async (m, { conn }) => {
   m.react('🧃');
   
+const imageUrl = 'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/IMG-20250613-WA0194.jpg'
   const numCreador = '50433191934';
   const ownerJid = numCreador + '@s.whatsapp.net';
   const name = await conn.getName(ownerJid) || 'Deylin';
@@ -62,7 +63,7 @@ END:VCARD`.trim();
         externalAdReply: {
           title: textbot,
           body: dev,
-          thumbnailUrl: catalogo,
+          thumbnailUrl: imageUrl,
           sourceUrl: redes,
           mediaType: 1,
           showAdAttribution: true,
