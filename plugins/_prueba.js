@@ -47,8 +47,8 @@ let handler = async (m, { conn, text, quoted }) => {
   await conn.sendMessage(m.chat, doc, { quoted: m })
 }
 
-handler.help = ['enlace']
+handler.help = ['editenlace']
 handler.tags = ['tools']
-handler.command = ['enlace']
+handler.command = ['editenlace']
 
 export default handler
