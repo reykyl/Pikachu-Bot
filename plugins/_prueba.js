@@ -1,3 +1,5 @@
+import fetch from 'node-fetch'
+
 let handler = async (m, { conn, text, quoted }) => {
   if (!text.includes('|') && !quoted?.isImage) {
     return m.reply(`Uso correcto:\n.enlace <url> | <título> | <descripción> | <url imagen>\n\nO responde a una imagen y usa:\n.enlace <url> | <título> | <descripción>`)
@@ -6,7 +8,6 @@ let handler = async (m, { conn, text, quoted }) => {
   let url, title, body, thumbnail
 
   if (quoted?.isImage && text.includes('|')) {
-    // Si responde a una imagen y usa texto
     [url, title, body] = text.split('|').map(v => v.trim())
     if (!url || !title || !body) return m.reply('Faltan datos. Usa: <url> | <título> | <descripción>')
 
@@ -17,13 +18,19 @@ let handler = async (m, { conn, text, quoted }) => {
     }
 
   } else {
-    // Si no responde a imagen, usa URL de imagen
     let [u, t, b, thumbUrl] = text.split('|').map(v => v.trim())
     if (!u || !t || !b || !thumbUrl) return m.reply('Faltan datos. Usa: <url> | <título> | <descripción> | <url imagen>')
     url = u
     title = t
     body = b
-    thumbnail = undefined // Usará thumbnailUrl
+
+    try {
+      const res = await fetch(thumbUrl)
+      if (!res.ok) throw 'No se pudo descargar la imagen'
+      thumbnail = await res.buffer()
+    } catch (e) {
+      return m.reply('Error al descargar la imagen desde el enlace.')
+    }
   }
 
   const doc = {
@@ -36,10 +43,8 @@ let handler = async (m, { conn, text, quoted }) => {
         body: body,
         mediaUrl: url,
         sourceUrl: url,
+        thumbnail: thumbnail,
         renderLargerThumbnail: true,
-        ...(thumbnail
-          ? { thumbnail } // Si respondió a imagen, usa el buffer
-          : { thumbnailUrl: text.split('|')[3]?.trim() }) // Si no, usa URL
       }
     }
   }
