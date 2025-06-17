@@ -13,7 +13,7 @@ let handler = async (m, { conn }) => {
 ┃ ⚡ *Estado:* ¡Activo y cargado! ⚡
 ┃ 🕒 *Velocidad:* ${latensi.toFixed(4)} ms
 ┃ 📊 *Sistema:*
-┃ ${sysinfo.split('\n').slice(1, 7).join('\n┃ ')}
+┃
 ╰━━━━━━━━━━━━━━━━━━━━━━━╯
 `.trim();
 
