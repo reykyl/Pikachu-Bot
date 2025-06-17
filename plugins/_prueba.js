@@ -1,14 +1,17 @@
 let handler = async (m, { conn, text, quoted }) => {
-  if (!text.includes('|') && !quoted?.isImage) {
-    return m.reply(`Uso correcto:\n.enlace <url> | <título> | <descripción> | <url imagen>\n\nO responde a una imagen y usa:\n.enlace <url> | <título> | <descripción>`)
+  if (!text.includes('|')) {
+    return m.reply(`Uso correcto:\n\n➡️ Si respondes una imagen:\n.editenlace <url> | <título> | <descripción>\n\n➡️ Sin responder imagen:\n.editenlace <url> | <título> | <descripción> | <url imagen>`)
   }
 
   let url, title, body, thumbnail
 
-  if (quoted?.isImage && text.includes('|')) {
-    
-    [url, title, body] = text.split('|').map(v => v.trim())
-    if (!url || !title || !body) return m.reply('Faltan datos. Usa: <url> | <título> | <descripción>')
+  if (quoted?.isImage) {
+    const parts = text.split('|').map(v => v.trim())
+    if (parts.length < 3) {
+      return m.reply('Faltan datos. Usa: <url> | <título> | <descripción>')
+    }
+
+    [url, title, body] = parts
 
     try {
       thumbnail = await quoted.download()
@@ -17,13 +20,13 @@ let handler = async (m, { conn, text, quoted }) => {
     }
 
   } else {
-    
-    let [u, t, b, thumbUrl] = text.split('|').map(v => v.trim())
-    if (!u || !t || !b || !thumbUrl) return m.reply('Faltan datos. Usa: <url> | <título> | <descripción> | <url imagen>')
-    url = u
-    title = t
-    body = b
-    thumbnail = undefined // Usará thumbnailUrl
+    const parts = text.split('|').map(v => v.trim())
+    if (parts.length < 4) {
+      return m.reply('Faltan datos. Usa: <url> | <título> | <descripción> | <url imagen>')
+    }
+
+    [url, title, body, thumbnailUrl] = parts
+    thumbnail = undefined // Se usará thumbnailUrl directamente en el mensaje
   }
 
   const doc = {
@@ -38,8 +41,8 @@ let handler = async (m, { conn, text, quoted }) => {
         sourceUrl: url,
         renderLargerThumbnail: true,
         ...(thumbnail
-          ? { thumbnail } // Si respondió a imagen, usa el buffer
-          : { thumbnailUrl: text.split('|')[3]?.trim() }) // Si no, usa URL
+          ? { thumbnail } // Si respondió imagen
+          : { thumbnailUrl }) // Si usó una URL de imagen
       }
     }
   }
