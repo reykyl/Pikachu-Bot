@@ -30,10 +30,11 @@ handler.tags = ['tools']
 handler.command = ['tourl2', 'catbox']
 export default handler
 
-// 🧩 Subida combinada (usa uguu.se o file.io según el tipo)
 async function uploadMedia(buffer, preferUguu = true) {
   const form = new FormData()
-  form.append('file', buffer, 'media')
+  // Darle un nombre con extensión reconocida
+  const filename = preferUguu ? 'file.jpg' : 'file.mp4'
+  form.append('file', buffer, filename)
 
   let uploadUrl = preferUguu
     ? 'https://uguu.se/upload.php'
