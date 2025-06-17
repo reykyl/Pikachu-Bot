@@ -119,9 +119,10 @@ ${readMore}
   }
 }
 
-// ✅ Soporte con y sin prefijo
-handler.customPrefix = /^\.?(menu|menú|allmenu)$/i
-handler.command = new RegExp('') // ← desactiva el sistema de comandos base
+
+handler.help = ['menu', 'menú'];
+handler.tags = ['main'];
+handler.command = ['menú', 'menu']; 
 
 export default handler
 
