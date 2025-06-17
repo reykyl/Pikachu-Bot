@@ -21,8 +21,6 @@ const fetchSticker = async (text, attempt = 1) => {
 };
 
 let handler = async (m, { conn, text, command, usedPrefix }) => {
-    
-
     if (!text) {
         return conn.reply(m.chat, `${emojis} *Uso incorrecto del comando.*\n\n*Ejemplo:*  ${usedPrefix + command} ${botname}`, m, rcanal);
     }
@@ -31,15 +29,40 @@ let handler = async (m, { conn, text, command, usedPrefix }) => {
         const buffer = await fetchSticker(text);
         const stiker = await sticker(buffer, false, botname, nombre);
 
-       if (stiker) conn.sendFile(m.chat, stiker, 'sticker.webp', ``,m, true, { contextInfo: { 'forwardingScore': 200, 'isForwarded': false, externalAdReply:{ showAdAttribution: false, title: packname, body: `${botname}`, mediaType: 2, sourceUrl: redes, thumbnail: catalogo}}}, { quoted: m })
+        if (stiker) {
+            await conn.sendFile(
+                m.chat,
+                stiker,
+                'sticker.webp',
+                ``,
+                m,
+                true,
+                {
+                    contextInfo: {
+                        forwardingScore: 200,
+                        isForwarded: false,
+                        externalAdReply: {
+                            showAdAttribution: false,
+                            title: packname,
+                            body: `${botname}`,
+                            mediaType: 2,
+                            sourceUrl: redes,
+                            thumbnail: catalogo
+                        }
+                    }
+                },
+                { quoted: m }
+            );
         } else {
             throw new Error("No se pudo generar el sticker.");
         }
     } catch (error) {
         console.error(error);
-        return conn.sendMessage(m.chat, {
-            text: `${msm} *Ocurrió un error:* ${error.message}`,
-        }, { quoted: m });
+        return conn.sendMessage(
+            m.chat,
+            { text: `${msm} *Ocurrió un error:* ${error.message}` },
+            { quoted: m }
+        );
     }
 };
 
