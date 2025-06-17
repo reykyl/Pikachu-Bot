@@ -1,4 +1,40 @@
-import uploadFile from '../lib/uploadFile.js'
+let handler = async (m, { conn, text }) => {
+  if (!text.includes('|')) {
+    return m.reply(`Uso correcto:\n.enlace <url> | <título> | <descripción> | <url imagen>\n\nEjemplo:\n.enlace https://example.com | Mi Título | Esta es una descripción | https://miweb.com/imagen.jpg`)
+  }
+
+  let [url, title, body, thumbnailUrl] = text.split('|').map(v => v.trim())
+  if (!url || !title || !body || !thumbnailUrl) {
+    return m.reply('Faltan datos. Asegúrate de incluir los 4 parámetros separados por |')
+  }
+
+  const doc = {
+    text: '',
+    contextInfo: {
+      externalAdReply: {
+        showAdAttribution: true,
+        mediaType: 1,
+        title: title,
+        body: body,
+        thumbnailUrl: thumbnailUrl,
+        mediaUrl: url,
+        sourceUrl: url,
+        renderLargerThumbnail: true,
+      }
+    }
+  }
+
+  await conn.sendMessage(m.chat, doc, { quoted: m })
+}
+
+handler.help = ['enlace']
+handler.tags = ['tools']
+handler.command = ['enlace']
+
+export default handler
+
+
+/*import uploadFile from '../lib/uploadFile.js'
 import uploadImage from '../lib/uploadImage.js'
 import fetch from 'node-fetch'
 
@@ -38,4 +74,4 @@ function formatBytes(bytes) {
 async function shortUrl(url) {
         let res = await fetch(`https://tinyurl.com/api-create.php?url=${url}`)
         return await res.text()
-}
+}*/
