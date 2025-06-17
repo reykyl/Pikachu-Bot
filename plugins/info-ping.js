@@ -15,7 +15,7 @@ let handler = async (m, { conn }) => {
 ┃ ⚡ *Estado:* ¡Activo y cargado! ⚡
 ┃ 🕒 *Velocidad:* ${latensi.toFixed(4)} ms
 ┃ 
-┃
+┃ ${users.length}
 ╰━━━━━━━━━━━━━━━━━━━━━━━╯
 `.trim();
 
