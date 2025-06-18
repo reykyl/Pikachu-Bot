@@ -122,8 +122,8 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
       title: botname,
       body: dev, 
       mediaUrl: http://Github.com/deylin-eliac/pikachu-bot,
-      sourceUrl: "https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/IMG-20250613-WA0194.jpg",
-      thumbnail: await (await fetch("https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/IMG-20250613-WA0194.jpg")).buffer(),
+      //sourceUrl: "https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/IMG-20250613-WA0194.jpg",
+      thumbnail: "https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/IMG-20250613-WA0194.jpg",
       renderLargerThumbnail: true
     }
   }
