@@ -147,41 +147,40 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
 
       let success = false;
       for (let source of sources) {
-        try {
-          const res = await fetch(source);
-          const { data, result, downloads } = await res.json();
-          let downloadUrl = data?.dl || result?.download?.url || downloads?.url || data?.download?.url;
+  try {
+    const res = await fetch(source);
+    const { data, result, downloads } = await res.json();
+    let downloadUrl = data?.dl || result?.download?.url || downloads?.url || data?.download?.url;
 
-          if (downloadUrl) {
-            success = true;
-            await conn.sendMessage(m.chat, {
-  video: { url: downloadUrl },
-  fileName: `${title}.mp4`,
-  mimetype: "video/mp4",
-  caption: "🎬 Aquí tienes tu video, descargado por *Pikachu-Bot MD* ⚡",
-  thumbnail: thumb,
-  contextInfo: {
-    externalAdReply: { 
-      showAdAttribution: true, 
-      title: packname, 
-      body: dev, 
-      mediaUrl: null, 
-      description: null, 
-      previewType: "PHOTO", 
-      thumbnailUrl: icono, 
-      sourceUrl: redes, 
-      mediaType: 1, 
-      renderLargerThumbnail: false 
-    }
-  }
-}, { quoted: m });
-            break;
-            }
+    if (downloadUrl) {
+      success = true;
+      await conn.sendMessage(m.chat, {
+        video: { url: downloadUrl },
+        fileName: `${title}.mp4`,
+        mimetype: "video/mp4",
+        caption: "🎬 Aquí tienes tu video, descargado por *Pikachu-Bot MD* ⚡",
+        thumbnail: thumb,
+        contextInfo: {
+          externalAdReply: { 
+            showAdAttribution: true, 
+            title: packname, 
+            body: dev, 
+            mediaUrl: null, 
+            description: null, 
+            previewType: "PHOTO", 
+            thumbnailUrl: icono, 
+            sourceUrl: redes, 
+            mediaType: 1, 
+            renderLargerThumbnail: false 
           }
-        } catch (e) {
-          console.error(`⚠️ Error con la fuente ${source}:`, e.message);
         }
-      }
+      }, { quoted: m });
+      break;
+    }
+  } catch (e) {
+    console.error(`⚠️ Error con la fuente ${source}:`, e.message);
+  }
+}
 
       if (!success) {
         return m.reply("❌ Pikachu no pudo encontrar un enlace válido para descargar.");
