@@ -40,8 +40,6 @@ global.db.data.users[m.sender] = {}
 if (user) {
 if (!isNumber(user.exp))
 user.exp = 0
-if (!isNumber(user.coin))
-user.coin = 10
 if (!isNumber(user.joincount))
 user.joincount = 1
 if (!isNumber(user.diamond))
@@ -104,8 +102,6 @@ if (!('banned' in user))
 user.banned = false
 if (!('useDocument' in user))
 user.useDocument = false
-if (!isNumber(user.level))
-user.level = 0
 if (!isNumber(user.bank))
 user.bank = 0
 if (!isNumber(user.warn))
@@ -113,7 +109,6 @@ user.warn = 0
 } else
                 global.db.data.users[m.sender] = {
 exp: 0,
-coin: 10,
 joincount: 1,
 diamond: 3,
 lastadventure: 0,
@@ -141,7 +136,6 @@ afkReason: '',
 banned: false,
 useDocument: false,
 bank: 0,
-level: 0,
 role: 'Nuv',
 premium: false,
 premiumTime: 0,                 
