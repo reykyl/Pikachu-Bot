@@ -155,23 +155,26 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
           if (downloadUrl) {
             success = true;
             await conn.sendMessage(m.chat, {
-              video: { url: downloadUrl },
-              fileName: `${title}.mp4`,
-              mimetype: "video/mp4",
-              caption: "🎬 Aquí tienes tu video, descargado por *Pikachu-Bot MD* ⚡",
-              thumbnail: thumb
-            externalAdReply: { 
-              showAdAttribution: true, 
-              title: packname, 
-              body: dev, 
-              mediaUrl: null, 
-              description: null, 
-              previewType: "PHOTO", 
-              thumbnailUrl: icono, 
-              sourceUrl: redes, 
-              mediaType: 1, 
-              renderLargerThumbnail: false },
-            }, { quoted: m });
+  video: { url: downloadUrl },
+  fileName: `${title}.mp4`,
+  mimetype: "video/mp4",
+  caption: "🎬 Aquí tienes tu video, descargado por *Pikachu-Bot MD* ⚡",
+  thumbnail: thumb,
+  contextInfo: {
+    externalAdReply: { 
+      showAdAttribution: true, 
+      title: packname, 
+      body: dev, 
+      mediaUrl: null, 
+      description: null, 
+      previewType: "PHOTO", 
+      thumbnailUrl: icono, 
+      sourceUrl: redes, 
+      mediaType: 1, 
+      renderLargerThumbnail: false 
+    }
+  }
+}, { quoted: m });
             break;
             }
           }
