@@ -118,10 +118,10 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
   contextInfo: {
     externalAdReply: {
       showAdAttribution: true,
-      mediaType: 2, // 2 = audio
+      mediaType: 1, 
       title: botname,
       body: dev, 
-      mediaUrl: catalogo,
+      mediaUrl: http://Github.com/deylin-eliac/pikachu-bot,
       sourceUrl: "https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/IMG-20250613-WA0194.jpg",
       thumbnail: await (await fetch("https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/IMG-20250613-WA0194.jpg")).buffer(),
       renderLargerThumbnail: true
