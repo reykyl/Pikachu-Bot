@@ -114,7 +114,6 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
   audio: { url: api.downloadUrl },
   mimetype: 'audio/mpeg',
   fileName: `${title}.mp3`,
-  ptt: true,
   contextInfo: {
     externalAdReply: {
       showAdAttribution: true,
