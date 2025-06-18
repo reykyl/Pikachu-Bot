@@ -31,7 +31,6 @@ m = smsg(this, m) || m
 if (!m)
 return
 m.exp = 0
-m.coin = false
 try {
 let user = global.db.data.users[m.sender]
 if (typeof user !== 'object')
