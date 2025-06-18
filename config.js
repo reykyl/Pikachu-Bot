@@ -21,9 +21,6 @@ import moment from 'moment-timezone'
 // ┃┃┃┃┃┣╯╰┫┃╱┃┃┃╱╱┃╭━╮┃┃┃┃┃┃
 // ╰╯╰╯╰┻━━┻╯╱╰┻╯╱╱╰╯╱╰┻╯╰╯╰╯
 
-global.botNumberCode = '' 
-global.confirmCode = ''
-
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
 
 // ⚙️ PROPIETARIO Y STAFF
@@ -42,9 +39,6 @@ global.prems = [];
 // 📚 INFORMACIÓN GENERAL
 global.libreria = 'Baileys';
 global.baileys = '@whiskeysockets/baileys';
-global.languaje = 'Español';
-global.vs = '2.2.0';
-global.vsJB = '5.0';
 global.nameqr = 'Pikachu-Bot';
 global.namebot = 'Pikachu-Bit';
 global.sessions = 'Sessions';
@@ -55,15 +49,12 @@ global.pikaJadibts = true;
 global.packname = '🧃 Pikachu-Bot MD';
 global.botname = '⚡ Pikachu-Bot ⚡';
 global.wm = 'Pikachu-MD';
-global.author = 'Creado por ⚡ Deylin';
 global.dev = '© Desarrollado por Deylin';
 global.textbot = 'Pikachu-Bot • Potenciado por Deylin';
 global.etiqueta = 'Team Pikachu ⚡';
 
 // 💰 MONEDA Y AVATARES
 global.moneda = 'pikas';
-global.banner = 'https://tinyurl.com/25md9gsv'
-global.avatar  = 'https://qu.ax/MuAQA.jpg'
 
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
 
@@ -73,8 +64,6 @@ global.photoSity = [catalogo]
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
 
 global.gp1 = 'https://chat.whatsapp.com/F8KwM3rVqkS9HhR5msoRqQ'
-global.comunidad1 = 'https://chat.whatsapp.com/F8KwM3rVqkS9HhR5msoRqQ'
-global.channel = 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
 global.channel2 = 'https://whatsapp.com/channel/0029VayQwPsFnSzESZJ9Us3z'
 global.md = 'https://github.com/Deylin-Eliac/Pikachu-bot'
 global.correo = 'deylibaquedano801@gmail.com'
