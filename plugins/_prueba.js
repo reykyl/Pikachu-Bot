@@ -1,50 +1,63 @@
-let gruposAdmin = {}
+let gruposAdmin = {} // Memoria temporal
 
-let handler = async (m, { conn, args, command, usedPrefix }) => {
+const handler = async (m, { conn, args, command, usedPrefix }) => {
   if (command === 'groupplease') {
-    const groups = Object.entries(conn.chats)
-      .filter(([jid, chat]) => jid.endsWith('@g.us') && chat.isGroup && chat.participants?.some(p => p.id === conn.user.jid && p.admin === 'admin'))
+    try {
+      gruposAdmin = {} // Limpiar
 
-    if (groups.length === 0) {
-      return m.reply('⚠️ No soy administrador en ningún grupo.')
+      const groups = Object.entries(conn.chats)
+        .filter(([jid, chat]) =>
+          jid.endsWith('@g.us') &&
+          chat.isChats &&
+          chat.metadata?.participants?.some(p => p.id === conn.user.jid && p.admin === 'admin')
+        )
+
+      if (groups.length === 0) return m.reply('⚠️ No soy administrador en ningún grupo.')
+
+      let texto = '*📋 Lista de grupos donde soy admin:*\n\n'
+      for (let i = 0; i < groups.length; i++) {
+        const [jid, chat] = groups[i]
+        const metadata = chat.metadata || (await conn.groupMetadata(jid).catch(() => null)) || {}
+        const nombre = metadata.subject || await conn.getName(jid)
+        texto += `${i + 1}. ${nombre}\n`
+        gruposAdmin[i + 1] = jid
+      }
+
+      texto += `\n✅ Usa *${usedPrefix}seraviso <número> <mensaje>* para enviar un aviso a ese grupo.`
+
+      m.reply(texto)
+    } catch (e) {
+      console.error(e)
+      m.reply('❌ Ocurrió un error al obtener los grupos.')
     }
-
-    let text = '*📋 Lista de grupos donde soy admin:*\n\n'
-    gruposAdmin = {} // Limpiar anterior
-
-    groups.forEach(([jid, chat], index) => {
-      gruposAdmin[index + 1] = jid
-      text += `${index + 1}. ${chat.subject || 'Grupo sin nombre'}\n`
-    })
-
-    text += `\n📌 Usa: *${usedPrefix}seraviso <número> <mensaje>* para enviar un aviso.`
-
-    return m.reply(text)
   }
 
   if (command === 'seraviso') {
-    if (!args[0] || !args[1]) {
-      return m.reply(`❌ Uso incorrecto.\nEjemplo: *${usedPrefix}seraviso 2 Este es un aviso importante*`)
-    }
-
     const numero = parseInt(args[0])
     const mensaje = args.slice(1).join(' ')
 
-    if (!gruposAdmin[numero]) {
-      return m.reply('❌ Número inválido. Usa el comando *groupplease* para ver la lista.')
+    if (!numero || !mensaje) {
+      return m.reply(`❌ Uso incorrecto.\nEjemplo: *${usedPrefix}seraviso 2 Este es un aviso*`)
     }
 
     const jid = gruposAdmin[numero]
-    await conn.sendMessage(jid, {
-      text: `📢 *Aviso del bot:*\n\n${mensaje}`
-    })
+    if (!jid) return m.reply('❌ Número inválido. Usa *groupplease* para listar los grupos primero.')
 
-    return m.reply('✅ Aviso enviado correctamente.')
+    try {
+      await conn.sendMessage(jid, {
+        text: `📢 *AVISO DEL BOT:*\n\n${mensaje}`
+      })
+      m.reply('✅ Aviso enviado correctamente.')
+    } catch (e) {
+      console.error(e)
+      m.reply('❌ Ocurrió un error al enviar el aviso.')
+    }
   }
 }
 
 handler.help = ['groupplease', 'seraviso <número> <mensaje>']
 handler.tags = ['grupos']
 handler.command = ['groupplease', 'seraviso']
+handler.rowner = true // Solo el dueño del bot puede usar estos comandos
 
 export default handler
