@@ -166,6 +166,7 @@ version: [2, 3000, 1023223821]
 };
 
 global.conn = makeWASocket(connectionOptions);
+conn.ev.on('connection.update', connectionUpdate)
 
 if (!fs.existsSync(`./${sessions}/creds.json`)) {
 if (opcion === '2' || methodCode) {
