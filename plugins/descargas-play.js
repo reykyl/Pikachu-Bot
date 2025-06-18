@@ -114,14 +114,14 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
   audio: { url: api.downloadUrl },
   mimetype: 'audio/mpeg',
   fileName: `${title}.mp3`,
-  ptt: true, 
+ // ptt: true, 
   contextInfo: {
     externalAdReply: {
       showAdAttribution: true,
       mediaType: 2, // 2 = audio
       title: botname,
       body: dev, 
-      mediaUrl: url,
+      mediaUrl: catalogo,
       sourceUrl: "https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/IMG-20250613-WA0194.jpg",
       thumbnail: await (await fetch("https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/IMG-20250613-WA0194.jpg")).buffer(),
       renderLargerThumbnail: true
