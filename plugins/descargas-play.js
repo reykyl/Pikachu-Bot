@@ -111,22 +111,23 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
       const api = await ddownr.download(url, "mp3");
 
       const doc = {
-        audio: { url: api.downloadUrl },
-        mimetype: 'audio/mpeg',
-        fileName: `${title}.mp3`,
-        contextInfo: {
-          externalAdReply: {
-            showAdAttribution: true,
-            mediaType: 2,
-            mediaUrl: "https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/refs/heads/main/src/IMG-20250613-WA0194.jpg",
-            title: botname,
-            //body: `Duración: ${timestamp} | Vistas: ${vistas}`,
-            sourceUrl: "https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/refs/heads/main/src/IMG-20250613-WA0194.jpg",
-            thumbnailUrl: "https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/refs/heads/main/src/IMG-20250613-WA0194.jpg",
-            renderLargerThumbnail: true
-          }
-        }
-      };
+  audio: { url: api.downloadUrl },
+  mimetype: 'audio/mpeg',
+  fileName: `${title}.mp3`,
+  ptt: true, // si quieres que se escuche como nota de voz; elimina si quieres que se vea como audio normal
+  contextInfo: {
+    externalAdReply: {
+      showAdAttribution: true,
+      mediaType: 2, // 2 = audio
+      title: botname,
+      body: '', // puedes incluir algo como 'Enviado por tu bot'
+      mediaUrl: "https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/IMG-20250613-WA0194.jpg",
+      sourceUrl: "https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/IMG-20250613-WA0194.jpg",
+      thumbnail: await (await fetch("https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/IMG-20250613-WA0194.jpg")).buffer(),
+      renderLargerThumbnail: true
+    }
+  }
+};
 
 
       return await conn.sendMessage(m.chat, doc, { quoted: m });
