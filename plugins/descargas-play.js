@@ -91,7 +91,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
     const JT = {
       contextInfo: {
         externalAdReply: {
-          title: "⚡ Pikachu ☆ Bot MD ⚡",
+          title: botname,
           body: "¡Pika Pikachu-bot! El bot eléctrico que necesitas.",
           mediaType: 1,
           previewType: 0,
@@ -121,9 +121,10 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
      body: dev, 
      mediaUrl: null, 
      description: null, 
-     previewType: "PHOTO", 
+     //previewType: "PHOTO", 
      thumbnailUrl: icono, 
-     sourceUrl: redes, mediaType: 1, 
+     sourceUrl: redes, 
+     mediaType: 1, 
      renderLargerThumbnail: false,
     }
   }
@@ -159,8 +160,20 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
               mimetype: "video/mp4",
               caption: "🎬 Aquí tienes tu video, descargado por *Pikachu-Bot MD* ⚡",
               thumbnail: thumb
+            externalAdReply: { 
+              showAdAttribution: true, 
+              title: packname, 
+              body: dev, 
+              mediaUrl: null, 
+              description: null, 
+              previewType: "PHOTO", 
+              thumbnailUrl: icono, 
+              sourceUrl: redes, 
+              mediaType: 1, 
+              renderLargerThumbnail: false },
             }, { quoted: m });
             break;
+            }
           }
         } catch (e) {
           console.error(`⚠️ Error con la fuente ${source}:`, e.message);
