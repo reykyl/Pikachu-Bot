@@ -118,7 +118,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
       externalAdReply: {  
         showAdAttribution: true,  
         mediaType: 2,  
-        mediaUrl: "https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m",  
+        mediaUrl: url,  
         title: botname,  
         body: dev,  
         sourceUrl: "https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/refs/heads/main/src/IMG-20250613-WA0194.jpg",  
