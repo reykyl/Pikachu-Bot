@@ -119,9 +119,9 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
             showAdAttribution: true,
             mediaType: 2,
             mediaUrl: "https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/refs/heads/main/src/IMG-20250613-WA0194.jpg",
-            //title: title,
+            title: botname,
             //body: `Duración: ${timestamp} | Vistas: ${vistas}`,
-            //sourceUrl: "https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/refs/heads/main/src/IMG-20250613-WA0194.jpg",
+            sourceUrl: "https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/refs/heads/main/src/IMG-20250613-WA0194.jpg",
             thumbnailUrl: "https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/refs/heads/main/src/IMG-20250613-WA0194.jpg",
             renderLargerThumbnail: true
           }
