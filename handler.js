@@ -431,24 +431,12 @@ if (plugin.private && m.isGroup) {
 fail('private', m, this)
 continue
 }
-/*if (plugin.register == true && _user.registered == false) { 
-fail('unreg', m, this)
-continue
-}*/
 m.isCommand = true
 let xp = 'exp' in plugin ? parseInt(plugin.exp) : 17 
 if (xp > 200)
 m.reply('chirrido -_-')
 else
 m.exp += xp
-if (!isPrems && plugin.coin && global.db.data.users[m.sender].coin < plugin.coin * 1) {
-conn.reply(m.chat, `❮✦❯ Se agotaron tus ${moneda}`, m)
-continue
-}
-if (plugin.level > _user.level) {
-conn.reply(m.chat, `❮✦❯ Se requiere el nivel: *${plugin.level}*\n\n• Tu nivel actual es: *${_user.level}*\n\n• Usa este comando para subir de nivel:\n*${usedPrefix}levelup*`, m)       
-continue
-}
 let extra = {
 match,
 usedPrefix,
