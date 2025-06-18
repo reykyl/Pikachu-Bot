@@ -110,24 +110,25 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
     if (["play", "yta", "ytmp3"].includes(command)) {
       const api = await ddownr.download(url, "mp3");
 
-      const doc = {
-  audio: { url: api.downloadUrl },
-  mimetype: 'audio/mpeg',
-  fileName: `${title}.mp3`,
-  ptt: true, 
-  contextInfo: {
-    externalAdReply: {
-      showAdAttribution: true,
-      mediaType: 1, 
-      title: botname,
-      body: dev, 
-      mediaUrl: http://Github.com/deylin-eliac/pikachu-bot,
-      //sourceUrl: "https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/IMG-20250613-WA0194.jpg",
-      thumbnail: "https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/IMG-20250613-WA0194.jpg",
-      renderLargerThumbnail: true
-    }
-  }
-};
+      const doc = {  
+    audio: { url: api.downloadUrl },  
+    mimetype: 'audio/mpeg',  
+    fileName: `${title}.mp3`,  
+    contextInfo: {  
+      externalAdReply: {  
+        showAdAttribution: true,  
+        mediaType: 2,  
+        mediaUrl: "https://github.com/Deylin-Eliac/Pikachu-Bot",  
+        title: botname,  
+        body: dev,  
+        sourceUrl: "https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/refs/heads/main/src/IMG-20250613-WA0194.jpg",  
+        thumbnailUrl: "https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/refs/heads/main/src/IMG-20250613-WA0194.jpg",  
+        renderLargerThumbnail: true  
+      }  
+    }  
+  };
+
+
 
 
       return await conn.sendMessage(m.chat, doc, { quoted: m });
