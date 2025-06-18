@@ -119,10 +119,10 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
     externalAdReply: {
       showAdAttribution: true,
       mediaType: 2,
-      mediaUrl: "https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m",
+      mediaUrl: null,
       title: botname,
       body: dev,
-      sourceUrl: "https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m",
+      sourceUrl: redes,
       thumbnailUrl: icono,
       renderLargerThumbnail: true
     }
