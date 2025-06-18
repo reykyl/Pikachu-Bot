@@ -123,7 +123,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
       title: botname,
       body: dev,
       sourceUrl: "https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m",
-      thumbnail: await (await fetch("https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/IMG-20250613-WA0194.jpg")).buffer(),
+      thumbnailUrl: icono,
       renderLargerThumbnail: true
     }
   }
