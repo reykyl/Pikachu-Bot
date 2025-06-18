@@ -1,59 +1,50 @@
-import fetch from 'node-fetch'
+let gruposAdmin = {}
 
-let handler = async (m, { conn, text, quoted }) => {
-  if (!text.includes('|') && !quoted?.isImage) {
-    return m.reply(`Uso correcto:\n.enlace <url> | <título> | <descripción> | <url imagen>\n\nO responde a una imagen y usa:\n.enlace <url> | <título> | <descripción>`)
-  }
+let handler = async (m, { conn, args, command, usedPrefix }) => {
+  if (command === 'groupplease') {
+    const groups = Object.entries(conn.chats)
+      .filter(([jid, chat]) => jid.endsWith('@g.us') && chat.isGroup && chat.participants?.some(p => p.id === conn.user.jid && p.admin === 'admin'))
 
-  let url, title, body, thumbnail
-
-  if (quoted?.isImage && text.includes('|')) {
-    [url, title, body] = text.split('|').map(v => v.trim())
-    if (!url || !title || !body) return m.reply('Faltan datos. Usa: <url> | <título> | <descripción>')
-
-    try {
-      thumbnail = await quoted.download()
-    } catch (e) {
-      return m.reply('No se pudo descargar la imagen respondida.')
+    if (groups.length === 0) {
+      return m.reply('⚠️ No soy administrador en ningún grupo.')
     }
 
-  } else {
-    let [u, t, b, thumbUrl] = text.split('|').map(v => v.trim())
-    if (!u || !t || !b || !thumbUrl) return m.reply('Faltan datos. Usa: <url> | <título> | <descripción> | <url imagen>')
-    url = u
-    title = t
-    body = b
+    let text = '*📋 Lista de grupos donde soy admin:*\n\n'
+    gruposAdmin = {} // Limpiar anterior
 
-    try {
-      const res = await fetch(thumbUrl)
-      if (!res.ok) throw 'No se pudo descargar la imagen'
-      thumbnail = await res.buffer()
-    } catch (e) {
-      return m.reply('Error al descargar la imagen desde el enlace.')
-    }
+    groups.forEach(([jid, chat], index) => {
+      gruposAdmin[index + 1] = jid
+      text += `${index + 1}. ${chat.subject || 'Grupo sin nombre'}\n`
+    })
+
+    text += `\n📌 Usa: *${usedPrefix}seraviso <número> <mensaje>* para enviar un aviso.`
+
+    return m.reply(text)
   }
 
-  const doc = {
-    text: '',
-    contextInfo: {
-      externalAdReply: {
-        showAdAttribution: true,
-        mediaType: 1,
-        title: title,
-        body: body,
-        mediaUrl: url,
-        sourceUrl: url,
-        thumbnail: thumbnail,
-        renderLargerThumbnail: true,
-      }
+  if (command === 'seraviso') {
+    if (!args[0] || !args[1]) {
+      return m.reply(`❌ Uso incorrecto.\nEjemplo: *${usedPrefix}seraviso 2 Este es un aviso importante*`)
     }
-  }
 
-  await conn.sendMessage(m.chat, doc, { quoted: m })
+    const numero = parseInt(args[0])
+    const mensaje = args.slice(1).join(' ')
+
+    if (!gruposAdmin[numero]) {
+      return m.reply('❌ Número inválido. Usa el comando *groupplease* para ver la lista.')
+    }
+
+    const jid = gruposAdmin[numero]
+    await conn.sendMessage(jid, {
+      text: `📢 *Aviso del bot:*\n\n${mensaje}`
+    })
+
+    return m.reply('✅ Aviso enviado correctamente.')
+  }
 }
 
-handler.help = ['th']
-handler.tags = ['tools']
-handler.command = ['th']
+handler.help = ['groupplease', 'seraviso <número> <mensaje>']
+handler.tags = ['grupos']
+handler.command = ['groupplease', 'seraviso']
 
 export default handler
