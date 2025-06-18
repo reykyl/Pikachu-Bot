@@ -8,6 +8,7 @@ import * as ws from 'ws';
 import { readdirSync, statSync, unlinkSync, existsSync, readFileSync, watch, rmSync } from 'fs';
 import yargs from 'yargs';
 import { spawn } from 'child_process';
+import { pikaJadiBot } from './plugins/_serbot.js';
 import lodash from 'lodash';
 import chalk from 'chalk'
 import syntaxerror from 'syntax-error';
