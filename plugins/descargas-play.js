@@ -118,10 +118,10 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
           externalAdReply: {
             showAdAttribution: true,
             mediaType: 2,
-            mediaUrl: url,
+            mediaUrl: "https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/refs/heads/main/src/IMG-20250613-WA0194.jpg",
             //title: title,
             //body: `Duración: ${timestamp} | Vistas: ${vistas}`,
-            //sourceUrl: url,
+            //sourceUrl: "https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/refs/heads/main/src/IMG-20250613-WA0194.jpg",
             thumbnailUrl: "https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/refs/heads/main/src/IMG-20250613-WA0194.jpg",
             renderLargerThumbnail: true
           }
