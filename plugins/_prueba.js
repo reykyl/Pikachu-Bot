@@ -1,9 +1,9 @@
-let gruposAdmin = {} // Memoria temporal
+let gruposAdmin = {} 
 
 const handler = async (m, { conn, args, command, usedPrefix }) => {
-  if (command === 'groupplease') {
+  if (command === 'listgrup') {
     try {
-      gruposAdmin = {} // Limpiar
+      gruposAdmin = {} 
 
       const groups = Object.entries(conn.chats)
         .filter(([jid, chat]) =>
@@ -32,7 +32,7 @@ const handler = async (m, { conn, args, command, usedPrefix }) => {
     }
   }
 
-  if (command === 'seraviso') {
+  if (command === 'avisot') {
     const numero = parseInt(args[0])
     const mensaje = args.slice(1).join(' ')
 
@@ -55,9 +55,9 @@ const handler = async (m, { conn, args, command, usedPrefix }) => {
   }
 }
 
-handler.help = ['groupplease', 'seraviso <número> <mensaje>']
+handler.help = ['listgrup', 'avisot <número> <mensaje>']
 handler.tags = ['grupos']
-handler.command = ['groupplease', 'seraviso']
-handler.rowner = true // Solo el dueño del bot puede usar estos comandos
+handler.command = ['listgrup', 'avisot']
+handler.rowner = true 
 
 export default handler
