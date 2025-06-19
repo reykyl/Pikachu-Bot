@@ -92,7 +92,7 @@ const pikaJBOptions = {}
 if (global.conns instanceof Array) console.log()
 else global.conns = []
 let handler = async (m, { conn, args, usedPrefix, command, isOwner }) => {
-if (!globalThis.db.data.settings[conn.user.jid].jadibotmd) return m.reply(`${emojis} Comando desactivado temporalmente as subbot en el grupo oficial \n\n${code}`)
+if (!globalThis.db.data.settings[conn.user.jid].jadibotmd) return m.reply(`${emojis} Comando desactivado temporalmente. \n\n *Desarrollador:* ${dev} \n\n *Nombre del bot:* ${botname}`)
 let time = global.db.data.users[m.sender].Subs + 120000
 //if (new Date - global.db.data.users[m.sender].Subs < 120000) return conn.reply(m.chat, `${emoji} Debes esperar ${msToTime(time - new Date())} para volver a vincular un *Sub-Bot.*`, m)
 const subBots = [...new Set([...global.conns.filter((conn) => conn.user && conn.ws.socket && conn.ws.socket.readyState !== ws.CLOSED).map((conn) => conn)])]
