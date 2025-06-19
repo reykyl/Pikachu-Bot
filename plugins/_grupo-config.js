@@ -9,15 +9,15 @@ let isClose = { // Switch Case Like :v
 'off': 'announcement',
 }[(args[0] || '')]
 if (isClose === undefined)
-return conn.reply(m.chat, `⚡️🐭 *¡Pika Pika! Elige una opción para configurar el grupo*\n\nEjemplos:\n*⚡ ${usedPrefix + command} on*\n*⚡ ${usedPrefix + command} off*\n*⚡ ${usedPrefix + command} close*\n*⚡ ${usedPrefix + command} open*`, m, rcanal)
+return conn.reply(m.chat, `${emojis} *Elija una opción para configurar el grupo*\n\nEjemplo:\n*✰ #${command} on*\n*✰ #${command} off*\n*✰ #${command} close*\n*✰ #${command} open*`, m, rcanal)
 await conn.groupSettingUpdate(m.chat, isClose)
 
 if (isClose === 'not_announcement'){
-   return conn.reply(m.chat, `🗨️✨ *¡Pikachu dice que todos pueden hablar ahora!*\n\n⚡ ¡Pikapi! El grupo ha sido abierto.` m, rcanal)
+m.reply(`${emojis} *Ya pueden escribir en este grupo.*`)
 }
 
 if (isClose === 'announcement'){
-return conn.reply(m.chat, `🔒🚫 *¡Pikachu activó el modo silencioso!*\n\n⚡ Solo los *líderes de gimnasio* (admins) pueden hablar ahora.` m, rcanal)
+m.reply(`${emojis} *Solos los admins pueden escribir en este grupo.*`)
 }}
 handler.help = ['group open / close', 'grupo on / off']
 handler.tags = ['grupo']
