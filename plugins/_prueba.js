@@ -6,7 +6,7 @@ let handler = async (m, { text, conn }) => {
   try {
     // Codificar el prompt para usarlo en la URL
     let prompt = encodeURIComponent(text.trim())
-    let imageUrl = `https://image.pollinations.ai/prompt/${prompt}`
+    let imageUrl = `https://anime-xi-wheat.vercel.app/api/ia-img?prompt=${prompt}`
 
     await conn.sendFile(m.chat, imageUrl, 'imagen.jpg', `🖼️ Imagen generada:\n"${text}"`, m)
   } catch (e) {
