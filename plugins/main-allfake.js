@@ -29,7 +29,7 @@ console.log(`Error : ${e}`)
 
 // 👑 Información del Bot
 global.creador = 'Wa.me/50433191934'
-global.ofcbot = `${conn.user.jid.split('@')[0]}`
+global.ofcbot = `Wa.me/${conn.user.jid.split('@')[0]}`
 global.asistencia = 'Wa.me/50433191934'
 global.namechannel = '⚡️𝙋𝙞𝙠𝙖𝙘𝙝𝙪-𝘽𝙤𝙩 ⚡ 𝘾𝙝𝙖𝙣𝙣𝙚𝙡'
 global.namechannel2 = '⚡️𝙋𝙞𝙠𝙖𝙘𝙝𝙪-𝘽𝙤𝙩 ⚡'
