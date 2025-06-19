@@ -36,7 +36,7 @@ global.namechannel2 = '⚡️𝙋𝙞𝙠𝙖𝙘𝙝𝙪-𝘽𝙤𝙩 ⚡'
 global.namegrupo = '⚡ 𝙋𝙞𝙠𝙖𝙘𝙝𝙪-𝘽𝙤𝙩 ⚡'
 global.namecomu = '⚡️𝙋𝙞𝙠𝙖𝙘𝙝𝙪-𝘽𝙤𝙩 ⚡ 𝘾𝙤𝙢𝙪𝙣𝙞𝙩𝙮'
 global.listo = '⚡ *¡Aquí tienes lo que pediste, maestro pokémon!*'
-global.fotoperfil = await conn.profilePictureUrl(m.sender, 'image').catch(_ => 'https://i.postimg.cc/RFdNynN5/IMG-20250315-WA0122.jpg')
+global.fotoperfil = await conn.profilePictureUrl(m.sender, 'image').catch(_ => catalogo,)
 
 // 🗞 Canal del Bot
 global.idchannel = '120363365444927738@newsletter'
