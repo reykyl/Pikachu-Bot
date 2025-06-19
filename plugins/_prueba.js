@@ -1,32 +1,35 @@
-
 import fetch from 'node-fetch'
 
-let handler = async (m, { text, conn}) => {
-  if (!text) throw 'Escribe el prompt de la imagen, por ejemplo:\n.genera ShadowUltra en el espacio'
+let handler = async (m, { text, conn }) => {
+  if (!text) throw '✏️ Escribe el prompt de la imagen. Ejemplo:\n.genera un dragón azul volando en el espacio'
 
-  m.reply('🪄 Generando imagen, espera un momento...')
+  m.reply('🪄 Generando imagen, espera un momento (esto puede tardar unos 15-30 segundos)...')
 
-  // Puedes usar una instancia pública de Hugging Face o la que tú hospedes
-  const endpoint = `https://api-inference.huggingface.co/models/CompVis/stable-diffusion-v1-4`
-  const body = {
-    inputs: text
+  try {
+    const response = await fetch('https://hf.space/embed/stabilityai/stable-diffusion/api/predict', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        data: [text]
+      })
+    })
+
+    const result = await response.json()
+
+    if (!result || !result.data || !result.data[0]) {
+      throw new Error('No se pudo generar la imagen. El servidor puede estar ocupado.')
+    }
+
+    const imageUrl = result.data[0]
+
+    await conn.sendFile(m.chat, imageUrl, 'imagen.png', `🖼️ Imagen generada:\n"${text}"`, m)
+  } catch (e) {
+    console.error(e)
+    m.reply(`❌ Ocurrió un error al generar la imagen:\n${e.message}`)
+  }
 }
 
-  const response = await fetch(endpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      // Si usas un Space que no requiere clave, omite "Authorization"
-},
-    body: JSON.stringify(body)
-})
-
-  const buffer = await response.buffer()
-
-  await conn.sendFile(m.chat, buffer, 'imagen.png', `🖼️ Imagen generada: "${text}"`, m)
-}
-
-handler.help = ['genera']
+handler.help = ['genera <prompt>']
 handler.tags = ['ai', 'imagen']
 handler.command = ['genera', 'imagina']
 
