@@ -1,29 +1,32 @@
 let handler = async (m, { conn, args, usedPrefix, command }) => {
-const pp = await conn.profilePictureUrl(m.chat, 'image').catch(_ => icono) 
-let isClose = { // Switch Case Like :v
-'open': 'not_announcement',
-'close': 'announcement',
-'abierto': 'not_announcement',
-'cerrado': 'announcement',
-'on': 'not_announcement',
-'off': 'announcement',
-}[(args[0] || '')]
-if (isClose === undefined)
-return conn.reply(m.chat, `${emoji} *Elija una opción para configurar el grupo*\n\nEjemplo:\n*✰ #${command} on*\n*✰ #${command} off*\n*✰ #${command} close*\n*✰ #${command} open*`, m, rcanal)
-await conn.groupSettingUpdate(m.chat, isClose)
+  const pp = await conn.profilePictureUrl(m.chat, 'image').catch(_ => icono) 
 
-if (isClose === 'not_announcement'){
-m.reply(`${emoji} *Ya pueden escribir en este grupo.*`)
+  let isClose = {
+    'open': 'not_announcement',
+    'close': 'announcement',
+    'abierto': 'not_announcement',
+    'cerrado': 'announcement',
+    'on': 'not_announcement',
+    'off': 'announcement',
+  }[(args[0] || '').toLowerCase()]
+
+  if (isClose === undefined)
+    return conn.reply(m.chat, `⚡️🐭 *¡Pika Pika! Elige una opción para configurar el grupo*\n\nEjemplos:\n*⚡ ${usedPrefix + command} on*\n*⚡ ${usedPrefix + command} off*\n*⚡ ${usedPrefix + command} close*\n*⚡ ${usedPrefix + command} open*`, m, rcanal)
+
+  await conn.groupSettingUpdate(m.chat, isClose)
+
+  if (isClose === 'not_announcement') {
+    m.reply(`🗨️✨ *¡Pikachu dice que todos pueden hablar ahora!*\n\n⚡ ¡Pikapi! El grupo ha sido abierto.`)
+  }
+
+  if (isClose === 'announcement') {
+    const m.reply(m.chat, `🔒🚫 *¡Pikachu activó el modo silencioso!*\n\n⚡ Solo los *líderes de gimnasio* (admins) pueden hablar ahora.` m, rcanal);
+  }
 }
-
-if (isClose === 'announcement'){
-m.reply(`${emoji2} *Solos los admins pueden escribir en este grupo.*`)
-}}
 handler.help = ['group open / close', 'grupo on / off']
 handler.tags = ['grupo']
 handler.command = ['group', 'grupo']
 handler.admin = true
-handler.botAdmin = true;
-
+handler.botAdmin = true
 
 export default handler
