@@ -286,11 +286,15 @@ userJid = sock.authState.creds.me.jid || `${path.basename(pathpikaJadiBot)}@s.wh
 sock.isInit = true
 global.conns.push(sock)
 await joinChannels(sock)
+    const userId = m.mentionedJid?.[0] || m.sender
 
-m?.chat ? conn.reply(m.chat, args[0] 
-  ? `⚡️✨ ¡Pika Pika! @${m.sender.split('@')[0]}, ya estás *conectado* y leyendo los mensajes entrantes... ⚡️🐭` 
-  : `${emojis} *¡Pikachu te elige!* @${m.sender.split('@')[0]}, ahora formas parte de la familia de Sub-Bots de *${botname}* ⚙️\ndesarrollado por: *${dev}* 🔧`, m, fkontak) 
-  : ''
+if (m?.chat) {
+  const mensaje = args[0]
+    ? `⚡️✨ ¡Pika Pika! @${userId.split('@')[0]}, ya estás *conectado* y leyendo los mensajes entrantes... ⚡️🐭`
+    : `${emojis} *¡Pikachu te elige!* @${m.sender.split('@')[0]}, ahora formas parte de la familia de Sub-Bots de *${botname}* ⚙️\ndesarrollado por: *${dev}* 🔧`;
+
+  conn.reply(m.chat, mensaje, m, fkontak);
+}
 
 }}
 setInterval(async () => {
