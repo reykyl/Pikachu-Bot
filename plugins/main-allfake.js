@@ -29,7 +29,7 @@ console.log(`Error : ${e}`)
 
 // 👑 Información del Bot
 global.creador = 'Wa.me/50433191934'
-global.ofcbot = `Wa.me/${conn.user.jid.split('@')[0]}`
+global.ofcbot = `Wa.me/${conn.user.jid.split('@')[0]}?text=⚡creador`
 global.asistencia = 'Wa.me/50433191934'
 global.namechannel = '⚡️𝙋𝙞𝙠𝙖𝙘𝙝𝙪-𝘽𝙤𝙩 ⚡ 𝘾𝙝𝙖𝙣𝙣𝙚𝙡'
 global.namechannel2 = '⚡️𝙋𝙞𝙠𝙖𝙘𝙝𝙪-𝘽𝙤𝙩 ⚡'
@@ -71,8 +71,6 @@ global.wait = '⚡ *Espera un momento entrenador...*'
 global.waitt = global.wait
 global.waittt = global.wait
 global.waitttt = global.wait
-
-global.code = 'https://chat.whatsapp.com/IjpqfWuWYVfG9cDgR0AnKn';
 
 //Enlaces
 var canal = 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'  
