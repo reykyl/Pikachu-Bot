@@ -289,7 +289,7 @@ await joinChannels(sock)
 
 m?.chat ? conn.reply(m.chat, args[0] 
   ? `⚡️✨ ¡Pika Pika! @${m.sender.split('@')[0]}, ya estás *conectado* y leyendo los mensajes entrantes... ⚡️🐭` 
-  : `${emojis} *¡Pikachu te elige!* @${m.sender.split('@')[0]}, ahora formas parte de la familia de Sub-Bots de *${botname}* ⚙️\ndesarrollado por: *${dev}* 🔧`, m, fake) 
+  : `${emojis} *¡Pikachu te elige!* @${m.sender.split('@')[0]}, ahora formas parte de la familia de Sub-Bots de *${botname}* ⚙️\ndesarrollado por: *${dev}* 🔧`, m, ) 
   : ''
 
 }}
