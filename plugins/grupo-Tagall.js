@@ -1,22 +1,15 @@
-/*Código original By deylin,
-mejorado por Angel*/
+const handler = async (m, { isOwner, isAdmin, conn, text, participants, args, command, usedPrefix }) => {
+    if (usedPrefix.toLowerCase() === 'a') return;
 
+    const customEmoji = global.db?.data?.chats?.[m.chat]?.customEmoji || '🧃';
+    m.react(customEmoji);
 
-const handler = async (m, { isOwner, isAdmin, conn, text, participants, args, command }) => {
-  const mensajeTexto = m.text?.toLowerCase() || '';
+    if (!(isAdmin || isOwner)) {
+        global.dfail('admin', m, conn);
+        return;
+    }
 
-  
-  if (!/^(\W*)?(tagall|todos)$/.test(mensajeTexto.trim())) return;
-
-  const customEmoji = global.db?.data?.chats?.[m.chat]?.customEmoji || '⚡';
-  m.react?.(customEmoji);
-
-  if (!(isAdmin || isOwner)) {
-    global.dfail?.('admin', m, conn);
-    return;
-  }
-
-      const countryFlags = {
+    const countryFlags = {
             "1": "🇺🇸", "7": "🇷🇺", "20": "🇪🇬", "27": "🇿🇦", "30": "🇬🇷", "31": "🇳🇱",
   "32": "🇧🇪", "33": "🇫🇷", "34": "🇪🇸", "36": "🇭🇺", "39": "🇮🇹", "40": "🇷🇴",
   "41": "🇨🇭", "43": "🇦🇹", "44": "🇬🇧", "45": "🇩🇰", "46": "🇸🇪", "47": "🇳🇴",
@@ -54,49 +47,42 @@ const handler = async (m, { isOwner, isAdmin, conn, text, participants, args, co
   "996": "🇰🇬", "998": "🇺🇿"
 };
 
-  const getPrefix = number => {
-    for (let i = 4; i >= 1; i--) {
-      const sub = number.slice(0, i);
-      if (countryFlags[sub]) return sub;
+    function getPrefix(number) {
+        for (let i = 4; i >= 1; i--) {
+            const sub = number.slice(0, i);
+            if (countryFlags[sub]) return sub;
+        }
+        return "🔍";
     }
-    return null;
-  };
 
-  const mensaje = args.join(' ');
-  const info = mensaje
-    ? `╰🧭 *Mensaje:* ${mensaje}`
-    : "╰⚠️ *Invocación general de Pika-bot: los administradores te necesitan.*";
+    const mensaje = args.join` `;
+    const info = mensaje ? `╰➤ ✉️ *Mensaje:* ${mensaje}` : "╰➤ ⚠️ *Invocación general*";
 
-  let listaUsuarios = participants.map(miembro => {
-    const number = miembro.id.replace(/\D/g, '');
-    const prefix = getPrefix(number);
-    const flag = countryFlags[prefix] || "🌐";
-    return `⚡ ${flag} @${number}`;
-  }).join('\n');
-
-  const texto = `
-╭─〔⚡ 𝐏𝐈𝐊𝐀𝐋𝐋 ⚡〕──⬣
-│ 🧑‍🤝‍🧑 *Miembros:* ${participants.length}
-│ 🏷️ *Grupo:* ${await conn.getName(m.chat)}
+    let texto = `
+╭══ *LLAMADO A TODOS* ══⬣
+│  🧃 *Total:* ${participants.length}
+│  ⚡ *Grupo:* ${await conn.getName(m.chat)}
 ${info}
-╰────⬣
+╰═══⬣\n`;
 
-${listaUsuarios}
+    for (const miembro of participants) {
+        const number = miembro.id.split('@')[0];
+        const prefix = getPrefix(number);
+        const flag = countryFlags[prefix] || "🌐";
+        texto += `┃ ${flag} @${number}\n`;
+    }
 
-🔋 𝐄𝐧𝐞𝐫𝐠í𝐚 𝐋𝐢𝐛𝐞𝐫𝐚𝐝𝐚 ⚡
-✨ *by Pikachu™* 🧃
-  `.trim();
+    texto += `╰══⬣\n✨ *${dev}* ⚔️`;
 
-  await conn.sendMessage(m.chat, {
-    text: texto,
-    mentions: participants.map(p => p.id)
-  }, { quoted: m });
+    conn.sendMessage(m.chat, {
+        text: texto.trim(),
+        mentions: participants.map(p => p.id)
+    }, { quoted: m });
 };
 
-
-handler.command = ['tagall', 'todos']; ; 
-handler.help = ['tagall', 'todos']; 
-handler.tags = ['grupo']; 
+handler.help = ['todos *<mensaje>*'];
+handler.tags = ['grupo'];
+handler.command = ['tagall', 'todos'];
 handler.group = true;
 
 export default handler;
