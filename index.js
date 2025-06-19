@@ -285,29 +285,45 @@ isInit = false
 return true
 };
 
-//Arranque nativo para subbots by - ReyEndymion >> https://github.com/ReyEndymion
+//Arranque nativo para subbots 
+
 
 global.rutaJadiBot = join(__dirname, './JadiBots')
 
 if (global.pikaJadibts) {
-if (!existsSync(global.rutaJadiBot)) {
-mkdirSync(global.rutaJadiBot, { recursive: true }) 
-console.log(chalk.bold.cyan(`La carpeta: ${jadi} se creó correctamente.`))
-} else {
-console.log(chalk.bold.cyan(`La carpeta: ${jadi} ya está creada.`)) 
-}
 
-const readRutaJadiBot = readdirSync(rutaJadiBot)
-if (readRutaJadiBot.length > 0) {
-const creds = 'creds.json'
-for (const gjbts of readRutaJadiBot) {
-const botPath = join(rutaJadiBot, gjbts)
-const readBotPath = readdirSync(botPath)
-if (readBotPath.includes(creds)) {
-pikaJadiBot({pathpikaJadiBot: botPath, m: null, conn, args: '', usedPrefix: '/', command: 'serbot'})
-}
-}
-}
+  
+  if (!existsSync(global.rutaJadiBot)) {
+    mkdirSync(global.rutaJadiBot, { recursive: true })
+    console.log(chalk.bold.cyan(`📁 Carpeta creada: ${global.rutaJadiBot}`))
+  } else {
+    console.log(chalk.bold.cyan(`📁 Carpeta ya existente: ${global.rutaJadiBot}`))
+  }
+
+  const subbots = readdirSync(global.rutaJadiBot, { withFileTypes: true })
+    .filter(dirent => dirent.isDirectory())
+    .map(dirent => dirent.name)
+
+  for (const nombreSubbot of subbots) {
+    const pathSubbot = join(global.rutaJadiBot, nombreSubbot)
+    const archivosSubbot = readdirSync(pathSubbot)
+
+    if (archivosSubbot.includes('creds.json')) {
+      try {
+        pikaJadiBot({
+          pathpikaJadiBot: pathSubbot,
+          m: null,
+          conn,
+          args: '',
+          usedPrefix: '/',
+          command: 'serbot'
+        })
+        console.log(chalk.green(`✅ Subbot cargado: ${nombreSubbot}`))
+      } catch (e) {
+        console.error(chalk.red(`❌ Error cargando subbot: ${nombreSubbot}`), e)
+      }
+    }
+  }
 }
 
 const pluginFolder = global.__dirname(join(__dirname, './plugins/index'))
