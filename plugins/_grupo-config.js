@@ -2,7 +2,7 @@
 //https://github.com/deylin-eliac 
 //➤  no quites créditos
 
-let handler = async (m, { conn, args, participants, groupMetadata, usedPrefix, command, isBotAdmin, isAdmin }) => {
+let handler = async (m, { conn }) => {
   const icono = 'https://files.catbox.moe/hnif5j.jpg'; 
   const emoji = '⚡';
   const emoji2 = '🔒';
