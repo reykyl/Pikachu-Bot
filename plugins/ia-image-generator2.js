@@ -27,6 +27,6 @@ let handler = async (m, { text, conn }) => {
 
 handler.help = ['imagina <prompt>']
 handler.tags = ['ia'];
-handler.command = ['imgrg', 'imagina']
+handler.command = ['imgia', 'imagina']
 
 export default handler
