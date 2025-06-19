@@ -6,33 +6,10 @@ let handler = async (m, { text, usedPrefix, command, conn }) => {
   let mime = (q.msg || q).mimetype || ''
   let hasImage = /^image\/(jpe?g|png)$/.test(mime)
 
-  
-  const prompt = text?.toLowerCase()
-  const quiereImagen = /(?:hazme|genera|crear|imagina|dibuja|construye|pinta).*(imagen|foto|escena|dibujo|paisaje|personaje)/.test(prompt)
-
-  
-  if (!hasImage && quiereImagen && text) {
-    try {
-      await m.react('🧠')
-      conn.sendPresenceUpdate('composing', m.chat)
-
-      let promptUrl = encodeURIComponent(text.trim())
-      let imageUrl = `https://anime-xi-wheat.vercel.app/api/ia-img?prompt=${promptUrl}`
-
-      await conn.sendFile(m.chat, imageUrl, 'imagen.jpg', `🖼️ Imagen generada con el prompt:\n"${text}"`, m)
-      return
-    } catch (e) {
-      console.error('[ERROR IMG GEN]', e)
-      return m.reply(`❌ Error al generar la imagen:\n${e.message}`)
-    }
-  }
-
-  
   if (!text && !hasImage) {
     return conn.reply(m.chat, `💡 Envía o responde a una imagen con una pregunta, o escribe un prompt para generar una imagen.\n\nEjemplo:\n${usedPrefix + command} ¿Qué ves en esta imagen?\n${usedPrefix + command} Genera una imagen de un zorro en la luna`, m)
   }
 
-  
   try {
     await m.react('🌟')
     conn.sendPresenceUpdate('composing', m.chat)
@@ -65,8 +42,14 @@ let handler = async (m, { text, usedPrefix, command, conn }) => {
     })
 
     const data = await res.json()
-    const respuesta = data?.candidates?.[0]?.content?.parts?.[0]?.text
 
+    // 📷 Si la API devuelve una imagen generada
+    if (data?.image && data?.from === 'image-generator') {
+      return await conn.sendFile(m.chat, data.image, 'imagen.jpg', `🖼️ Imagen generada con el prompt:\n"${text}"`, m)
+    }
+
+    // 💬 Si devuelve texto (respuesta IA normal)
+    const respuesta = data?.candidates?.[0]?.content?.parts?.[0]?.text
     if (!respuesta) throw '❌ No se recibió respuesta válida de la IA.'
 
     await m.reply(respuesta.trim())
