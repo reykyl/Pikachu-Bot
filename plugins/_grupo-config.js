@@ -80,7 +80,7 @@ ${link}
   }
 };
 
-handler.help = ['link', 'group open / close', 'del', 'delete'];
+handler.help = ['link', 'group (open) (close)', 'del', 'delete'];
 handler.tags = ['grupo'];
 handler.command = ['link', 'enlace', 'group', 'grupo', 'del', 'delete'];
 handler.group = true;
