@@ -17,7 +17,7 @@ let handler = async (m, { text, conn }) => {
     }
 
     // Hacer petición al Space
-    const response = await fetch('https://black-forest-labs-flux-1-dev.hf.space/run/predict', {
+    const response = await fetch('https://huggingface.co/spaces/black-forest-labs/FLUX.1-dev/run/predict', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
