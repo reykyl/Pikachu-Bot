@@ -59,11 +59,12 @@ global.done = '✅'
 global.error = '✖️'
 global.msm = '⚠️'
 
-global.emoji0 = '*Ｏ(≧∇≦)Ｏ 🧃*'
-global.emoji2 = '*(≧▽≦) 🧃*'
-global.emoji3 = '*(◕‿◕) 🧃*'
-global.emoji4 = '*(ुŏ̥̥ŏ̥̥) 🧃*'
-global.emoji5 = '*ᰔᩚ ( ᜊ°-° )ᜊ  .ᐟ .ᐟ 🧃*'
+global.emoji0 = '*⚡(≧∇≦) ピカチュウ~! 🧃*\n'
+global.emoji1 = '*⚡(o≧▽ﾟ)o ピッカ〜!! 🧃*\n'
+global.emoji2 = '*⚡(✧ω✧) ピカ!! 🧃*\n'
+global.emoji3 = '*⚡(｡♥‿♥｡) ピカチュウ！🧃*\n'
+global.emoji4 = '*⚡(˘▾˘) ピィ〜カ〜！🧃*\n'
+global.emoji5 = '*⚡ᰔᩚ ( ᜊ°-° )ᜊ ピカッ！.ᐟ .ᐟ 🧃*\n'
 global.emojis = [emoji0, emoji2, emoji3, emoji4, emoji5].getRandom()
 
 global.wait = '⚡ *Espera un momento entrenador...*'
