@@ -1,22 +1,44 @@
-/*let handler = async (m, { text, conn }) => {
-  if (!text) throw '✏️ Escribe el prompt de la imagen. Ejemplo:\n.genera un dragón azul volando en el espacio'
+import fetch from 'node-fetch'
+import { Buffer } from 'buffer'
 
-  m.reply('🪄 Generando imagen, espera un momento...')
+let handler = async (m, { text, conn }) => {
+  if (!text) {
+    return await conn.reply(m.chat, '✏️ Escribe el prompt. Ejemplo:\n.genera un dragón azul en el espacio', m)
+  }
+
+  await conn.reply(m.chat, `🪄 Generando imagen de: "${text}", espera un momento...`, m)
 
   try {
-    // Codificar el prompt para usarlo en la URL
-    let prompt = encodeURIComponent(text.trim())
-    let imageUrl = `https://anime-xi-wheat.vercel.app/api/ia-img?prompt=${prompt}`
+    // Preparar el prompt
+    const payload = {
+      fn_index: 0,
+      data: [text],
+      session_hash: 'flux_' + Math.random().toString(36).slice(2)
+    }
 
-    await conn.sendFile(m.chat, imageUrl, 'imagen.jpg', `🖼️ Imagen generada:\n"${text}"`, m)
+    // Hacer petición al Space
+    const response = await fetch('https://black-forest-labs-flux-1-dev.hf.space/run/predict', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+
+    const json = await response.json()
+
+    if (!json.data || !json.data[0]) throw new Error('No se pudo obtener la imagen.')
+
+    const imageBase64 = json.data[0].split(',')[1] // quitar "data:image/png;base64,"
+    const buffer = Buffer.from(imageBase64, 'base64')
+
+    await conn.sendFile(m.chat, buffer, 'imagen.png', `🧃 Imagen generada:\n"${text}"`, m)
   } catch (e) {
     console.error(e)
-    m.reply(`❌ Ocurrió un error al generar la imagen:\n${e.message}`)
+    m.reply('❌ Error al generar la imagen. Intenta con otro prompt o más corto.')
   }
 }
 
-handler.help = ['genera <prompt>']
+handler.help = ['genera <texto>']
 handler.tags = ['ai', 'imagen']
-handler.command = ['genera', 'imagina']
+handler.command = ['hy', 'imagina']
 
-export default handler*/
+export default handler
