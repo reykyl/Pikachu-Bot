@@ -36,6 +36,6 @@ const handler = async (m, { conn, args }) => {
 
 handler.command = ['imgg', 'pikaia', 'generarimg', 'genera', 'arte', 'img', 'imgai'];
 handler.help = ['imgg <texto>', 'pikaia', 'generarimg', 'genera', 'arte', 'img', 'imgai'];
-handler.tags = ['tools'];
+handler.tags = ['ia'];
 
 export default handler;
