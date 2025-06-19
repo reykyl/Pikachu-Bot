@@ -45,7 +45,7 @@ let handler = async (m, { text, usedPrefix, command, conn }) => {
 
     // 📷 Si la API devuelve una imagen generada
     if (data?.image && data?.from === 'image-generator') {
-      return await conn.sendFile(m.chat, data.image, 'imagen.jpg', `🖼️ Imagen generada con el prompt:\n"${text}"`, m)
+      return await conn.sendFile(m.chat, data.image, 'imagen.jpg', ` Claro aquí tienes tu imagen de "${text}" espero te guste 😸 \n\n\n> Gemini (IA) ✨`, m)
     }
 
     // 💬 Si devuelve texto (respuesta IA normal)
