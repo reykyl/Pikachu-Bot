@@ -41,37 +41,48 @@ let handler = async (m, { text, usedPrefix, command, conn }) => {
       body: JSON.stringify(body)
     })
 
-    if (!res.ok) throw new Error(`API error ${res.status}`)
+    if (!res.ok) throw new Error(`🌐 Error al consultar API: ${res.status}`)
 
     const data = await res.json()
+
+    // 🖼️ Si se trata de una imagen generada (IA externa)
+    if (data?.from === 'external-image-api') {
+      const base64 = data?.image_base64
+      const mimeType = data?.mime_type || 'image/jpeg'
+      const buffer = Buffer.from(base64.split(',')[1], 'base64')
+      const ext = mimeType.includes('png') ? 'png' : 'jpg'
+
+      await conn.sendFile(m.chat, buffer, `imagen-ia.${ext}`, `🖼️ Imagen generada por IA:\n"${text}"`, m)
+      return
+    }
+
+    // 🤖 Si es texto o respuesta mixta desde Gemini
     const part = data?.candidates?.[0]?.content?.parts?.[0]
 
-    if (!part) throw new Error('❌ No se recibió contenido válido de la IA.')
+    if (!part) throw new Error('❌ Respuesta vacía de Gemini.')
 
-    
     if (part.inline_data?.mime_type && part.inline_data?.data) {
+      // Imagen en base64
       const buffer = Buffer.from(part.inline_data.data, 'base64')
       const ext = part.inline_data.mime_type.includes('png') ? 'png' : 'jpg'
-      const fileName = `imagen-generada.${ext}`
+      await conn.sendFile(m.chat, buffer, `imagen.${ext}`, `🖼️ Imagen generada:\n"${text}"`, m)
 
-      await conn.sendFile(m.chat, buffer, fileName, `🖼️ Imagen generada por IA:\n"${text || ''}"`, m)
+    } else if (part.text?.match(/^https?:\/\/.*\.(jpg|jpeg|png|webp)$/i)) {
+      // URL de imagen directa
+      await conn.sendFile(m.chat, part.text.trim(), 'imagen.jpg', `🖼️ Imagen generada:\n"${text}"`, m)
 
-    
-    } else if (part.text && /^https?:\/\/.*\.(jpg|jpeg|png|webp)$/i.test(part.text.trim())) {
-      await conn.sendFile(m.chat, part.text.trim(), 'imagen.jpg', `🖼️ Imagen generada:\n"${text || ''}"`, m)
-
-    
     } else if (part.text) {
+      // Solo texto
       await m.reply(part.text.trim())
 
     } else {
-      throw new Error('❌ No se pudo interpretar la respuesta de la IA.')
+      throw new Error('⚠️ La IA no devolvió una respuesta comprensible.')
     }
 
   } catch (e) {
-    console.error(e)
+    console.error('[GEMINI ERROR]', e)
     await m.react('⚠️')
-    await conn.reply(m.chat, '⚠️ Ocurrió un error procesando la imagen o pregunta.', m)
+    await conn.reply(m.chat, '⚠️ Ocurrió un error procesando la imagen o pregunta.\n\n' + e.message, m)
   }
 }
 
