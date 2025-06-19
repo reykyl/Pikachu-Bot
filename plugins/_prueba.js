@@ -1,4 +1,4 @@
-let handler = async (m, { text, conn }) => {
+/*let handler = async (m, { text, conn }) => {
   if (!text) throw '✏️ Escribe el prompt de la imagen. Ejemplo:\n.genera un dragón azul volando en el espacio'
 
   m.reply('🪄 Generando imagen, espera un momento...')
@@ -19,4 +19,4 @@ handler.help = ['genera <prompt>']
 handler.tags = ['ai', 'imagen']
 handler.command = ['genera', 'imagina']
 
-export default handler
+export default handler*/
