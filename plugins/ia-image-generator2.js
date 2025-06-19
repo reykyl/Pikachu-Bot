@@ -11,7 +11,7 @@ let handler = async (m, { text, conn }) => {
     let prompt = encodeURIComponent(text.trim())
     let imageUrl = `https://anime-xi-wheat.vercel.app/api/ia-img?prompt=${prompt}`
 
-    await conn.sendFile(m.chat, imageUrl, 'imagen.jpg', `"${emojis}" Imagen generada:\n"${text}"`, m)
+    await conn.sendFile(m.chat, imageUrl, 'imagen.jpg', `🧃 Imagen generada:\n"${text}"`, m)
   } catch (e) {
     console.error(e)
     m.reply(`❌ Ocurrió un error al generar la imagen:\n${e.message}`)
