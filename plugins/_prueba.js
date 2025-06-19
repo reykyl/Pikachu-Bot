@@ -1,63 +1,53 @@
-let gruposAdmin = {} 
+import fetch from 'node-fetch';
+import yts from 'yt-search';
 
-const handler = async (m, { conn, args, command, usedPrefix }) => {
-  if (command === 'listgrup') {
-    try {
-      gruposAdmin = {} 
+let handler = async (m, { conn, command, text, usedPrefix }) => {
+  if (!text) return conn.reply(m.chat, `✧ Ejemplo: ${usedPrefix}${command} Waguri Edit`, m);
 
-      const groups = Object.entries(conn.chats)
-        .filter(([jid, chat]) =>
-          jid.endsWith('@g.us') &&
-          chat.isChats &&
-          chat.metadata?.participants?.some(p => p.id === conn.user.jid && p.admin === 'admin')
-        )
+  await conn.sendMessage(m.chat, { react: { text: '🕒', key: m.key }});
 
-      if (groups.length === 0) return m.reply('⚠️ No soy administrador en ningún grupo.')
+  let results = await yts(text);
+  let tes = results.videos[0];
+  if (!tes) return conn.reply(m.chat, 'No se encontró ningún video.', m);
 
-      let texto = '*📋 Lista de grupos donde soy admin:*\n\n'
-      for (let i = 0; i < groups.length; i++) {
-        const [jid, chat] = groups[i]
-        const metadata = chat.metadata || (await conn.groupMetadata(jid).catch(() => null)) || {}
-        const nombre = metadata.subject || await conn.getName(jid)
-        texto += `${i + 1}. ${nombre}\n`
-        gruposAdmin[i + 1] = jid
-      }
+  const apiUrl = `https://www.apis-anomaki.zone.id/downloader/ytv?url=${encodeURIComponent(tes.url)}`;
 
-      texto += `\n✅ Usa *${usedPrefix}seraviso <número> <mensaje>* para enviar un aviso a ese grupo.`
+  const respuesta = await fetch(apiUrl);
+  if (!respuesta.ok) return conn.reply(m.chat, 'Error al obtener datos de la API.', m);
 
-      m.reply(texto)
-    } catch (e) {
-      console.error(e)
-      m.reply('❌ Ocurrió un error al obtener los grupos.')
-    }
-  }
+  const keni = await respuesta.json();
+  const format = keni.result.formats[0];
+  if (!format || !format.url) return conn.reply(m.chat, 'No hay URL de video disponible.', m);
 
-  if (command === 'avisot') {
-    const numero = parseInt(args[0])
-    const mensaje = args.slice(1).join(' ')
+  const { url, qualityLabel = 'no encontrado', fps = 'no encontrado' } = format;
+  const { title } = keni.result;
 
-    if (!numero || !mensaje) {
-      return m.reply(`❌ Uso incorrecto.\nEjemplo: *${usedPrefix}seraviso 2 Este es un aviso*`)
-    }
+  const safeTitle = title.replace(/[\\\/:*?"<>|]/g, '');
 
-    const jid = gruposAdmin[numero]
-    if (!jid) return m.reply('❌ Número inválido. Usa *groupplease* para listar los grupos primero.')
+  const caption = `
+*💮 PLAY VIDEO 💮*
 
-    try {
-      await conn.sendMessage(jid, {
-        text: `📢 *AVISO DEL BOT:*\n\n${mensaje}`
-      })
-      m.reply('✅ Aviso enviado correctamente.')
-    } catch (e) {
-      console.error(e)
-      m.reply('❌ Ocurrió un error al enviar el aviso.')
-    }
-  }
-}
+✧ : \`titulo;\` ${tes.title || 'no encontrado'}
+✧ : \`duracion;\` ${tes.duration || 'no encontrado'}
+✧ : \`calidad;\` ${qualityLabel}
+✧ : \`fps;\` ${fps}
 
-handler.help = ['listgrup', 'avisot <número> <mensaje>']
-handler.tags = ['grupos']
-handler.command = ['listgrup', 'avisot']
-handler.rowner = true 
+> ${wm}
+> Pedido de @${m.sender.split('@')[0]}`;
 
-export default handler
+  await conn.sendMessage(m.chat, {
+    video: { url },
+    mimetype: "video/mp4",
+    fileName: `${safeTitle}.mp4`,
+    caption,
+    mentions: [m.sender]
+  }, { quoted: m });
+
+  await conn.sendMessage(m.chat, { react: { text: '✅', key: m.key }});
+};
+
+handler.help = ['playvideo *<consulta>*'];
+handler.tags = ['descargas'];
+handler.command = /^(playvideo|playvid)$/i;
+
+export default handler;
