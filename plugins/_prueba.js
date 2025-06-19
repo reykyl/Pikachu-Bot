@@ -1,53 +1,33 @@
-import fetch from 'node-fetch';
-import yts from 'yt-search';
 
-let handler = async (m, { conn, command, text, usedPrefix }) => {
-  if (!text) return conn.reply(m.chat, `✧ Ejemplo: ${usedPrefix}${command} Waguri Edit`, m);
+import fetch from 'node-fetch'
 
-  await conn.sendMessage(m.chat, { react: { text: '🕒', key: m.key }});
+let handler = async (m, { text, conn}) => {
+  if (!text) throw 'Escribe el prompt de la imagen, por ejemplo:\n.genera ShadowUltra en el espacio'
 
-  let results = await yts(text);
-  let tes = results.videos[0];
-  if (!tes) return conn.reply(m.chat, 'No se encontró ningún video.', m);
+  m.reply('🪄 Generando imagen, espera un momento...')
 
-  const apiUrl = `https://www.apis-anomaki.zone.id/downloader/ytv?url=${encodeURIComponent(tes.url)}`;
+  // Puedes usar una instancia pública de Hugging Face o la que tú hospedes
+  const endpoint = `https://api-inference.huggingface.co/models/CompVis/stable-diffusion-v1-4`
+  const body = {
+    inputs: text
+}
 
-  const respuesta = await fetch(apiUrl);
-  if (!respuesta.ok) return conn.reply(m.chat, 'Error al obtener datos de la API.', m);
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      // Si usas un Space que no requiere clave, omite "Authorization"
+},
+    body: JSON.stringify(body)
+})
 
-  const keni = await respuesta.json();
-  const format = keni.result.formats[0];
-  if (!format || !format.url) return conn.reply(m.chat, 'No hay URL de video disponible.', m);
+  const buffer = await response.buffer()
 
-  const { url, qualityLabel = 'no encontrado', fps = 'no encontrado' } = format;
-  const { title } = keni.result;
+  await conn.sendFile(m.chat, buffer, 'imagen.png', `🖼️ Imagen generada: "${text}"`, m)
+}
 
-  const safeTitle = title.replace(/[\\\/:*?"<>|]/g, '');
+handler.help = ['genera']
+handler.tags = ['ai', 'imagen']
+handler.command = ['genera', 'imagina']
 
-  const caption = `
-*💮 PLAY VIDEO 💮*
-
-✧ : \`titulo;\` ${tes.title || 'no encontrado'}
-✧ : \`duracion;\` ${tes.duration || 'no encontrado'}
-✧ : \`calidad;\` ${qualityLabel}
-✧ : \`fps;\` ${fps}
-
-> ${wm}
-> Pedido de @${m.sender.split('@')[0]}`;
-
-  await conn.sendMessage(m.chat, {
-    video: { url },
-    mimetype: "video/mp4",
-    fileName: `${safeTitle}.mp4`,
-    caption,
-    mentions: [m.sender]
-  }, { quoted: m });
-
-  await conn.sendMessage(m.chat, { react: { text: '✅', key: m.key }});
-};
-
-handler.help = ['playvideo *<consulta>*'];
-handler.tags = ['descargas'];
-handler.command = /^(playvideo|playvid)$/i;
-
-export default handler;
+export default handler
