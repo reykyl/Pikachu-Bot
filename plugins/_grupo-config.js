@@ -13,11 +13,11 @@ return conn.reply(m.chat, `⚡️🐭 *¡Pika Pika! Elige una opción para confi
 await conn.groupSettingUpdate(m.chat, isClose)
 
 if (isClose === 'not_announcement'){
-   const m.reply(m.chat, `🗨️✨ *¡Pikachu dice que todos pueden hablar ahora!*\n\n⚡ ¡Pikapi! El grupo ha sido abierto.` m, rcanal)
+   const conn.reply(m.chat, `🗨️✨ *¡Pikachu dice que todos pueden hablar ahora!*\n\n⚡ ¡Pikapi! El grupo ha sido abierto.` m, rcanal)
 }
 
 if (isClose === 'announcement'){
-const m.reply(m.chat, `🔒🚫 *¡Pikachu activó el modo silencioso!*\n\n⚡ Solo los *líderes de gimnasio* (admins) pueden hablar ahora.` m, rcanal)
+const conn.reply(m.chat, `🔒🚫 *¡Pikachu activó el modo silencioso!*\n\n⚡ Solo los *líderes de gimnasio* (admins) pueden hablar ahora.` m, rcanal)
 }}
 handler.help = ['group open / close', 'grupo on / off']
 handler.tags = ['grupo']
