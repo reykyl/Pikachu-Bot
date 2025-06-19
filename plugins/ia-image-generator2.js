@@ -1,3 +1,10 @@
+/* Código creado por Deylin y API también
+https://github.com/deylin-eliac 
+  no quites créditos 
+ Atte: Deylin-eliac*/
+
+
+
 let handler = async (m, { text, conn }) => {
 
 
