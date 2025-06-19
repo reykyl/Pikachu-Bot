@@ -287,7 +287,10 @@ sock.isInit = true
 global.conns.push(sock)
 await joinChannels(sock)
 
-m?.chat ? await conn.sendMessage(m.chat, {text: args[0] ? `@${m.sender.split('@')[0]}, ya estás conectado, leyendo mensajes entrantes...` : `genial @${m.sender.split('@')[0]},  ya eres parte de nuestra familia de Sub-Bots de ${botname} desarrollado por: ${dev}`, mentions: [m.sender]}, { quoted: m }) : ''
+m?.chat ? conn.reply(m.chat, args[0] 
+  ? `⚡️✨ ¡Pika Pika! @${m.sender.split('@')[0]}, ya estás *conectado* y leyendo los mensajes entrantes... ⚡️🐭` 
+  : `${emojis} *¡Pikachu te elige!* @${m.sender.split('@')[0]}, ahora formas parte de la familia de Sub-Bots de *${botname}* ⚙️\ndesarrollado por: *${dev}* 🔧`, m, rcanal) 
+  : ''
 
 }}
 setInterval(async () => {
