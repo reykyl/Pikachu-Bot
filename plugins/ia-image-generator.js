@@ -2,14 +2,14 @@ import axios from 'axios';
 
 const handler = async (m, { conn, args }) => {
     if (!args[0]) {
-        await conn.reply(m.chat, `${emoji} Por favor, proporciona una descripción para generar la imagen.`, m, rcanal);
+        await conn.reply(m.chat, `${emojis} Por favor, proporciona una descripción para generar la imagen.`, m, rcanal);
         return;
     }
 
     const prompt = args.join(' ');
     const apiUrl = `https://eliasar-yt-api.vercel.app/api/ai/text2img?prompt=${encodeURIComponent(prompt)}`;
 
-    conn.reply(m.chat, `${emoji2} Espere un momento...\n\ngenerando imagen de *${prompt}*`, m, rcanal);
+    conn.reply(m.chat, `${emojis} Espere un momento...\n\ngenerando imagen de *${prompt}*`, m, rcanal);
 
     let imageBuffer = null;
 
