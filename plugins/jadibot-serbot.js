@@ -288,13 +288,7 @@ global.conns.push(sock)
 await joinChannels(sock)
     const userId = m.mentionedJid?.[0] || m.sender
 
-if (m?.chat) {
-  const mensaje = args[0]
-    ? `⚡️✨ ¡Pika Pika! @${userId.split('@')[0]}, ya estás *conectado* y leyendo los mensajes entrantes... ⚡️🐭`
-    : `${emojis} *¡Pikachu te elige!* @${m.sender.split('@')[0]}, ahora formas parte de la familia de Sub-Bots de *${botname}* ⚙️\ndesarrollado por: *${dev}* 🔧`;
-
-  conn.reply(m.chat, mensaje, m, fkontak);
-}
+m?.chat ? await conn.sendMessage(m.chat, {text: args[0] ? `@${m.sender.split('@')[0]}, ya estás conectado, leyendo mensajes entrantes...` : `${emojis} *¡Pikachu te elige!* @${m.sender.split('@')[0]}, ahora formas parte de la familia de Sub-Bots de *${botname}* ⚙️\ndesarrollado por: *${dev}*: [m.sender]}, { quoted: fkontak }) : ''
 
 }}
 setInterval(async () => {
