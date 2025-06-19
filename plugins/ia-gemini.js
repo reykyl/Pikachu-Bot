@@ -12,7 +12,7 @@ let handler = async (m, { text, usedPrefix, command, conn }) => {
 
   try {
     await m.react('🌟')
-    conn.sendPresenceUpdate('composing', m.chat)
+    await conn.sendPresenceUpdate('composing', m.chat)
 
     let base64Image = null
     let mimeType = null
@@ -37,33 +37,35 @@ let handler = async (m, { text, usedPrefix, command, conn }) => {
 
     const res = await fetch('https://g-mini-ia.vercel.app/api/gemini', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
     })
+
+    if (!res.ok) throw new Error(`API error ${res.status}`)
 
     const data = await res.json()
     const part = data?.candidates?.[0]?.content?.parts?.[0]
 
-    if (!part) throw '❌ No se recibió contenido válido de la IA.'
+    if (!part) throw new Error('❌ No se recibió contenido válido de la IA.')
 
-    // Verificamos si la respuesta contiene una imagen
-    if (part.inline_data && part.inline_data.mime_type && part.inline_data.data) {
-      // Imagen en base64
+    
+    if (part.inline_data?.mime_type && part.inline_data?.data) {
       const buffer = Buffer.from(part.inline_data.data, 'base64')
-      const extension = part.inline_data.mime_type.includes('png') ? 'png' : 'jpg'
-      const fileName = `imagen-generada.${extension}`
+      const ext = part.inline_data.mime_type.includes('png') ? 'png' : 'jpg'
+      const fileName = `imagen-generada.${ext}`
 
-      await conn.sendFile(m.chat, buffer, fileName, `🖼️ Imagen generada por IA:\n"${text}"`, m)
+      await conn.sendFile(m.chat, buffer, fileName, `🖼️ Imagen generada por IA:\n"${text || ''}"`, m)
+
+    
     } else if (part.text && /^https?:\/\/.*\.(jpg|jpeg|png|webp)$/i.test(part.text.trim())) {
-      // Imagen como URL directa
-      await conn.sendFile(m.chat, part.text.trim(), 'imagen.jpg', `🖼️ Imagen generada:\n"${text}"`, m)
+      await conn.sendFile(m.chat, part.text.trim(), 'imagen.jpg', `🖼️ Imagen generada:\n"${text || ''}"`, m)
+
+    
     } else if (part.text) {
-      // Solo texto como respuesta
       await m.reply(part.text.trim())
+
     } else {
-      throw '❌ No se pudo interpretar la respuesta de la IA.'
+      throw new Error('❌ No se pudo interpretar la respuesta de la IA.')
     }
 
   } catch (e) {
