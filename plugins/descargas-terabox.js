@@ -1,4 +1,5 @@
 import axios from 'axios';
+import path from 'path';
 
 const handler = async (m, { conn, args, text, usedPrefix, command }) => {
   if (!text) return m.reply(`✳️ Usa el comando así:\n\n${usedPrefix + command} <url de Terabox>\n\nEjemplo:\n${usedPrefix + command} https://www.terabox.com/s/1abcdEFGH`);
@@ -21,18 +22,43 @@ const handler = async (m, { conn, args, text, usedPrefix, command }) => {
     const { filename = 'archivo_terabox', size, thumb, direct_url: link } = result;
     const sizeInBytes = parseInt(size) || 0;
     const sizeInMB = (sizeInBytes / (1024 * 1024)).toFixed(2);
+    const ext = path.extname(filename).toLowerCase();
+
     const caption = `╭─── 「 TERABOX 」\n│\n├ 📂 *Archivo:* ${filename}\n├ 📦 *Tamaño:* ${sizeInMB} MB\n│\n╰───`;
 
- 
-    await conn.sendMessage(m.chat, { image: { url: thumb }, caption }, { quoted: m });
+    // Enviar miniatura si existe
+    if (thumb) {
+      await conn.sendMessage(m.chat, { image: { url: thumb }, caption }, { quoted: m });
+    } else {
+      await m.reply(caption);
+    }
 
-    
+
+    const isVideo = ['.mp4', '.mov', '.avi', '.mkv'].includes(ext);
+    const isImage = ['.jpg', '.jpeg', '.png', '.webp'].includes(ext);
     const isHeavy = sizeInBytes > 99 * 1024 * 1024;
-    const fileMsg = {
-      [isHeavy ? 'document' : 'video']: { url: link },
-      fileName: filename,
-      mimetype: 'video/mp4'
-    };
+
+    let fileMsg;
+
+    if (isImage) {
+      fileMsg = {
+        image: { url: link },
+        fileName: filename
+      };
+    } else if (isVideo && !isHeavy) {
+      fileMsg = {
+        video: { url: link },
+        mimetype: 'video/mp4',
+        fileName: filename
+      };
+    } else {
+      
+      fileMsg = {
+        document: { url: link },
+        mimetype: 'application/octet-stream',
+        fileName: filename
+      };
+    }
 
     await conn.sendMessage(m.chat, fileMsg, { quoted: m });
 
