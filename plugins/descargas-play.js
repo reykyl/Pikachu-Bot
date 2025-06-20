@@ -174,6 +174,7 @@ await m.react('🎧');
             renderLargerThumbnail: false 
           }
         }
+await m.react('📽️');
       }, { quoted: m });
       break;
     }
@@ -181,7 +182,7 @@ await m.react('🎧');
     console.error(`⚠️ Error con la fuente ${source}:`, e.message);
   }
 }
-    await m.react('📽️');
+    
       if (!success) {
         return m.reply("❌ Pikachu no pudo encontrar un enlace válido para descargar.");
       }
