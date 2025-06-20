@@ -76,14 +76,14 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
 
     const videoInfo = search.all[0];
     const { title, thumbnail, timestamp, views, ago, url } = videoInfo;
-    const vistas = formatViews(views);
+   // const vistas = formatViews(views);
     const thumb = (await conn.getFile(thumbnail))?.data;
 
     const infoMessage = `⚡🐭 
               \`Pikachu-Bot - Descargas Pokémon\`
 *🎵 Título:* ${title}
 > 🎬 *Duración:* ${timestamp}
-> 👀 *Vistas:* ${vistas}
+//> 👀 *Vistas:* ${vistas}
 > 🎤 *Canal:* ${(videoInfo.author?.name) || "Desconocido"}
 > 📅 *Publicado:* ${ago}
 > 🔗 *Enlace:* ${url}`;
