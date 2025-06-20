@@ -1,46 +1,44 @@
 import axios from 'axios';
-import { Readable } from 'stream';
-import fetch from 'node-fetch';
 
-let handler = async (m, { conn, args, usedPrefix, command }) => {
-  if (!args[0]) throw `✳️ Ejemplo de uso:\n${usedPrefix + command} <enlace de Terabox>`;
+const handler = async (m, { conn, args, text, usedPrefix, command }) => {
+  if (!text) return m.reply(`✳️ Usa el comando así:\n\n${usedPrefix + command} <url de Terabox>\n\nEjemplo:\n${usedPrefix + command} https://www.terabox.com/s/1abcdEFGH`);
 
-  const url = args[0];
-  m.reply('⏳ Obteniendo información del archivo desde Terabox...');
+  if (!text.includes("terabox.com")) return m.reply("❌ El enlace no parece ser de Terabox.");
 
   try {
-    // Obtener info desde la API de Zenz
-    const { data } = await axios.get(`https://zenzapis.xyz/downloader/terabox?apikey=zenzkey&url=${encodeURIComponent(url)}`);
+    await m.reply("⏳ Obteniendo el archivo desde Terabox...");
 
-    if (!data.status || !data.result?.direct_url) throw '⚠️ Enlace inválido o archivo no disponible.';
-
-    const { filename, size, direct_url } = data.result;
-
-    m.reply(`📥 Descargando: *${filename}*\n📦 Tamaño: ${(Number(size) / 1048576).toFixed(2)} MB`);
-
-    // Descargar archivo como stream
-    const res = await fetch(direct_url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0'
-      }
+    const apiUrl = `https://zenz.biz.id/downloader/terabox?url=${encodeURIComponent(text)}`;
+    const { data: apiResponse } = await axios.get(apiUrl, {
+      headers: { 'User-Agent': 'Mozilla/5.0' }
     });
 
-    if (!res.ok) throw '❌ No se pudo descargar el archivo.';
+    if (!apiResponse.status || !apiResponse.result?.direct_url) {
+      throw new Error("❌ No se pudo obtener el archivo. La API no devolvió un enlace válido.");
+    }
 
-    const buffer = await res.arrayBuffer();
-    const stream = Readable.from(Buffer.from(buffer));
+    const result = apiResponse.result;
+    const { filename = 'archivo_terabox', size, thumb, direct_url: link } = result;
+    const sizeInBytes = parseInt(size) || 0;
+    const sizeInMB = (sizeInBytes / (1024 * 1024)).toFixed(2);
+    const caption = `╭─── 「 TERABOX 」\n│\n├ 📂 *Archivo:* ${filename}\n├ 📦 *Tamaño:* ${sizeInMB} MB\n│\n╰───`;
 
-    // Enviar como documento (no como video normal)
-    await conn.sendMessage(m.chat, {
-      document: stream,
-      mimetype: 'application/octet-stream',
+ 
+    await conn.sendMessage(m.chat, { image: { url: thumb }, caption }, { quoted: m });
+
+    
+    const isHeavy = sizeInBytes > 99 * 1024 * 1024;
+    const fileMsg = {
+      [isHeavy ? 'document' : 'video']: { url: link },
       fileName: filename,
-      caption: `📁 Archivo descargado desde Terabox:\n\n📄 *${filename}*`
-    }, { quoted: m });
+      mimetype: 'video/mp4'
+    };
 
-  } catch (e) {
-    console.error(e);
-    m.reply('❌ Ocurrió un error al descargar o enviar el archivo.\nAsegúrate de que el enlace es válido y el archivo no fue eliminado.');
+    await conn.sendMessage(m.chat, fileMsg, { quoted: m });
+
+  } catch (err) {
+    console.error(err);
+    m.reply("❌ Ocurrió un error al descargar o enviar el archivo.\nAsegúrate de que el enlace sea válido y que el archivo esté disponible.");
   }
 };
 
