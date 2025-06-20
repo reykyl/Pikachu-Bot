@@ -131,11 +131,11 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
 };
 
 
-
+await m.react('🎧');
 
       return await conn.sendMessage(m.chat, doc, { quoted: m });
     }
-    await m.react('🎧');
+    
     // Video (play2/ytv/ytmp4)
     if (["play2", "ytv", "ytmp4"].includes(command)) {
       const sources = [
