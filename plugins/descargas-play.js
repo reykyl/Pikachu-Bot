@@ -74,10 +74,10 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
       return m.reply("*(>_<)🧃* Pikachu no encontró nada con ese nombre...");
     }
 
-    const vistas = formatViews(views ?? 0);
+   
     const videoInfo = search.all[0];
     const { title, thumbnail, timestamp, views, ago, url } = videoInfo;
-    //const vistas = formatViews(views);
+    const vistas = formatViews(views);
     const thumb = (await conn.getFile(thumbnail))?.data;
 
     const infoMessage = `⚡🐭 
