@@ -76,7 +76,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
 
     const videoInfo = search.all[0];
     const { title, thumbnail, timestamp, views, ago, url } = videoInfo;
-   // const vistas = formatViews(views);
+    const vistas = formatViews(views);
     const thumb = (await conn.getFile(thumbnail))?.data;
 
     const infoMessage = `⚡🐭 
@@ -84,9 +84,10 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
 *🎵 Título:* ${title}
 > 🎬 *Duración:* ${timestamp}
 > 🎤 *Canal:* ${(videoInfo.author?.name) || "Desconocido"}
+> 👀 *Vistas:* ${vistas}
 > 📅 *Publicado:* ${ago}
 > 🔗 *Enlace:* ${url}`;
-/*> 👀 *Vistas:* ${vistas}*/
+
     const JT = {
       contextInfo: {
         externalAdReply: {
@@ -197,9 +198,9 @@ handler.tags = ["downloader"];
 
 export default handler;
 
-/*function formatViews(views) {
+function formatViews(views) {
   if (typeof views !== "number") return "Desconocido";
   return views >= 1000
     ? (views / 1000).toFixed(1) + "k (" + views.toLocaleString() + ")"
     : views.toString();
-}*/
+}
