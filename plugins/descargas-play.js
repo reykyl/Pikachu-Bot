@@ -103,7 +103,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
       }
     };
 
-    await m.react('🎧');
+    await m.react('🎉');
     await conn.reply(m.chat, infoMessage, m, JT);
 
     // Audio (play/yta/ytmp3)
@@ -135,7 +135,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
 
       return await conn.sendMessage(m.chat, doc, { quoted: m });
     }
-
+    await m.react('🎧');
     // Video (play2/ytv/ytmp4)
     if (["play2", "ytv", "ytmp4"].includes(command)) {
       const sources = [
@@ -181,7 +181,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
     console.error(`⚠️ Error con la fuente ${source}:`, e.message);
   }
 }
-
+    await m.react('📽️');
       if (!success) {
         return m.reply("❌ Pikachu no pudo encontrar un enlace válido para descargar.");
       }
