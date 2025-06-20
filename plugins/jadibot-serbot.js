@@ -287,6 +287,8 @@ sock.isInit = true
 global.conns.push(sock)
 await joinChannels(sock)
     //const userId = m.mentionedJid?.[0] || m.sender
+const userId = if (!m || !m.message) return
+
 const userId = m.message?.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || m.sender
 
 m?.chat ? await conn.sendMessage(m.chat, {text: args[0] ? `@${m.sender.split('@')[0]}, ya estás conectado, leyendo mensajes entrantes...` : `${emojis} *¡Pikachu te elige!* @${m.sender.split('@')[0]}, ahora formas parte de la familia de Sub-Bots de *${botname}* ⚙️\ndesarrollado por: *${dev}*`, mentions: [m.sender]}, { quoted: fkontak }) : ''
