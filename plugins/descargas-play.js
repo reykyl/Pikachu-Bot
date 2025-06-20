@@ -83,11 +83,10 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
               \`Pikachu-Bot - Descargas Pokémon\`
 *🎵 Título:* ${title}
 > 🎬 *Duración:* ${timestamp}
-/*> 👀 *Vistas:* ${vistas}*/
 > 🎤 *Canal:* ${(videoInfo.author?.name) || "Desconocido"}
 > 📅 *Publicado:* ${ago}
 > 🔗 *Enlace:* ${url}`;
-
+/*> 👀 *Vistas:* ${vistas}*/
     const JT = {
       contextInfo: {
         externalAdReply: {
