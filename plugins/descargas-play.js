@@ -74,7 +74,6 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
       return m.reply("*(>_<)🧃* Pikachu no encontró nada con ese nombre...");
     }
 
-   
     const videoInfo = search.all[0];
     const { title, thumbnail, timestamp, views, ago, url } = videoInfo;
     const vistas = formatViews(views);
@@ -104,7 +103,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
       }
     };
 
-    await m.react('🎉');
+    await m.react('🎧');
     await conn.reply(m.chat, infoMessage, m, JT);
 
     // Audio (play/yta/ytmp3)
@@ -132,11 +131,11 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
 };
 
 
-await m.react('🎧');
+
 
       return await conn.sendMessage(m.chat, doc, { quoted: m });
     }
-    
+
     // Video (play2/ytv/ytmp4)
     if (["play2", "ytv", "ytmp4"].includes(command)) {
       const sources = [
@@ -175,7 +174,6 @@ await m.react('🎧');
             renderLargerThumbnail: false 
           }
         }
-await m.react('📽️');
       }, { quoted: m });
       break;
     }
@@ -183,7 +181,7 @@ await m.react('📽️');
     console.error(`⚠️ Error con la fuente ${source}:`, e.message);
   }
 }
-    
+
       if (!success) {
         return m.reply("❌ Pikachu no pudo encontrar un enlace válido para descargar.");
       }
@@ -199,7 +197,6 @@ handler.command = handler.help = ["play", "play2", "ytmp3", "yta", "ytmp4", "ytv
 handler.tags = ["downloader"];
 
 export default handler;
-
 
 function formatViews(views) {
   if (typeof views !== "number") return "Desconocido";
