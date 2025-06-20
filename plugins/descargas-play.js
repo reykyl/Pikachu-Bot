@@ -83,7 +83,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
               \`Pikachu-Bot - Descargas Pokémon\`
 *🎵 Título:* ${title}
 > 🎬 *Duración:* ${timestamp}
-/"> 👀 *Vistas:* ${vistas}*/
+/*> 👀 *Vistas:* ${vistas}*/
 > 🎤 *Canal:* ${(videoInfo.author?.name) || "Desconocido"}
 > 📅 *Publicado:* ${ago}
 > 🔗 *Enlace:* ${url}`;
