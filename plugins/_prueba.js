@@ -23,9 +23,8 @@ const handler = async (m, { conn }) => {
   }
 };
 
-handler.command = ['pingfreenom'];
-handler.help = ['pingfreenom'];
-handler.tags = ['internet'];
+handler.help = ['pingfreenom']
+handler.tags = ['main']
+handler.command = ['pingfreenom']
 
-
-module.exports = handler;
+export default handler
