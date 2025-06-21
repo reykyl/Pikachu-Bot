@@ -2,9 +2,11 @@ const axios = require('axios');
 
 async function handler(m, { conn, text }) {
   try {
+    
+    await conn.reply(m.chat, `⏳ Un momento...`, m);
+
     const res = await axios.get('https://api.freenom.com/v2/service/ping');
     const data = res.data;
-return conn.reply(m.chat, `Un momento...`, m);
 
     const respuesta = `🛰️ *Ping a Freenom API:*
 📅 Timestamp: ${data.timestamp}
