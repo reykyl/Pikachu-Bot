@@ -23,8 +23,6 @@ handler.help = ['pingfreenom'];
 handler.tags = ['main'];
 handler.command = ['pingfreenom'];
 
-export default handler;*/
-
 import axios from 'axios';
 
 const API_BASE = 'https://api.freenom.com/v2';
@@ -135,25 +133,56 @@ async function renewDomain({ domainname, period = '1Y', email, password }) {
 // COMANDO .pingfreenom
 // =======================
 
-let handler = async (m, { reply }) => {
+let handler = async (m, { reply, command, args }) => {
   try {
-await conn.reply(m.chat, '⏳ Consultando la API de Freenom...', m);
+    if (command === 'pingfreenom') {
+      await reply('⏳ Consultando la API de Freenom...');
+      const data = await ping();
+      let text = `🟢 *Freenom API Ping OK*\n\n` +
+                 `📍 *Resultado:* ${data.result}\n` +
+                 `📶 *Estado:* ${data.status}\n` +
+                 `🕒 *Timestamp:* ${data.timestamp}`;
+      await reply(text);
+    }
 
-    const data = await ping();
-    let text = `🟢 *Freenom API Ping OK*\n\n` +
-               `📍 *Resultado:* ${data.result}\n` +
-               `📶 *Estado:* ${data.status}\n` +
-               `🕒 *Timestamp:* ${data.timestamp}`;
-    await reply(text);
+    // =======================
+    // COMANDO .freenomsearch
+    // =======================
+    if (command === 'freenomsearch') {
+      let query = args[0];
+      if (!query) return reply(`🔍 Usa el comando así:\n.freenomsearch <nombre-dominio>`);
+      const TLDs = ['.tk', '.ml', '.ga', '.cf', '.gq'];
+      const email = 'TU_CORREO_FREENOM'; // ← reemplaza
+      const password = 'TU_PASSWORD_FREENOM'; // ← reemplaza
+      let results = [];
+
+      await reply(`⏳ Buscando dominios disponibles para: *${query}*`);
+
+      for (const tld of TLDs) {
+        try {
+          const fullDomain = query + tld;
+          const res = await searchDomain(fullDomain, 'FREE', email, password);
+          const available = res?.domains?.[0]?.available;
+          const status = available === '1' ? '✅ Disponible' : '❌ No disponible';
+          results.push(`🌐 *${fullDomain}* → ${status}`);
+        } catch (e) {
+          results.push(`🌐 *${query + tld}* → ⚠️ Error`);
+        }
+      }
+
+      const text = `📦 *Resultados de Freenom:*\n\n${results.join('\n')}`;
+      await reply(text);
+    }
+
   } catch (error) {
     let errMsg = error?.message || JSON.stringify(error?.response?.data || error, null, 2);
-    await reply(`🔴 *Error al hacer ping a Freenom:*\n\`\`\`\n${errMsg}\n\`\`\``);
+    await reply(`🔴 *Error en el comando:*\n\`\`\`\n${errMsg}\n\`\`\``);
   }
 };
 
-handler.help = ['pingfreenom'];
-handler.tags = ['main'];
-handler.command = ['pingfreenom'];
+handler.help = ['pingfreenom', 'freenomsearch <dominio>'];
+handler.tags = ['freenom'];
+handler.command = ['pingfreenom', 'freenomsearch'];
 
 export default handler;
 
