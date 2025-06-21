@@ -24,5 +24,15 @@ https://Ytumode-api.vercel.app/api/search?q=
 [6]
 https://mode-api-sigma.vercel.app/api/mp3?url=
 > descarga audio de YouTube.
+> *clausurado*
+
+[7]
+https://mode-api-sigma.vercel.app/api/index?url=
+> descarga audio de YouTube.
+> *clausurado*
+
+Usa estas APIs con precaución evita el spam de solicitud en un determinado tiempo.
 `, m, rcanal);
 
+
+Handler.comad = ['api', 'apis', servicios]
