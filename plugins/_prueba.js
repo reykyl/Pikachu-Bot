@@ -32,12 +32,11 @@ https://mode-api-sigma.vercel.app/api/index?url=
 > *clausurado*
 
 Usa estas APIs con precaución evita el spam de solicitud en un determinado tiempo.
-`, m, rcanal);
-  };
+`, m, rcanal)};
 
 
-handler.command = ['api', 'apis', servicios]
+handler.command = ['api', 'apis', 'servicios']
 handler.tags = ['info']
-handler.help = ['api', 'apis', servicios]
+handler.help = ['api', 'apis', 'servicios']
 
 export default handler;
