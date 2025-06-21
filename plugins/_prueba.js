@@ -32,7 +32,7 @@ return conn.reply(m.chat,`*APIs desarrolladas por Deylin*
 *⚠️ Clausurado.*
 
 *🔒 Nota:* Usa estas APIs con precaución. Evita hacer múltiples solicitudes en un corto período de tiempo para prevenir bloqueos o fallos del servicio.
-`, m)};
+`, m, fake)};
 
 
 handler.command = ['api', 'apis', 'servicios']
