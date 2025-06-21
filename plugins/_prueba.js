@@ -35,4 +35,7 @@ Usa estas APIs con precaución evita el spam de solicitud en un determinado tiem
 `, m, rcanal);
 
 
-handler.commad = ['api', 'apis', servicios]
+handler.command = ['api', 'apis', servicios]
+handler.help = ['api', 'apis', servicios]
+
+export default handler;
