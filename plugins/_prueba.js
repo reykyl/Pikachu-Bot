@@ -3,7 +3,7 @@ const axios = require('axios');
 const handler = async (m, { conn }) => {
   try {
     
-    await conn.reply(m.chat, '⏳ Consultando la API de Freenom...', m);
+    return conn.reply(m.chat, '⏳ Consultando la API de Freenom...', m);
 
     
     const res = await axios.get('https://api.freenom.com/v2/service/ping');
