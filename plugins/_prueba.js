@@ -21,7 +21,7 @@ const handler = async (m, { conn }) => {
 
 handler.help = ['pingfreenom'];
 handler.tags = ['main'];
-handler.command = ['pingfreenom'];
+handler.command = ['pingfreenom'];*/
 
 import axios from 'axios';
 
