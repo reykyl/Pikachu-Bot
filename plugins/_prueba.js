@@ -1,42 +1,25 @@
-let handler = async (m, { conn, args, usedPrefix, command }) => {
-return conn.reply(m.chat,`*APIs desarrolladas por Deylin*
+const axios = require('axios');
 
-[1]
- https://anime-xi-wheat.vercel.app/api/pinterest?q=
-> Pinterest: Buscador de imágenes en Pinterest.
+async function handler(m, { conn, text }) {
+  try {
+    const res = await axios.get('https://api.freenom.com/v2/service/ping');
+    const data = res.data;
 
-[2]
- https://anime-xi-wheat.vercel.app/api/ia-img?prompt=
-> Generador de imágenes con IA.
+    const respuesta = `🛰️ *Ping a Freenom API:*
+📅 Timestamp: ${data.timestamp}
+📍 Resultado: ${data.result}
+✅ Estado: ${data.status}`;
 
-[3]
- https://g-mini-ia.vercel.app/api/gemini
-> Gemini IA: Responde preguntas, analiza imágenes y genera contenido visual.
+    await conn.reply(m.chat, respuesta, m);
+  } catch (e) {
+    await conn.reply(m.chat, '❌ Error al hacer ping a la API de Freenom.', m);
+    console.error(e);
+  }
+}
 
-[4]
- https://mode-ia.onrender.com/mode-ia?prompt=
-> Mode-IA: Inteligencia artificial para responder preguntas en formato texto.
+handler.command = /^pingfreenom$/i;
+handler.tags = ['internet'];
+handler.help = ['pingfreenom'];
+handler.register = true;
 
-[5]
- https://ytumode-api.vercel.app/api/search?q=
-> Buscador de contenido en YouTube.
-
-[6]
- https://mode-api-sigma.vercel.app/api/mp3?url=
-> Descarga de audio desde YouTube.
-*⚠️ Clausurado.*
-
-[7]
- https://mode-api-sigma.vercel.app/api/index?url=
-> Descarga de audio desde YouTube.
-*⚠️ Clausurado.*
-
-*🔒 Nota:* Usa estas APIs con precaución. Evita hacer múltiples solicitudes en un corto período de tiempo para prevenir bloqueos o fallos del servicio.
-`, m, fake)};
-
-
-handler.command = ['api', 'apis', 'servicios']
-handler.tags = ['main']
-handler.help = ['api', 'apis', 'servicios']
-
-export default handler;
+module.exports = handler;
