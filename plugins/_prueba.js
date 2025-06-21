@@ -2,20 +2,16 @@ import axios from 'axios';
 
 const handler = async (m, { conn }) => {
   try {
-    
     await conn.reply(m.chat, '⏳ Consultando la API de Freenom...', m);
 
-    
     const res = await axios.get('https://api.freenom.com/v2/service/ping');
     const { timestamp, result, status } = res.data;
 
-    
     const mensaje = `🛰️ *Freenom API Response:*
 📅 *Timestamp:* ${timestamp}
 📍 *Resultado:* ${result}
 ✅ *Estado:* ${status}`;
 
-    
     return conn.reply(m.chat, mensaje, m);
   } catch (err) {
     console.error('[pingfreenom] Error:', err);
@@ -23,8 +19,8 @@ const handler = async (m, { conn }) => {
   }
 };
 
-handler.help = ['pingfreenom']
-handler.tags = ['main']
-handler.command = ['pingfreenom']
+handler.help = ['pingfreenom'];
+handler.tags = ['main'];
+handler.command = ['pingfreenom'];
 
-export default handler
+export default handler;
