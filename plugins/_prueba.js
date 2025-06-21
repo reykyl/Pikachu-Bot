@@ -18,7 +18,7 @@ return conn.reply(m.chat, `Un momento...`, m);
   }
 }
 
-handler.command = /^pingfreenom$/i;
+handler.command = ['pingfreenom'];
 handler.tags = ['internet'];
 handler.help = ['pingfreenom'];
 handler.register = true;
