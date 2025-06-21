@@ -15,7 +15,6 @@ const handler = async (m, { conn }) => {
 📍 *Resultado:* ${result}
 ✅ *Estado:* ${status}`;
 
-    
     return conn.reply(m.chat, mensaje, m);
   } catch (err) {
     console.error('[pingfreenom] Error:', err);
