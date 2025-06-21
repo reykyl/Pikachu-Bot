@@ -36,6 +36,7 @@ Usa estas APIs con precaución evita el spam de solicitud en un determinado tiem
 
 
 handler.command = ['api', 'apis', servicios]
+handler.tags = ['info']
 handler.help = ['api', 'apis', servicios]
 
 export default handler;
