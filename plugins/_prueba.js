@@ -25,27 +25,28 @@ handler.command = ['pingfreenom'];
 
 export default handler;*/
 
-
 import axios from 'axios';
 
 const API_BASE = 'https://api.freenom.com/v2';
 
-// Opcional: para llamadas XML, poner `.xml` en la URL
+// =======================
+// FUNCIONES FREENOM API
+// =======================
 
 // Hacer ping al servicio
-export async function ping() {
+async function ping() {
   try {
     const response = await axios.get(`${API_BASE}/service/ping`, {
       headers: { Accept: 'application/json' },
     });
-    return response.data; // JSON con {result, status, timestamp}
+    return response.data;
   } catch (error) {
     throw error.response?.data || error;
   }
 }
 
 // Buscar dominio disponible
-export async function searchDomain(domainname, domaintype, email, password) {
+async function searchDomain(domainname, domaintype, email, password) {
   try {
     const url = `${API_BASE}/domain/search`;
     const params = {
@@ -62,7 +63,7 @@ export async function searchDomain(domainname, domaintype, email, password) {
 }
 
 // Registrar dominio
-export async function registerDomain({
+async function registerDomain({
   domainname,
   period = '1Y',
   forward_url,
@@ -80,7 +81,6 @@ export async function registerDomain({
 }) {
   try {
     const url = `${API_BASE}/domain/register`;
-    // Si se usa nameservers, forward_url no debe enviarse y viceversa
     const data = {
       domainname,
       period,
@@ -90,6 +90,10 @@ export async function registerDomain({
       idshield,
       autorenew,
     };
+
+    if (!nameservers.length && !forward_url) {
+      throw new Error('Debe proporcionar al menos nameservers o forward_url');
+    }
 
     if (nameservers.length >= 2) {
       nameservers.forEach((ns, i) => (data[`nameserver[${i}]`] = ns));
@@ -113,7 +117,7 @@ export async function registerDomain({
 }
 
 // Renovar dominio
-export async function renewDomain({ domainname, period = '1Y', email, password }) {
+async function renewDomain({ domainname, period = '1Y', email, password }) {
   try {
     const url = `${API_BASE}/domain/renew`;
     const data = { domainname, period, email, password };
@@ -127,20 +131,23 @@ export async function renewDomain({ domainname, period = '1Y', email, password }
   }
 }
 
-
+// =======================
+// COMANDO .pingfreenom
+// =======================
 
 let handler = async (m, { reply }) => {
   try {
+await conn.reply(m.chat, '⏳ Consultando la API de Freenom...', m);
+
     const data = await ping();
-    // Formatea la respuesta para enviar al chat
-    let text = `🟢 Freenom API Ping OK\n\n` +
-               `Resultado: ${data.result}\n` +
-               `Estado: ${data.status}\n` +
-               `Timestamp: ${data.timestamp}`;
+    let text = `🟢 *Freenom API Ping OK*\n\n` +
+               `📍 *Resultado:* ${data.result}\n` +
+               `📶 *Estado:* ${data.status}\n` +
+               `🕒 *Timestamp:* ${data.timestamp}`;
     await reply(text);
   } catch (error) {
-    let errMsg = typeof error === 'string' ? error : JSON.stringify(error, null, 2);
-    await reply(`🔴 Error al hacer ping a Freenom:\n${errMsg}`);
+    let errMsg = error?.message || JSON.stringify(error?.response?.data || error, null, 2);
+    await reply(`🔴 *Error al hacer ping a Freenom:*\n\`\`\`\n${errMsg}\n\`\`\``);
   }
 };
 
@@ -149,3 +156,13 @@ handler.tags = ['main'];
 handler.command = ['pingfreenom'];
 
 export default handler;
+
+// =======================
+// EXPORT OPCIONAL DE API
+// =======================
+export {
+  ping,
+  searchDomain,
+  registerDomain,
+  renewDomain
+};
