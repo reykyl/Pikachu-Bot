@@ -1,37 +1,37 @@
 let handler = async (m, { conn, args, usedPrefix, command }) => {
-return conn.reply(m.chat,`*"APIs desarrolladas por Deylin"*
+return conn.reply(m.chat,`*APIs desarrolladas por Deylin*
 
 [1]
-https://anime-xi-wheat.vercel.app/api/pinterest?q=
-> pinterest: buscador de imágenes en Pinterest.
+ https://anime-xi-wheat.vercel.app/api/pinterest?q=
+> Pinterest: Buscador de imágenes en Pinterest.
 
 [2]
-https://anime-xi-wheat.vercel.app/api/ia-img?prompt=
-> generador de imágenes con IA.
+ https://anime-xi-wheat.vercel.app/api/ia-img?prompt=
+> Generador de imágenes con IA.
 
 [3]
-https://g-mini-ia.vercel.app/api/gemini
-> IA gemini responde preguntas, analiza imágenes, genera imágenes.
+ https://g-mini-ia.vercel.app/api/gemini
+> Gemini IA: Responde preguntas, analiza imágenes y genera contenido visual.
 
 [4]
-https://mode-ia.onrender.com/mode-ia?prompt=
-> mode-ia inteligencia artificial para responder preguntas solo en texto.
+ https://mode-ia.onrender.com/mode-ia?prompt=
+> Mode-IA: Inteligencia artificial para responder preguntas en formato texto.
 
 [5]
-https://Ytumode-api.vercel.app/api/search?q=
-> busca contenido de YouTube.
+ https://ytumode-api.vercel.app/api/search?q=
+> Buscador de contenido en YouTube.
 
 [6]
-https://mode-api-sigma.vercel.app/api/mp3?url=
-> descarga audio de YouTube.
-> *clausurado*
+ https://mode-api-sigma.vercel.app/api/mp3?url=
+> Descarga de audio desde YouTube.
+*⚠️ Clausurado.*
 
 [7]
-https://mode-api-sigma.vercel.app/api/index?url=
-> descarga audio de YouTube.
-> *clausurado*
+ https://mode-api-sigma.vercel.app/api/index?url=
+> Descarga de audio desde YouTube.
+*⚠️ Clausurado.*
 
-Usa estas APIs con precaución evita el spam de solicitud en un determinado tiempo.
+*🔒 Nota:* Usa estas APIs con precaución. Evita hacer múltiples solicitudes en un corto período de tiempo para prevenir bloqueos o fallos del servicio.
 `, m, rcanal)};
 
 
