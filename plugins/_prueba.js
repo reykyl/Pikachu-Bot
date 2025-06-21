@@ -3,28 +3,26 @@ const axios = require('axios');
 const handler = async (m, { conn }) => {
   try {
     
-    await conn.reply(m.chat, '⏳ Consultando la API de Freenom...', m);
+    return conn.reply(m.chat, '⏳ Consultando la API de Freenom...', m).then(async () => {
+      const res = await axios.get('https://api.freenom.com/v2/service/ping');
+      const { timestamp, result, status } = res.data;
 
-    
-    const res = await axios.get('https://api.freenom.com/v2/service/ping');
-    const { timestamp, result, status } = res.data;
-
-    
-    const mensaje = `🛰️ *Freenom API Response:*
+      const mensaje = `🛰️ *Freenom API Response:*
 📅 *Timestamp:* ${timestamp}
 📍 *Resultado:* ${result}
 ✅ *Estado:* ${status}`;
 
-    await conn.reply(m.chat, mensaje, m);
+      return conn.reply(m.chat, mensaje, m);
+    });
   } catch (err) {
     console.error('[pingfreenom] Error:', err);
-    await conn.reply(m.chat, '❌ No se pudo conectar con la API de Freenom.', m);
+    return conn.reply(m.chat, '❌ No se pudo conectar con la API de Freenom.', m);
   }
 };
 
 handler.command = ['pingfreenom'];
 handler.help = ['pingfreenom'];
 handler.tags = ['internet'];
+handler.register = true;
 
-
-export default handler
+module.exports = handler;
