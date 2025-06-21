@@ -33,6 +33,7 @@ https://mode-api-sigma.vercel.app/api/index?url=
 
 Usa estas APIs con precaución evita el spam de solicitud en un determinado tiempo.
 `, m, rcanal);
+  };
 
 
 handler.command = ['api', 'apis', servicios]
