@@ -35,4 +35,4 @@ Usa estas APIs con precaución evita el spam de solicitud en un determinado tiem
 `, m, rcanal);
 
 
-Handler.comad = ['api', 'apis', servicios]
+handler.commad = ['api', 'apis', servicios]
