@@ -24,7 +24,7 @@ var handler = async (m, { conn, participants, usedPrefix, command }) => {
     }
 
     await conn.groupParticipantsUpdate(m.chat, [user], 'remove');
-    conn.reply(m.chat, `${pikachu} ¡Pika Pika! Usuario eliminado con un Impactrueno.`, m, rcanal);
+    //conn.reply(m.chat, `${pikachu} ¡Pika Pika! Usuario eliminado con un Impactrueno.`, m, rcanal);
 };
 
 handler.help = ['kick'];
