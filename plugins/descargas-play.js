@@ -1,4 +1,3 @@
-
 import fetch from "node-fetch";
 import yts from "yt-search";
 import axios from "axios";
@@ -8,7 +7,7 @@ let handler = async (m, { conn, args, command, text, usedPrefix }) => {
     throw `⚠️ Ingresa el título o enlace de YouTube.\n\n📌 Ejemplo:\n${usedPrefix + command} Yo Te Esperaré`;
   }
 
-  await conn.reply(m.chat, '🔎 *Buscando, espera un momento...*', m); 
+  await m.react('🔎');
 
   let url = '';
   if (text.includes("youtube.com") || text.includes("youtu.be")) {
@@ -21,36 +20,51 @@ let handler = async (m, { conn, args, command, text, usedPrefix }) => {
   }
 
   let api = '';
-  if (["play", "play2", "ytmp3", "yta"].includes(command)) {
+  const isAudio = ["play", "play2", "ytmp3", "yta"].includes(command);
+  if (isAudio) {
     api = `https://mode-api-sigma.vercel.app/api/mp3?url=${encodeURIComponent(url)}`;
   } else if (["ytmp4", "ytv"].includes(command)) {
     api = `https://mode-api-sigma.vercel.app/api/index?url=${encodeURIComponent(url)}`;
+  } else {
+    throw "❌ Comando no reconocido.";
   }
 
   try {
     const { data } = await axios.get(api);
 
     if (!data.status || !data.video || !data.video.url) {
-      throw "❌ No se pudo descargar el contenido.";
+      throw "❌ No se pudo obtener el contenido del video.";
     }
 
-    const { title, url: dlUrl } = data.video;
-    const isAudio = ["play", "play2", "ytmp3", "yta"].includes(command);
+    const { title, url: dlUrl, size } = data.video;
 
     await conn.sendMessage(m.chat, {
       document: { url: dlUrl },
       mimetype: isAudio ? "audio/mpeg" : "video/mp4",
-      fileName: `${title}.${isAudio ? 'mp3' : 'mp4'}`
+      fileName: `${title}.${isAudio ? "mp3" : "mp4"}`,
+      caption: `✅ *${title}*\n📦 *Tamaño:* ${size || 'desconocido'}\n📥 Descargado desde YouTube`,
+      contextInfo: {
+        externalAdReply: {
+          title: "Pikachu-Bot",
+          body: "Descargas rápidas desde YouTube",
+          thumbnailUrl: 'icono', 
+          sourceUrl: url,
+          mediaType: 1,
+          renderLargerThumbnail: true,
+          showAdAttribution: true
+        }
+      }
     }, { quoted: m });
 
   } catch (e) {
-    console.error("❌ Error al descargar:", e);
-    throw "❌ Ocurrió un error al procesar la descarga.";
+    console.error("❌ Error:", e);
+    return m.reply("❌ Ocurrió un error al procesar la descarga. Intenta nuevamente.");
   }
 };
 
 handler.command = handler.help = ["play", "play2", "ytmp3", "yta", "ytmp4", "ytv"];
 handler.tags = ["downloader"];
+handler.register = true;
 
 export default handler;
 
