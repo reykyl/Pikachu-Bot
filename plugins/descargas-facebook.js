@@ -18,7 +18,7 @@ const handler = async (m, { text, conn, args }) => {
     return conn.reply(m.chat, `${emojis} Pikachu no encontró nada... prueba con otro link.`, m, rcanal);
   }
 
-  // Buscar el mejor video o imagen
+  
   let data = result.find(i => i.url && i.url.endsWith('.mp4') && i.resolution === "720p (HD)") ||
              result.find(i => i.url && i.url.endsWith('.mp4') && i.resolution === "360p (SD)") ||
              result.find(i => i.url && i.url.endsWith('.jpg') || i.url.endsWith('.png'));
