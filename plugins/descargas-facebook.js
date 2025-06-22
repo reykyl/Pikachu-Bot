@@ -43,10 +43,7 @@ const handler = async (m, { text, conn, args }) => {
   let infoMsg = `
 ⚡─────『 𝑷𝒊𝒌𝒂𝒄𝒉𝒖 𝑩𝒐𝒕 ⚡️』─────⚡
 
-📌 *Título:* ${title}
 🎞️ *Resolución:* ${resolution}
-⏱️ *Duración:* ${duration}
-💾 *Tamaño:* ${size}
 🌐 *Origen:* Facebook
 🔗 *Enlace:* ${args[0]}
 
