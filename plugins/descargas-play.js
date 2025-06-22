@@ -26,7 +26,6 @@ let handler = async (m, { conn, args, command, text, usedPrefix }) => {
 
   try {
     const { data } = await axios.get(api);
-
     if (!data.status || !data.video || !data.video.url) {
       throw "❌ No se pudo obtener el contenido del video.";
     }
@@ -35,8 +34,15 @@ let handler = async (m, { conn, args, command, text, usedPrefix }) => {
     const title = data.video.title || "descarga";
     const size = data.video.size || "Desconocido";
 
+    // Descarga el archivo como buffer
+    const fileRes = await axios.get(dlUrl, {
+      responseType: 'arraybuffer',
+      headers: { 'User-Agent': 'okhttp/4.5.0' }
+    });
+    const fileBuffer = fileRes.data;
+
     await conn.sendMessage(m.chat, {
-      document: { url: dlUrl },
+      document: fileBuffer,
       mimetype: isAudio ? "audio/mpeg" : "video/mp4",
       fileName: `${title}.${isAudio ? "mp3" : "mp4"}`,
       caption: `✅ *${title}*\n📦 *Tamaño:* ${size}\n📥 Descargado desde YouTube`,
@@ -44,7 +50,7 @@ let handler = async (m, { conn, args, command, text, usedPrefix }) => {
         externalAdReply: {
           title: "Pikachu-Bot",
           body: "Descargas rápidas desde YouTube",
-          thumbnailUrl: icono, 
+          thumbnailUrl: icono,
           sourceUrl: ytUrl,
           mediaType: 1,
           renderLargerThumbnail: true,
@@ -54,7 +60,7 @@ let handler = async (m, { conn, args, command, text, usedPrefix }) => {
     }, { quoted: m });
 
   } catch (e) {
-    console.error("❌ Error al descargar:", e);
+    console.error("❌ Error al procesar descarga:", e);
     return m.reply("❌ Ocurrió un error al procesar la descarga. Intenta nuevamente.");
   }
 };
