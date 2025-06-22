@@ -31,6 +31,14 @@ return conn.reply(m.chat,`*APIs desarrolladas por Deylin*
 > Descarga de audio desde YouTube.
 *⚠️ Clausurado.*
 
+[8]
+https://g-mini-ia.vercel.app/api/meme
+> Buscador de memes aleatorios.
+
+[9]
+https://g-mini-ia.vercel.app/api/infonumero?numero=
+> Obten información de un número de teléfono como nombre del país y un emoji de su bandera usando en tagall y welcome.
+
 *🔒 Nota:* Usa estas APIs con precaución. Evita hacer múltiples solicitudes en un corto período de tiempo para prevenir bloqueos o fallos del servicio.
 `, m, fake)};
 
