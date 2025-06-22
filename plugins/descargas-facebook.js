@@ -18,17 +18,29 @@ const handler = async (m, { text, conn, args }) => {
     return conn.reply(m.chat, `${emojis} Pikachu no encontró nada... prueba con otro link.`, m, rcanal);
   }
 
-  let videoData = result.find(i => i.resolution?.includes("720p")) || result.find(i => i.resolution?.includes("360p"));
-  let imageData = result.filter(i => i.url && i.url.endsWith(".jpg") || i.url.endsWith(".png"));
+  let data;
+  try {
+    data = result.find(i => i.resolution === "720p (HD)") || result.find(i => i.resolution === "360p (SD)");
+  } catch (e) {
+    return conn.reply(m.chat, `${emojis} Pika... no se pudo procesar el video.`, m, rcanal);
+  }
 
-  // Si hay video, enviar el video
-  if (videoData) {
-    let {
-      title = "Desconocido",
-      resolution = videoData.resolution || "Sin datos",
-    } = videoData;
+  if (!data) {
+    return conn.reply(m.chat, `${emojis} No hay resolución compatible disponible.`, m, rcanal);
+  }
 
-    let infoMsg = `
+  let video = data.url;
+
+  // Información extendida (si está disponible)
+  let {
+    title = "Desconocido",
+    duration = "No disponible",
+    size = "Desconocido",
+    resolution = data.resolution || "Sin datos",
+    thumbnail
+  } = data;
+
+  let infoMsg = `
 ⚡─────『 𝑷𝒊𝒌𝒂𝒄𝒉𝒖 𝑩𝒐𝒕 ⚡️』─────⚡
 
 🎞️ *Resolución:* ${resolution}
@@ -39,36 +51,18 @@ const handler = async (m, { text, conn, args }) => {
 
 ─────────────────────────`.trim();
 
-    try {
-      await conn.sendMessage(m.chat, {
-        video: { url: videoData.url },
-        caption: infoMsg,
-        fileName: 'facebook_video.mp4',
-        mimetype: 'video/mp4'
-      }, { quoted: m });
+  try {
+    await conn.sendMessage(m.chat, {
+      video: { url: video },
+      caption: infoMsg,
+      fileName: 'facebook_video.mp4',
+      mimetype: 'video/mp4'
+    }, { quoted: m });
 
-      await m.react(done);
-    } catch (e) {
-      await m.react(error);
-      return conn.reply(m.chat, `${emojis} Pikachu se enredó con los cables... no se pudo enviar el video.`, m, rcanal);
-    }
-
-  } else if (imageData.length > 0) {
-    // Si hay imágenes, enviarlas como álbum
-    try {
-      const messages = imageData.map(img => ({
-        image: { url: img.url },
-        caption: `${emojis} Imagen de Facebook`,
-      }));
-
-      await conn.sendMessage(m.chat, messages, { quoted: m });
-      await m.react(done);
-    } catch (e) {
-      await m.react(error);
-      return conn.reply(m.chat, `${emojis} Pika... no pude enviar las imágenes.`, m, rcanal);
-    }
-  } else {
-    return conn.reply(m.chat, `${emojis} No se encontró ni video ni imágenes válidas.`, m, rcanal);
+    await m.react(done);
+  } catch (e) {
+    await m.react(error);
+    return conn.reply(m.chat, `${emojis} Pikachu se enredó con los cables... no se pudo enviar el video.`, m, rcanal);
   }
 };
 
