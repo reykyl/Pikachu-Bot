@@ -6,7 +6,7 @@ import axios from "axios";
 let handler = async (m, { conn, args, command, text, usedPrefix }) => {
   if (!text) throw `⚠️ Ingresa el título o enlace de YouTube.\n\n📌 Ejemplo:\n${usedPrefix + command} Yo Te Esperaré`;
 
-return conn.reply(m.chat,🔎 *buscando espera un momento..*`, m, rcanal);
+  await conn.reply(m.chat, '🔎 *Buscando, espera un momento...*', m); // Respuesta inicial
 
   let url = '';
   if (text.includes("youtube.com") || text.includes("youtu.be")) {
