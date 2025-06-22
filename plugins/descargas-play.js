@@ -9,25 +9,20 @@ let handler = async (m, { conn, args, command, text, usedPrefix }) => {
 
   await m.react('🔎');
 
-  let url = '';
+  let ytUrl = '';
   if (text.includes("youtube.com") || text.includes("youtu.be")) {
-    url = text;
+    ytUrl = text;
   } else {
-    let search = await yts(text);
-    let vid = search.videos[0];
+    const search = await yts(text);
+    const vid = search.videos[0];
     if (!vid) throw "❌ No se encontraron resultados.";
-    url = vid.url;
+    ytUrl = vid.url;
   }
 
-  let api = '';
   const isAudio = ["play", "play2", "ytmp3", "yta"].includes(command);
-  if (isAudio) {
-    api = `https://mode-api-sigma.vercel.app/api/mp3?url=${encodeURIComponent(url)}`;
-  } else if (["ytmp4", "ytv"].includes(command)) {
-    api = `https://mode-api-sigma.vercel.app/api/index?url=${encodeURIComponent(url)}`;
-  } else {
-    throw "❌ Comando no reconocido.";
-  }
+  const api = isAudio
+    ? `https://mode-api-sigma.vercel.app/api/mp3?url=${encodeURIComponent(ytUrl)}`
+    : `https://mode-api-sigma.vercel.app/api/index?url=${encodeURIComponent(ytUrl)}`;
 
   try {
     const { data } = await axios.get(api);
@@ -36,19 +31,21 @@ let handler = async (m, { conn, args, command, text, usedPrefix }) => {
       throw "❌ No se pudo obtener el contenido del video.";
     }
 
-    const { title, url: dlUrl, size } = data.video;
+    const dlUrl = data.video.url;
+    const title = data.video.title || "descarga";
+    const size = data.video.size || "Desconocido";
 
     await conn.sendMessage(m.chat, {
       document: { url: dlUrl },
       mimetype: isAudio ? "audio/mpeg" : "video/mp4",
       fileName: `${title}.${isAudio ? "mp3" : "mp4"}`,
-      caption: `✅ *${title}*\n📦 *Tamaño:* ${size || 'desconocido'}\n📥 Descargado desde YouTube`,
+      caption: `✅ *${title}*\n📦 *Tamaño:* ${size}\n📥 Descargado desde YouTube`,
       contextInfo: {
         externalAdReply: {
           title: "Pikachu-Bot",
           body: "Descargas rápidas desde YouTube",
-          thumbnailUrl: 'icono', 
-          sourceUrl: url,
+          thumbnailUrl: icono, 
+          sourceUrl: ytUrl,
           mediaType: 1,
           renderLargerThumbnail: true,
           showAdAttribution: true
@@ -57,7 +54,7 @@ let handler = async (m, { conn, args, command, text, usedPrefix }) => {
     }, { quoted: m });
 
   } catch (e) {
-    console.error("❌ Error:", e);
+    console.error("❌ Error al descargar:", e);
     return m.reply("❌ Ocurrió un error al procesar la descarga. Intenta nuevamente.");
   }
 };
