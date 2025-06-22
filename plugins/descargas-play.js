@@ -4,9 +4,11 @@ import yts from "yt-search";
 import axios from "axios";
 
 let handler = async (m, { conn, args, command, text, usedPrefix }) => {
-  if (!text) throw `⚠️ Ingresa el título o enlace de YouTube.\n\n📌 Ejemplo:\n${usedPrefix + command} Yo Te Esperaré`;
+  if (!text) {
+    throw `⚠️ Ingresa el título o enlace de YouTube.\n\n📌 Ejemplo:\n${usedPrefix + command} Yo Te Esperaré`;
+  }
 
-  await conn.reply(m.chat, '🔎 *Buscando, espera un momento...*', m); // Respuesta inicial
+  await conn.reply(m.chat, '🔎 *Buscando, espera un momento...*', m); 
 
   let url = '';
   if (text.includes("youtube.com") || text.includes("youtu.be")) {
@@ -20,33 +22,35 @@ let handler = async (m, { conn, args, command, text, usedPrefix }) => {
 
   let api = '';
   if (["play", "play2", "ytmp3", "yta"].includes(command)) {
-    api = `https://mode-api-sigma.vercel.app/api/mp3?url=${url}`;
+    api = `https://mode-api-sigma.vercel.app/api/mp3?url=${encodeURIComponent(url)}`;
   } else if (["ytmp4", "ytv"].includes(command)) {
-    api = `https://mode-api-sigma.vercel.app/api/index?url=${url}`;
+    api = `https://mode-api-sigma.vercel.app/api/index?url=${encodeURIComponent(url)}`;
   }
 
   try {
-    let { data } = await axios.get(api);
-    if (!data.status) throw "❌ No se pudo descargar el contenido.";
+    const { data } = await axios.get(api);
 
-    let { title, url: dlUrl } = data.video;
-    let isAudio = ["play", "play2", "ytmp3", "yta"].includes(command);
+    if (!data.status || !data.video || !data.video.url) {
+      throw "❌ No se pudo descargar el contenido.";
+    }
+
+    const { title, url: dlUrl } = data.video;
+    const isAudio = ["play", "play2", "ytmp3", "yta"].includes(command);
 
     await conn.sendMessage(m.chat, {
       document: { url: dlUrl },
       mimetype: isAudio ? "audio/mpeg" : "video/mp4",
-      fileName: title + (isAudio ? ".mp3" : ".mp4")
+      fileName: `${title}.${isAudio ? 'mp3' : 'mp4'}`
     }, { quoted: m });
 
   } catch (e) {
-    console.error(e);
+    console.error("❌ Error al descargar:", e);
     throw "❌ Ocurrió un error al procesar la descarga.";
   }
 };
 
 handler.command = handler.help = ["play", "play2", "ytmp3", "yta", "ytmp4", "ytv"];
 handler.tags = ["downloader"];
-
 
 export default handler;
 
