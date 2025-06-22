@@ -2,16 +2,10 @@ import fetch from 'node-fetch';
 
 let handler = async (m, { conn }) => {
   try {
-    const res = await fetch('https://g-mini-ia.vercel.app/api/meme');
-    if (!res.ok) throw await res.text();
-    
-    const json = await res.json();
-    if (!json.url) return m.reply('No se encontró un meme 😿');
-
-    await conn.sendMessage(m.chat, {
-      image: { url: json.url },
-      caption: `🧠 *${json.title}*\n\n📤 *Subreddit:* ${json.subreddit}\n🧑 *Autor:* ${json.autor}\n👍 *Upvotes:* ${json.subidas}\n🔗 *Link:* ${json.postLink}`
-    }, { quoted: m });
+    let res = await fetch('https://tu-app.vercel.app/api/meme')
+let json = await res.json()
+let meme = json.url
+conn.sendFile(m.chat, meme, 'meme.jpg', 'Aquí tienes un meme 😄', m)
 
   } catch (e) {
     console.error('[ERROR MEME]', e);
