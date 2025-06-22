@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 
 let handler = async (m, { conn }) => {
   try {
-    const res = await fetch('https://tu-app.vercel.app/api/meme'); // Reemplaza por tu URL real
+    const res = await fetch('https://g-mini-ia.vercel.app/api/meme'); 
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     
     const json = await res.json();
