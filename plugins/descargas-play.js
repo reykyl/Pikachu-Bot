@@ -1,3 +1,59 @@
+
+import fetch from "node-fetch";
+import yts from "yt-search";
+import axios from "axios";
+
+let handler = async (m, { conn, args, command, text, usedPrefix }) => {
+  if (!text) throw `⚠️ Ingresa el título o enlace de YouTube.\n\n📌 Ejemplo:\n${usedPrefix + command} Yo Te Esperaré`;
+
+return conn.reply(m.chat,🔎 *buscando espera un momento..*`, m, rcanal);
+
+  let url = '';
+  if (text.includes("youtube.com") || text.includes("youtu.be")) {
+    url = text;
+  } else {
+    let search = await yts(text);
+    let vid = search.videos[0];
+    if (!vid) throw "❌ No se encontraron resultados.";
+    url = vid.url;
+  }
+
+  let api = '';
+  if (["play", "play2", "ytmp3", "yta"].includes(command)) {
+    api = `https://mode-api-sigma.vercel.app/api/mp3?url=${url}`;
+  } else if (["ytmp4", "ytv"].includes(command)) {
+    api = `https://mode-api-sigma.vercel.app/api/index?url=${url}`;
+  }
+
+  try {
+    let { data } = await axios.get(api);
+    if (!data.status) throw "❌ No se pudo descargar el contenido.";
+
+    let { title, url: dlUrl } = data.video;
+    let isAudio = ["play", "play2", "ytmp3", "yta"].includes(command);
+
+    await conn.sendMessage(m.chat, {
+      document: { url: dlUrl },
+      mimetype: isAudio ? "audio/mpeg" : "video/mp4",
+      fileName: title + (isAudio ? ".mp3" : ".mp4")
+    }, { quoted: m });
+
+  } catch (e) {
+    console.error(e);
+    throw "❌ Ocurrió un error al procesar la descarga.";
+  }
+};
+
+handler.command = handler.help = ["play", "play2", "ytmp3", "yta", "ytmp4", "ytv"];
+handler.tags = ["downloader"];
+handler.limit = 2;
+handler.premium = false;
+
+export default handler;
+
+
+
+
 // editado y reestructurado por 
 // https://github.com/deylin-eliac 
 
@@ -5,7 +61,7 @@ import fetch from "node-fetch";
 import yts from "yt-search";
 import axios from "axios";
 
-const formatAudio = ["mp3", "m4a", "webm", "acc", "flac", "opus", "ogg", "wav"];
+/*const formatAudio = ["mp3", "m4a", "webm", "acc", "flac", "opus", "ogg", "wav"];
 const formatVideo = ["360", "480", "720", "1080", "1440", "4k"];
 
 const ddownr = {
@@ -203,4 +259,4 @@ function formatViews(views) {
   return views >= 1000
     ? (views / 1000).toFixed(1) + "k (" + views.toLocaleString() + ")"
     : views.toString();
-}
+}*/
