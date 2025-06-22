@@ -1,3 +1,9 @@
+/*codigo y API desarrollo por Deylin 
+https://github.com/deylin-eliac
+no quites créditos y no modifiques el código*/
+
+
+
 import fetch from 'node-fetch'
 import { downloadContentFromMessage } from '@whiskeysockets/baileys'
 
