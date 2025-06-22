@@ -110,6 +110,9 @@ global.fake = { contextInfo: { isForwarded: true, forwardedNewsletterMessageInfo
 
 global.icono = [ 
 'https://kirito-bot-md.vercel.app/IMG-20250606-WA0167.jpg',
+'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/pika.jpg',
+'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/pikay.jpg',
+'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/pikachu.jpg',
 'https://kirito-bot-md.vercel.app/catalogo.jpg'
 ].getRandom()
 
