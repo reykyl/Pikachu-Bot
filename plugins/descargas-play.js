@@ -64,16 +64,6 @@ const ddownr = {
 const handler = async (m, { conn, text, usedPrefix, command }) => {
   await m.react('⚡️');
 
-  let ytUrl = '';
-  if (text.includes("youtube.com") || text.includes("youtu.be")) {
-    ytUrl = text;
-  } else {
-    const search = await yts(text);
-    const vid = search.videos[0];
-    if (!vid) throw "❌ No se encontraron resultados.";
-    ytUrl = vid.url;
-  }
-
   if (!text.trim()) {
     return conn.reply(m.chat, "*Ｏ(≧∇≦)Ｏ🧃* *Pikachu-Bot* | Dime el nombre de la canción que estás buscando, ¡Pika!", m, rcanal);
   }
