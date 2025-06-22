@@ -1,6 +1,3 @@
-
-
-
 const handler = async (m, { conn }) => {
 return conn.reply(m.chat, `hola`, m, rcanal)};
 
