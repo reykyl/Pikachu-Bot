@@ -18,20 +18,18 @@ const handler = async (m, { text, conn, args }) => {
     return conn.reply(m.chat, `${emojis} Pikachu no encontró nada... prueba con otro link.`, m, rcanal);
   }
 
-  let data;
-  try {
-    data = result.find(i => i.resolution === "720p (HD)") || result.find(i => i.resolution === "360p (SD)");
-  } catch (e) {
-    return conn.reply(m.chat, `${emojis} Pika... no se pudo procesar el video.`, m, rcanal);
-  }
+  // Buscar el mejor video o imagen
+  let data = result.find(i => i.url && i.url.endsWith('.mp4') && i.resolution === "720p (HD)") ||
+             result.find(i => i.url && i.url.endsWith('.mp4') && i.resolution === "360p (SD)") ||
+             result.find(i => i.url && i.url.endsWith('.jpg') || i.url.endsWith('.png'));
 
   if (!data) {
-    return conn.reply(m.chat, `${emojis} No hay resolución compatible disponible.`, m, rcanal);
+    return conn.reply(m.chat, `${emojis} No se encontró contenido multimedia compatible (video o imagen).`, m, rcanal);
   }
 
-  let video = data.url;
+  const isVideo = data.url.endsWith('.mp4');
+  const isImage = data.url.endsWith('.jpg') || data.url.endsWith('.png');
 
-  // Información extendida (si está disponible)
   let {
     title = "Desconocido",
     duration = "No disponible",
@@ -47,22 +45,29 @@ const handler = async (m, { text, conn, args }) => {
 🌐 *Origen:* Facebook
 🔗 *Enlace:* ${args[0]}
 
-💛 ¡Pika-Pika! Aquí tienes tu video listo para ver y compartir. ¡Disfrútalo!
+💛 ¡Pika-Pika! Aquí tienes tu archivo multimedia. ¡Disfrútalo!
 
 ─────────────────────────`.trim();
 
   try {
-    await conn.sendMessage(m.chat, {
-      video: { url: video },
-      caption: infoMsg,
-      fileName: 'facebook_video.mp4',
-      mimetype: 'video/mp4'
-    }, { quoted: m });
+    if (isVideo) {
+      await conn.sendMessage(m.chat, {
+        video: { url: data.url },
+        caption: infoMsg,
+        fileName: 'facebook_video.mp4',
+        mimetype: 'video/mp4'
+      }, { quoted: m });
+    } else if (isImage) {
+      await conn.sendMessage(m.chat, {
+        image: { url: data.url },
+        caption: infoMsg
+      }, { quoted: m });
+    }
 
     await m.react(done);
   } catch (e) {
     await m.react(error);
-    return conn.reply(m.chat, `${emojis} Pikachu se enredó con los cables... no se pudo enviar el video.`, m, rcanal);
+    return conn.reply(m.chat, `${emojis} Pikachu se enredó con los cables... no se pudo enviar el contenido.`, m, rcanal);
   }
 };
 
