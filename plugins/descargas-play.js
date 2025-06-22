@@ -1,83 +1,7 @@
-import fetch from "node-fetch";
-import yts from "yt-search";
-import axios from "axios";
-
-let handler = async (m, { conn, args, command, text, usedPrefix }) => {
-  if (!text) {
-    throw `⚠️ Ingresa el título o enlace de YouTube.\n\n📌 Ejemplo:\n${usedPrefix + command} Yo Te Esperaré`;
-  }
-
-  await m.react('🔎');
-
-  let ytUrl = '';
-  if (text.includes("youtube.com") || text.includes("youtu.be")) {
-    ytUrl = text;
-  } else {
-    const search = await yts(text);
-    const vid = search.videos[0];
-    if (!vid) throw "❌ No se encontraron resultados.";
-    ytUrl = vid.url;
-  }
-
-  const isAudio = ["play", "play2", "ytmp3", "yta"].includes(command);
-  const api = isAudio
-    ? `https://mode-api-sigma.vercel.app/api/mp3?url=${encodeURIComponent(ytUrl)}`
-    : `https://mode-api-sigma.vercel.app/api/index?url=${encodeURIComponent(ytUrl)}`;
-
-  try {
-    const { data } = await axios.get(api);
-    if (!data.status || !data.video || !data.video.url) {
-      throw "❌ No se pudo obtener el contenido del video.";
-    }
-
-    const dlUrl = data.video.url;
-    const title = data.video.title || "descarga";
-    const size = data.video.size || "Desconocido";
-
-    // Descarga el archivo como buffer
-    const fileRes = await axios.get(dlUrl, {
-      responseType: 'arraybuffer',
-      headers: { 'User-Agent': 'okhttp/4.5.0' }
-    });
-    const fileBuffer = fileRes.data;
-
-    await conn.sendMessage(m.chat, {
-      document: fileBuffer,
-      mimetype: isAudio ? "audio/mpeg" : "video/mp4",
-      fileName: `${title}.${isAudio ? "mp3" : "mp4"}`,
-      caption: `✅ *${title}*\n📦 *Tamaño:* ${size}\n📥 Descargado desde YouTube`,
-      contextInfo: {
-        externalAdReply: {
-          title: "Pikachu-Bot",
-          body: "Descargas rápidas desde YouTube",
-          thumbnailUrl: icono,
-          sourceUrl: ytUrl,
-          mediaType: 1,
-          renderLargerThumbnail: true,
-          showAdAttribution: true
-        }
-      }
-    }, { quoted: m });
-
-  } catch (e) {
-    console.error("❌ Error al procesar descarga:", e);
-    return m.reply("❌ Ocurrió un error al procesar la descarga. Intenta nuevamente.");
-  }
-};
-
-handler.command = handler.help = ["play", "play2", "ytmp3", "yta", "ytmp4", "ytv"];
-handler.tags = ["downloader"];
-handler.register = true;
-
-export default handler;
-
-
-
-
 // editado y reestructurado por 
 // https://github.com/deylin-eliac 
 
-/*import fetch from "node-fetch";
+import fetch from "node-fetch";
 import yts from "yt-search";
 import axios from "axios";
 
@@ -279,4 +203,4 @@ function formatViews(views) {
   return views >= 1000
     ? (views / 1000).toFixed(1) + "k (" + views.toLocaleString() + ")"
     : views.toString();
-}*/
+}
