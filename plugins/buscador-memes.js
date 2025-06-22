@@ -2,11 +2,15 @@ import fetch from 'node-fetch';
 
 let handler = async (m, { conn }) => {
   try {
-    let res = await fetch('https://tu-app.vercel.app/api/meme')
-let json = await res.json()
-let meme = json.url
-conn.sendFile(m.chat, meme, 'meme.jpg', 'Aquí tienes un meme 😄', m)
+    const res = await fetch('https://tu-app.vercel.app/api/meme'); // Reemplaza por tu URL real
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    
+    const json = await res.json();
+    const meme = json.url;
 
+    if (!meme) throw new Error('No se encontró la URL del meme');
+
+    await conn.sendFile(m.chat, meme, 'meme.jpg', 'Aquí tienes un meme 😄', m);
   } catch (e) {
     console.error('[ERROR MEME]', e);
     m.reply('😿 Ocurrió un error al obtener el meme.');
