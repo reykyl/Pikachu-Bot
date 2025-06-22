@@ -1,6 +1,6 @@
 const handler = async (m, { conn }) => {
-    const userId = m.mentionedJid?.[0] || m.sender
-return conn.reply(m.chat, `hola @${userId.split('@')[0]} ${global.saludo}`, m)};
+      const taguser = `@${who.split("@")[0]}`;
+return conn.reply(m.chat, `hola ${taguser} ${global.saludo}`, m)};
 
 handler.command = ['hola'];
 
