@@ -37,7 +37,7 @@ case isCommand1:
   }
 
   try {
-    fs.rmdir(`./${jadi}/` + uniqid, { recursive: true, force: true })
+    fs.rm(`./${jadi}/` + uniqid, { recursive: true, force: true })
     await conn.sendMessage(m.chat, { text : `🗑️ Sesión eliminada correctamente.` }, { quoted: m })
   } catch (e) {
     reportError(e)
