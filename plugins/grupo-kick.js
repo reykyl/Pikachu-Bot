@@ -3,7 +3,7 @@ var handler = async (m, { conn, participants, usedPrefix, command }) => {
     const sadchu = 'Ｏ(≧∇≦)Ｏ🧃';
 
     if (!m.mentionedJid[0] && !m.quoted) {
-        return conn.reply(m.chat, `${pikachu} ¡Pika Pika! Debes mencionar a alguien para expulsarlo del grupo.`, m, rcanal);
+        return conn.reply(m.chat, `${pikachu} ¡Pika Pika! Debes mencionar a alguien para expulsarlo del grupo.`, m, fake);
     }
 
     let user = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted.sender;
@@ -12,19 +12,19 @@ var handler = async (m, { conn, participants, usedPrefix, command }) => {
     const ownerBot = global.owner[0][0] + '@s.whatsapp.net';
 
     if (user === conn.user.jid) {
-        return conn.reply(m.chat, `${sadchu} ¡Pika! No puedo eliminarme a mí mismo.`, m, rcanal);
+        return conn.reply(m.chat, `${sadchu} ¡Pika! No puedo eliminarme a mí mismo.`, m, fake);
     }
 
     if (user === ownerGroup) {
-        return conn.reply(m.chat, `${sadchu} ¡Pikachu no se mete con el líder del grupo!`, m, rcanal);
+        return conn.reply(m.chat, `${sadchu} ¡Pikachu no se mete con el líder del grupo!`, m, fake);
     }
 
     if (user === ownerBot) {
-        return conn.reply(m.chat, `${sadchu} ¡Ese es mi entrenador! No puedo hacer eso.`, m, rcanal);
+        return conn.reply(m.chat, `${sadchu} ¡Ese es mi entrenador! No puedo hacer eso.`, m, fake);
     }
 
     await conn.groupParticipantsUpdate(m.chat, [user], 'remove');
-    //conn.reply(m.chat, `${pikachu} ¡Pika Pika! Usuario eliminado con un Impactrueno.`, m, rcanal);
+    //conn.reply(m.chat, `${pikachu} ¡Pika Pika! Usuario eliminado con un Impactrueno.`, m, fake);
 };
 
 handler.help = ['kick'];
