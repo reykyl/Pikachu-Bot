@@ -18,7 +18,7 @@ let handler = async (m, { conn }) => {
 ╰━━━━━━━━━━━━━━━━━━━━━━━╯
 `.trim();
 
-    conn.reply(m.chat, pikachuPing, m, fkontak, fake);
+    conn.reply(m.chat, pikachuPing, fkontak, fake);
   });
 }
 
