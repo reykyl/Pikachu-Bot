@@ -1,7 +1,7 @@
 import fetch from 'node-fetch'
 
 var handler = async (m, { text, usedPrefix, command }) => {
-  if (!text) return conn.reply(m.chat, `${emoji} Ingrese una petición para que Mode IA lo responda.`, m, rcanal)
+  if (!text) return conn.reply(m.chat, `${emojis} Ingrese una petición para que Mode IA lo responda.`, m, rcanal)
   try {
     await m.react('🌟')
     conn.sendPresenceUpdate('composing', m.chat)
@@ -13,7 +13,7 @@ var handler = async (m, { text, usedPrefix, command }) => {
     await m.reply(data.response.trim())
   } catch (e) {
     await m.react('⚡️')
-    await conn.reply(m.chat, `${emoji} Mode IA no puede responder a esa pregunta.`, m, rcanal)
+    await conn.reply(m.chat, `${emojis} Mode IA no puede responder a esa pregunta.`, m, rcanal)
   }
 }
 
