@@ -5,7 +5,7 @@ let handler = async (m, { conn }) => {
     const res = await fetch('https://g-mini-ia.vercel.app/api/meme'); 
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-    const memeurl = json.url;
+    const url = url;
     const json = await res.json();
     const meme = json.url;
 
