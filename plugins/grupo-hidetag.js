@@ -10,7 +10,7 @@ import * as fs from 'fs'
 var handler = async (m, { conn, text, participants, isOwner, isAdmin }) => {
 
 
-  //if (!m.quoted && !text) return conn.reply(m.chat, `⚡ Debes enviar un texto para hacer un tag.`, m, rcanal);
+  //if (!m.quoted && !text) return conn.reply(m.chat, `⚡ Debes enviar un texto para hacer un tag.`, m, fake);
 
   try { 
     let users = participants.map(u => conn.decodeJid(u.id)) 
