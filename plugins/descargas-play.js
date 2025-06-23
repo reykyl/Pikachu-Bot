@@ -6,66 +6,46 @@ import yts from "yt-search";
 import axios from "axios";
 
 const formatAudio = ["mp3", "m4a", "webm", "acc", "flac", "opus", "ogg", "wav"];
-const formatVideo = ["360", "480", "720", "1080", "1440", "4k"];
 
 const ddownr = {
   download: async (url, format) => {
-    if (!formatAudio.includes(format) && !formatVideo.includes(format)) {
-      throw new Error("⚠️ Pika Pika~ Ese formato no es compatible.");
-    }
+    if (!formatAudio.includes(format)) throw new Error("⚠️ Pika Pika~ Ese formato no es compatible.");
 
-    const config = {
-      method: "GET",
-      url: `https://p.oceansaver.in/ajax/download.php?format=${format}&url=${encodeURIComponent(url)}&api=dfcb6d76f2f6a9894gjkege8a4ab232222`,
-      headers: {
-        "User-Agent": "Mozilla/5.0"
-      }
-    };
-
-    const { data } = await axios.request(config);
+    const { data } = await axios.get(`https://p.oceansaver.in/ajax/download.php?format=${format}&url=${encodeURIComponent(url)}&api=dfcb6d76f2f6a9894gjkege8a4ab232222`);
     if (!data?.success) throw new Error("⛔ Pikachu no pudo encontrar los detalles del video.");
 
     const downloadUrl = await ddownr.cekProgress(data.id);
-    return { id: data.id, title: data.title, image: data.info.image, downloadUrl };
+    return { title: data.title, image: data.info.image, downloadUrl };
   },
 
   cekProgress: async (id) => {
     const url = `https://p.oceansaver.in/ajax/progress.php?id=${id}`;
-    const headers = { "User-Agent": "Mozilla/5.0" };
-
     for (let i = 0; i < 6; i++) {
-      const { data } = await axios.get(url, { headers });
+      const { data } = await axios.get(url);
       if (data?.success && data.progress === 1000) return data.download_url;
-      await new Promise(res => setTimeout(res, 1200));
+      await new Promise(res => setTimeout(res, 800)); // 🔥 Menos espera
     }
-
     throw new Error("❌ Pikachu se cansó de esperar el enlace de descarga.");
   }
 };
 
 const handler = async (m, { conn, text, usedPrefix, command }) => {
   await m.react('⚡️');
-
-  if (!text.trim()) {
-    return conn.reply(m.chat, "*Ｏ(≧∇≦)Ｏ🧃* *Pikachu-Bot* | Dime el nombre de la canción que estás buscando, ¡Pika!", m, rcanal);
-  }
+  if (!text.trim()) return conn.reply(m.chat, "*Ｏ(≧∇≦)Ｏ🧃* *Pikachu-Bot* | Dime el nombre de la canción que estás buscando, ¡Pika!", m, rcanal);
 
   try {
     const search = await yts(text);
-    if (!search.all.length) {
-      return m.reply("*(>_<)🧃* Pikachu no encontró nada con ese nombre...");
-    }
+    if (!search.all.length) return m.reply("*(>_<)🧃* Pikachu no encontró nada con ese nombre...");
 
-    const videoInfo = search.all[0];
-    const { title, thumbnail, timestamp, views, ago, url } = videoInfo;
+    const vid = search.all[0];
+    const { title, url, views, ago, timestamp, thumbnail } = vid;
     const vistas = formatViews(views);
-    const thumb = (await conn.getFile(thumbnail))?.data;
 
-    const infoMessage = `⚡🐭 
+    const info = `⚡🐭 
               \`Pikachu-Bot - Descargas Pokémon\`
 *🎵 Título:* ${title}
 > 🎬 *Duración:* ${timestamp}
-> 🎤 *Canal:* ${(videoInfo.author?.name) || "Desconocido"}
+> 🎤 *Canal:* ${vid.author?.name || "Desconocido"}
 > 👀 *Vistas:* ${vistas}
 > 📅 *Publicado:* ${ago}
 > 🔗 *Enlace:* ${url}`;
@@ -79,42 +59,38 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
           previewType: 0,
           mediaUrl: url,
           sourceUrl: url,
-          thumbnail: thumb,
+          thumbnail: thumbnail,
           renderLargerThumbnail: true
         }
       }
     };
 
     await m.react('🎧');
-    await conn.reply(m.chat, infoMessage, m, JT);
+    await conn.reply(m.chat, info, m, JT);
 
-    // Audio (play/yta/ytmp3)
+    // Audio rápido y directo
     if (["play", "yta", "ytmp3"].includes(command)) {
       const api = await ddownr.download(url, "mp3");
 
-      const doc = {
-        audio: { url: api.downloadUrl },
+      // ✅ usa sendFile para enviar directo (más rápido que sendMessage)
+      return conn.sendFile(m.chat, api.downloadUrl, `${title}.mp3`, null, m, false, {
         mimetype: 'audio/mpeg',
         fileName: `${title}.mp3`,
         contextInfo: {
-          externalAdReply: { 
-            showAdAttribution: true, 
-            title: packname, 
-            body: dev, 
-            mediaUrl: null, 
-            description: null, 
-            thumbnailUrl: icono, 
-            sourceUrl: redes, 
-            mediaType: 1, 
+          externalAdReply: {
+            showAdAttribution: true,
+            title: packname,
+            body: dev,
+            thumbnailUrl: icono,
+            sourceUrl: redes,
+            mediaType: 1,
             renderLargerThumbnail: false,
           }
         }
-      };
-
-      return await conn.sendMessage(m.chat, doc, { quoted: m });
+      });
     }
 
-    // Video (play2/ytv/ytmp4)
+    // Video (igual de rápido que antes)
     if (["play2", "ytv", "ytmp4"].includes(command)) {
       const sources = [
         `https://api.siputzx.my.id/api/d/ytmp4?url=${url}`,
@@ -135,19 +111,17 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
       try {
         const downloadUrl = await getValidVideo();
 
-        await conn.sendMessage(m.chat, {
+        return conn.sendMessage(m.chat, {
           video: { url: downloadUrl },
           fileName: `${title}.mp4`,
           mimetype: "video/mp4",
           caption: "🎬 Aquí tienes tu video, descargado por *Pikachu-Bot MD* ⚡",
-          thumbnail: thumb,
+          thumbnail: await (await conn.getFile(thumbnail)).data,
           contextInfo: {
             externalAdReply: { 
               showAdAttribution: true, 
               title: packname, 
               body: dev, 
-              mediaUrl: null, 
-              description: null, 
               previewType: "PHOTO", 
               thumbnailUrl: icono, 
               sourceUrl: redes, 
