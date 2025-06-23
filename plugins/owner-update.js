@@ -2,14 +2,14 @@ import { execSync } from 'child_process';
 
 let handler = async (m, { conn, args }) => { 
     try { 
-        await conn.reply(m.chat, '⚡ Actualizando el bot, por favor espere...', m, rcanal);
+        //await conn.reply(m.chat, '⚡ Actualizando el bot, por favor espere...', m, fake);
 
         const output = execSync('git pull' + (args.length ? ' ' + args.join(' ') : '')).toString();
         let response = output.includes('Already up to date') 
             ? '🧃 El bot ya está actualizado.' 
             : `🧃 Se han aplicado actualizaciones:\n\n${output}`;
 
-        await conn.reply(m.chat, response, m, rcanal);
+        await conn.reply(m.chat, response, m, fake);
 
     } catch (error) { 
         try { 
@@ -33,7 +33,7 @@ let handler = async (m, { conn, args }) => {
             console.error(statusError); 
         }
 
-        await conn.reply(m.chat, `❌ Error al actualizar: ${error.message || 'Error desconocido.'}`, m, rcanal);
+        await conn.reply(m.chat, `❌ Error al actualizar: ${error.message || 'Error desconocido.'}`, m, fake);
     } 
 };
 
