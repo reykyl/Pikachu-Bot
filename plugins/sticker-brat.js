@@ -22,7 +22,7 @@ const fetchSticker = async (text, attempt = 1) => {
 
 let handler = async (m, { conn, text, command, usedPrefix }) => {
     if (!text) {
-        return conn.reply(m.chat, `${emojis} *Uso incorrecto del comando.*\n\n*Ejemplo:*  ${usedPrefix + command} ${botname}`, m, rcanal);
+        return conn.reply(m.chat, `${emojis} *Uso incorrecto del comando.*\n\n*Ejemplo:*  ${usedPrefix + command} ${botname}`, m, fake);
     }
 
     try {
