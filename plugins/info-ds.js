@@ -26,11 +26,11 @@ if (filesDeleted === 0) {
 await conn.reply(m.chat, `${emoji2} No se encontró ningún archivo que incluya la ID del chat.`, m, rcanal);
 } else {
 await conn.reply(m.chat, `${emoji2} Se eliminaron ${filesDeleted} archivos de sesión.`, m, rcanal);
-conn.reply(m.chat, `${emoji} ¡Hola! ¿logras verme?`, m, rcanal);
+conn.reply(m.chat, `${emojis} ¡Hola! ¿logras verme?`, m, rcanal);
 }
 } catch (err) {
 console.error('Error al leer la carpeta o los archivos de sesión:', err)
-await conn.reply(m.chat, `${emoji} Hola Soy ${botname} Sigue El Canal y apoyanos porfavor.\n\n> ${channel}`, m, rcanal);
+await conn.reply(m.chat, `${emojis} Hola Soy ${botname} Sigue El Canal y apoyanos porfavor.\n\n> ${channel}`, m, rcanal);
 }
 
 }
