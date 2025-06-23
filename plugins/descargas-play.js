@@ -1,5 +1,5 @@
-// editado y reestructurado por 
-// https://github.com/deylin-eliac 
+// editado y optimizado por 
+// https://github.com/deylin-eliac
 
 import fetch from "node-fetch";
 import yts from "yt-search";
@@ -77,7 +77,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
     await m.react('🎧');
     await conn.reply(m.chat, info, m, JT);
 
-    // Audio (play/yta/ytmp3)
+    // Audio
     if (["play", "yta", "ytmp3"].includes(command)) {
       const api = await ddownr.download(url, "mp3");
 
@@ -98,7 +98,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
       });
     }
 
-    // Video (play2/ytv/ytmp4)
+    // Video
     if (["play2", "ytv", "ytmp4"].includes(command)) {
       const sources = [
         `https://api.siputzx.my.id/api/d/ytmp4?url=${url}`,
@@ -108,40 +108,42 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
       ];
 
       const getValidVideo = async () => {
-        const results = sources.map(async (src) => {
-          const res = await fetch(src);
-          const json = await res.json();
-          return json?.data?.dl || json?.result?.download?.url || json?.downloads?.url || json?.data?.download?.url;
-        });
-        return await Promise.any(results);
+        const fetchWithTimeout = async (src, timeout = 5000) => {
+          return Promise.race([
+            fetch(src).then(res => res.ok ? res.json() : null),
+            new Promise(resolve => setTimeout(() => resolve(null), timeout))
+          ]);
+        };
+
+        for (const src of sources) {
+          const json = await fetchWithTimeout(src);
+          const dl = json?.data?.dl || json?.result?.download?.url || json?.downloads?.url || json?.data?.download?.url;
+          if (dl) return dl;
+        }
+        throw new Error("❌ Pikachu no encontró enlaces de video válidos.");
       };
 
-      try {
-        const downloadUrl = await getValidVideo();
+      const videoUrl = await getValidVideo();
 
-        return conn.sendMessage(m.chat, {
-          video: { url: downloadUrl },
-          fileName: `${title}.mp4`,
-          mimetype: "video/mp4",
-          caption: "🎬 Aquí tienes tu video, descargado por *Pikachu-Bot MD* ⚡",
-          thumbnail: await (await conn.getFile(thumbnail)).data,
-          contextInfo: {
-            externalAdReply: { 
-              showAdAttribution: true, 
-              title: packname, 
-              body: dev, 
-              previewType: "PHOTO", 
-              thumbnailUrl: icono, 
-              sourceUrl: redes, 
-              mediaType: 1, 
-              renderLargerThumbnail: false 
-            }
+      return conn.sendMessage(m.chat, {
+        video: { url: videoUrl },
+        fileName: `${title}.mp4`,
+        mimetype: "video/mp4",
+        caption: "🎬 Aquí tienes tu video, descargado por *Pikachu-Bot MD* ⚡",
+        thumbnail: await (await conn.getFile(thumbnail)).data,
+        contextInfo: {
+          externalAdReply: { 
+            showAdAttribution: true, 
+            title: packname, 
+            body: dev, 
+            previewType: "PHOTO", 
+            thumbnailUrl: icono, 
+            sourceUrl: redes, 
+            mediaType: 1, 
+            renderLargerThumbnail: false 
           }
-        }, { quoted: m });
-
-      } catch {
-        return m.reply("❌ Pikachu no pudo encontrar un enlace válido para descargar.");
-      }
+        }
+      }, { quoted: m });
     }
 
   } catch (error) {
