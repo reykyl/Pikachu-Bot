@@ -48,7 +48,7 @@ let handler = async (m, { conn }) => {
     const totalreg = Object.keys(global.db.data.users).length
     const uptime = clockString(process.uptime() * 1000)
 
-    const users = [...new Set((global.conns || []).filter(conn => conn.user && conn.ws?.socket?.readyState !== ws.CLOSED))]
+      const users = [...new Set([...global.conns.filter((conn) => conn.user && conn.ws.socket && conn.ws.socket.readyState !== ws.CLOSED).map((conn) => conn)])];
 
     const { exp, level } = user
     const { min, xp, max } = xpRange(level, global.multiplier)
