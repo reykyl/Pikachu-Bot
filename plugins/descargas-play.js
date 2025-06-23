@@ -6,24 +6,33 @@ import yts from "yt-search";
 import axios from "axios";
 
 const formatAudio = ["mp3", "m4a", "webm", "acc", "flac", "opus", "ogg", "wav"];
+const formatVideo = ["360", "480", "720", "1080", "1440", "4k"];
 
 const ddownr = {
   download: async (url, format) => {
-    if (!formatAudio.includes(format)) throw new Error("⚠️ Pika Pika~ Ese formato no es compatible.");
+    if (!formatAudio.includes(format) && !formatVideo.includes(format)) {
+      throw new Error("⚠️ Pika Pika~ Ese formato no es compatible.");
+    }
 
-    const { data } = await axios.get(`https://p.oceansaver.in/ajax/download.php?format=${format}&url=${encodeURIComponent(url)}&api=dfcb6d76f2f6a9894gjkege8a4ab232222`);
+    const { data } = await axios.get(`https://p.oceansaver.in/ajax/download.php?format=${format}&url=${encodeURIComponent(url)}&api=dfcb6d76f2f6a9894gjkege8a4ab232222`, {
+      headers: { "User-Agent": "Mozilla/5.0" },
+      responseType: 'json'
+    });
+
     if (!data?.success) throw new Error("⛔ Pikachu no pudo encontrar los detalles del video.");
-
     const downloadUrl = await ddownr.cekProgress(data.id);
-    return { title: data.title, image: data.info.image, downloadUrl };
+    return { id: data.id, title: data.title, image: data.info.image, downloadUrl };
   },
 
   cekProgress: async (id) => {
     const url = `https://p.oceansaver.in/ajax/progress.php?id=${id}`;
     for (let i = 0; i < 6; i++) {
-      const { data } = await axios.get(url);
+      const { data } = await axios.get(url, {
+        headers: { "User-Agent": "Mozilla/5.0" },
+        responseType: 'json'
+      });
       if (data?.success && data.progress === 1000) return data.download_url;
-      await new Promise(res => setTimeout(res, 800)); 
+      await new Promise(res => setTimeout(res, 800));
     }
     throw new Error("❌ Pikachu se cansó de esperar el enlace de descarga.");
   }
@@ -68,11 +77,10 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
     await m.react('🎧');
     await conn.reply(m.chat, info, m, JT);
 
-    // Audio rápido y directo
+    // Audio (play/yta/ytmp3)
     if (["play", "yta", "ytmp3"].includes(command)) {
       const api = await ddownr.download(url, "mp3");
 
-      // ✅ usa sendFile para enviar directo (más rápido que sendMessage)
       return conn.sendFile(m.chat, api.downloadUrl, `${title}.mp3`, null, m, false, {
         mimetype: 'audio/mpeg',
         fileName: `${title}.mp3`,
@@ -90,7 +98,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
       });
     }
 
-    // Video (igual de rápido que antes)
+    // Video (play2/ytv/ytmp4)
     if (["play2", "ytv", "ytmp4"].includes(command)) {
       const sources = [
         `https://api.siputzx.my.id/api/d/ytmp4?url=${url}`,
