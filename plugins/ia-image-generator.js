@@ -9,7 +9,7 @@ const handler = async (m, { conn, args }) => {
     const prompt = args.join(' ');
     const apiUrl = `https://eliasar-yt-api.vercel.app/api/ai/text2img?prompt=${encodeURIComponent(prompt)}`;
 
-    conn.reply(m.chat, `${emojis} Espere un momento...\n\ngenerando imagen de *${prompt}*`, m, rcanal);
+    conn.reply(m.chat, `${emojis} Espere un momento...\n\ngenerando imagen de *${prompt}*`, m, fake);
 
     let imageBuffer = null;
 
@@ -30,7 +30,7 @@ const handler = async (m, { conn, args }) => {
     if (imageBuffer) {
         await conn.sendMessage(m.chat, { image: imageBuffer }, { quoted: m });
     } else {
-        await conn.reply(m.chat, `❌ No se pudo generar la imagen tras varios intentos.\nPor favor, intenta nuevamente más tarde.`, m, rcanal);
+        await conn.reply(m.chat, `❌ No se pudo generar la imagen tras varios intentos.\nPor favor, intenta nuevamente más tarde.`, m, fake);
     }
 };
 
