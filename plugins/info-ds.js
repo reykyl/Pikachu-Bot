@@ -4,7 +4,7 @@ import path from 'path'
 var handler = async (m, { conn, usedPrefix }) => {
 
 if (global.conn.user.jid !== conn.user.jid) {
-return conn.reply(m.chat, `${emojis} Utiliza este comando directamente en el número principal del Bot.`, m, rcanal);
+return conn.reply(m.chat, `${emojis} Utiliza este comando directamente en el número principal del Bot.`, m, fake);
 }
 
 let chatId = m.isGroup ? [m.chat, m.sender] : [m.sender]
@@ -23,14 +23,14 @@ break
 }}}
 
 if (filesDeleted === 0) {
-await conn.reply(m.chat, `${emoji2} No se encontró ningún archivo que incluya la ID del chat.`, m, rcanal);
+await conn.reply(m.chat, `${emoji2} No se encontró ningún archivo que incluya la ID del chat.`, m, fake);
 } else {
 await conn.reply(m.chat, `${emoji2} Se eliminaron ${filesDeleted} archivos de sesión.`, m, rcanal);
-conn.reply(m.chat, `${emojis} ¡Hola! ¿logras verme?`, m, rcanal);
+conn.reply(m.chat, `${emojis} ¡Hola! ¿logras verme?`, m, fake);
 }
 } catch (err) {
 console.error('Error al leer la carpeta o los archivos de sesión:', err)
-await conn.reply(m.chat, `${emojis} Hola Soy ${botname} Sigue El Canal y apoyanos porfavor.\n\n> ${channel}`, m, rcanal);
+await conn.reply(m.chat, `${emojis} Hola Soy ${botname} Sigue El Canal y apoyanos porfavor.\n\n> ${channel}`, m, fake);
 }
 
 }
