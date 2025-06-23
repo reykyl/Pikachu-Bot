@@ -68,9 +68,9 @@ let handler = async (m, { text, usedPrefix, command, conn }) => {
   }
 }
 
-handler.command = ['gemini', 'geminis', 'imgia', 'imagina'];
+handler.command = ['gemini', 'geminis'];
 handler.tags = ['ia'];
-handler.help = ['gemini <pregunta o prompt>'];
+handler.help = ['gemini <pregunta>'];
 
 handler.group = false
 
