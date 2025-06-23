@@ -1,92 +1,159 @@
-import yts from "yt-search";
-import fetch from "node-fetch";
+import yts from 'yt-search';
+import fs from 'fs';
+import axios from 'axios';
 
-const handler = async (m, { conn, text, command }) => {
-  await m.react("⚡️");
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const MAX_RETRIES = 2;
+const TIMEOUT_MS = 10000;
+const RETRY_DELAY_MS = 12000;
 
-  if (!text) {
-    return conn.reply(
-      m.chat,
-      "*Ｏ(≧∇≦)Ｏ🧃* *Pikachu-Bot* | Dime el nombre de la canción que estás buscando, ¡Pika!",
-      m,
-      rcanal
-    );
-  }
 
+const getUserGreeting = (userNumber, limaTime) => {
+  const hour = limaTime.getHours();
+  return `${getGreeting(hour)} @${userNumber}`;
+};
+
+const isUserBlocked = (userId) => {
   try {
-    const search = await yts(text);
-    const vid = search.all[0];
-    if (!vid) return m.reply("*(>_<)🧃* Pikachu no encontró nada con ese nombre...");
-
-    const { title, url, timestamp, ago, author, thumbnail, views } = vid;
-
-    const vistas = formatViews(views);
-
-    const info = `⚡🐭 
-              \`Pikachu-Bot - Descargas Pokémon\`
-*🎵 Título:* ${title}
-> 🎬 *Duración:* ${timestamp}
-> 🎤 *Canal:* ${author?.name || "Desconocido"}
-> 👀 *Vistas:* ${vistas}
-> 📅 *Publicado:* ${ago}
-> 🔗 *Enlace:* ${url}`;
-
-    const preview = {
-      contextInfo: {
-        externalAdReply: {
-          title: botname,
-          body: "¡Pika Pikachu-bot! El bot eléctrico que necesitas.",
-          mediaType: 1,
-          previewType: 0,
-          mediaUrl: url,
-          sourceUrl: url,
-          thumbnail: thumbnail,
-          renderLargerThumbnail: true
-        }
-      }
-    };
-
-    await m.react("🎧");
-    await conn.reply(m.chat, info, m, preview);
-
-    const res = await fetch(`https://api.zenzapis.xyz/downloader/yta?url=${url}&apikey=zenzkey1`);
-    const json = await res.json();
-
-    if (!json.status) throw new Error("⚡ Pikachu falló en la descarga...");
-
-    const audio = json.result.url;
-
-    await conn.sendMessage(m.chat, {
-      audio: { url: audio },
-      mimetype: "audio/mpeg",
-      fileName: `${title}.mp3`,
-      contextInfo: {
-        externalAdReply: {
-          showAdAttribution: true,
-          title: packname,
-          body: dev,
-          thumbnailUrl: icono,
-          sourceUrl: redes,
-          mediaType: 1,
-          renderLargerThumbnail: false
-        }
-      }
-    }, { quoted: m });
-
-  } catch (e) {
-    console.error("❌ Error:", e);
-    return m.reply(`⚠️ Ocurrió un error eléctrico: ${e.message}`);
+    const blockedUsers = JSON.parse(fs.readFileSync('./bloqueados.json', 'utf8'));
+    return blockedUsers.includes(userId);
+  } catch {
+    return false;
   }
 };
 
-handler.command = ["play"];
-handler.help = ["play"];
-handler.tags = ["downloader"];
-export default handler;
+const getDownloadUrl = async (videoUrl) => {
+  const apis = [{ url: 'https://api.vreden.my.id/api/ytmp3?url=', type: 'vreden' }];
+  for (const api of apis) {
+    for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+      try {
+        const response = await axios.get(`${api.url}${encodeURIComponent(videoUrl)}`, { timeout: TIMEOUT_MS });
+        const res = response.data?.result?.download;
+        if (res?.url && res?.status) {
+          return {
+            url: res.url.trim(),
+            title: response.data.result.metadata.title
+          };
+        }
+      } catch {
+        if (attempt < MAX_RETRIES - 1) await wait(RETRY_DELAY_MS);
+      }
+    }
+  }
+  return null;
+};
 
-function formatViews(views) {
-  if (typeof views !== "number" || isNaN(views)) return "Desconocido";
-  return views >= 1000
-    ? (views / 1000).toFixed(1) + "k (" + views.toLocaleString() + ")"
-    : views.toString();
-}
+const sendAudioPika = async (conn, chat, audioUrl, videoTitle, thumb) => {
+  for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+    try {
+      await conn.sendMessage(chat, {
+        audio: { url: audioUrl },
+        mimetype: 'audio/mpeg',
+        fileName: `${videoTitle}.mp3`,
+        contextInfo: {
+          externalAdReply: {
+            title: videoTitle,
+            body: "¡Pika Pikachu-Bot! El bot eléctrico que necesitas.",
+            thumbnail: thumb,
+            mediaType: 1,
+            renderLargerThumbnail: false,
+            showAdAttribution: true,
+          }
+        }
+      });
+      return true;
+    } catch {
+      if (attempt < MAX_RETRIES - 1) await wait(RETRY_DELAY_MS);
+    }
+  }
+  return false;
+};
+
+const handler = async (m, { conn, text, usedPrefix, command }) => {
+  const userId = m.sender;
+  if (isUserBlocked(userId)) {
+    return conn.reply(m.chat, '🚫 Lo siento, estás en la lista de usuarios bloqueados.', m);
+  }
+
+  if (!text || !text.trim()) {
+    return conn.reply(
+      m.chat,
+      `*Ｏ(≧∇≦)Ｏ🧃* *Pikachu-Bot* | Dime el nombre de la canción que estás buscando, ¡Pika!`,
+      m
+    );
+  }
+
+  const limaTime = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Lima' }));
+  const userNumber = m.sender.split('@')[0];
+
+  const loading = await conn.reply(
+    m.chat,
+    `${getUserGreeting(userNumber, limaTime)}\n🔍 *Estoy buscando tu canción, dame un momento... Pika!*`,
+    m,
+    { mentions: [m.sender] }
+  );
+
+  await conn.sendMessage(m.chat, { react: { text: '⚡', key: loading.key } }, { quoted: m });
+
+  try {
+    const searchResults = await yts(text.trim());
+    if (!searchResults?.videos?.length) throw new Error('⛔ Pikachu no encontró nada con ese nombre...');
+
+    const videoInfo = searchResults.videos[0];
+    const { title, timestamp: duration, views, ago, url: videoUrl, image } = videoInfo;
+
+    let thumb = null;
+    try {
+      const res = await axios.get(image, { responseType: 'arraybuffer' });
+      thumb = Buffer.from(res.data, 'binary');
+    } catch {}
+
+    const ficha = `⚡🐭 \`Pikachu-Bot - Descargas Pokémon\`
+
+*🎵 Título:* ${title}
+> 🎬 *Duración:* ${duration || 'Desconocida'}
+> 🎤 *Canal:* ${videoInfo.author?.name || 'Desconocido'}
+> 👀 *Vistas:* ${views.toLocaleString()}
+> 📅 *Publicado:* ${ago || 'Desconocido'}
+> 🔗 *Enlace:* ${videoUrl}`;
+
+    await conn.reply(
+      m.chat,
+      ficha,
+      m,
+      {
+        contextInfo: {
+          externalAdReply: {
+            title: title,
+            body: "¡Pika Pikachu-Bot! El bot eléctrico que necesitas.",
+            thumbnail: thumb,
+            mediaType: 1,
+            renderLargerThumbnail: true,
+            showAdAttribution: true,
+            sourceUrl: videoUrl
+          }
+        }
+      }
+    );
+
+    const downloadData = await getDownloadUrl(videoUrl);
+    if (!downloadData || !downloadData.url) {
+      await conn.sendMessage(m.chat, { react: { text: '🔴', key: loading.key } });
+      throw new Error('❌ Pikachu no pudo descargar la canción desde ninguna fuente.');
+    }
+
+    await conn.sendMessage(m.chat, { react: { text: '🟢', key: loading.key } });
+    const success = await sendAudioPika(conn, m.chat, downloadData.url, title, thumb);
+    if (!success) throw new Error('❌ Pikachu falló al enviar la música.');
+
+  } catch (error) {
+    await conn.sendMessage(m.chat, { react: { text: '🔴', key: loading.key } });
+    return conn.reply(m.chat, `⚠️ Ocurrió un error eléctrico: ${error.message}`, m);
+  }
+};
+
+handler.command = /^play$/i;
+handler.help = ['play <canción>'];
+handler.tags = ['descargas'];
+
+export default handler;
