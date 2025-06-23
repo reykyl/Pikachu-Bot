@@ -7,7 +7,7 @@ let handler = async (m, { conn, command }) => {
     let acertijos = JSON.parse(fs.readFileSync('./src/database/acertijos.json'))
     let acertijo = acertijos[Math.floor(Math.random() * acertijos.length)]
 
-    await conn.reply(m.chat, `🧠 *Adivina este acertijo:*\n\n${acertijo.question}\n\n_Responde con la respuesta, no es necesario citar el mensaje._`, m, rcanal)
+    await conn.reply(m.chat, `🧠 *Adivina este acertijo:*\n\n${acertijo.question}\n\n_Responde con la respuesta, no es necesario citar el mensaje._`, m, fake)
 
     global.acertijosActivos[m.sender] = {
       acertijo,
