@@ -210,6 +210,3 @@ return views >= 1000
 ? (views / 1000).toFixed(1) + "k (" + views.toLocaleString() + ")"
 : views.toString();
 }
-
-No muevas nada de nada,
-Solo optimizalo para que sea más rápido va?
