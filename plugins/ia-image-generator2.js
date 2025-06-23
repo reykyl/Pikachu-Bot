@@ -9,10 +9,10 @@ let handler = async (m, { text, conn }) => {
 
 
   if (!text) {
-    return await conn.reply(m.chat, `${emojis} Escribe el prompt de la imagen. Ejemplo:\n.imagina un dragón azul volando en el espacio`, m, rcanal)
+    return await conn.reply(m.chat, `${emojis} Escribe el prompt de la imagen. Ejemplo:\n.imagina un dragón azul volando en el espacio`, m, fake)
   }
 
-  await conn.reply(m.chat, `${emojis} Generando imagen de: "${text}", espera un momento...`, m, rcanal)
+  await conn.reply(m.chat, `${emojis} Generando imagen de: "${text}", espera un momento...`, m, fake)
 
   try {
     let prompt = encodeURIComponent(text.trim())
