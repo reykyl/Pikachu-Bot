@@ -4,7 +4,7 @@ import path from 'path'
 var handler = async (m, { conn, usedPrefix }) => {
 
 if (global.conn.user.jid !== conn.user.jid) {
-return conn.reply(m.chat, `${emoji} Utiliza este comando directamente en el número principal del Bot.`, m, rcanal);
+return conn.reply(m.chat, `${emojis} Utiliza este comando directamente en el número principal del Bot.`, m, rcanal);
 }
 
 let chatId = m.isGroup ? [m.chat, m.sender] : [m.sender]
