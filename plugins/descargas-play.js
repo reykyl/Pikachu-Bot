@@ -1,34 +1,41 @@
 import yts from 'yt-search';
-import fs from 'fs';
 import axios from 'axios';
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const MAX_RETRIES = 2;
-const TIMEOUT_MS = 10000;
 const RETRY_DELAY_MS = 12000;
 
 const getDownloadUrl = async (videoUrl) => {
-  const apis = [{ url: 'https://api.vreden.my.id/api/ytmp3?url=', type: 'vreden' }];
-  for (const api of apis) {
-    for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
-      try {
-        const response = await axios.get(`${api.url}${encodeURIComponent(videoUrl)}`, { timeout: TIMEOUT_MS });
-        if (
-          response.data?.status === 200 &&
-          response.data?.result?.download?.url &&
-          response.data?.result?.download?.status === true
-        ) {
-          return {
-            url: response.data.result.download.url.trim(),
-            title: response.data.result.metadata.title
-          };
-        }
-      } catch {
-        if (attempt < MAX_RETRIES - 1) await wait(RETRY_DELAY_MS);
-      }
+  const format = "mp3";
+  const apiUrl = `https://p.oceansaver.in/ajax/download.php?format=${format}&url=${encodeURIComponent(videoUrl)}&api=dfcb6d76f2f6a9894gjkege8a4ab232222`;
+
+  try {
+    const { data } = await axios.get(apiUrl, { headers: { "User-Agent": "Mozilla/5.0" } });
+
+    if (data?.success) {
+      const downloadUrl = await cekProgress(data.id);
+      return {
+        url: downloadUrl,
+        title: data.title
+      };
+    } else {
+      throw new Error("⛔ Pikachu no pudo encontrar los detalles del video.");
     }
+  } catch (err) {
+    throw new Error("❌ Error al procesar la descarga.");
   }
-  return null;
+};
+
+const cekProgress = async (id) => {
+  const progressUrl = `https://p.oceansaver.in/ajax/progress.php?id=${id}`;
+  for (let i = 0; i < 10; i++) {
+    try {
+      const { data } = await axios.get(progressUrl, { headers: { "User-Agent": "Mozilla/5.0" } });
+      if (data?.success && data.progress === 1000) return data.download_url;
+    } catch {}
+    await wait(1500);
+  }
+  throw new Error("❌ Pikachu se cansó de esperar el enlace de descarga.");
 };
 
 const sendAudioNormal = async (conn, chat, audioUrl, videoTitle) => {
