@@ -3,12 +3,20 @@ import path from 'path';
 
 const handler = async (m, { conn, args }) => {
   const patrones = args.length > 0 ? args : [
-    'fs.rmdir(', 
-    'fs.rmdirSync(', 
+   // 'fs.rmdir(', 
+    //'fs.rmdirSync(', 
     '.buffer(', 
     'new Buffer(', 
     'util.print('
   ];
+
+  const nombres = {
+    'fs.rmdir(': '📁 fs.rmdir (DEPRECATED)',
+    'fs.rmdirSync(': '📁 fs.rmdirSync (DEPRECATED)',
+    '.buffer(': '🟠 response.buffer() (usa arrayBuffer())',
+    'new Buffer(': '🔴 new Buffer (usa Buffer.from)',
+    'util.print(': '🟡 util.print (DEPRECATED)'
+  };
 
   const dir = './plugins';
   let resultados = [];
@@ -27,7 +35,8 @@ const handler = async (m, { conn, args }) => {
         lineas.forEach((linea, index) => {
           for (const patron of patrones) {
             if (linea.includes(patron)) {
-              resultados.push(`${rutaCompleta} [línea ${index + 1}]: ${linea.trim()}`);
+              const nombre = nombres[patron] || `🧩 ${patron}`;
+              resultados.push(`${nombre}\n📂 ${rutaCompleta} [línea ${index + 1}]: ${linea.trim()}\n`);
               break;
             }
           }
@@ -39,11 +48,11 @@ const handler = async (m, { conn, args }) => {
   buscarEnArchivos(dir);
 
   if (resultados.length === 0) {
-    return m.reply(`✅ No se encontraron patrones obsoletos en los plugins.`);
+    return m.reply(`✅ No se encontraron funciones obsoletas o peligrosas.`);
   }
 
-  const salida = resultados.join('\n').slice(0, 4000); // límite para WhatsApp
-  return m.reply(`⚠️ Coincidencias encontradas:\n\n${salida}`);
+  const salida = resultados.join('\n').slice(0, 4000); // WhatsApp límite
+  return m.reply(`⚠️ *Deprecaciones encontradas:*\n\n${salida}`);
 };
 
 handler.command = ['buscardeprecados', 'scandepre', 'depredetect'];
