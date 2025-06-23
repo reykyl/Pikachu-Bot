@@ -10,7 +10,7 @@ let handler = async (m, { conn }) => {
 
     if (!meme) throw new Error('No se encontró la URL del meme');
 
-    await conn.sendFile(m.chat, meme, 'meme.jpg', 'Aquí tienes un meme 😄', m, fake);
+    await conn.sendFile(m.chat, meme, 'meme.jpg', 'Aquí tienes un meme 😄 \n descargado de:', res, m);
   } catch (e) {
     console.error('[ERROR MEME]', e);
     m.reply('😿 Ocurrió un error al obtener el meme.');
