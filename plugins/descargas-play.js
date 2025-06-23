@@ -23,7 +23,7 @@ const ddownr = {
     for (let i = 0; i < 6; i++) {
       const { data } = await axios.get(url);
       if (data?.success && data.progress === 1000) return data.download_url;
-      await new Promise(res => setTimeout(res, 800)); // 🔥 Menos espera
+      await new Promise(res => setTimeout(res, 800)); 
     }
     throw new Error("❌ Pikachu se cansó de esperar el enlace de descarga.");
   }
