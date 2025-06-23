@@ -9,7 +9,7 @@ const font2 = {
 
 const handler = async (m, { conn, text }) => {
   if (!text.includes('|')) {
-    return m.reply(`❌ Formato incorrecto.\nUsa:\n.reactch https://whatsapp.com/channel/abc/123|Hola Mundo`)
+    return m.reply(`${emojis} Formato incorrecto.\nUsa:\n.reactch https://whatsapp.com/channel/abc/123|Hola Mundo`)
   }
 
   let [link, ...messageParts] = text.split('|')
@@ -17,7 +17,7 @@ const handler = async (m, { conn, text }) => {
   const msg = messageParts.join('|').trim().toLowerCase()
 
   if (!link.startsWith("https://whatsapp.com/channel/")) {
-    return m.reply("❌ El enlace no es válido.\nDebe comenzar con: https://whatsapp.com/channel/")
+    return m.reply("${emojis} El enlace no es válido.\nDebe comenzar con: https://whatsapp.com/channel/")
   }
 
   const emoji = msg.split('').map(c => c === ' ' ? '―' : (font2[c] || c)).join('')
@@ -26,10 +26,10 @@ const handler = async (m, { conn, text }) => {
     const [, , , , channelId, messageId] = link.split('/')
     const res = await conn.newsletterMetadata("invite", channelId)
     await conn.newsletterReactMessage(res.id, messageId, emoji)
-    m.reply(`✅ Reacción enviada como: *${emoji}*\nCanal: *${res.name}*`)
+    m.reply(`${emojis} Reacción enviada como: *${emojis}*\nCanal: *${res.name}*`)
   } catch (e) {
     console.error(e)
-    m.reply("❌ Error\nNo se pudo reaccionar. Revisa el enlace o tu conexión.")
+    m.reply("${emojis} Error\nNo se pudo reaccionar. Revisa el enlace o tu conexión.")
   }
 }
 
