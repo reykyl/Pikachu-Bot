@@ -3,9 +3,9 @@ const handler = async (m, {conn, isAdmin, groupMetadata }) => {
   try {
     await conn.groupParticipantsUpdate(m.chat, [m.sender], 'promote');
   await m.react(done)
-   m.reply(`${emojis} Ya te di admin. `, m, rcanal);
+   m.reply(`${emojis} Ya te di admin. `, m, fake);
   } catch {
-    m.reply(`${emojis} Ocurrio un error.`, m, rcanal);
+    m.reply(`${emojis} Ocurrio un error.`, m, fake);
   }
 };
 handler.tags = ['owner'];
