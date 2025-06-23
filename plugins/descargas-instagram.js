@@ -2,7 +2,7 @@ import { igdl } from 'ruhend-scraper';
 
 const handler = async (m, { args, conn }) => {
   if (!args[0]) {
-    return conn.reply(m.chat, `${emojis} ¡Pika! Necesitas enviar un enlace de *Instagram*.`, m, rcanal);
+    return conn.reply(m.chat, `${emojis} ¡Pika! Necesitas enviar un enlace de *Instagram*.`, m, fake);
   }
 
   try {
@@ -12,7 +12,7 @@ const handler = async (m, { args, conn }) => {
 
     if (!data || data.length === 0) {
       await m.react(error);
-      return conn.reply(m.chat, `${emojis} Pikachu no encontró ningún archivo... prueba con otro link.`, m, rcanal);
+      return conn.reply(m.chat, `${emojis} Pikachu no encontró ningún archivo... prueba con otro link.`, m, fake);
     }
 
     for (let media of data) {
@@ -31,15 +31,14 @@ const handler = async (m, { args, conn }) => {
 
 ─────────────────────────
 `.trim(),
-        m,
-        rcanal
+        m
       );
     }
 
     await m.react(done);
   } catch (e) {
     await m.react(error);
-    return conn.reply(m.chat, `${emojis} Pikachu se cayó intentando descargar... ocurrió un error.`, m, rcanal);
+    return conn.reply(m.chat, `${emojis} Pikachu se cayó intentando descargar... ocurrió un error.`, m, fake);
   }
 };
 
