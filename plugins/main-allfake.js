@@ -120,7 +120,7 @@ global.icono = [
 ].getRandom()
 
 
-    global.rcanal = { 
+    let rcanal = { 
         contextInfo: { 
             isForwarded: true, 
             forwardedNewsletterMessageInfo: { 
