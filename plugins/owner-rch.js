@@ -1,5 +1,3 @@
-// creado por Fantom5700 function de comando te deja reaccionar con letras en canales
-
 const font2 = {
   a: '🅐', b: '🅑', c: '🅒', d: '🅓', e: '🅔', f: '🅕', g: '🅖',
   h: '🅗', i: '🅘', j: '🅙', k: '🅚', l: '🅛', m: '🅜', n: '🅝',
@@ -8,28 +6,32 @@ const font2 = {
 }
 
 const handler = async (m, { conn, text }) => {
-  if (!text.includes('|')) {
-    return m.reply(`${emojis} Formato incorrecto.\nUsa:\n.reactch https://whatsapp.com/channel/abc/123|Hola Mundo`)
+  if (!text || !text.includes('|')) {
+    return m.reply(`${emojis} *Formato incorrecto.*\nUsa:\n.reactch enlace | Texto personalizado`)
   }
 
   let [link, ...messageParts] = text.split('|')
   link = link.trim()
   const msg = messageParts.join('|').trim().toLowerCase()
 
-  if (!link.startsWith("https://whatsapp.com/channel/")) {
-    return m.reply("${emojis} El enlace no es válido.\nDebe comenzar con: https://whatsapp.com/channel/")
+  if (!/^https:\/\/whatsapp\.com\/channel\/[a-zA-Z0-9]+\/[0-9]+$/.test(link)) {
+    return m.reply(`${emojis} *Enlace inválido.*\nDebe tener el formato: https://whatsapp.com/channel/<id>/<mensajeId>`)
   }
 
   const emoji = msg.split('').map(c => c === ' ' ? '―' : (font2[c] || c)).join('')
 
   try {
-    const [, , , , channelId, messageId] = link.split('/')
-    const res = await conn.newsletterMetadata("invite", channelId)
+    const parts = link.split('/')
+    const channelId = parts[4]
+    const messageId = parts[5]
+
+    const res = await conn.newsletterMetadata('invite', channelId)
     await conn.newsletterReactMessage(res.id, messageId, emoji)
-    m.reply(`${emojis} Reacción enviada como: *${emojis}*\nCanal: *${res.name}*`)
+
+    m.reply(`${emojis} *Reacción enviada exitosamente.*\nTexto: *${emoji}*\nCanal: *${res.name}*`)
   } catch (e) {
     console.error(e)
-    m.reply("${emojis} Error\nNo se pudo reaccionar. Revisa el enlace o tu conexión.")
+    m.reply(`${emojis} *Error:* No se pudo reaccionar al mensaje.\nVerifica el enlace, el ID del mensaje y tu conexión.`)
   }
 }
 
