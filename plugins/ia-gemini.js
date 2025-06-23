@@ -13,7 +13,7 @@ let handler = async (m, { text, usedPrefix, command, conn }) => {
   let hasImage = /^image\/(jpe?g|png)$/.test(mime)
 
   if (!text && !hasImage) {
-    return conn.reply(m.chat, `💡 Envía o responde a una imagen con una pregunta, o escribe un prompt para generar una imagen.\n\nEjemplo:\n${usedPrefix + command} ¿Qué ves en esta imagen?\n${usedPrefix + command} Genera una imagen de un zorro en la luna`, m)
+    return conn.reply(m.chat, `${emojis} Envía o responde a una imagen con una pregunta, o escribe un prompt para generar una imagen.\n\nEjemplo:\n${usedPrefix + command} ¿Qué ves en esta imagen?\n${usedPrefix + command} Genera una imagen de un zorro en la luna`, m, fake)
   }
 
   try {
@@ -51,7 +51,7 @@ let handler = async (m, { text, usedPrefix, command, conn }) => {
 
     
     if (data?.image && data?.from === 'image-generator') {
-      return await conn.sendFile(m.chat, data.image, 'imagen.jpg', ` Claro aquí tienes tu imagen espero te guste 😸 \n\n\n> Gemini (IA) ✨`, m)
+      return await conn.sendFile(m.chat, data.image, 'imagen.jpg', ` Claro aquí tienes tu imagen espero te guste 😸 \n\n\n> Gemini (IA) ✨`, m, fake)
     }
 
     
@@ -64,7 +64,7 @@ let handler = async (m, { text, usedPrefix, command, conn }) => {
   } catch (e) {
     console.error('[ERROR GEMINI]', e)
     await m.react('⚠️')
-    await conn.reply(m.chat, '⚠️ Ocurrió un error procesando la imagen o pregunta.', m)
+    await conn.reply(m.chat, '⚠️ Ocurrió un error procesando la imagen o pregunta.', m, fake)
   }
 }
 
