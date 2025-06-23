@@ -1,5 +1,6 @@
 let handler = async (m, { conn, args, usedPrefix, command }) => {
 return conn.reply(m.chat,`*APIs desarrolladas por Deylin*
+*Prueba APIs directamente aquí:* https://paka-apis.vercel.app/
 
 [1]
  https://anime-xi-wheat.vercel.app/api/pinterest?q=
