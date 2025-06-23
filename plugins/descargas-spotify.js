@@ -4,10 +4,10 @@ import fetch from "node-fetch";
 import yts from "yt-search";
 
 let handler = async (m, { conn, text }) => {
-  if (!text) return conn.reply(m.chat, `⚡ Por favor, ingresa el nombre de una canción de Spotify.`, m, rcanal);
+  if (!text) return conn.reply(m.chat, `⚡ Por favor, ingresa el nombre de una canción de Spotify.`, m, fake);
 
   await m.react('🕒');
-  conn.reply(m.chat, `*🎧 Buscando tu canción en Spotify...*`, m, rcanal);
+  conn.reply(m.chat, `*🎧 Buscando tu canción en Spotify...*`, m, fake);
 
   try {
     let res = await fetch(`https://api.nekorinn.my.id/downloader/spotifyplay?q=${encodeURIComponent(text)}`);
@@ -46,7 +46,7 @@ let handler = async (m, { conn, text }) => {
   } catch (e) {
     console.error(e);
     await m.react('❌');
-    conn.reply(m.chat, '🚫 Hubo un error al buscar la canción.', m, rcanal);
+    conn.reply(m.chat, '🚫 Hubo un error al buscar la canción.', m, fake);
   }
 };
 
