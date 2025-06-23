@@ -2,7 +2,14 @@ import fs from 'fs';
 import path from 'path';
 
 const handler = async (m, { conn, args }) => {
-  const textoBuscar = args[0] || 'fs.rmdir';
+  const patrones = args.length > 0 ? args : [
+    'fs.rmdir(', 
+    'fs.rmdirSync(', 
+    '.buffer(', 
+    'new Buffer(', 
+    'util.print('
+  ];
+
   const dir = './plugins';
   let resultados = [];
 
@@ -18,8 +25,11 @@ const handler = async (m, { conn, args }) => {
         const contenido = fs.readFileSync(rutaCompleta, 'utf-8');
         const lineas = contenido.split('\n');
         lineas.forEach((linea, index) => {
-          if (linea.includes(textoBuscar)) {
-            resultados.push(`${rutaCompleta} [línea ${index + 1}]: ${linea.trim()}`);
+          for (const patron of patrones) {
+            if (linea.includes(patron)) {
+              resultados.push(`${rutaCompleta} [línea ${index + 1}]: ${linea.trim()}`);
+              break;
+            }
           }
         });
       }
@@ -29,13 +39,13 @@ const handler = async (m, { conn, args }) => {
   buscarEnArchivos(dir);
 
   if (resultados.length === 0) {
-    return m.reply(`🔍 No se encontró "${textoBuscar}" en los plugins.`);
+    return m.reply(`✅ No se encontraron patrones obsoletos en los plugins.`);
   }
 
   const salida = resultados.join('\n').slice(0, 4000); // límite para WhatsApp
-  return m.reply(`📁 Resultados de "${textoBuscar}":\n\n${salida}`);
+  return m.reply(`⚠️ Coincidencias encontradas:\n\n${salida}`);
 };
 
-handler.command = ['buscar', 'scanplugin', 'buscarfs'];
+handler.command = ['buscardeprecados', 'scandepre', 'depredetect'];
 
 export default handler;
