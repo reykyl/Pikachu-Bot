@@ -109,7 +109,7 @@ global.fake = { contextInfo: { isForwarded: true, forwardedNewsletterMessageInfo
 
 
 //global.rcanal = { contextInfo: { isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: channelRD.id, newsletterName: channelRD.name, serverMessageId: -1 }
-}}, { quoted: m }
+//}}, { quoted: m }
 
 
 global.icono = [ 
