@@ -22,7 +22,7 @@ export async function before(m, { participants, conn }) {
 
 Para evitar spam y confusión, me voy tranquilamente 🌩️
 ¡Hasta luego, entrenador!
-─────────────────────────`, m, rcanal);
+─────────────────────────`, m, fake);
                     await this.groupLeave(m.chat)
                 }, 5000)// 5 segundos
             }
