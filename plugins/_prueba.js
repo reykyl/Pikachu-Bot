@@ -1,4 +1,17 @@
-import fetch from 'node-fetch'
+    await conn.sendMessage(global.idchannel, {
+        text: chtxt,
+        contextInfo: {
+            externalAdReply: {
+                title: "【 🔔 𝐍𝐎𝐓𝐈𝐅𝐈𝐂𝐀𝐂𝐈𝐎́𝐍 🔔 】",
+                body: '🥳 ¡𝚄𝚗 𝚞𝚜𝚞𝚊𝚛𝚒𝚘 𝚗𝚞𝚎𝚟𝚘 𝚎𝚗 𝚖𝚒 𝚋𝚊𝚜𝚎 𝚍𝚎 𝚍𝚊𝚝𝚘𝚜!',
+                thumbnailUrl: perfil,
+                sourceUrl: redes,
+                mediaType: 1,
+                showAdAttribution: false,
+                renderLargerThumbnail: false
+            }
+        }
+    }, { quoted: null });import fetch from 'node-fetch'
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
  
@@ -15,7 +28,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
   
   const mensaje = `*⚡ 𝙿𝙸𝙺𝙰𝙲𝙷𝚄 - 𝙱𝙾𝚃 ⚡*\n\n${text}\n\n${pie}`
 
-  try {
+ /* try {
     await conn.sendMessage(canalJid, {
       text: mensaje,
       contextInfo: {
@@ -29,7 +42,22 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
           showAdAttribution: false
         }
       }
-    })
+    })*/
+
+    await conn.sendMessage(global.idchannel, {
+        text: mensaje,
+        contextInfo: {
+            externalAdReply: {
+                title: " 🪧 AVISO ENVIADO POR EL BOT",
+                body: dev,
+                thumbnailUrl: icano,
+                sourceUrl: redes,
+                mediaType: 1,
+                showAdAttribution: false,
+                renderLargerThumbnail: false
+            }
+         }
+      })
 
     await m.reply('✅ Aviso enviado correctamente al canal.')
   } catch (e) {
