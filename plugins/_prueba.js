@@ -1,6 +1,4 @@
 let handler = async (m, { conn, args, participants, usedPrefix, command }) => {
-  
-  
 
   if (!m.isGroup) {
     return conn.reply(m.chat, `${emojis} Este comando solo funciona en grupos.`, m, rcanal);
@@ -23,7 +21,7 @@ let handler = async (m, { conn, args, participants, usedPrefix, command }) => {
   text += matching.map((u, i) => `${i + 1}. @${u.split('@')[0]}`).join('\n');
   text += `\n\n🌎 Total encontrados: *${matching.length}*`;
 
-  await conn.reply(m.chat, text, m, { mentions: matching, ...rcanal });
+  await conn.reply(m.chat, text, m, { mentions: [m.sender], ...rcanal });
 };
 
 handler.help = ['litsnuber +prefijo'];
