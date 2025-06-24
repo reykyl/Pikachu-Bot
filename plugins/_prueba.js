@@ -1,10 +1,7 @@
 import fetch from 'node-fetch'
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
-  // Verificar si el usuario es owner
-  if (!global.owner.includes(m.sender)) {
-    return m.reply('❌ Solo el creador o desarrolladores pueden usar este comando.')
-  }
+ 
 
   // Validar texto
   if (!text) {
