@@ -2,29 +2,56 @@ var handler = async (m, { conn, participants, usedPrefix, command }) => {
     const pikachu = 'Ｏ(≧∇≦)Ｏ🧃';
     const sadchu = 'Ｏ(≧∇≦)Ｏ🧃';
 
-    if (!m.mentionedJid[0] && !m.quoted) {
-        return conn.reply(m.chat, `${pikachu} ¡Pika Pika! Debes mencionar a alguien para expulsarlo del grupo.`, m, fake);
+    
+    if (!m.mentionedJid.length && !m.quoted) {
+        return conn.reply(m.chat, `${pikachu} ¡Pika Pika! Debes mencionar al menos a un usuario para expulsarlo.`, m);
     }
 
-    let user = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted.sender;
     const groupInfo = await conn.groupMetadata(m.chat);
     const ownerGroup = groupInfo.owner || m.chat.split`-`[0] + '@s.whatsapp.net';
     const ownerBot = global.owner[0][0] + '@s.whatsapp.net';
 
-    if (user === conn.user.jid) {
-        return conn.reply(m.chat, `${sadchu} ¡Pika! No puedo eliminarme a mí mismo.`, m, fake);
+    
+    let usersToKick = m.mentionedJid;
+    if (m.quoted && !usersToKick.includes(m.quoted.sender)) {
+        usersToKick.push(m.quoted.sender);
     }
 
-    if (user === ownerGroup) {
-        return conn.reply(m.chat, `${sadchu} ¡Pikachu no se mete con el líder del grupo!`, m, fake);
+    let kicked = [];
+    let notAllowed = [];
+
+    for (let user of usersToKick) {
+        if (user === conn.user.jid) {
+            notAllowed.push('🤖 El bot no puede eliminarse a sí mismo.');
+            continue;
+        }
+        if (user === ownerGroup) {
+            notAllowed.push('👑 No se puede expulsar al dueño del grupo.');
+            continue;
+        }
+        if (user === ownerBot) {
+            notAllowed.push('🧑‍💻 No se puede expulsar al creador del bot.');
+            continue;
+        }
+
+        try {
+            await conn.groupParticipantsUpdate(m.chat, [user], 'remove');
+            kicked.push(user);
+        } catch (e) {
+            notAllowed.push(`⚠️ No se pudo expulsar a @${user.split('@')[0]}`);
+        }
     }
 
-    if (user === ownerBot) {
-        return conn.reply(m.chat, `${sadchu} ¡Ese es mi entrenador! No puedo hacer eso.`, m, fake);
+    let text = `${pikachu} ¡Pika Pika! Expulsión completada.\n\n`;
+
+    if (kicked.length) {
+        text += `🧨 Expulsados:\n` + kicked.map(u => `@${u.split('@')[0]}`).join('\n') + '\n\n';
+    }
+    if (notAllowed.length) {
+        text += `❌ No expulsados:\n` + notAllowed.join('\n');
     }
 
-    await conn.groupParticipantsUpdate(m.chat, [user], 'remove');
-    //conn.reply(m.chat, `${pikachu} ¡Pika Pika! Usuario eliminado con un Impactrueno.`, m, fake);
+    conn.reply(m.chat, text, m, { mentions: usersToKick });
 };
 
 handler.help = ['kick'];
