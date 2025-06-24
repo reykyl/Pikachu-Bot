@@ -32,7 +32,7 @@ ${info}
         }
     }));
 
-    texto += resultados.join('\n') + `\n╰══⬣\n✨ *Pikachu Bot* ⚡`;
+    texto += `╰══⬣\n✨ *${dev}* ⚔️`;
 
     conn.sendMessage(m.chat, {
         text: texto.trim(),
