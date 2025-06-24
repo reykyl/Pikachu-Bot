@@ -38,6 +38,7 @@ let handler = async (m, { conn, args }) => {
   } catch (e) {
     console.error(e);
     await m.reply('❌ Error al inspeccionar el enlace. Asegúrate de que el bot tenga permisos para acceder.');
+   return m.reply(`${id}`);
   }
 };
 
