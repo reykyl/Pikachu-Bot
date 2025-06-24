@@ -1,12 +1,11 @@
 const handler = async (m, { conn }) => {
-    const codigoACopiar = 'EQ3M-WGSK'; // El texto que quieres que el usuario pueda copiar
-    // Formatea el mensaje para que WhatsApp lo reconozca como un bloque de código
+    const codigoACopiar = 'PRUEBA_COPIAR_XYZ'; // Usa un código diferente para asegurar que es un mensaje nuevo
     const mensajeConFormatoDeCodigo = `Aquí está tu código:\n\`\`\`\n${codigoACopiar}\n\`\`\``;
 
     await conn.sendMessage(m.chat, {
         text: mensajeConFormatoDeCodigo
-    }, { quoted: m }); // Envía el mensaje al chat
+    }, { quoted: m });
 };
 
-handler.command = ['h']; // O el comando que uses para activarlo
+handler.command = ['h'];
 export default handler;
