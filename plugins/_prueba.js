@@ -1,60 +1,111 @@
-import fs from 'fs';
-import path from 'path';
+const {
+    default: makeWASocket,
+    DisconnectReason,
+    useMultiFileAuthState
+} = require('@whiskeysockets/baileys');
+const pino = require('pino');
+const {
+    Boom
+} = require('@hapi/boom');
 
-const handler = async (m, { conn, args }) => {
-  const patrones = args.length > 0 ? args : [
-   // 'fs.rmdir(', 
-    //'fs.rmdirSync(', 
-    '.buffer(', 
-    'new Buffer(', 
-    'util.print('
-  ];
+async function connectToWhatsApp() {
+    const {
+        state,
+        saveCreds
+    } = await useMultiFileAuthState('auth_info_baileys');
 
-  const nombres = {
-    'fs.rmdir(': '📁 fs.rmdir (DEPRECATED)',
-    'fs.rmdirSync(': '📁 fs.rmdirSync (DEPRECATED)',
-    '.buffer(': '🟠 response.buffer() (usa arrayBuffer())',
-    'new Buffer(': '🔴 new Buffer (usa Buffer.from)',
-    'util.print(': '🟡 util.print (DEPRECATED)'
-  };
+    const sock = makeWASocket({
+        logger: pino({
+            level: 'silent'
+        }),
+        auth: state,
+        printQRInTerminal: true
+    });
 
-  const dir = './plugins';
-  let resultados = [];
-
-  const buscarEnArchivos = (dir) => {
-    const archivos = fs.readdirSync(dir);
-    for (const archivo of archivos) {
-      const rutaCompleta = path.join(dir, archivo);
-      const stats = fs.statSync(rutaCompleta);
-
-      if (stats.isDirectory()) {
-        buscarEnArchivos(rutaCompleta);
-      } else if (rutaCompleta.endsWith('.js')) {
-        const contenido = fs.readFileSync(rutaCompleta, 'utf-8');
-        const lineas = contenido.split('\n');
-        lineas.forEach((linea, index) => {
-          for (const patron of patrones) {
-            if (linea.includes(patron)) {
-              const nombre = nombres[patron] || `🧩 ${patron}`;
-              resultados.push(`${nombre}\n📂 ${rutaCompleta} [línea ${index + 1}]: ${linea.trim()}\n`);
-              break;
+    sock.ev.on('connection.update', (update) => {
+        const {
+            connection,
+            lastDisconnect
+        } = update;
+        if (connection === 'close') {
+            const shouldReconnect = (lastDisconnect.error instanceof Boom) ?
+                lastDisconnect.error.output.statusCode !== DisconnectReason.loggedOut :
+                true;
+            console.log('connection closed due to ', lastDisconnect.error, ', reconnecting ', shouldReconnect);
+            // reconnect if not logged out
+            if (shouldReconnect) {
+                connectToWhatsApp();
             }
-          }
-        });
-      }
-    }
-  };
+        } else if (connection === 'open') {
+            console.log('opened connection');
+        }
+    });
 
-  buscarEnArchivos(dir);
+    sock.ev.on('creds.update', saveCreds);
 
-  if (resultados.length === 0) {
-    return m.reply(`✅ No se encontraron funciones obsoletas o peligrosas.`);
-  }
+    sock.ev.on('messages.upsert', async m => {
+        console.log(JSON.stringify(m, undefined, 2));
 
-  const salida = resultados.join('\n').slice(0, 4000); // WhatsApp límite
-  return m.reply(`⚠️ *Deprecaciones encontradas:*\n\n${salida}`);
-};
+        const msg = m.messages[0];
+        if (!msg.message) return;
 
-handler.command = ['buscardeprecados', 'scandepre', 'depredetect'];
+        const from = msg.key.remoteJid;
+        const type = Object.keys(msg.message)[0];
+        const text = (type === 'conversation') ? msg.message.conversation : (type === 'extendedTextMessage') ? msg.message.extendedTextMessage.text : '';
+
+        if (text.startsWith('!copy ')) {
+            const contentToCopy = text.substring('!copy '.length).trim();
+
+            if (contentToCopy) {
+                // Generate a message with a button to copy the content
+                // Baileys doesn't have a native "copy button" feature like some other APIs.
+                // We will simulate it by providing the text clearly and instructing the user.
+                // For a more advanced "copy button", you'd typically need to use a custom
+                // button type if Baileys supported it directly, or a web-based solution
+                // if you were interacting with a web client.
+
+                // For a simple bot, the most straightforward way is to present the text
+                // and explain how to copy it.
+                await sock.sendMessage(from, {
+                    text: `¡Aquí tienes!\n\n\`\`\`${contentToCopy}\`\`\`\n\n_Puedes copiar este texto manteniendo presionado el mensaje._`
+                }, {
+                    quoted: msg
+                });
+
+                // If you want to use interactive buttons for other purposes (not direct "copy" functionality for text),
+                // you can explore interactive messages. However, directly making a button copy arbitrary text
+                // in the native WhatsApp client via the API is generally not supported.
+                /*
+                // Example of an interactive button (not for direct text copy, but for other actions)
+                const buttons = [
+                    { buttonId: 'copy_action', buttonText: { displayText: 'Copiar Texto (no funcional)' }, type: 1 }
+                ];
+
+                const buttonMessage = {
+                    text: `Aquí tienes el contenido que pediste:\n\n${contentToCopy}`,
+                    footer: 'Presiona el botón para una acción (la copia directa no es posible así).',
+                    buttons: buttons,
+                    headerType: 1
+                };
+
+                await sock.sendMessage(from, buttonMessage);
+                */
+
+            } else {
+                await sock.sendMessage(from, {
+                    text: 'Por favor, proporciona el texto o enlace que quieres que copie. Ejemplo: `!copy Hola mundo`'
+                }, {
+                    quoted: msg
+                });
+            }
+        }
+    });
+}
+
+connectToWhatsApp();
+
+handler.help = ['copy <texto>'];
+handler.tags = ['tools'];
+handler.command = /^!copy\s.+/i;
 
 export default handler;
