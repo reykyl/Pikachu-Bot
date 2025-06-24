@@ -6,7 +6,7 @@ conn.reply(m.chat, '🍭 Descargando su imagen, espere un momento...', m, {
 contextInfo: { externalAdReply :{ mediaUrl: null, mediaType: 1, showAdAttribution: true,
 title: packname,
 body: dev,
-previewType: 0, thumbnail: icons,
+previewType: 0, thumbnail: icono,
 sourceUrl: channel }}})
 const res = await googleImage(text);
 const image = await res.getRandom();
