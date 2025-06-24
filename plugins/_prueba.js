@@ -10,10 +10,9 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
   const canalJid = global.idchannel || '0029VawF8fBBvvsktcInIz3m@newsletter' 
   const thumbnail = 'https://i.imgur.com/4M34hi2.jpeg' 
   const redes = global.redes || 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
-  const pie = global.textoBot || '🤖 Gracias por usar Pikachu-Bot'
-
   
-  const mensaje = `*⚡ 𝙿𝙸𝙺𝙰𝙲𝙷𝚄 - 𝙱𝙾𝚃 ⚡*\n\n${text}\n\n${pie}`
+  
+  const mensaje = `> *AVISO ENVIADO POR EL BOT 🔔*\n\n${text}`
 
  /* try {
     await conn.sendMessage(canalJid, {
