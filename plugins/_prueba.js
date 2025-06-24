@@ -1,7 +1,7 @@
 import fetch from 'node-fetch'
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
-  if (!global.owner.includes(m.sender)) {
+  //if (!global.owner.includes(m.sender)) {
     return m.reply('❌ Solo el creador o desarrolladores pueden usar este comando.')
   }
 
