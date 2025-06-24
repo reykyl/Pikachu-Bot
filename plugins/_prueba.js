@@ -11,7 +11,7 @@ let handler = async (m, { conn }) => {
     text: `h:\n\n${bloqueCodigo}`,
     footer: 'P',
     buttons: [
-      { buttonId: '.h', buttonText: { displayText: '📄 Ver otra vez' }, type: 1 }
+      { buttonId: '.h', buttonText: { displayCopy: '📄 Ver otra vez' }, type: 1 }
     ],
     headerType: 1
   }, { quoted: m });
