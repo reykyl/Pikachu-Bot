@@ -30,59 +30,9 @@ let crm3 = "SBpbmZvLWRvbmFyLmpz"
 let crm4 = "IF9hdXRvcmVzcG9uZGVyLmpzIGluZm8tYm90Lmpz"
 let drm1 = ""
 let drm2 = ""
-let rtx = `
-╔══════════════════════════╗
-║ ⚡🐭  P I K A C H U   B O T  ⚡ 
-╠══════════════════════════╣
-║   ╭───(⚡◕ᴥ◕⚡)───╮         
-║   │  P I K A   │ P I K A  
-║   │   C H U !  │ C H U !  
-║   ╰─────────────╯         
-╠══════════════════════════╣
-║ 📡  Sub-Bot – Modo QR        
-╟──────────────────────────╢
-║ ⟿ ¡Pika Pika! Escanea este  
-║    código QR con otro       
-║    dispositivo o desde PC   
-║    para ser un *Sub-Bot*    
-║                            
-║ ➥ ❶ Toca ⋮ (tres rayitos)   
-║ ➥ ❷ Selecciona “Dispositivos
-║       vinculados”           
-║ ➥ ❸ Escanea y conéctate al 
-║       poder eléctrico ⚡     
-╟──────────────────────────╢
-║ ⚠  Expira en ❺❹ seg.        
-║   ¡No dejes que te atrape   
-║     la sobrecarga!          
-╚══════════════════════════╝`;
+let rtx = `${QR}`;
 
-let rtx2 = `
-╔══════════════════════════╗
-║ ✨🐭  P I K A C H U   B O T  ✨ 
-╠══════════════════════════╣
-║   ╭───(⚡◕ᴥ◕⚡)───╮         
-║   │  P I K A   │ C H U !  
-║   │   C O D E  │   ⚡      
-║   ╰─────────────╯         
-╠══════════════════════════╣
-║ 🛠️  Sub-Bot – Modo Código    
-╟──────────────────────────╢
-║ ⟿ Usa este código para un   
-║   irte con la fuerza        
-║    eléctrica de Pikachu ⚡   
-║                            
-║ ➥ ❶ Abre ⋮ (tres rayitos)   
-║ ➥ ❷ “Dispositivos vinculados”
-║ ➥ ❸ Vincular con número     
-║ ➥ ❹ Ingresa el código ¡y    
-║       Pikaaa! Ya eres parte 
-║       del equipo eléctrico  
-╟──────────────────────────╢
-║ ⚠  Si ya tienes otra sesión 
-║    abierta, desconecta para 
-║    evitar sobrecarga ⚡      
-╚══════════════════════════╝`;
+let rtx2 = `${CODE}`;
 
 let imagenUrl = 'src/catalogo.jpg';
 
