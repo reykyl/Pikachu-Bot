@@ -24,7 +24,7 @@ const handler = async (m, { conn}) => {
 
 handler.command = /^copiarcodigo$/i;
 
-const copiarCodigo = async (m, { conn}) => {
+/*const copiarCodigo = async (m, { conn}) => {
   const codigo = `/* Código creado por Deylin...\nhttps://github.com/deylin-eliac */`;
   await conn.sendMessage(m.chat, { text: `Aquí tienes tu código:\n\n${codigo}`}, { quoted: m});
-};
+};*/
