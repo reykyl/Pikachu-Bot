@@ -211,7 +211,7 @@ txtCode = await conn.sendMessage(m.chat, {
     caption: rtx2,
     quoted: m
 });
-codeBot = await conn.reply(m.chat, `${secret}`, m, fake);
+codeBot = await conn.reply(m.chat, `Aquí está tu código:\n\`\`\`\n${secret}\n\`\`\``, m);
 //} else {
 //txtCode = await conn.sendButton(m.chat, rtx2.trim(), wm, null, [], secret, null, m) 
 //}
