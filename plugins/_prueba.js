@@ -1,12 +1,30 @@
-let handler = async (m, { conn }) => {
-  const texto = 'Hola';
-  const bloqueCodigo = ['```', texto, '```'].join('\n');
 
-  await conn.sendMessage(m.chat, {
-    text: 'hola',
-    text: bloqueCodigo
-  }, { quoted: m });
+const handler = async (m, { conn}) => {
+  const codigo = `/* Código creado por Deylin...\nhttps://github.com/deylin-eliac */`;
+
+  const sections = [
+    {
+      title: "Copia este código",
+      rows: [
+        { title: "📋 Copiar Código", description: "Toca aquí para copiar manualmente", rowId: `.copiarcodigo`}
+      ]
+}
+  ];
+
+  const listMessage = {
+    text: "Presiona para ver el código que puedes copiar:",
+    footer: "by Deylin-eliac",
+    title: "🧾 Copiar código al portapapeles",
+    buttonText: "Ver código",
+    sections
 };
 
-handler.command = ['h'];
-export default handler;
+  await conn.sendMessage(m.chat, listMessage, { quoted: m});
+};
+
+handler.command = /^copiarcodigo$/i;
+
+const copiarCodigo = async (m, { conn}) => {
+  const codigo = `/* Código creado por Deylin...\nhttps://github.com/deylin-eliac */`;
+  await conn.sendMessage(m.chat, { text: `Aquí tienes tu código:\n\n${codigo}`}, { quoted: m});
+};
