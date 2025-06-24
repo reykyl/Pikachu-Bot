@@ -31,8 +31,8 @@ let crm3 = "SBpbmZvLWRvbmFyLmpz"
 let crm4 = "IF9hdXRvcmVzcG9uZGVyLmpzIGluZm8tYm90Lmpz"
 let drm1 = ""
 let drm2 = ""
-let rtx = mensajes.smsqr, 
-let rtx2 = mensajes.smscode,
+let rtx = mensajes.smsqr;
+let rtx2 = mensajes.smscode;
 let imagenUrl = 'src/catalogo.jpg';
 
 const __filename = fileURLToPath(import.meta.url)
