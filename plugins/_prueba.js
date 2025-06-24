@@ -1,5 +1,5 @@
 let handler = async (m, { conn, args, participants, usedPrefix, command }) => {
-    const userId = m.mentionedJid?.[0] || m.sender
+
   if (!m.isGroup) {
     return conn.reply(m.chat, `${emojis} Este comando solo funciona en grupos.`, m, rcanal);
   }
@@ -18,10 +18,10 @@ let handler = async (m, { conn, args, participants, usedPrefix, command }) => {
   }
 
   let text = `*${emojis} ¡Pika Pika! Lista de números que comienzan con ${prefix}*\n\n`;
-  text += matching.map((u, i) => `${i + 1}. @${userId.split('@')[0]}`).join('\n');
+  text += matching.map((u, i) => `${i + 1}. @${u.split('@')[0]}`).join('\n');
   text += `\n\n🌎 Total encontrados: *${matching.length}*`;
 
-  await conn.reply(m.chat, text, m, { mentions: [m.sender] });
+  await conn.reply(m.chat, text, m, { mentions: [m.sender], ...rcanal });
 };
 
 handler.help = ['litsnuber +prefijo'];
