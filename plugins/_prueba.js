@@ -36,6 +36,6 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 handler.help = ['aviso <texto>'];
 handler.tags = ['owner'];
 handler.command = ['aviso'];
-handler.rowner = true; // Solo el dueño puede usar este comando
+handler.rowner = true; 
 
 export default handler;
