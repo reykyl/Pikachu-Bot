@@ -1,20 +1,8 @@
 const handler = async (m, { conn }) => {
-const buttons = [
-  {buttonId: 'id1', buttonText: {displayText: 'Haz clic para copiar'}, type: 1}
-];
+    const codigoACopiar = 'DESC20'; // Aquí pones el código que quieres que se copie
+    const mensajeConCodigo = `Aquí está tu código:\n\`\`\`\n${codigoACopiar}\n\`\`\``;
 
-const buttonMessage = {
-    text: "Aquí está tu código:",
-    footer: 'Presiona el botón para copiar',
-    buttons: buttons,
-    headerType: 1
-}
-
-await conn.sendMessage(m.chat, buttonMessage);
+    await conn.sendMessage(m.chat, { text: mensajeConCodigo }, { quoted: m });
 };
 
-handler.command = ['h'];
-export default handler;
-
-
-  
+handler.command = ['h']; 
