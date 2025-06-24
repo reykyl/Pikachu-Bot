@@ -5,7 +5,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 
   const canalJid = '0029VawF8fBBvvsktcInIz3m@newsletter'; // JID real del canal
   const canalUrl = 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'; // URL pública
-  const thumbnail = 'https://files.catbox.moe/xr2m6u.jpg'; 
+  const thumbnail = icono; 
 
   try {
     
