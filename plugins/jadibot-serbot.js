@@ -32,7 +32,7 @@ let drm1 = ""
 let drm2 = ""
 let rtx = QR,
 
-let rtx2 = `${CODE}`;
+let rtx2 = CODE,
 
 let imagenUrl = 'src/catalogo.jpg';
 
