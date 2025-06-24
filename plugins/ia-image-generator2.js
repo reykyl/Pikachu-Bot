@@ -7,7 +7,8 @@ https://github.com/deylin-eliac
 
 let handler = async (m, { text, conn }) => {
 
-
+  const texto= ['hola']
+  const bloqueCodigo = ['```', texto, '```'].join('\n');
   if (!text) {
     return await conn.reply(m.chat, `${emojis} Escribe el prompt de la imagen. Ejemplo:\n.imagina un dragón azul volando en el espacio`, m, fake)
   }
@@ -18,8 +19,8 @@ let handler = async (m, { text, conn }) => {
     let prompt = encodeURIComponent(text.trim())
     let imageUrl = `https://anime-xi-wheat.vercel.app/api/ia-img?prompt=${prompt}`
 
-    await conn.sendFile(m.chat, imageUrl, 'imagen.jpg', `🧃 Imagen generada:
-https://anime-xi-wheat.vercel.app/api/ia-img?prompt=${prompt}`, m, fake)
+    await conn.sendFile(m.chat, imageUrl, bloqueCodigo, 'imagen.jpg', `🧃 Imagen generada:
+https://anime-xi-wheat.vercel.app/api/ia-img?prompt=${prompt}`, m)
   } catch (e) {
     console.error(e)
     m.reply(`❌ Ocurrió un error al generar la imagen:\n${e.message}`)
