@@ -1,53 +1,61 @@
-import { googleImage } from '@bochilteam/scraper';
+import axios from 'axios';
+const {
+  generateWAMessageContent,
+  generateWAMessageFromContent,
+  proto
+} = (await import("@whiskeysockets/baileys"))["default"];
 
-const handler = async (m, { conn, text }) => {
-  if (!text) {
-    return conn.reply(m.chat, '🍬 Por favor, ingresa un término de búsqueda.', m, rcanal);
-  }
-
-  await m.react(rwait);
-
-  conn.reply(m.chat, '🍭 Descargando su imagen, espere un momento...', m, {
-    contextInfo: {
-      externalAdReply: {
-        mediaUrl: null,
-        mediaType: 1,
-        showAdAttribution: true,
-        title: packname,
-        body: dev,
-        previewType: 0,
-        thumbnail: icono,
-        sourceUrl: channel
-      }
-    }
-  });
-
+let handler = async (m, { conn, text, usedPrefix, command }) => {
+  if (!text) return conn.reply(m.chat, "🍬 Por favor, ingresa lo que deseas buscar en Pinterest.", m);
+  let query = text + " hd";
+  await m.react("⏳");
+  conn.reply(m.chat, '🍭 Descargando imágenes, espere un momento...', m);
   try {
-    const res = await googleImage(text);
-    if (!res || !res.length) throw new Error('No se encontraron imágenes.');
-
-    
-    const getRandomImage = () => res[Math.floor(Math.random() * res.length)];
-
-    const messages = [
-      ['🖼 Imagen 1', dev, getRandomImage(), [[]], [[]], [[]], [[]]],
-      ['🖼 Imagen 2', dev, getRandomImage(), [[]], [[]], [[]], [[]]],
-      ['🖼 Imagen 3', dev, getRandomImage(), [[]], [[]], [[]], [[]]],
-      ['🖼 Imagen 4', dev, getRandomImage(), [[]], [[]], [[]], [[]]]
-    ];
-
-    
-    await conn.sendCarousel(m.chat, `🍬 Resultado de ${text}`, '⪛✰ Imagen - Búsqueda ✰⪜', null, messages, m);
-
-  } catch (err) {
-    console.error(err);
-    await conn.reply(m.chat, `❌ Ocurrió un error al buscar imágenes:\n${err.message}`, m);
+    let { data } = await axios.get(`https://api.dorratz.com/v2/pinterest?q=${encodeURIComponent(query)}`);
+    let images = data.slice(0, 6).map(item => item.image_large_url);
+    let cards = [];
+    let counter = 1;
+    for (let url of images) {
+      const { imageMessage } = await generateWAMessageContent({ image: { url } }, { upload: conn.waUploadToServer });
+      cards.push({
+        body: proto.Message.InteractiveMessage.Body.fromObject({ text: `Imagen - ${counter++}` }),
+        footer: proto.Message.InteractiveMessage.Footer.fromObject({ text: "Pinterest HD" }),
+        header: proto.Message.InteractiveMessage.Header.fromObject({ title: '', hasMediaAttachment: true, imageMessage }),
+        nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.fromObject({
+          buttons: [{
+            name: "cta_url",
+            buttonParamsJson: JSON.stringify({
+              display_text: "Ver en Pinterest",
+              Url: `https://www.pinterest.com/search/pins/?q=${encodeURIComponent(query)}`,
+              merchant_url: `https://www.pinterest.com/search/pins/?q=${encodeURIComponent(query)}`
+            })
+          }]
+        })
+      });
+    }
+    const messageContent = generateWAMessageFromContent(m.chat, {
+      viewOnceMessage: {
+        message: {
+          messageContextInfo: { deviceListMetadata: {}, deviceListMetadataVersion: 2 },
+          interactiveMessage: proto.Message.InteractiveMessage.fromObject({
+            body: proto.Message.InteractiveMessage.Body.create({ text: `🍭 Resultado de: ${query}` }),
+            footer: proto.Message.InteractiveMessage.Footer.create({ text: "⪛✰ Pinterest HD - Búsquedas ✰⪜" }),
+            header: proto.Message.InteractiveMessage.Header.create({ hasMediaAttachment: false }),
+            carouselMessage: proto.Message.InteractiveMessage.CarouselMessage.fromObject({ cards })
+          })
+        }
+      }
+    }, { quoted: m });
+    await m.react("✅");
+    await conn.relayMessage(m.chat, messageContent.message, { messageId: messageContent.key.id });
+  } catch (error) {
+    console.error(error);
+    return conn.reply(m.chat, "Ocurrió un error al buscar las imágenes.", m);
   }
 };
 
-handler.help = ['imagen'];
-handler.tags = ['buscador', 'tools', 'descargas'];
-handler.command = ['image', 'imagenh'];
-handler.register = true;
+handler.help = ["pinterest"];
+handler.tags = ["descargas"];
+handler.command = ['pinterest', 'pinh'];
 
 export default handler;
