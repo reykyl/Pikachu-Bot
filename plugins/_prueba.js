@@ -1,13 +1,20 @@
 const handler = async (m, { conn }) => {
-    const codigoACopiar = 'MI_CODIGO_SECRETO_123';
+  const codigo = 'MI_CODIGO_SECRETO_123';
 
-    // Mensaje con código formateado en bloque
-    const mensajeParaWhatsApp = `Aquí está tu código:\n\`\`\`\n${codigoACopiar}\n\`\`\``;
+  const mensaje = `🎉 Aquí está tu código:\n\n\`\`\`\n${codigo}\n\`\`\``;
 
-    await conn.sendMessage(m.chat, {
-        text: mensajeParaWhatsApp
-    }, { quoted: m });
+  await conn.sendMessage(m.chat, {
+    text: mensaje,
+    contextInfo: {
+      isForwarded: true,
+      forwardedNewsletterMessageInfo: {
+        newsletterJid: '120363#######@newsletter.whatsapp.net', // <- ID del canal (puede ser uno falso)
+        serverMessageId: 100,
+        newsletterName: 'Canal Oficial'
+      }
+    }
+  }, { quoted: m });
 };
 
-handler.command = ['h'];
+handler.command = ['hcopy'];
 export default handler;
