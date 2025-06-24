@@ -1,11 +1,29 @@
-let handler = async (m, { conn }) => {
+let handler = async (m, { conn, args }) => {
   try {
-    let id = m.chat;
-    let tipo = id.endsWith('@g.us') ? 'Grupo' : id.endsWith('@newsletter') ? 'Canal' : id.endsWith('@s.whatsapp.net') ? 'Chat Privado' : 'Desconocido';
+    if (!args[0]) return m.reply('❌ Proporciona la URL de un *grupo* o *canal*.');
+
+    let url = args[0];
+    let id, tipo;
+
+    if (url.includes('chat.whatsapp.com')) {
+      
+      let code = url.split('/').pop().trim();
+      id = await conn.groupAcceptInvite(code).catch(() => null);
+      if (!id) return m.reply('❌ No se pudo unir temporalmente al grupo para obtener info. Asegúrate de que el enlace es válido.');
+      tipo = 'Grupo';
+    } else if (url.includes('whatsapp.com/channel/')) {
+      
+      let rawId = url.split('/channel/').pop().trim();
+      id = rawId + '@newsletter';
+      tipo = 'Canal';
+    } else {
+      return m.reply('❌ URL inválida. Solo se permiten enlaces de *grupos* o *canales*.');
+    }
+
     let nombre = await conn.getName(id);
     let participantes = [];
     let descripcion = '';
-    
+
     if (tipo === 'Grupo') {
       const info = await conn.groupMetadata(id);
       participantes = info.participants.map(p => p.id);
@@ -19,11 +37,11 @@ let handler = async (m, { conn }) => {
     await m.reply(texto);
   } catch (e) {
     console.error(e);
-    await m.reply('❌ Error al inspeccionar este chat. Asegúrate de que el bot esté dentro del grupo o canal.');
+    await m.reply('❌ Error al inspeccionar el enlace. Asegúrate de que el bot tenga permisos para acceder.');
   }
 };
 
-handler.help = ['inspeccionar'];
+handler.help = ['inspeccionar <url>'];
 handler.tags = ['tools'];
 handler.command = ['inspeccionar', 'id', 'chatinfo'];
 handler.rowner = true;
