@@ -3,6 +3,7 @@ import fs from 'fs'
 import fetch from 'node-fetch'
 import axios from 'axios'
 import moment from 'moment-timezone'
+import getMensajeSistema from '../lib/msmwarning.js';
 const { generateWAMessageFromContent, prepareWAMessageMedia, proto } = pkg
 
 var handler = m => m
@@ -43,6 +44,9 @@ global.idchannel = '120363365444927738@newsletter'
 global.canalIdM = ["120363365444927738@newsletter", "120363365444927738@newsletter"]
 global.canalNombreM = ["⚡️𝙋𝙞𝙠𝙖𝙘𝙝𝙪-𝘽𝙤𝙩 ⚡ 𝘾𝙝𝙖𝙣𝙣𝙚𝙡", "⚡️𝙋𝙞𝙠𝙖𝙘𝙝𝙪-𝘽𝙤𝙩 ⚡"]
 global.channelRD = await getRandomChannel()
+
+
+global.mensajes = getMensajeSistema();
 
 //fechas
 global.d = new Date(new Date + 3600000)
