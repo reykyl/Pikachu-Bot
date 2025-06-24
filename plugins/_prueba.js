@@ -1,27 +1,22 @@
-const handler = async (m, { conn }) => {
-  const sections = [
-    {
-      title: "Copia este código",
-      rows: [
-        {
-          title: "📋 Copiar Código",
-          description: "Toca aquí para ver y copiar el código",
-          rowId: ".copiarcodigo"
-        }
-      ]
-    }
-  ];
-
-  const listMessage = {
-    text: "Presiona el botón para ver el código que puedes copiar:",
-    footer: "by Deylin-eliac",
-    title: "🧾 Copiar código al portapapeles",
-    buttonText: "Ver código",
-    sections
-  };
-
-  await conn.sendMessage(m.chat, listMessage, { quoted: m });
+import {googleImage} from '@bochilteam/scraper';
+const handler = async (m, {conn, text, usedPrefix, command}) => {
+if (!text) return conn.reply(m.chat, '🍬 Por favor, ingresa un término de búsqueda.', m, rcanal);
+await m.react(rwait)
+conn.reply(m.chat, '🍭 Descargando su imagen, espere un momento...', m, {
+contextInfo: { externalAdReply :{ mediaUrl: null, mediaType: 1, showAdAttribution: true,
+title: packname,
+body: dev,
+previewType: 0, thumbnail: icons,
+sourceUrl: channel }}})
+const res = await googleImage(text);
+const image = await res.getRandom();
+const link = image;
+const messages = [['Imagen 1', dev, await res.getRandom(),
+[[]], [[]], [[]], [[]]], ['Imagen 2', dev, await res.getRandom(), [[]], [[]], [[]], [[]]], ['Imagen 3', dev, await res.getRandom(), [[]], [[]], [[]], [[]]], ['Imagen 4', dev, await res.getRandom(), [[]], [[]], [[]], [[]]]]
+await conn.sendCarousel(m.chat, `🍬 Resultado de ${text}`, '⪛✰ Imagen - Búsqueda ✰⪜', null, messages, m);
 };
-
-handler.command = ['h'];
+handler.help = ['imagen'];
+handler.tags = ['buscador', 'tools', 'descargas'];
+handler.command = ['image', 'imagenh'];
+handler.register = true
 export default handler;
