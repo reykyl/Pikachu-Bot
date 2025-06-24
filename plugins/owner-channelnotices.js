@@ -76,7 +76,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 
 handler.help = ['avisor <texto>']
 handler.tags = ['owner']
-handler.command = ['aviso']
+handler.command = ['avisor']
 handler.rowner = true
 
 export default handler
