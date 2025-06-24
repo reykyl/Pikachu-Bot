@@ -3,18 +3,16 @@ import fetch from 'node-fetch'
 let handler = async (m, { conn, text, usedPrefix, command }) => {
  
 
-  // Validar texto
+  
   if (!text) {
     return m.reply(`⚠️ Escribe el texto que quieres enviar al canal.\n\nEjemplo:\n${usedPrefix + command} ¡Atención! Mantenimiento programado esta noche. 🌙`)
   }
 
-  // Datos base
-  const canalJid = global.idchannel || '0029VawF8fBBvvsktcInIz3m@newsletter' // Asegúrate de establecer esto en tu global
-  const thumbnail = 'https://i.imgur.com/4M34hi2.jpeg' // Puedes cambiarla por otra imagen estilo Pikachu
-  const redes = global.redes || 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
-  const pie = global.textoBot || '🤖 Gracias por usar Pikachu-Bot'
+  const canalJid = global.idchannel || '0029VawF8fBBvvsktcInIz3m@newsletter' 
+  
+  
 
-  // Formato del mensaje
+  
   const mensaje = `*⚡ 𝙿𝙸𝙺𝙰𝙲𝙷𝚄 - 𝙱𝙾𝚃 ⚡*\n\n${text}\n\n${pie}`
 
   try {
@@ -24,7 +22,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         externalAdReply: {
           title: '🔔 Aviso Oficial - Pikachu Bot',
           body: '🧠 Información importante para todos los usuarios',
-          thumbnailUrl: thumbnail,
+          thumbnailUrl: icono,
           sourceUrl: redes,
           mediaType: 1,
           renderLargerThumbnail: true,
