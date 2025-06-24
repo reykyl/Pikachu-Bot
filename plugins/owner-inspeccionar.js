@@ -35,10 +35,10 @@ let handler = async (m, { conn, args }) => {
     let texto = `┌─ ⟡ *INSPECCIÓN DE CHAT*\n│\n│ 📌 *Tipo:* ${tipo}\n│ 🆔 *ID:* ${id}\n│ 📛 *Nombre:* ${nombre}\n│ 👥 *Participantes:* ${participantes.length || 'N/A'}\n│ 📝 *Descripción:* ${descripcion.slice(0, 100)}${descripcion.length > 100 ? '...' : ''}\n│\n└────⟡`;
 
     await m.reply(texto);
+   await m.reply(`${id}`);
   } catch (e) {
     console.error(e);
     await m.reply('❌ Error al inspeccionar el enlace. Asegúrate de que el bot tenga permisos para acceder.');
-   return m.reply(`${id}`);
   }
 };
 
