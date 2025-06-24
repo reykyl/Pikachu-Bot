@@ -1,17 +1,4 @@
-    await conn.sendMessage(global.idchannel, {
-        text: chtxt,
-        contextInfo: {
-            externalAdReply: {
-                title: "【 🔔 𝐍𝐎𝐓𝐈𝐅𝐈𝐂𝐀𝐂𝐈𝐎́𝐍 🔔 】",
-                body: '🥳 ¡𝚄𝚗 𝚞𝚜𝚞𝚊𝚛𝚒𝚘 𝚗𝚞𝚎𝚟𝚘 𝚎𝚗 𝚖𝚒 𝚋𝚊𝚜𝚎 𝚍𝚎 𝚍𝚊𝚝𝚘𝚜!',
-                thumbnailUrl: perfil,
-                sourceUrl: redes,
-                mediaType: 1,
-                showAdAttribution: false,
-                renderLargerThumbnail: false
-            }
-        }
-    }, { quoted: null });import fetch from 'node-fetch'
+import fetch from 'node-fetch'
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
  
