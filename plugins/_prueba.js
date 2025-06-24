@@ -1,3 +1,4 @@
+const handler = async (m, { conn }) => {
 const buttons = [
   {buttonId: 'id1', buttonText: {displayText: 'Haz clic para copiar'}, type: 1}
 ];
@@ -14,3 +15,6 @@ await conn.sendMessage(m.chat, buttonMessage);
 
 handler.command = ['h'];
 export default handler;
+
+
+  
