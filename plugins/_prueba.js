@@ -4,7 +4,7 @@ const handler = async (m, { conn }) => {
     const code = `\`\`\`\n${codigoACopiar}\n\`\`\``;
 
     await conn.sendMessage(m.chat, {
-        text: mensajeConFormatoDeCodigo
+        text: mensajeConFormatoDeCodigo,
         code: code
     }, { quoted: m });
 };
