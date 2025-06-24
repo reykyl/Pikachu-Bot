@@ -5,9 +5,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
   const canalUrl = 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m';
 
   try {
-    
     let nombreCanal = await conn.getName(canalJid).catch(() => null);
-    
     if (!nombreCanal) {
       return m.reply(`❌ *El bot no tiene permisos para enviar mensajes al canal.*\n\n👉 Asegúrate de que el bot sea *editor* o *admin* del canal.\n🔗 ${canalUrl}`);
     }
@@ -15,12 +13,6 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     const msg = {
       text: `╭───────⟡\n│ *📢 AVISO IMPORTANTE*\n╰───────⟡\n\n${text}\n\n⟣ _Enviado automáticamente por tu bot_`,
       contextInfo: {
-        isForwarded: true,
-        forwardedNewsletterMessageInfo: {
-          newsletterJid: canalJid,
-          serverMessageId: 100,
-          newsletterName: 'Canal Oficial 🛠️'
-        },
         externalAdReply: {
           showAdAttribution: true,
           title: 'Canal Oficial del Bot 📢',
@@ -34,7 +26,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
       }
     };
 
-    await conn.sendMessage(canalJid, msg, { quoted: m });
+    await conn.sendMessage(canalJid, msg);
     await m.reply('✅ *Mensaje enviado correctamente al canal.*');
 
   } catch (e) {
