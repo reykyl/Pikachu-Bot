@@ -50,9 +50,9 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         contextInfo: {
           isForwarded: true,
           forwardedNewsletterMessageInfo: {
-            newsletterJid: canalJid,
+            //newsletterJid: canalJid,
             serverMessageId: 100,
-            newsletterName: namechannel
+            
           },
           externalAdReply: {
             title: '📢 𝐀𝐕𝐈𝐒𝐎 𝐈𝐌𝐏𝐎𝐑𝐓𝐀𝐍𝐓𝐄 ⚡',
