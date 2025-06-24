@@ -26,6 +26,6 @@ let handler = async (m, { conn }) => {
 handler.help = ['inspeccionar'];
 handler.tags = ['tools'];
 handler.command = ['inspeccionar', 'id', 'chatinfo'];
-handler.rowner = true; // Opcional: solo dueño
+handler.rowner = true;
 
 export default handler;
