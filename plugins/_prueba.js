@@ -15,7 +15,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
   
   const mensaje = `*⚡ 𝙿𝙸𝙺𝙰𝙲𝙷𝚄 - 𝙱𝙾𝚃 ⚡*\n\n${text}\n\n${pie}`
 
-  try {
+ /* try {
     await conn.sendMessage(canalJid, {
       text: mensaje,
       contextInfo: {
@@ -27,6 +27,31 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
           mediaType: 1,
           renderLargerThumbnail: true,
           showAdAttribution: false
+        }
+      }
+    })*/
+
+try {
+    await conn.sendMessage(canalJid, {
+      text: mensaje,
+      contextInfo: {
+        isForwarded: true,
+        forwardedNewsletterMessageInfo: {
+          newsletterJid: channelRD.id,
+          serverMessageId: 100,
+          newsletterName: channelRD.name
+        },
+        externalAdReply: {
+          title: textbot,
+          body: dev,
+          mediaUrl: null,
+          description: null,
+          previewType: "PHOTO",
+          thumbnailUrl: icono,
+          sourceUrl: redes,
+          mediaType: 1,
+          renderLargerThumbnail: false,
+          showAdAttribution: true
         }
       }
     })
