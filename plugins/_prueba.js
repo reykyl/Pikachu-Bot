@@ -1,7 +1,6 @@
 let handler = async (m, { conn }) => {
-  const texto = `h text`;
+  const texto = `Texto que se podrá copiar con el botón de WhatsApp`;
 
-  
   const bloqueCodigo = [
     '```',
     texto,
@@ -9,7 +8,12 @@ let handler = async (m, { conn }) => {
   ].join('\n');
 
   await conn.sendMessage(m.chat, {
-    text: bloqueCodigo
+    text: `h:\n\n${bloqueCodigo}`,
+    footer: 'P',
+    buttons: [
+      { buttonId: '.h', buttonText: { displayText: '📄 Ver otra vez' }, type: 1 }
+    ],
+    headerType: 1
   }, { quoted: m });
 };
 
