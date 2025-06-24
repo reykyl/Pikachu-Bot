@@ -1,9 +1,9 @@
-let handler = async (m, { conn, text }) => {
-  if (!text) return m.reply('❗Escribe el texto que quieres que sea copiable.\nEjemplo: *.copiar Hola mundo*');
-  const bloqueCodigo = ['[[[', text, ']]]'].join('\n');
+let handler = async (m, { conn }) => {
+  const texto = 'Hola';
+  const bloqueCodigo = ['```', texto, '```'].join('\n');
 
   await conn.sendMessage(m.chat, {
-    text: bloqueCodigo
+    text: bloqueCodigo,
   }, { quoted: m });
 };
 
