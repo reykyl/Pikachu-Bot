@@ -3,7 +3,7 @@ let handler = async (m, { conn }) => {
   const bloqueCodigo = ['```', texto, '```'].join('\n');
 
   await conn.sendMessage(m.chat, {
-    text: bloqueCodigo,
+    text: bloqueCodigo
   }, { quoted: m });
 };
 
