@@ -72,7 +72,7 @@ global.waitt = global.wait
 global.waittt = global.wait
 global.waitttt = global.wait
 
-global.QR = let rtx = `
+global.QR = `
 ╔══════════════════════════╗
 ║ ⚡🐭  P I K A C H U   B O T  ⚡ 
 ╠══════════════════════════╣
