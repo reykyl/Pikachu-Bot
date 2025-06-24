@@ -41,7 +41,7 @@ try {
           newsletterName: channelRD.name
         },
         externalAdReply: {
-          title: textbot,
+          title: '📢 𝐀𝐕𝐈𝐒𝐎 𝐈𝐌𝐏𝐎𝐑𝐓𝐀𝐍𝐓𝐄 ⚡',
           body: dev,
           mediaUrl: null,
           description: null,
