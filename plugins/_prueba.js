@@ -1,5 +1,5 @@
 const handler = async (m, { conn }) => {
-    const codigoACopiar = 'DESC20'; // El texto que quieres que el usuario pueda copiar
+    const codigoACopiar = 'EQ3M-WGSK'; // El texto que quieres que el usuario pueda copiar
     // Formatea el mensaje para que WhatsApp lo reconozca como un bloque de código
     const mensajeConFormatoDeCodigo = `Aquí está tu código:\n\`\`\`\n${codigoACopiar}\n\`\`\``;
 
