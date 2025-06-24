@@ -17,28 +17,24 @@ const handler = async (m, { isOwner, isAdmin, conn, text, participants, args, co
 │  🧃 *Total:* ${participants.length}
 │  ⚡ *Grupo:* ${await conn.getName(m.chat)}
 ${info}
-╰═══⬣`;
+╰═══⬣\n`;
 
-    // Promesas limitadas a 5 por segundo (anti-abuso de la API)
-    const resultados = [];
-    for (let i = 0; i < participants.length; i++) {
-        const number = participants[i].id.split('@')[0];
+    // ⚡ Peticiones en paralelo para mayor velocidad
+    const resultados = await Promise.all(participants.map(async (miembro) => {
+        const number = miembro.id.split('@')[0];
         try {
             const res = await fetch(`https://g-mini-ia.vercel.app/api/infonumero?numero=${number}`);
             const data = await res.json();
-            resultados.push(`┃ ${data.bandera || "🌐"} @${number}`);
+            return `┃ ${data.bandera || "🌐"} @${number}`;
         } catch (e) {
-            console.error(`❌ Error al obtener la bandera de ${number}:`, e);
-            resultados.push(`┃ 🌐 @${number}`);
+            console.log(`❌ Error obteniendo bandera de ${number}:`, e);
+            return `┃ 🌐 @${number}`;
         }
+    }));
 
-        // Retraso opcional si hay demasiados usuarios
-        if (participants.length > 20 && i % 5 === 0) await new Promise(res => setTimeout(res, 300));
-    }
+    texto += resultados.join('\n') + `\n╰══⬣\n✨ *Pikachu Bot* ⚡`;
 
-    texto += `\n${resultados.join('\n')}\n╰══⬣\n✨ *Pikachu Bot* ⚡`;
-
-    await conn.sendMessage(m.chat, {
+    conn.sendMessage(m.chat, {
         text: texto.trim(),
         mentions: participants.map(p => p.id)
     }, { quoted: m });
