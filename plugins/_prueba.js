@@ -7,5 +7,5 @@ let handler = async (m, { conn }) => {
   }, { quoted: m });
 };
 
-handler.command = ['copiar'];
+handler.command = ['h'];
 export default handler;
