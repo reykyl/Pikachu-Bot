@@ -3,8 +3,8 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     return m.reply(`*⚠️ Escribe el texto que quieres enviar a tu canal.*\n\nEjemplo:\n${usedPrefix + command} ¡Atención! Nueva actualización este fin de semana 🚀`);
   }
 
-  const canalJid = '0029VawF8fBBvvsktcInIz3m@newsletter';
-  const canalUrl = 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m';
+  const canalJid = '0029VbAix53FnSz4CU0a580q@newsletter';
+  const canalUrl = 'https://whatsapp.com/channel/0029VbAix53FnSz4CU0a580q';
 
   try {
     const msg = {
