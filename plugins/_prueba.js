@@ -2,8 +2,8 @@ import fetch from 'node-fetch'
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
   // Verificar si el usuario es owner
- /* if (!global.owner.includes(m.sender)) {
-    return m.reply('❌ Solo el creador o desarrolladores pueden usar este comando.')*)
+  if (!global.owner.includes(m.sender)) {
+    return m.reply('❌ Solo el creador o desarrolladores pueden usar este comando.')
   }
 
   // Validar texto
@@ -20,18 +20,18 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
   // Formato del mensaje
   const mensaje = `*⚡ 𝙿𝙸𝙺𝙰𝙲𝙷𝚄 - 𝙱𝙾𝚃 ⚡*\n\n${text}\n\n${pie}`
 
-    try {
+  try {
     await conn.sendMessage(canalJid, {
       text: mensaje,
       contextInfo: {
         externalAdReply: {
-          title: "🪧 AVISO ENVIADO POR EL BOT",
-          body: dev,
+          title: '🔔 Aviso Oficial - Pikachu Bot',
+          body: '🧠 Información importante para todos los usuarios',
           thumbnailUrl: icono,
           sourceUrl: redes,
           mediaType: 1,
-          showAdAttribution: false,
-          renderLargerThumbnail: true
+          renderLargerThumbnail: true,
+          showAdAttribution: false
         }
       }
     })
