@@ -2,7 +2,7 @@ let handler = async (m, { conn }) => {
   try {
     const who = m.quoted?.sender || m.mentionedJid?.[0] || (m.fromMe ? conn.user.jid : m.sender);
     const name = await conn.getName(who);
-    const pp = await conn.profilePictureUrl(who, 'image').catch(() => 'https://files.catbox.moe/xr2m6u.jpg');
+    const pp = await conn.profilePictureUrl(who, 'image').catch(() => catalogo,);
 
     const userNumber = who.split('@')[0];
     const isBot = who.endsWith('g.us') || who.startsWith('status@') ? '❌' : who.includes(':') ? '❌' : '✅';
