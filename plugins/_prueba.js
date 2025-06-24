@@ -1,49 +1,38 @@
+import { createHash } from 'crypto'  
+import fetch from 'node-fetch'
 let handler = async (m, { conn, text, usedPrefix, command }) => {
-  if (!text) {
-    return m.reply(`*⚠️ Escribe el texto que quieres enviar al canal desde los subbots.*\n\nEjemplo:\n${usedPrefix + command} ¡Atención! Nueva actualización 🚀`);
+  
+  if (!global.owner.includes(m.sender)) {
+    return m.reply('❌ Solo el creador o desarrolladores pueden usar este comando.')
   }
 
-  const canalJid = global.channelJid || '0029VbAix53FnSz4CU0a580q@newsletter';
-  const canalUrl = global.channelUrl || 'https://whatsapp.com/channel/0029VbAix53FnSz4CU0a580q';
-  const thumbnail = global.channelThumbnail || 'https://files.catbox.moe/xr2m6u.jpg';
+  if (!text) {
+    return m.reply(`⚠️ Escribe el texto que quieres enviar al canal.\n\nEjemplo:\n${usedPrefix + command} ¡Atención! Mantenimiento programado esta noche. 🌙`)
+  }
 
-  const mensaje = {
-    text: `📢 *AVISO DEL BOT*\n\n${text}\n\n⏳ _Publicado automáticamente por el bot auxiliar_`,
+  let thumbnail = 'https://i.imgur.com/4M34hi2.jpeg' // Imagen estilo Pikachu (puedes cambiarla)
+  let mensaje = `*⚡ 𝙿𝙸𝙺𝙰𝙲𝙷𝚄 - 𝙱𝙾𝚃 ⚡*\n\n${text}\n\n${global.textoBot}`
+
+  await conn.sendMessage(global.idchannel, {
+    text: mensaje,
     contextInfo: {
       externalAdReply: {
-        title: '🚀 Canal Oficial del Bot',
-        body: 'Haz clic para unirte al canal',
+        title: '🔔 Aviso Oficial - Pikachu Bot',
+        body: '🧠 Información importante para todos los usuarios',
         thumbnailUrl: thumbnail,
-        sourceUrl: canalUrl,
+        sourceUrl: global.redes,
         mediaType: 1,
-        showAdAttribution: true,
-        renderLargerThumbnail: true
+        renderLargerThumbnail: true,
+        showAdAttribution: false
       }
     }
-  };
+  })
 
-  // Enviar desde subbots conectados
-  let enviados = 0;
+  await m.reply('✅ Aviso enviado correctamente al canal.')
+}
+handler.help = ['aviso <texto>']
+handler.tags = ['owner']
+handler.command = ['aviso']
+handler.rowner = true
 
-  for (let bot of global.conns || []) {
-    try {
-      await bot.sendMessage(canalJid, mensaje, { quoted: null });
-      enviados++;
-    } catch (e) {
-      console.error(`[❌] Falló envío desde un subbot:`, e?.message || e);
-    }
-  }
-
-  if (enviados > 0) {
-    await m.reply(`✅ *Mensaje enviado correctamente al canal desde ${enviados} subbot(s).*`);
-  } else {
-    await m.reply(`⚠️ No se encontró ningún subbot que haya podido publicar el mensaje.\n\nAsegúrate de que:\n- Estén conectados (global.conns)\n- Sean editores del canal\n- El canal JID esté correcto`);
-  }
-};
-
-handler.help = ['avisar <texto>'];
-handler.tags = ['owner'];
-handler.command = ['avisar'];
-handler.rowner = true;
-
-export default handler;
+export default handlerimport fs from 'fs'
