@@ -1,44 +1,49 @@
 let handler = async (m, { conn, text, usedPrefix, command }) => {
   if (!text) {
-    return m.reply(`*⚠️ Escribe el texto que quieres enviar a tu canal.*\n\nEjemplo:\n${usedPrefix + command} ¡Atención! Nueva actualización este fin de semana 🚀`);
+    return m.reply(`*⚠️ Escribe el texto que quieres enviar al canal desde los subbots.*\n\nEjemplo:\n${usedPrefix + command} ¡Atención! Nueva actualización 🚀`);
   }
 
-  const canalJid = '0029VbAix53FnSz4CU0a580q@newsletter'; // JID real del canal
-  const canalUrl = 'https://whatsapp.com/channel/0029VbAix53FnSz4CU0a580q'; // URL pública
-  const thumbnail = icono; 
+  const canalJid = global.channelJid || '0029VbAix53FnSz4CU0a580q@newsletter';
+  const canalUrl = global.channelUrl || 'https://whatsapp.com/channel/0029VbAix53FnSz4CU0a580q';
+  const thumbnail = global.channelThumbnail || 'https://files.catbox.moe/xr2m6u.jpg';
 
-  try {
-    
-    await m.react('📣');
-
-    
-    await conn.sendMessage(canalJid, {
-      text: `📢 *AVISO DEL BOT*\n\n${text}\n\n⏳ _Enviado automáticamente por tu bot_`,
-      contextInfo: {
-        externalAdReply: {
-          title: '🚀 Canal Oficial del Bot',
-          body: 'Haz clic para unirte al canal',
-          thumbnailUrl: thumbnail,
-          sourceUrl: canalUrl,
-          mediaType: 1,
-          showAdAttribution: true,
-          renderLargerThumbnail: true
-        }
+  const mensaje = {
+    text: `📢 *AVISO DEL BOT*\n\n${text}\n\n⏳ _Publicado automáticamente por el bot auxiliar_`,
+    contextInfo: {
+      externalAdReply: {
+        title: '🚀 Canal Oficial del Bot',
+        body: 'Haz clic para unirte al canal',
+        thumbnailUrl: thumbnail,
+        sourceUrl: canalUrl,
+        mediaType: 1,
+        showAdAttribution: true,
+        renderLargerThumbnail: true
       }
-    }, { quoted: null }); 
+    }
+  };
 
-    
-    await m.reply('✅ *Mensaje enviado correctamente al canal.*');
+  // Enviar desde subbots conectados
+  let enviados = 0;
 
-  } catch (e) {
-    console.error('❌ ERROR AL ENVIAR AL CANAL:', e);
-    await m.reply('❌ Error al enviar al canal:\n' + (e?.message || e));
+  for (let bot of global.conns || []) {
+    try {
+      await bot.sendMessage(canalJid, mensaje, { quoted: null });
+      enviados++;
+    } catch (e) {
+      console.error(`[❌] Falló envío desde un subbot:`, e?.message || e);
+    }
+  }
+
+  if (enviados > 0) {
+    await m.reply(`✅ *Mensaje enviado correctamente al canal desde ${enviados} subbot(s).*`);
+  } else {
+    await m.reply(`⚠️ No se encontró ningún subbot que haya podido publicar el mensaje.\n\nAsegúrate de que:\n- Estén conectados (global.conns)\n- Sean editores del canal\n- El canal JID esté correcto`);
   }
 };
 
-handler.help = ['aviso <texto>'];
+handler.help = ['avisar <texto>'];
 handler.tags = ['owner'];
-handler.command = ['aviso'];
+handler.command = ['avisar'];
 handler.rowner = true;
 
 export default handler;
