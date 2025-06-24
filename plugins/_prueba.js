@@ -21,7 +21,7 @@ let handler = async (m, { conn, args, participants, usedPrefix, command }) => {
   text += matching.map((u, i) => `${i + 1}. @${u.split('@')[0]}`).join('\n');
   text += `\n\n🌎 Total encontrados: *${matching.length}*`;
 
-  await conn.reply(m.chat, text, m, { mentions: [m.sender], ...rcanal });
+  await conn.reply(m.chat, text, m, { mentions: [m.sender], ...fake });
 };
 
 handler.help = ['litsnuber +prefijo'];
