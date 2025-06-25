@@ -18,9 +18,12 @@ var handler = async (m, { text, usedPrefix, command }) => {
 }
 
 
-handler.command = /^([.@])ia$/i;
-handler.help = ['ia'];
-handler.tags = ['ai'];
-handler.group = true;
+handler.command = ['ia']
+handler.before = async (m, { conn }) => {
+    let text = m.text?.toLowerCase()?.trim();
+    if (text === '@ia') {
+        return handler(m, { conn });
+    }
+}
 
-export default handler;
+export default handler
