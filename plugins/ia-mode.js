@@ -24,7 +24,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
 handler.help = ['ia *<texto>*'];
 handler.tags = ['ia'];
 handler.command = ['ia']
-handler.customPrefix = /^(@ia)$/i
+handler.customPrefix = /^(@ia )$/i
 handler.command = new RegExp
 handler.group = true;
 
