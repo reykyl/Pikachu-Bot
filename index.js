@@ -1,6 +1,6 @@
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '1'
 import './config.js'
-import { iniciarMemeAutomatico } from './plugins/_prueba.js';
+//import { iniciarMemeAutomatico } from './plugins/_prueba.js';
 import { setupMaster, fork } from 'cluster'
 import { watchFile, unwatchFile } from 'fs'
 import cfonts from 'cfonts'
@@ -214,7 +214,6 @@ console.log(chalk.bold.yellow(`\n❐ ESCANEA EL CÓDIGO QR EXPIRA EN 45 SEGUNDOS
 }
 if (connection == 'open') {
   console.log(chalk.bold.green('\n🧃 Pikachu-bot Conectada con éxito 🪽'))
-  iniciarMemeAutomatico(conn)
 }
 let reason = new Boom(lastDisconnect?.error)?.output?.statusCode
 if (connection === 'close') {
