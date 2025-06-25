@@ -9,7 +9,7 @@ const handler = async (m, { conn }) => {
       return m.reply('❌ No se pudo obtener el meme.');
     }
 
-    await conn.sendMessage('0029VbAix53FnSz4CU0a580q@newsletter', {
+    await conn.sendMessage('120363403119941672@newsletter', {
       image: { url: memeUrl },
       caption: '> ❀ *Meme destacado* ❀',
     });
