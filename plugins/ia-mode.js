@@ -18,7 +18,7 @@ var handler = async (m, { text, usedPrefix, command }) => {
 }
 
 
-handler.command = /^\.?ia$/i;
+handler.command = /^([.@])ia$/i;
 handler.help = ['ia'];
 handler.tags = ['ai'];
 handler.group = true;
