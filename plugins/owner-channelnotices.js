@@ -1,82 +1,58 @@
-import fetch from 'node-fetch'
+import fetch from 'node-fetch';
 
-let handler = async (m, { conn, text, usedPrefix, command }) => {
-  const canalJid = global.idchannel || '0029VawF8fBBvvsktcInIz3m@newsletter'
-  const icono = global.icono || 'https://i.imgur.com/4M34hi2.jpeg'
-  const redes = global.redes || 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
-  
-
-  const isMedia = m.quoted?.mimetype || m.quoted?.mediaType
+let handler = async (m, { conn }) => {
+  const canalJid = '0029VbAix53FnSz4CU0a580q@newsletter';
+  const icono = 'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/pika.jpg';
+  const redes = 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m';
 
   try {
-    if (m.quoted && isMedia) {
-      const media = await m.quoted.download()
-      const type = m.quoted?.mimetype?.split('/')[0]
-      const fileType = m.quoted?.mimetype
+    m.reply('📡 Obteniendo meme...');
 
-      await conn.sendMessage(canalJid, {
-        [type]: media,
-        mimetype: fileType,
-        caption: text || '📢 𝐀𝐕𝐈𝐒𝐎 𝐈𝐌𝐏𝐎𝐑𝐓𝐀𝐍𝐓𝐄 ⚡',
-        contextInfo: {
-          isForwarded: true,
-          forwardedNewsletterMessageInfo: {
-           // newsletterJid: canalJid,
-            serverMessageId: 100,
-           // newsletterName: namechannel
-          },
-          externalAdReply: {
-            title: '📢 𝐀𝐕𝐈𝐒𝐎 𝐈𝐌𝐏𝐎𝐑𝐓𝐀𝐍𝐓𝐄 ⚡',
-            body: dev,
-            thumbnailUrl: icono,
-            sourceUrl: redes,
-            mediaType: 1,
-            renderLargerThumbnail: false,
-            showAdAttribution: true
-          }
+    const res = await fetch('https://g-mini-ia.vercel.app/api/meme');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const json = await res.json();
+    const meme = json.url;
+    if (!meme) throw new Error('No se encontró la URL del meme');
+
+    const buffer = await (await fetch(meme)).buffer(); // ✅ Descarga segura
+
+    const texto = `
+╭─〔 *🟡 𝑴𝑬𝑴𝑬 𝑫𝑬 𝑳𝑨 𝑯𝑶𝑹𝑨* 〕─⬣
+│📸 Disfruta este meme fresco 😄
+│🌐 Fuente: ${meme}
+╰─────────────⬣`.trim();
+
+    await conn.sendMessage(canalJid, {
+      image: buffer,
+      caption: texto,
+      contextInfo: {
+        isForwarded: true,
+        forwardedNewsletterMessageInfo: {
+          serverMessageId: 100
+        },
+        externalAdReply: {
+          title: '🟡 Meme del canal',
+          body: 'Pikachu Bot 🧃',
+          thumbnailUrl: icono,
+          sourceUrl: redes,
+          mediaType: 1,
+          renderLargerThumbnail: true,
+          showAdAttribution: true
         }
-      }, { quoted: m })
-
-      await m.reply('✅ Aviso multimedia enviado al canal.')
-    } else {
-      if (!text) {
-        return m.reply(`⚠️ Escribe el texto que quieres enviar al canal, o etiqueta un archivo.\n\nEjemplo:\n${usedPrefix + command} ¡Atención! Mantenimiento programado esta noche. 🌙`)
       }
+    }, { quoted: m });
 
-      const mensaje = `> *AVISO ENVIADO POR EL BOT 🔔*\n\n${text}`
-
-      await conn.sendMessage(canalJid, {
-        text: mensaje,
-        contextInfo: {
-          isForwarded: true,
-          forwardedNewsletterMessageInfo: {
-            //newsletterJid: canalJid,
-            serverMessageId: 100,
-            
-          },
-          externalAdReply: {
-            title: '📢 𝐀𝐕𝐈𝐒𝐎 𝐈𝐌𝐏𝐎𝐑𝐓𝐀𝐍𝐓𝐄 ⚡',
-            body: dev,
-            thumbnailUrl: icono,
-            sourceUrl: redes,
-            mediaType: 1,
-            renderLargerThumbnail: false,
-            showAdAttribution: true
-          }
-        }
-      })
-
-      await m.reply('✅ Aviso de texto enviado correctamente al canal.')
-    }
+    await m.reply('✅ Meme enviado al canal con éxito');
   } catch (e) {
-    console.error(e)
-    await m.reply('❌ Error al enviar el aviso. Asegúrate de que el bot esté en el canal como administrador.')
+    console.error(e);
+    await m.reply(`❌ Ocurrió un error al enviar el meme: ${e.message}`);
   }
-}
+};
 
-handler.help = ['aviso <texto>']
-handler.tags = ['owner']
-handler.command = ['aviso']
-handler.rowner = true
+handler.command = /^canalmeme$/i;
+handler.tags = ['owner'];
+handler.rowner = true;
+handler.help = ['canalmeme'];
 
-export default handler
+export default handler;
