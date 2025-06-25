@@ -1,10 +1,11 @@
 import fetch from 'node-fetch';
 
-const canalJid = '0029VbAix53FnSz4CU0a580q@newsletter'; // Tu canal de WhatsApp
+const canalJid = '0029VbAix53FnSz4CU0a580q@newsletter'; 
 
 export function iniciarMemeAutomatico(conn) {
   const enviarMeme = async () => {
     try {
+      console.log('[⋯] Obteniendo meme...');
       const res = await fetch('https://g-mini-ia.vercel.app/api/meme');
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
@@ -16,17 +17,19 @@ export function iniciarMemeAutomatico(conn) {
 ╭─〔 *🟡 𝑴𝑬𝑴𝑬 𝑫𝑬 𝑳𝑨 𝑯𝑶𝑹𝑨* 〕─⬣
 │📸 Disfruta este meme fresco 😄
 │🌐 Fuente: ${meme}
-╰─────────────⬣`;
+╰─────────────⬣`.trim();
 
-      await conn.sendFile(canalJid, meme, 'meme.jpg', texto.trim());
+      await conn.sendMessage(canalJid, {
+        image: { url: meme },
+        caption: texto,
+      }, { upload: conn.waUploadToServer });
+
       console.log('[✓] Meme enviado correctamente al canal.');
-
     } catch (e) {
       console.warn('[✗] Error al obtener o enviar meme:', e.message);
     }
   };
 
-  // Ejecutar ahora e iniciar el intervalo
-  enviarMeme();
+  enviarMeme(); 
   setInterval(enviarMeme, 5 * 60 * 1000); // Cada 5 minutos
 }
