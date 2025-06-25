@@ -11,7 +11,7 @@ const handler = async (m, { conn }) => {
 
     await conn.sendMessage('120363403119941672@newsletter', {
       image: { url: memeUrl },
-      caption: ╭─〔 *🟡 𝑴𝑬𝑴𝑬 𝑫𝑬 𝑳𝑨 𝑯𝑶𝑹𝑨* 〕─⬣
+      caption: `╭─〔 *🟡 𝑴𝑬𝑴𝑬 𝑫𝑬 𝑳𝑨 𝑯𝑶𝑹𝑨* 〕─⬣
 │📸 Disfruta este meme fresco 😄
 │🌐 Fuente: ${memeUrl}
 ╰─────────────⬣`
