@@ -21,8 +21,11 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
   }
 }
 
-// Aceptar .ia o @ia, mayúsculas o minúsculas
-handler.command = /^([.@])ia$/i;
-handler.tags = ['ia']
+handler.help = ['ia *<texto>*'];
+handler.tags = ['ia'];
+handler.command = ['ia']
+handler.customPrefix = /^(@ia)$/i
+handler.command = new RegExp
+handler.group = true;
 
-export default handler
+export default handler;
