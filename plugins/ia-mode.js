@@ -22,6 +22,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
 }
 
 // Aceptar .ia o @ia, mayúsculas o minúsculas
-handler.command = /^([.@])ia$/i
+handler.command = /^([.@])ia$/i;
+handler.tags = ['ia']
 
 export default handler
