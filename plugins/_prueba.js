@@ -25,5 +25,6 @@ const handler = async (m, { conn }) => {
 };
 
 handler.command = ['enviarmeme'];
+handler.rowner = true;
 
 export default handler;
