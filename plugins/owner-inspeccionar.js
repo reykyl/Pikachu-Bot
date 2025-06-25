@@ -33,7 +33,7 @@ let pp, ch, q, mime, buffer, media, inviteUrlch, imageBuffer
 switch (true) {     
 case isCommand1:
 let inviteCode
-if (!text) return await conn.reply(m.chat, `${emoji} Ingrese el enlace de grupo/comunidad o canal.`, m)
+if (!text) return await conn.reply(m.chat, `${emojis} Ingrese el enlace de grupo/comunidad o canal.`, m)
 const MetadataGroupInfo = async (res, isInviteInfo = false) => {
 let nameCommunity = "no pertenece a ninguna Comunidad"
 let groupPicture = "No se pudo obtener"
