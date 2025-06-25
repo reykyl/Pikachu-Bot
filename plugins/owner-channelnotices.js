@@ -41,7 +41,7 @@ let handler = async (m, { conn }) => {
           showAdAttribution: true
         }
       }
-    }, { quoted: null });
+    },
 
     await m.reply('✅ Meme enviado al canal con éxito');
   } catch (e) {
