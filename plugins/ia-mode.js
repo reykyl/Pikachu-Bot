@@ -1,7 +1,10 @@
 import fetch from 'node-fetch'
 
-var handler = async (m, { text, usedPrefix, command }) => {
-  if (!text) return conn.reply(m.chat, `${emojis} Ingrese una petición para que Mode IA lo responda.`, m, fake)
+const handler = async (m, { conn, text, usedPrefix, command }) => {
+  if (!text) {
+    return conn.reply(m.chat, `⚡ Ingrese una petición para que Mode IA la responda.`, m, fake)
+  }
+
   try {
     await m.react('🌟')
     conn.sendPresenceUpdate('composing', m.chat)
@@ -12,18 +15,13 @@ var handler = async (m, { text, usedPrefix, command }) => {
     if (!data.response) throw 'Sin respuesta válida'
     await m.reply(data.response.trim())
   } catch (e) {
+    console.error(e)
     await m.react('⚡️')
-    await conn.reply(m.chat, `${emojis} Mode IA no puede responder a esa pregunta.`, m, fake)
+    await conn.reply(m.chat, `⚡ Mode IA no puede responder a esa pregunta.`, m, fake)
   }
 }
 
-
-handler.command = ['ia']
-handler.before = async (m, { conn }) => {
-    let text = m.text?.toLowerCase()?.trim();
-    if (text === '@ia') {
-        return handler(m, { conn });
-    }
-}
+// Aceptar .ia o @ia, mayúsculas o minúsculas
+handler.command = /^([.@])ia$/i
 
 export default handler
