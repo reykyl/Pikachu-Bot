@@ -18,9 +18,9 @@ var handler = async (m, { text, usedPrefix, command }) => {
 }
 
 
-handler.command = ['ia']
-handler.help = ['ia']
-handler.tags = ['ai']
-handler.group = true
+handler.command = /^\.?ia$/i;
+handler.help = ['ia'];
+handler.tags = ['ai'];
+handler.group = true;
 
-export default handler
+export default handler;
