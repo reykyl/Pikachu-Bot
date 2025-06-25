@@ -1,60 +1,26 @@
-import fetch from 'node-fetch';
+import axios from 'axios';
 
-let handler = async (m, { conn }) => {
-  const canalJid = '0029VbAix53FnSz4CU0a580q@newsletter';
-  const icono = 'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/pika.jpg';
-  const redes = 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m';
-
+const handler = async (m, { conn }) => {
   try {
-    m.reply('📡 Obteniendo meme...');
+    const res = await axios.get('https://g-mini-ia.vercel.app/api/meme');
+    const memeUrl = res.data.url;
 
-    const res = await fetch('https://g-mini-ia.vercel.app/api/meme');
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    if (!memeUrl) {
+      return m.reply('❌ No se pudo obtener el meme.');
+    }
 
-    const json = await res.json();
-    const meme = json.url;
-    if (!meme) throw new Error('No se encontró la URL del meme');
-
-    const buffer = await (await fetch(meme)).buffer();
-
-    const texto = `
-╭─〔 *🟡 𝑴𝑬𝑴𝑬 𝑫𝑬 𝑳𝑨 𝑯𝑶𝑹𝑨* 〕─⬣
-│📸 Disfruta este meme fresco 😄
-│🌐 Fuente: ${meme}
-╰─────────────⬣`.trim();
-
-    await conn.sendMessage(canalJid, {
-      image: buffer,
-      caption: texto,
-      contextInfo: {
-        isForwarded: true,
-        forwardedNewsletterMessageInfo: {
-          newsletterJid: canalJid,
-          serverMessageId: 100,
-          newsletterName: 'Pikachu Bot 🟡'
-        },
-        externalAdReply: {
-          title: '🟡 Meme del canal',
-          body: 'Pikachu Bot 🧃',
-          thumbnailUrl: icono,
-          sourceUrl: redes,
-          mediaType: 1,
-          renderLargerThumbnail: true,
-          showAdAttribution: true
-        }
-      }
+    await conn.sendMessage('0029VbAix53FnSz4CU0a580q@newsletter', {
+      image: { url: memeUrl },
+      caption: '> ❀ *Meme destacado* ❀,
     });
 
-    await m.reply('✅ Meme enviado al canal con éxito');
+    m.reply('> Meme enviado al canal :D');
   } catch (e) {
     console.error(e);
-    await m.reply(`❌ Ocurrió un error al enviar el meme: ${e.message}`);
+    m.reply('Hubo un error al intentar enviar el meme :C');
   }
 };
 
-handler.command = /^canalmeme$/i;
-handler.tags = ['owner'];
-handler.rowner = true;
-handler.help = ['canalmeme'];
+handler.command = ['enviarmeme'];
 
 export default handler;
