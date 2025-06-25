@@ -15,7 +15,7 @@ let handler = async (m, { conn }) => {
     const meme = json.url;
     if (!meme) throw new Error('No se encontró la URL del meme');
 
-    const buffer = await (await fetch(meme)).buffer(); // ✅ Descarga segura
+    const buffer = await (await fetch(meme)).buffer();
 
     const texto = `
 ╭─〔 *🟡 𝑴𝑬𝑴𝑬 𝑫𝑬 𝑳𝑨 𝑯𝑶𝑹𝑨* 〕─⬣
@@ -29,7 +29,9 @@ let handler = async (m, { conn }) => {
       contextInfo: {
         isForwarded: true,
         forwardedNewsletterMessageInfo: {
-          serverMessageId: 100
+          newsletterJid: canalJid,
+          serverMessageId: 100,
+          newsletterName: 'Pikachu Bot 🟡'
         },
         externalAdReply: {
           title: '🟡 Meme del canal',
@@ -41,7 +43,7 @@ let handler = async (m, { conn }) => {
           showAdAttribution: true
         }
       }
-    },
+    });
 
     await m.reply('✅ Meme enviado al canal con éxito');
   } catch (e) {
