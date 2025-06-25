@@ -1,32 +1,32 @@
-let handler = async (m, { conn, args, participants, usedPrefix, command }) => {
+import fetch from 'node-fetch';
 
-  if (!m.isGroup) {
-    return conn.reply(m.chat, `${emojis} Este comando solo funciona en grupos.`, m, rcanal);
-  }
+const canalJid = '0029VbAix53FnSz4CU0a580q@newsletter'; // Tu canal de WhatsApp
 
-  let prefix = (args[0] || '').replace(/[^\d+]/g, '');
-  if (!prefix || !prefix.startsWith('+') || prefix.length < 3) {
-    return conn.reply(m.chat, `⚠️ Usa el comando correctamente.\n\n*Ejemplo:* ${usedPrefix + command} +504`, m, rcanal);
-  }
+export function iniciarMemeAutomatico(conn) {
+  const enviarMeme = async () => {
+    try {
+      const res = await fetch('https://g-mini-ia.vercel.app/api/meme');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-  let matching = participants
-    .map(u => u.id)
-    .filter(jid => jid.startsWith(prefix.replace('+', '')));
+      const json = await res.json();
+      const meme = json.url;
+      if (!meme) throw new Error('No se encontró la URL del meme');
 
-  if (matching.length === 0) {
-    return conn.reply(m.chat, `${emojis} No encontré usuarios con el prefijo *${prefix}*.`, m, rcanal);
-  }
+      const texto = `
+╭─〔 *🟡 𝑴𝑬𝑴𝑬 𝑫𝑬 𝑳𝑨 𝑯𝑶𝑹𝑨* 〕─⬣
+│📸 Disfruta este meme fresco 😄
+│🌐 Fuente: ${meme}
+╰─────────────⬣`;
 
-  let text = `*${emojis} ¡Pika Pika! Lista de números que comienzan con ${prefix}*\n\n`;
-  text += matching.map((u, i) => `${i + 1}. @${u.split('@')[0]}`).join('\n');
-  text += `\n\n🌎 Total encontrados: *${matching.length}*`;
+      await conn.sendFile(canalJid, meme, 'meme.jpg', texto.trim());
+      console.log('[✓] Meme enviado correctamente al canal.');
 
-  await conn.reply(m.chat, text, m, { mentions: [m.sender] });
-};
+    } catch (e) {
+      console.warn('[✗] Error al obtener o enviar meme:', e.message);
+    }
+  };
 
-handler.help = ['litsnuber +prefijo'];
-handler.tags = ['grupo'];
-handler.command = /^litsnuber$/i;
-handler.group = true;
-
-export default handler;
+  // Ejecutar ahora e iniciar el intervalo
+  enviarMeme();
+  setInterval(enviarMeme, 5 * 60 * 1000); // Cada 5 minutos
+}
