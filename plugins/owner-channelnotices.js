@@ -1,29 +1,33 @@
-import fetch from 'node-fetch'
+import fetch from 'node-fetch';
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
   const canalJid = '120363365444927738@newsletter';
-  const thumbnail = 'https://i.imgur.com/4M34hi2.jpeg';
+  const icono = 'https://i.imgur.com/4M34hi2.jpeg';
   const redes = global.redes || 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m';
-  
+  const dev = '💡 PikachuBot Notifier';
 
   const isMedia = m.quoted?.mimetype || m.quoted?.mediaType;
 
   try {
     if (m.quoted && isMedia) {
       const media = await m.quoted.download();
-      const type = m.quoted?.mimetype?.split('/')[0];
-      const fileType = m.quoted?.mimetype;
+      const mimetype = m.quoted?.mimetype;
+      const type = mimetype.startsWith('image') ? 'image'
+                  : mimetype.startsWith('video') ? 'video'
+                  : mimetype.startsWith('audio') ? 'audio'
+                  : mimetype === 'image/webp' ? 'sticker'
+                  : null;
+
+      if (!type) return m.reply('❌ Tipo de archivo no soportado para enviar al canal.');
 
       await conn.sendMessage(canalJid, {
         [type]: media,
-        mimetype: fileType,
-        caption: text || '📢 𝐀𝐕𝐈𝐒𝐎 𝐈𝐌𝐏𝐎𝐑𝐓𝐀𝐍𝐓𝐄 ⚡',
+        mimetype,
+        caption: type !== 'sticker' ? (text || '📢 𝐀𝐕𝐈𝐒𝐎 𝐈𝐌𝐏𝐎𝐑𝐓𝐀𝐍𝐓𝐄 ⚡') : undefined,
         contextInfo: {
           isForwarded: true,
           forwardedNewsletterMessageInfo: {
-            //newsletterJid: channelRD.id,
-            serverMessageId: 100,
-         //   newsletterName: channelRD.name
+            serverMessageId: 100
           },
           externalAdReply: {
             title: '📢 𝐀𝐕𝐈𝐒𝐎 𝐈𝐌𝐏𝐎𝐑𝐓𝐀𝐍𝐓𝐄 ⚡',
@@ -43,7 +47,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
       await m.reply('✅ Aviso multimedia enviado al canal.');
     } else {
       if (!text) {
-        return m.reply(`⚠️ Escribe el texto que quieres enviar al canal, o etiqueta un archivo.\n\nEjemplo:\n${usedPrefix + command} ¡Atención! Mantenimiento programado esta noche. 🌙`)
+        return m.reply(`⚠️ Escribe el texto que quieres enviar al canal, o etiqueta un archivo.\n\nEjemplo:\n${usedPrefix + command} ¡Atención! Mantenimiento programado esta noche. 🌙`);
       }
 
       const mensaje = `> *AVISO ENVIADO POR EL BOT 🔔*\n\n${text}`;
@@ -53,9 +57,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         contextInfo: {
           isForwarded: true,
           forwardedNewsletterMessageInfo: {
-          //  newsletterJid: channelRD.id,
-            serverMessageId: 100,
-        //    newsletterName: channelRD.name
+            serverMessageId: 100
           },
           externalAdReply: {
             title: '📢 𝐀𝐕𝐈𝐒𝐎 𝐈𝐌𝐏𝐎𝐑𝐓𝐀𝐍𝐓𝐄 ⚡',
