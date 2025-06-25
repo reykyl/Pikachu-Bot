@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 
 const canalJid = '0029VbAix53FnSz4CU0a580q@newsletter'; 
-//const icono = 'https://i.imgur.com/4M34hi2.jpeg'; 
+const icono = 'https://i.imgur.com/4M34hi2.jpeg'; 
 const redes = 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m';
 
 export function iniciarMemeAutomatico(conn) {
