@@ -1,5 +1,5 @@
 let handler = async (m, { conn }) => {
-  const meme = 'https://i.pinimg.com/736x/18/8f/02/188f02fa1535296a47943f1e28e2cc6b.jpg';
+  const meme = 'https://i.pinimg.com/736x/7a/c6/27/7ac62716f5ebba2cad1c2239e482b763.jpg';
   const texto = `
 ╭─〔 *🟡 𝑴𝑬𝑴𝑬 𝑫𝑬 𝑳𝑨 𝑯𝑶𝑹𝑨* 〕─⬣
 │📸 Disfruta este meme fresco 😄
