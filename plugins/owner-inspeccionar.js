@@ -125,7 +125,7 @@ if (info) {
 await conn.sendMessage(m.chat, { text: info, contextInfo: {
 mentionedJid: conn.parseMention(info),
 externalAdReply: {
-title: `${emoji} Inspector de Grupos`,
+title: `${emojis} Inspector de Grupos`,
 body: `${emoji2} ¡Super Inspectador!`,
 thumbnailUrl: pp ? pp : thumb,
 sourceUrl: args[0] ? args[0] : inviteCode ? `https://chat.whatsapp.com/${inviteCode}` : md,
@@ -151,8 +151,8 @@ if (channelUrl && newsletterInfo) {
 await conn.sendMessage(m.chat, { text: caption, contextInfo: {
 mentionedJid: conn.parseMention(caption),
 externalAdReply: {
-title: `${emoji} Kirito-Bot Inspector de Canales`,
-body: `${emoji2} ¡Super kirito bot Inspectador!`,
+title: `${emojis} Pikachu Inspector de Canales`,
+body: `${emoji2} ¡Super Pikachu bot Inspectador!`,
 thumbnailUrl: pp,
 sourceUrl: args[0],
 mediaType: 1,
@@ -167,9 +167,9 @@ break
 
 // Seguir un canal de WhatsApp 
 case isCommand2:
-if (!isOwner || !isROwner) return await conn.reply(m.chat, `${emoji} No tienes permiso para usar este comando.`, m)
+if (!isOwner || !isROwner) return await conn.reply(m.chat, `${emojis} No tienes permiso para usar este comando.`, m)
 ch
-if (!text) return await conn.reply(m.chat, `${emoji} Ingrese el ID o enlace de un canal de WhatsApp que quiere que el bot siga.\n\nPuede obtener el ID usando el comando:\n${usedPrefix}superinspect enlace${txtBotAdminCh}`, m)
+if (!text) return await conn.reply(m.chat, `${emojis} Ingrese el ID o enlace de un canal de WhatsApp que quiere que el bot siga.\n\nPuede obtener el ID usando el comando:\n${usedPrefix}superinspect enlace${txtBotAdminCh}`, m)
 if (text.includes("@newsletter")) {
 ch = text
 } else {
@@ -188,7 +188,7 @@ break
 case isCommand3:
 if (!isOwner || !isROwner) return await conn.reply(m.chat, `${emoji2} No tienes permiso para usar este comando.`, m)
 ch
-if (!text) return await conn.reply(m.chat, `${emoji} Ingrese el ID o enlace de un canal de WhatsApp que quiere que el bot deje de seguir.\n\nPuede obtener el ID usando el comando:\n${usedPrefix}superinspect enlace${txtBotAdminCh}`, m)
+if (!text) return await conn.reply(m.chat, `${emojis} Ingrese el ID o enlace de un canal de WhatsApp que quiere que el bot deje de seguir.\n\nPuede obtener el ID usando el comando:\n${usedPrefix}superinspect enlace${txtBotAdminCh}`, m)
 if (text.includes("@newsletter")) {
 ch = text
 } else {
@@ -197,7 +197,7 @@ ch = await conn.newsletterMetadata("invite", channelUrl).then(data => data.id).c
 try {
 const chtitle = await conn.newsletterMetadata(text.includes("@newsletter") ? "jid" : "invite", text.includes("@newsletter") ? ch : channelUrl).then(data => data.name).catch(e => null)
 await conn.newsletterUnfollow(ch)
-await conn.reply(m.chat, `${emoji} El bot ha dejado de seguir el canal *${chtitle}*.`, m) 
+await conn.reply(m.chat, `${emojis} El bot ha dejado de seguir el canal *${chtitle}*.`, m) 
 } catch (e) {
 reportError(e)
 }
@@ -207,7 +207,7 @@ break
 case isCommand4:
 if (!isOwner || !isROwner) return await conn.reply(m.chat, `${emoji2} No tienes permiso para usar este comando.`, m)
 ch
-if (!text) return await conn.reply(m.chat, `${emoji} Ingrese el ID o enlace de un canal de WhatsApp que quiere que el bot silencie las actualizaciones.\n\nPuede obtener el ID usando el comando:\n*${usedPrefix}superinspect enlace${txtBotAdminCh}`, m)
+if (!text) return await conn.reply(m.chat, `${emojis} Ingrese el ID o enlace de un canal de WhatsApp que quiere que el bot silencie las actualizaciones.\n\nPuede obtener el ID usando el comando:\n*${usedPrefix}superinspect enlace${txtBotAdminCh}`, m)
 if (text.includes("@newsletter")) {
 ch = text
 } else {
