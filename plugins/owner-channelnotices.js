@@ -1,7 +1,7 @@
 import fetch from 'node-fetch'
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
-  const canalJid = global.idchannel || '0029VawF8fBBvvsktcInIz3m@newsletter'
+  const canalJid = global.idchannel || '120363365444927738@newsletter'
   const icono = global.icono || 'https://i.imgur.com/4M34hi2.jpeg'
   const redes = global.redes || 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
   
