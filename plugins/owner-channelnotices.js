@@ -11,13 +11,13 @@ const handler = async (m, { conn }) => {
 
     await conn.sendMessage('0029VbAix53FnSz4CU0a580q@newsletter', {
       image: { url: memeUrl },
-      caption: '> ❀ *Meme destacado* ❀,
+      caption: '> ❀ *Meme destacado* ❀',
     });
 
-    m.reply('> Meme enviado al canal :D');
+    m.reply('✅ Meme enviado al canal :D');
   } catch (e) {
     console.error(e);
-    m.reply('Hubo un error al intentar enviar el meme :C');
+    m.reply('❌ Hubo un error al intentar enviar el meme :C');
   }
 };
 
