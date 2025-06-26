@@ -1,7 +1,7 @@
 
 
 const handler = async (m, { conn, text, usedPrefix, command }) => {
-    return conn.reply(m.chat, "*Ｏ(≧∇≦)Ｏ🧃* *Pikachu-Bot* | Dime el nombre de la canción que estás buscando, ¡Pika!", m, rcanal)
+    return conn.reply(m.chat, `Hola XD`, m, rcanal)
 };
  handler.command = ['xd'];
 
