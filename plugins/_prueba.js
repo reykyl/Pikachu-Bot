@@ -23,7 +23,7 @@ let handler = async (m, { conn, usedPrefix, command }) => {
   }
 };
 
-handler.command = ['nsfw'];
+handler.command = ['nsfw2'];
 handler.tags = ['nsfw'];
 handler.help = ['nsfw'];
 
