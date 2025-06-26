@@ -1,4 +1,4 @@
-var handler = async (m, { conn, participants, isAdmin, isBotAdmin, args, usedPrefix, command }) => 
+var handler = async (m, { conn }) => 
 {
   await conn.reply(m.chat, `hola soy bajo perfil🐉`, m, rcanal)
 }
