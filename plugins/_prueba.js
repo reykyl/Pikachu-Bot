@@ -1,7 +1,7 @@
 
 
 const handler = async (m, { conn, text, usedPrefix, command }) => {
-conn.reply(m.chat, ` hola XD`, m, rcanal)},
+returt conn.reply(m.chat, ` hola XD`, m, rcanal)},
 
  handler.command = ['xd'];
 
