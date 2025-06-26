@@ -1,6 +1,6 @@
 //Hola Deylin, lo Modifique un poco,
-estaba re masiado lento.
-Attm: Angel
+//estaba re masiado lento.
+//Attm: Angel
 
 
 import axios from 'axios';
