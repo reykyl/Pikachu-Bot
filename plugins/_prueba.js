@@ -24,9 +24,8 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
 
 const deve = 'Deylin'
 const mi = 'Pikachu-bot'
-    return conn.reply(m.chat, `Hola soy ${mi} fuí desarrollado por ${deve} 
-
-desarrolladores ${owner}`, m, rcanal)
+    return conn.reply(m.chat, `Hola soy: ${mi} fuí desarrollado por: ${deve} 
+visita: ${redes}`, m, rcanal)
 };
  handler.command = ['xd'];
 
