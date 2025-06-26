@@ -1,6 +1,6 @@
 var handler = async (m, { conn, participants, isAdmin, isBotAdmin, args, usedPrefix, command }) => 
 {
-  await conn.reply(m.chat, `hola soy bajo perfil🐉`  ', m, rcanal)
+  await conn.reply(m.chat, `hola soy bajo perfil🐉`, m, rcanal)
 }
 
 handler.command = ['soy'] 
