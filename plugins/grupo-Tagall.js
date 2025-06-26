@@ -1,4 +1,4 @@
-/Hola Deylin, lo Modifique un poco,
+//Hola Deylin, lo Modifique un poco,
 estaba re masiado lento.
 Attm: Angel
 
