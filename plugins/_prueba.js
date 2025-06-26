@@ -1,10 +1,21 @@
-let handler = async (m, { conn }) => {
+var handler = async (m, { conn, participants, isAdmin, isBotAdmin, args, usedPrefix, command }) => 
+{
+  await conn.reply(m.chat, `hola soy bajo perfil🐉`  ', m, rcanal)
+}
+
+handler.command = ['soy'] 
+
+export default handler
+
+
+//@⁨~NEOTOKIO⁩
+/*let handler = async (m, { conn }) => {
   await conn.reply(m.chat, 'Hola ⚡ Cómo estás', m)
 }
 
 handler.command = ['hola'] 
 
-export default handler
+export default handler*/
 
 
 // Deylin 
