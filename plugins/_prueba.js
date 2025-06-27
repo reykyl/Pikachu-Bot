@@ -23,6 +23,9 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     if (!json.status || !json.video?.download?.url) {
       throw '❌ No se pudo descargar el contenido.';
     }
+        const videoInfo = search.all[0];
+    const { title, thumbnail, timestamp, views, ago, url } = videoInfo;
+    const vistas = formatViews(views);
     const thumb = (await conn.getFile(thumbnail))?.data;
     const info = json.video;
     const media = info.download;
@@ -67,3 +70,9 @@ handler.register = true;
 
 export default handler;
 
+function formatViews(views) {
+  if (typeof views !== "number" || isNaN(views)) return "Desconocido";
+  return views >= 1000
+    ? (views / 1000).toFixed(1) + "k (" + views.toLocaleString() + ")"
+    : views.toString();
+}*/
