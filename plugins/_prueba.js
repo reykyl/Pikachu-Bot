@@ -89,18 +89,22 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     const res = await fetch(apiUrl);
     const json = await res.json();
 
-    // Validación estricta según tu respuesta
-    if (!json.estado || !json.audio || !json.audio.descargar || !json.audio.descargar.url) {
+    const debugMessage = `📡 *Respuesta de la API:*\n\`\`\`json\n${JSON.stringify(json, null, 2)}\n\`\`\``;
+    await conn.reply(m.chat, debugMessage, m);
+
+    
+    if (!json?.estado || !json?.audio || !json.audio?.descargar || !json.audio.descargar?.url) {
       return conn.reply(m.chat, `❌ *La API no devolvió un enlace válido.*`, m);
     }
 
-    const { descargar } = json.audio;
+    const media = json.audio.descargar;
+    const audioUrl = media.url;
 
     await conn.sendMessage(
       m.chat,
       {
-        audio: { url: descargar.url },
-        fileName: descargar.filename,
+        audio: { url: audioUrl },
+        fileName: media.filename || 'audio.mp3',
         mimetype: 'audio/mpeg',
         ptt: false
       },
@@ -108,13 +112,13 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     );
   } catch (e) {
     console.error(e);
-    conn.reply(m.chat, `⚠️ *Error al descargar o enviar el audio.*`, m);
+    conn.reply(m.chat, `⚠️ *Error al procesar el audio.*`, m);
   }
 };
 
 handler.help = ['playaudio <nombre>'];
 handler.tags = ['descargas'];
-handler.command = ['play'];
+handler.command = ['playaudio'];
 handler.register = true;
 
 export default handler;
