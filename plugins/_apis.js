@@ -27,12 +27,10 @@ _________________________________
 [6]
  https://mode-api-sigma.vercel.app/api/mp3?url=
 > Descarga de audio desde YouTube.
-*⚠️ Clausurado.*
 
 [7]
- https://mode-api-sigma.vercel.app/api/index?url=
+ https://mode-api-sigma.vercel.app/api/mp4?url=
 > Descarga de audio desde YouTube.
-*⚠️ Clausurado.*
 
 [8]
 https://g-mini-ia.vercel.app/api/meme
