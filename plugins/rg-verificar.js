@@ -30,9 +30,7 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
   user.age = age
   user.regTime = +new Date
   user.registered = true
-  global.db.data.users[m.sender].coin += 40
-  global.db.data.users[m.sender].exp += 300
-  global.db.data.users[m.sender].joincount += 20
+  
 
   let sn = createHash('md5').update(m.sender).digest('hex').slice(0, 20)
 
@@ -40,9 +38,6 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
   regbot += `👤 Nombre: *${name}*\n`
   regbot += `🎂 Edad: *${age} años*\n\n`
   regbot += `🎁 Recompensas:\n`
-  regbot += `• ⛁ *${moneda || 'Monedas'}*: +40\n`
-  regbot += `• ✨ Experiencia: +300\n`
-  regbot += `• 🔮 Tokens: +20\n\n`
   regbot += `🧢 ¡Prepárate para atraparlos a todos!\n`
   regbot += `🔗 ${dev || 'Equipo Pikachu-Bot'}`
 
