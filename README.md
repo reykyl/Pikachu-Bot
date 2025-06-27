@@ -8,54 +8,16 @@
 
 ---
 
-🚀 Características
-
-✅ Compatible con WhatsApp Multi-Device
-✅ Sistema de comandos modular
-✅ Soporte para Stickers, Juegos, Descargas, Herramientas
-✅ Administración de grupos, Bienvenidas/Despedidas automáticas
-✅ Comandos automáticos y personalizados
-✅ Fácil de instalar y editar
-
+### 🌟 DESARROLLADORES
+<a href="https://github.com/deylin-eliac/kirito-bot-MD/graphs/contributors">
+<img src="https://contrib.rocks/image?repo=deylin-eliac/kirito-bot-MD" /> 
+</a>
 
 ---
 
-📦 Instalación rápida
-
-🧠 Requisitos previos
-
-Node.js v18 o superior
-
-Git
-
-ffmpeg y imagemagick instalados
-
-Número de WhatsApp con escaneo de código QR
+# *Autor y desarrollador*
 
 
-🖥️ Clonar y ejecutar
-
-```bash
-git clone https://github.com/Deylin-Eliac/Pikachu-Bot
-cd Pikachu-Bot
-npm install
-npm start
-```
-
-
----
-
-❗ Solución de errores comunes
-
-Si al iniciar el bot encuentras errores, asegúrate de:
-
-Tener instalada la versión correcta de Node.js (node -v)
-
-Haber instalado correctamente ffmpeg e imagemagick
-
-No haber modificado el código base sin saber lo que haces
-
-Ejecutar npm install sin errores
-
-
-Si el problema persiste, abre un Issue en el repositorio o contacta al desarrollador.
+<a href="https://github.com/deylin-eliac">
+  <img src="https://github.com/deylin-eliac.png" width="130" height="130" alt="Deylin-eliac"/>
+</a>
