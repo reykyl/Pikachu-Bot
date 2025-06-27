@@ -89,28 +89,44 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     const res = await fetch(apiUrl);
     const json = await res.json();
 
-    // Mostrar respuesta para depuración
-    const debugMessage = `📡 *Respuesta de la API:*\n\`\`\`json\n${JSON.stringify(json, null, 2)}\n\`\`\``;
-    await conn.reply(m.chat, debugMessage, m);
-
-    // Corrección de validaciones con campos reales
     if (!json.status || !json.audio || !json.audio.download || !json.audio.download.url) {
       return conn.reply(m.chat, `❌ *La API no devolvió un enlace válido.*`, m);
     }
 
-    const media = json.audio.download;
-    const audioUrl = media.url;
+    const info = json.audio;
+    const media = info.download;
 
-    await conn.sendMessage(
-      m.chat,
-      {
-        audio: { url: audioUrl },
-        fileName: media.filename || 'audio.mp3',
-        mimetype: 'audio/mpeg',
-        ptt: false
-      },
-      { quoted: m }
-    );
+    const caption = `🎵 *Título:* ${info.title}\n👤 *Autor:* ${info.author}\n📦 *Tamaño:* ${media.size}\n🎧 *Calidad:* ${media.quality}`;
+
+    const JT = {
+      contextInfo: {
+        externalAdReply: {
+          title: global.botname || 'Pikachu-Bot',
+          body: "¡Pika Pikachu-bot! El bot eléctrico que necesitas.",
+          mediaType: 1,
+          previewType: 0,
+          mediaUrl: video.url,
+          sourceUrl: video.url,
+          thumbnail: global.thumb,
+          renderLargerThumbnail: true
+        }
+      }
+    };
+
+    await m.react('🎶');
+
+    await conn.sendMessage(m.chat, {
+      image: { url: info.image },
+      caption
+    }, { quoted: m });
+
+    await conn.sendMessage(m.chat, {
+      audio: { url: media.url },
+      fileName: media.filename || 'audio.mp3',
+      mimetype: 'audio/mpeg',
+      ptt: false
+    }, { quoted: m, ...JT });
+
   } catch (e) {
     console.error(e);
     conn.reply(m.chat, `⚠️ *Error al procesar o enviar el audio.*`, m);
@@ -119,7 +135,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
 
 handler.help = ['playaudio <nombre>'];
 handler.tags = ['descargas'];
-handler.command = ['play'];
-
+handler.command = ['playaudio'];
+handler.register = true;
 
 export default handler;
