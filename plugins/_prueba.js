@@ -69,10 +69,20 @@ export default handler;*/
 
 import fetch from 'node-fetch';
 import yts from 'yt-search';
+import { fileTypeFromBuffer } from 'file-type'; // Opcional para validar mime
 
-let handler = async (m, { conn, args, usedPrefix, command }) => {
+async function resolveRedirect(url) {
+  // Resuelve la URL final siguiendo redirecciones HTTP
+  const res = await fetch(url, {
+    method: 'HEAD',
+    redirect: 'follow',
+  });
+  return res.url || url;
+}
+
+let handler = async (m, { conn, args, usedPrefix }) => {
   if (!args.length) {
-    return conn.reply(m.chat, `🎧 *¿Qué canción deseas buscar?*\n\nUsa:\n${usedPrefix + command} Alan Walker Faded`, m);
+    return conn.reply(m.chat, `🎧 *¿Qué canción deseas buscar?*\n\nUsa:\n${usedPrefix}playaudio Alan Walker Faded`, m);
   }
 
   const searchText = args.join(' ');
@@ -83,7 +93,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
   }
 
   const video = searchResult.videos[0];
-  const apiUrl = `https://mode-api-sigma.vercel.app/api/mp3?url=${video.url}`;
+  const apiUrl = `https://mode-api-sigma.vercel.app/api/mp3?url=${encodeURIComponent(video.url)}`;
 
   try {
     const res = await fetch(apiUrl);
@@ -93,51 +103,41 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
       return conn.reply(m.chat, `❌ *La API no devolvió un enlace válido.*`, m);
     }
 
-    const info = json.audio;
-    const media = info.download;
-
-    const caption = `🎵 *Título:* ${info.title}\n👤 *Autor:* ${info.author}\n📦 *Tamaño:* ${media.size}\n🎧 *Calidad:* ${media.quality}`;
-
-    const JT = {
-      contextInfo: {
-        externalAdReply: {
-          title: global.botname || 'Pikachu-Bot',
-          body: "¡Pika Pikachu-bot! El bot eléctrico que necesitas.",
-          mediaType: 1,
-          previewType: 0,
-          mediaUrl: video.url,
-          sourceUrl: video.url,
-          thumbnail: global.thumb,
-          renderLargerThumbnail: true
-        }
-      }
-    };
-
-    await m.react('🎶');
-
-    await conn.sendMessage(m.chat, {
-      image: { url: info.image },
-      caption
-    }, { quoted: m });
+    const media = json.audio.download;
+    let audioUrl = media.url;
 
     
-    const audioRes = await fetch(media.url);
+    audioUrl = await resolveRedirect(audioUrl);
+
+    
+    const audioRes = await fetch(audioUrl);
+    if (!audioRes.ok) throw new Error('No se pudo descargar el audio.');
+
     const audioBuffer = await audioRes.buffer();
 
     
-    await conn.sendMessage(
-      m.chat,
-      {
-        audio: audioBuffer,
-        fileName: media.filename || 'audio.mp3',
-        mimetype: 'audio/mpeg',
-        ptt: false
-      },
-      { quoted: m, ...JT }
-    );
-  } catch (e) {
-    console.error(e);
-    conn.reply(m.chat, `⚠️ *Error al procesar o enviar el audio.*`, m);
+    /*
+    const type = await fileTypeFromBuffer(audioBuffer);
+    const mime = type?.mime || 'audio/mpeg';
+    */
+
+    const caption = `🎵 *Título:* ${json.audio.title}\n👤 *Autor:* ${json.audio.author}\n📦 *Tamaño:* ${media.size}\n🎧 *Calidad:* ${media.quality}`;
+
+    await conn.sendMessage(m.chat, {
+      image: { url: json.audio.image },
+      caption
+    }, { quoted: m });
+
+    await conn.sendMessage(m.chat, {
+      audio: audioBuffer,
+      fileName: media.filename || 'audio.mp3',
+      mimetype: 'audio/mpeg', 
+      ptt: false
+    }, { quoted: m });
+
+  } catch (error) {
+    console.error(error);
+    await conn.reply(m.chat, `⚠️ *Error al descargar o enviar el audio.*\n${error.message}`, m);
   }
 };
 
