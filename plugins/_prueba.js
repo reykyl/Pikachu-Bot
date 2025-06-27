@@ -23,7 +23,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     if (!json.status || !json.video?.download?.url) {
       throw '❌ No se pudo descargar el contenido.';
     }
-
+    const thumb = (await conn.getFile(thumbnail))?.data;
     const info = json.video;
     const media = info.download;
 
@@ -38,7 +38,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
           previewType: 0,
           mediaUrl: video.url,
           sourceUrl: video.url,
-          thumbnail: global.thumb,
+          thumbnail: thumb,
           renderLargerThumbnail: true
         }
       }
