@@ -2,27 +2,39 @@ import fetch from 'node-fetch';
 
 let handler = async (m, { conn, args, usedPrefix, command }) => {
   if (!args[0]) {
-    return conn.reply(m.chat, `🔗 *Envía la URL del video de YouTube que deseas descargar.*\n\n📌 Ejemplo:\n${usedPrefix + command} https://www.youtube.com/watch?v=dQw4w9WgXcQ`, m);
+    return conn.reply(m.chat, `📽️ *Enlace faltante*\n\nUsa el comando así:\n${usedPrefix + command} https://youtu.be/tuVideo`, m);
   }
 
-  let url = args[0];
-  let api = command === 'ytmp3'
+  const url = args[0];
+  const apiUrl = command === 'ytmp3'
     ? `https://mode-api-sigma.vercel.app/api/mp3?url=${url}`
     : `https://mode-api-sigma.vercel.app/api/mp4?url=${url}`;
 
   try {
-    conn.reply(m.chat, `⏳ Descargando... esto puede tardar unos segundos...`, m);
-    let res = await fetch(api);
-    let data = await res.json();
+    const res = await fetch(apiUrl);
+    const json = await res.json();
 
-    if (!data || !data.url) throw new Error('❌ No se pudo obtener el archivo.');
+    if (!json.status || !json.video?.download?.url) {
+      throw '❌ No se pudo descargar el contenido.';
+    }
 
-    let caption = `✅ *Título:* ${data.title || 'Desconocido'}\n📥 *Tipo:* ${command === 'ytmp3' ? 'Audio (MP3)' : 'Video (MP4)'}`;
+    const info = json.video;
+    const media = info.download;
 
-    await conn.sendFile(m.chat, data.url, data.title + (command === 'ytmp3' ? '.mp3' : '.mp4'), caption, m);
+    const caption = `🎵 *Título:* ${info.title}\n👤 *Autor:* ${info.author}\n📦 *Tamaño:* ${media.size}\n🎚️ *Calidad:* ${media.quality}\n📁 *Tipo:* ${media.extension.toUpperCase()}`;
+
+    await conn.sendMessage(m.chat, { image: { url: info.image }, caption }, { quoted: m });
+
+    await conn.sendFile(
+      m.chat,
+      media.url,
+      media.filename,
+      null,
+      m
+    );
   } catch (e) {
     console.error(e);
-    conn.reply(m.chat, `⚠️ *Error al descargar el archivo.*\nIntenta con otro enlace.`, m);
+    conn.reply(m.chat, `⚠️ *Error al procesar la descarga.*\nEs posible que el enlace esté roto o el video sea privado.`, m);
   }
 };
 
