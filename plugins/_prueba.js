@@ -27,9 +27,25 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     const info = json.video;
     const media = info.download;
 
-    const caption = `🎬 *Título:* ${info.title}\n👤 *Autor:* ${info.author}\n📦 *Tamaño:* ${media.size}\n🎚️ *Calidad:* ${media.quality}\n📁 *Tipo:* ${media.extension.toUpperCase()}`;
+    const infoMessage = `🎬 *Título:* ${info.title}\n👤 *Autor:* ${info.author}\n📦 *Tamaño:* ${media.size}\n🎚️ *Calidad:* ${media.quality}\n📁 *Tipo:* ${media.extension.toUpperCase()}`;
 
-    await conn.sendMessage(m.chat, { image: { url: info.image }, caption }, { quoted: m });
+    const JT = {
+      contextInfo: {
+        externalAdReply: {
+          title: global.botname,
+          body: "¡Pika Pikachu-bot! El bot eléctrico que necesitas.",
+          mediaType: 1,
+          previewType: 0,
+          mediaUrl: video.url,
+          sourceUrl: video.url,
+          thumbnail: global.thumb,
+          renderLargerThumbnail: true
+        }
+      }
+    };
+
+    await m.react('🎧');
+    await conn.reply(m.chat, infoMessage, m, JT);
 
     await conn.sendFile(
       m.chat,
