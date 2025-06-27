@@ -5,8 +5,8 @@ let handler = async (m, { conn }) => {
     const nombre = await conn.getName(m.sender);
     const texto = `Hola ${nombre}, ¿Cómo estás?`;
     const ownerName = '𝐃𝐞𝐲𝐥𝐢𝐧';
-    const botName = 'Pikachu-Bot'; // Cambia esto por el nombre real de tu bot
-    const redes = 'https://whatsapp.com/channel/0029VbB46nl2ER6dZac6Nd1o'; // Cambia por tu canal o link oficial
+    const botName = 'Pikachu-Bot'; 
+    const redes = 'https://whatsapp.com/channel/0029VbB46nl2ER6dZac6Nd1o'; 
     const prefix = ['.', '⚡', '/', '#'].sort(() => 0.5 - Math.random())[0];
     const comando = ['menu', 'help'].sort(() => 0.5 - Math.random())[0];
 
