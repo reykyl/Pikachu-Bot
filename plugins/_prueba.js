@@ -1,83 +1,34 @@
 import fetch from 'node-fetch';
 
-let handler = async (m, { conn }) => {
+let handler = async (m, { conn, args, usedPrefix, command }) => {
+  if (!args[0]) {
+    return conn.reply(m.chat, `🔗 *Envía la URL del video de YouTube que deseas descargar.*\n\n📌 Ejemplo:\n${usedPrefix + command} https://www.youtube.com/watch?v=dQw4w9WgXcQ`, m);
+  }
+
+  let url = args[0];
+  let api = command === 'ytmp3'
+    ? `https://mode-api-sigma.vercel.app/api/mp3?url=${url}`
+    : `https://mode-api-sigma.vercel.app/api/mp4?url=${url}`;
+
   try {
-    const nombre = await conn.getName(m.sender);
-    const texto = `Hola ${nombre}, ¿Cómo estás?`;
-    const ownerName = '𝐃𝐞𝐲𝐥𝐢𝐧';
-    const botName = 'Pikachu-Bot'; 
-    const redes = 'https://whatsapp.com/channel/0029VbB46nl2ER6dZac6Nd1o'; 
-    const prefix = ['.', '⚡', '/', '#'].sort(() => 0.5 - Math.random())[0];
-    const comando = ['menu', 'help'].sort(() => 0.5 - Math.random())[0];
+    conn.reply(m.chat, `⏳ Descargando... esto puede tardar unos segundos...`, m);
+    let res = await fetch(api);
+    let data = await res.json();
 
-    let profile;
-    try {
-      profile = await conn.profilePictureUrl(m.sender, 'image');
-    } catch {
-      profile = 'https://files.catbox.moe/651gmb.jpg';
-    }
+    if (!data || !data.url) throw new Error('❌ No se pudo obtener el archivo.');
 
-    const xdd = {
-      "key": {
-        "fromMe": false,
-        "participant": "0@s.whatsapp.net",
-        "remoteJid": "0@s.whatsapp.net"
-      },
-      "message": {
-        "groupInviteMessage": {
-          "groupJid": "120363297867770433@g.us",
-          "inviteCode": "G9zQlCHDBrn99wcC2FyWgm",
-          "groupName": "𝙷𝙾𝙻𝙰 𝚄𝚂𝚄𝙰𝚁𝙸𝙾",
-          "caption": "𝙷𝙾𝙻𝙰, ¿𝙲𝙾𝙼𝙾 𝚃𝙴 𝙿𝚄𝙴𝙳𝙾 𝙰𝚈𝚄𝙳𝙰𝚁?",
-          "jpegThumbnail": await (await fetch(profile)).buffer()
-        }
-      }
-    };
+    let caption = `✅ *Título:* ${data.title || 'Desconocido'}\n📥 *Tipo:* ${command === 'ytmp3' ? 'Audio (MP3)' : 'Video (MP4)'}`;
 
-    const xddd = {
-      contextInfo: {
-        isForwarded: true,
-        forwardedNewsletterMessageInfo: {
-          newsletterJid: "120363415670808219@newsletter",
-          serverMessageId: 100,
-          newsletterName: "Cuervo Betas"
-        },
-        externalAdReply: {
-          showAdAttribution: true,
-          title: "Betas",
-          body: "Lo Goad",
-          mediaUrl: null,
-          description: null,
-          previewType: "PHOTO",
-          thumbnailUrl: profile,
-          sourceUrl: redes,
-          mediaType: 1,
-          renderLargerThumbnail: true
-        }
-      }
-    };
-
-    const imgUrl = `https://api.dorratz.com/v3/text-image?text=${encodeURIComponent(texto)}&fontSize=50`;
-    const img = await fetch(imgUrl).then(res => res.buffer());
-
-    const mensaje = `
-╭┈ ↷
-│✰ 𝙷𝙾𝙻𝙰 𝚄𝚂𝚄𝙰𝚁𝙸𝙾: ${nombre}
-│ᰔᩚ Soy ${botName}
-│❀ 𝙲𝚁𝙴𝙰𝙳𝙾𝚁: ${ownerName}
-│✦ 𝙼𝙴𝙽𝚄: ${prefix + comando}
-│⌬ 𝚄𝚁𝙻: ${redes}
-╰─────────────────`;
-
-    await conn.sendFile(m.chat, img, 'pikachu-bienvenida.jpg', mensaje.trim(), xdd, null, xddd);
-
-  } catch (error) {
-    console.error(error);
-    conn.sendMessage(m.chat, '𝙷𝙾𝙻𝙰 𝚄𝚂𝚄𝙰𝚁𝙸𝙾, ¿𝙲𝙾𝙼𝙾 𝚃𝙴 𝙿𝚄𝙴𝙳𝙾 𝙰𝚈𝚄𝙳𝙰𝚁?', 'conversation', { quoted: xdd });
+    await conn.sendFile(m.chat, data.url, data.title + (command === 'ytmp3' ? '.mp3' : '.mp4'), caption, m);
+  } catch (e) {
+    console.error(e);
+    conn.reply(m.chat, `⚠️ *Error al descargar el archivo.*\nIntenta con otro enlace.`, m);
   }
 };
 
-handler.command = ['hola'];
-handler.group = true;
+handler.help = ['ytmp3 <url>', 'ytmp4 <url>'];
+handler.tags = ['descargas'];
+handler.command = ['ytmp3', 'ytmp4'];
+handler.register = true;
 
 export default handler;
