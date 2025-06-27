@@ -27,7 +27,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     const info = json.video;
     const media = info.download;
 
-    /*const infoMessage = `🎬 *Título:* ${info.title}\n👤 *Autor:* ${info.author}\n📦 *Tamaño:* ${media.size}\n🎚️ *Calidad:* ${media.quality}\n📁 *Tipo:* ${media.extension.toUpperCase()}`;
+    const infoMessage = `🎬 *Título:* ${info.title}\n👤 *Autor:* ${info.author}\n📦 *Tamaño:* ${media.size}\n🎚️ *Calidad:* ${media.quality}\n📁 *Tipo:* ${media.extension.toUpperCase()}`;
 
     const JT = {
       contextInfo: {
@@ -45,7 +45,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     };
 
     await m.react('🎧');
-    await conn.reply(m.chat, infoMessage, m, JT);*/
+    await conn.reply(m.chat, infoMessage, m, JT);
 
     await conn.sendFile(
       m.chat,
@@ -96,7 +96,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     const info = json.audio;
     const media = info.descargar;
 
-    const infoMessage = `🎵 *Título:* ${info.title}\n👤 *Autor:* ${info.autor}\n📦 *Tamaño:* ${media.tamaño}\n🎧 *Calidad:* ${media.calidad}`;
+   /* const infoMessage = `🎵 *Título:* ${info.title}\n👤 *Autor:* ${info.autor}\n📦 *Tamaño:* ${media.tamaño}\n🎧 *Calidad:* ${media.calidad}`;
 
     const JT = {
       contextInfo: {
@@ -114,7 +114,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     };
 
     await m.react('🎶');
-    await conn.reply(m.chat, infoMessage, m, JT);
+    await conn.reply(m.chat, infoMessage, m, JT);*/
 
     await conn.sendFile(
       m.chat,
