@@ -38,7 +38,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
           previewType: 0,
           mediaUrl: video.url,
           sourceUrl: video.url,
-          thumbnail: global.thumb,
+          thumbnail: thumb,
           renderLargerThumbnail: true
         }
       }
