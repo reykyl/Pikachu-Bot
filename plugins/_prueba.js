@@ -69,10 +69,8 @@ export default handler;*/
 
 import fetch from 'node-fetch';
 import yts from 'yt-search';
-import { fileTypeFromBuffer } from 'file-type'; // Opcional para validar mime
 
 async function resolveRedirect(url) {
-  // Resuelve la URL final siguiendo redirecciones HTTP
   const res = await fetch(url, {
     method: 'HEAD',
     redirect: 'follow',
@@ -86,7 +84,9 @@ let handler = async (m, { conn, args, usedPrefix }) => {
   }
 
   const searchText = args.join(' ');
+  console.time('YTSearch');
   const searchResult = await yts(searchText);
+  console.timeEnd('YTSearch');
 
   if (!searchResult.videos.length) {
     return conn.reply(m.chat, `❌ *No se encontró ningún resultado para:* "${searchText}"`, m);
@@ -96,44 +96,38 @@ let handler = async (m, { conn, args, usedPrefix }) => {
   const apiUrl = `https://mode-api-sigma.vercel.app/api/mp3?url=${encodeURIComponent(video.url)}`;
 
   try {
+    console.time('API Fetch');
     const res = await fetch(apiUrl);
     const json = await res.json();
+    console.timeEnd('API Fetch');
 
-    if (!json.status || !json.audio || !json.audio.download || !json.audio.download.url) {
+    if (!json.status || !json.audio || !json.audio.download?.url) {
       return conn.reply(m.chat, `❌ *La API no devolvió un enlace válido.*`, m);
     }
 
-    const media = json.audio.download;
-    let audioUrl = media.url;
+    let audioUrl = json.audio.download.url;
 
-    
+    console.time('Resolve Redirect');
     audioUrl = await resolveRedirect(audioUrl);
+    console.timeEnd('Resolve Redirect');
 
-    
+    console.time('Audio Download');
     const audioRes = await fetch(audioUrl);
     if (!audioRes.ok) throw new Error('No se pudo descargar el audio.');
-
     const audioBuffer = await audioRes.buffer();
+    console.timeEnd('Audio Download');
 
-    
-    /*
-    const type = await fileTypeFromBuffer(audioBuffer);
-    const mime = type?.mime || 'audio/mpeg';
-    */
+    const caption = `🎵 *Título:* ${json.audio.title}\n👤 *Autor:* ${json.audio.author}\n📦 *Tamaño:* ${json.audio.download.size}\n🎧 *Calidad:* ${json.audio.download.quality}`;
 
-    const caption = `🎵 *Título:* ${json.audio.title}\n👤 *Autor:* ${json.audio.author}\n📦 *Tamaño:* ${media.size}\n🎧 *Calidad:* ${media.quality}`;
-
-    await conn.sendMessage(m.chat, {
-      image: { url: json.audio.image },
-      caption
-    }, { quoted: m });
-
+    console.time('Send Audio');
     await conn.sendMessage(m.chat, {
       audio: audioBuffer,
-      fileName: media.filename || 'audio.mp3',
-      mimetype: 'audio/mpeg', 
+      fileName: json.audio.download.filename || 'audio.mp3',
+      mimetype: 'audio/mpeg',
+      caption,
       ptt: false
     }, { quoted: m });
+    console.timeEnd('Send Audio');
 
   } catch (error) {
     console.error(error);
@@ -143,7 +137,7 @@ let handler = async (m, { conn, args, usedPrefix }) => {
 
 handler.help = ['playaudio <nombre>'];
 handler.tags = ['descargas'];
-handler.command = ['play'];
+handler.command = ['play', 'playaudio'];
 handler.register = true;
 
 export default handler;
