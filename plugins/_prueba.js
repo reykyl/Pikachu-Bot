@@ -89,15 +89,16 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     const res = await fetch(apiUrl);
     const json = await res.json();
 
+    // Mostrar respuesta para depuración
     const debugMessage = `📡 *Respuesta de la API:*\n\`\`\`json\n${JSON.stringify(json, null, 2)}\n\`\`\``;
     await conn.reply(m.chat, debugMessage, m);
 
-    
-    if (!json?.estado || !json?.audio || !json.audio?.descargar || !json.audio.descargar?.url) {
+    // Corrección de validaciones con campos reales
+    if (!json.status || !json.audio || !json.audio.download || !json.audio.download.url) {
       return conn.reply(m.chat, `❌ *La API no devolvió un enlace válido.*`, m);
     }
 
-    const media = json.audio.descargar;
+    const media = json.audio.download;
     const audioUrl = media.url;
 
     await conn.sendMessage(
@@ -112,13 +113,13 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     );
   } catch (e) {
     console.error(e);
-    conn.reply(m.chat, `⚠️ *Error al procesar el audio.*`, m);
+    conn.reply(m.chat, `⚠️ *Error al procesar o enviar el audio.*`, m);
   }
 };
 
 handler.help = ['playaudio <nombre>'];
 handler.tags = ['descargas'];
 handler.command = ['play'];
-handler.register = true;
+
 
 export default handler;
