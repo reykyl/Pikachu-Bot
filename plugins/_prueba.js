@@ -32,7 +32,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     const JT = {
       contextInfo: {
         externalAdReply: {
-          title: global.botname,
+          title: botname,
           body: "¡Pika Pikachu-bot! El bot eléctrico que necesitas.",
           mediaType: 1,
           previewType: 0,
