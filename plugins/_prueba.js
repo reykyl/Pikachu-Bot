@@ -17,7 +17,7 @@ let handler = async (m, { conn, usedPrefix, command }) => {
     const title = json.type;
     const author = post.author;
 
-    await conn.sendFile(m.chat, image, 'nsfw.jpg', `🔞 *${title}*`, m);
+    await conn.sendFile(m.chat, image, 'meme.jpg', m);
   } catch (e) {
     console.error(e);
     conn.reply(m.chat, '❌ Hubo un error al obtener el contenido NSFW.', m);
