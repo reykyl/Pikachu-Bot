@@ -36,8 +36,9 @@ await conn.sendFile(m.chat, img, 'error-xddd.jpg', xd, xdd, null, xddd)
     conn.sendMessage(m.chat, '𝙷𝙾𝙻𝙰 𝚄𝚂𝚄𝙰𝚁𝙸𝙾, ¿𝙲𝙾𝙼𝙾 𝚃𝙴 𝙿𝚄𝙴𝙳𝙾 𝙰𝚈𝚄𝙳𝙰𝚁?', 'conversation', { quoted: xdd })
   }
 }
-handler.customPrefix = /^(Hola|hola|Holis|holis|Ola|ola)$/i
-handler.command = new RegExp
-handler.register = true
+
+handler.command = ['hola'];
+
 handler.group = true
+
 export default handler
