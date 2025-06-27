@@ -9,8 +9,8 @@
 ---
 
 ### 🌟 DESARROLLADORES
-<a href="https://github.com/deylin-eliac/kirito-bot-MD/graphs/contributors">
-<img src="https://contrib.rocks/image?repo=deylin-eliac/kirito-bot-MD" /> 
+<a href="https://github.com/deylin-eliac/Pikachu-bot/graphs/contributors">
+<img src="https://contrib.rocks/image?repo=deylin-eliac/Pikachu-bot" /> 
 </a>
 
 ---
