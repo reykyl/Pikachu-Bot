@@ -76,37 +76,39 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
   }
 
   const searchText = args.join(' ');
-  let searchResult = await yts(searchText);
+  const searchResult = await yts(searchText);
 
   if (!searchResult.videos.length) {
     return conn.reply(m.chat, `❌ *No se encontró ningún resultado para:* "${searchText}"`, m);
   }
 
-  let video = searchResult.videos[0];
-  let apiUrl = `https://mode-api-sigma.vercel.app/api/mp3?url=${video.url}`;
+  const video = searchResult.videos[0];
+  const apiUrl = `https://mode-api-sigma.vercel.app/api/mp3?url=${video.url}`;
 
   try {
     const res = await fetch(apiUrl);
     const json = await res.json();
 
-    if (!json.estado || !json.audio?.descargar?.url) {
-      throw '❌ No se pudo obtener el audio.';
+    // Validación estricta según tu respuesta
+    if (!json.estado || !json.audio || !json.audio.descargar || !json.audio.descargar.url) {
+      return conn.reply(m.chat, `❌ *La API no devolvió un enlace válido.*`, m);
     }
 
-    const media = json.audio.descargar;
+    const { descargar } = json.audio;
 
-    await conn.sendFile(
+    await conn.sendMessage(
       m.chat,
-      media.url,
-      media.filename,
-      null,
-      m,
-      false,
-      { mimetype: 'audio/mpeg' }
+      {
+        audio: { url: descargar.url },
+        fileName: descargar.filename,
+        mimetype: 'audio/mpeg',
+        ptt: false
+      },
+      { quoted: m }
     );
   } catch (e) {
     console.error(e);
-    conn.reply(m.chat, `⚠️ *Error al descargar el audio.*`, m);
+    conn.reply(m.chat, `⚠️ *Error al descargar o enviar el audio.*`, m);
   }
 };
 
