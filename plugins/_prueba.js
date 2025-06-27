@@ -135,7 +135,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
 
 handler.help = ['playaudio <nombre>'];
 handler.tags = ['descargas'];
-handler.command = ['playaudio'];
+handler.command = ['play'];
 handler.register = true;
 
 export default handler;
