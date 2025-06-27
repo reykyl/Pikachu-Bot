@@ -120,13 +120,21 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
       caption
     }, { quoted: m });
 
-    await conn.sendMessage(m.chat, {
-      audio: { url: media.url },
-      fileName: media.filename || 'audio.mp3',
-      mimetype: 'audio/mpeg',
-      ptt: false
-    }, { quoted: m, ...JT });
+    
+    const audioRes = await fetch(media.url);
+    const audioBuffer = await audioRes.buffer();
 
+    
+    await conn.sendMessage(
+      m.chat,
+      {
+        audio: audioBuffer,
+        fileName: media.filename || 'audio.mp3',
+        mimetype: 'audio/mpeg',
+        ptt: false
+      },
+      { quoted: m, ...JT }
+    );
   } catch (e) {
     console.error(e);
     conn.reply(m.chat, `⚠️ *Error al procesar o enviar el audio.*`, m);
@@ -135,7 +143,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
 
 handler.help = ['playaudio <nombre>'];
 handler.tags = ['descargas'];
-handler.command = ['play'];
+handler.command = ['playaudio'];
 handler.register = true;
 
 export default handler;
