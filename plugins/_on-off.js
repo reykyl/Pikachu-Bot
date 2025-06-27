@@ -34,94 +34,7 @@ const handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, i
       chat.welcome = isEnable;
       break;
 
-    case 'antiprivado':
-    case 'antipriv':
-    case 'antiprivate':
-      isAll = true;
-      if (!isOwner) {
-        global.dfail('admin', m, conn);
-        throw false;
-      }
-      bot.antiPrivate = isEnable;
-      break;
-
-    case 'restrict':
-    case 'restringir':
-      isAll = true;
-      if (!isOwner) {
-        global.dfail('rowner', m, conn);
-        throw false;
-      }
-      bot.restrict = isEnable;
-      break;
-
-    case 'autolevelup':
-    case 'autonivel':
-      if (m.isGroup) {
-        if (!(isAdmin || isOwner)) {
-          global.dfail('admin', m, conn);
-          throw false;
-        }
-      }
-      chat.autolevelup = isEnable;
-      break;
-
-    case 'autosticker':
-      if (m.isGroup) {
-        if (!(isAdmin || isOwner)) {
-          global.dfail('admin', m, conn);
-          throw false;
-        }
-      }
-      chat.autosticker = isEnable;
-      break;
-
-    case 'antibot':
-    case 'antibots':
-      if (m.isGroup) {
-        if (!(isAdmin || isOwner)) {
-          global.dfail('admin', m, conn);
-          throw false;
-        }
-      }
-      chat.antiBot = isEnable;
-      break;
-
-    case 'autoaceptar':
-    case 'aceptarauto':
-      if (m.isGroup) {
-        if (!(isAdmin || isOwner)) {
-          global.dfail('admin', m, conn);
-          throw false;
-        }
-      }
-      chat.autoAceptar = isEnable;
-      break;
-
-    case 'autorechazar':
-    case 'rechazarauto':
-      if (m.isGroup) {
-        if (!(isAdmin || isOwner)) {
-          global.dfail('admin', m, conn);
-          throw false;
-        }
-      }
-      chat.autoRechazar = isEnable;
-      break;
-
-    case 'autoresponder':
-    case 'autorespond':
-      if (!m.isGroup) {
-        if (!isOwner) {
-          global.dfail('group', m, conn);
-          throw false;
-        }
-      } else if (!isAdmin) {
-        global.dfail('admin', m, conn);
-        throw false;
-      }
-      chat.autoresponder = isEnable;
-      break;
+    
 
     case 'antisubbots':
     case 'antisub':
@@ -147,31 +60,7 @@ const handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, i
       chat.modoadmin = isEnable;
       break;
 
-    case 'autoread':
-    case 'autoleer':
-    case 'autover':
-      isAll = true;
-      if (!isROwner) {
-        global.dfail('rowner', m, conn);
-        throw false;
-      }
-      global.opts['autoread'] = isEnable;
-      break;
-
-    case 'antiver':
-    case 'antiocultar':
-    case 'antiviewonce':
-      if (!m.isGroup) {
-        if (!isOwner) {
-          global.dfail('group', m, conn);
-          throw false;
-        }
-      } else if (!isAdmin) {
-        global.dfail('admin', m, conn);
-        throw false;
-      }
-      chat.antiver = isEnable;
-      break;
+    
 
     case 'reaction':
     case 'reaccion':
@@ -203,27 +92,7 @@ const handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, i
       chat.nsfw = isEnable;
       break;
 
-    case 'antispam':
-    case 'antiSpam':
-    case 'antispamosos':
-      isAll = true;
-      if (!isOwner) {
-        global.dfail('rowner', m, conn);
-        throw false;
-      }
-      bot.antiSpam = isEnable;
-      break;
-
-    case 'antidelete': 
-    case 'antieliminar':
-      if (m.isGroup) {
-        if (!(isAdmin || isOwner)) {
-          global.dfail('admin', m, conn);
-          throw false;
-        }
-      }
-      chat.delete = isEnable;
-      break;
+    
 
     case 'jadibotmd':
     case 'modejadibot':
