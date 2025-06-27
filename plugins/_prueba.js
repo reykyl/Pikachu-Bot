@@ -44,9 +44,9 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
   }
 };
 
-handler.help = ['ytmp4 <nombre del video>'];
+handler.help = ['play2 <nombre del video>'];
 handler.tags = ['descargas'];
-handler.command = ['ytmp4'];
+handler.command = ['play2'];
 handler.register = true;
 
 export default handler;
