@@ -3,8 +3,9 @@ import fetch from 'node-fetch';
 let handler = async (m, { conn, usedPrefix, command }) => {
   try {
     const res = await fetch('https://g-mini-ia.vercel.app/api/nsfw');
-    const json = await res.json();
-    const posts = json.data.children.filter(post => post.data.post_hint === 'image');
+        const json = await res.json();
+    const meme = json.url;
+
 
     if (!posts.length) {
       return conn.reply(m.chat, '⚠️ No se encontró contenido NSFW por ahora.', m);
