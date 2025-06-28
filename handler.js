@@ -554,7 +554,14 @@ global.dfail = (type, m, conn, comando = '') => {
   let edadaleatoria = ['10', '28', '20', '40', '18', '21', '15', '11', '9', '17', '25'].getRandom();
   let user2 = m.pushName || 'Anónimo';
   let verifyaleatorio = ['registrar', 'reg', 'verificar', 'verify', 'register'].getRandom();
-  let mensajes = getMensajeSistema(comando)
+  let edades = Array.from({ length: 3 }, () => ['10', '28', '20', '40', '18', '21', '15', '11', '9', '17', '25'].getRandom());
+
+  let mensajes = getMensajeSistema({
+    comando,
+    verifyaleatorio,
+    user2,
+    edades
+  });
 
   const msg = {
     rowner: mensajes.smsrowner,
@@ -567,7 +574,7 @@ global.dfail = (type, m, conn, comando = '') => {
     botAdmin: mensajes.smsbotAdmin,
     unreg: mensajes.smsunreg,
     restrict: mensajes.smsrestrict
-  }[type]
+  }[type];
 
   if (msg) return conn.reply(m.chat, msg, m, fake).then(_ => m.react('✖️'))
 }
