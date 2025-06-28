@@ -1,35 +1,27 @@
-/** 
- *  Created By LUA SER OFC
- *  CopyRight 2024 MIT License
- *  My Github : https://github.com/xxirfanx
- *  My Instagram : https://instagram.com/luaserofc
- *  My Youtube : https://youtube.com/@luaserofc
-*/
+// handler para comando .vincular
+let handler = async (m, { conn, command, usedPrefix }) => {
+  const secret = generarCodigo() // función que genera el código, por ejemplo: GAOK-IG36
+  const texto = `🔐 *Tu código de vinculación es:*`;
+  const footer = `📡 Usa este código para vincular tu sub-bot`;
+  const image = 'https://i.imgur.com/AaJzNHz.jpeg'; // Puedes poner cualquier imagen
+  const buttons = [
+    { buttonId: `${usedPrefix}menu`, buttonText: { displayText: "📜 Menú" }, type: 1 },
+    { buttonId: `${usedPrefix}info`, buttonText: { displayText: "ℹ️ Información" }, type: 1 }
+  ];
+  const copyText = `${secret}`; // Texto final que aparece como si fuera 'copiable'
 
-import yts from 'yt-search';
+  await conn.sendButton2(m.chat, texto, footer, image, buttons, copyText, null, m);
+};
 
-let handler = async (m, { conn, command, text, usedPrefix }) => {
-  if (!text) throw ` 🦄Use example *${usedPrefix + command}* Somewhere Only We Know`;
-        let res = await yts(text)
-        let vid = res.videos[0]
-        if (!vid) throw `🍊 Audio not find title song `;
-        let { title, description, thumbnail, videoId, timestamp, views, ago, url } = vid
-        //const url = 'https://www.youtube.com/watch?v=' + videoId
-        m.react(`🐢`) 
-  let play = `
-📺 *Title:* ${vid.title}
-⌛ *Duration:* ${vid.timestamp}
-👀 *Views:* ${vid.views.toLocaleString()}
-📅 *Upload:* ${vid.ago}
-`
- await conn.sendButton2(m.chat, play, thumbnail, [
-    ['🎶 MP3', `${usedPrefix}vfmp3 ${url}`]], null, null, m)
+// Generador de código aleatorio
+function generarCodigo() {
+  const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const numeros = '0123456789';
+  const parte1 = Array(4).fill().map(() => letras[Math.floor(Math.random() * letras.length)]).join('');
+  const parte2 = Array(4).fill().map(() => numeros[Math.floor(Math.random() * numeros.length)]).join('');
+  return `${parte1}-${parte2}`;
 }
 
-handler.help = ['play'].map((v) => v + ' <query>')
-handler.tags = ['downloader']
-handler.command = ['play', 'song']
+handler.command = /^vincular$/i;
 
-export default handler
-
-
+export default handler;
