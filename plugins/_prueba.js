@@ -1,54 +1,37 @@
-import fs from 'fs'
-import path from 'path'
-import ffmpeg from 'fluent-ffmpeg'
-import ffmpegPath from 'ffmpeg-static'
-import { transcribe } from '@ai-zen/whisper'
-
-ffmpeg.setFfmpegPath(ffmpegPath)
+let handler = async (m, { conn, command }) => {
+  const code = `
+const fetch = require('node-fetch');
 
 let handler = async (m, { conn, args }) => {
-  try {
-    if (!m.quoted || !m.quoted.audio) {
-      return m.reply('🎙️ Responde a un audio con el comando *bt* para transcribirlo.')
+  let url = args[0];
+  if (!url) throw '🚫 Ingresa una URL de Instagram.';
+
+  let res = await fetch(\`https://api-instagram.fake/api?url=\${url}\`);
+  let json = await res.json();
+
+  if (!json.result) throw '❌ No se pudo obtener el contenido.';
+
+  await conn.sendFile(m.chat, json.result.url, 'insta.mp4', '✅ Descargado con éxito.', m);
+};
+
+handler.command = /^instagram|ig(dl)?$/i;
+module.exports = handler;
+`.trim()
+
+  await conn.sendMessage(m.chat, {
+    text: `🍄 *Instagram Downloader*\n\n` +
+          '```js\n' + code + '\n```',
+    contextInfo: {
+      externalAdReply: {
+        title: '🍄 Instagram Downloader',
+        body: "𝘴ყℓρԋιҽttҽ's | αlphα v1",
+        renderLargerThumbnail: true,
+        mediaType: 1,
+        thumbnailUrl: 'https://telegra.ph/file/4132fa15b4b7d238a6f40.jpg',
+        sourceUrl: 'https://github.com/Deylin-Eliac'
+      }
     }
-
-    const media = await m.quoted.download()
-    const inputPath = './tmp/input.ogg'
-    const outputPath = './tmp/output.wav'
-
-    if (!fs.existsSync('./tmp')) fs.mkdirSync('./tmp')
-
-    fs.writeFileSync(inputPath, media)
-
-    
-    await new Promise((resolve, reject) => {
-      ffmpeg(inputPath)
-        .audioCodec('pcm_s16le')
-        .format('wav')
-        .save(outputPath)
-        .on('end', resolve)
-        .on('error', reject)
-    })
-
-    
-    m.reply('🧠 Transcribiendo el audio...')
-
-    const result = await transcribe(outputPath)
-
-    const text = result.text?.trim()
-    if (!text) return m.reply('❌ No se pudo transcribir el audio.')
-
-    m.reply(`🗣️ *Texto detectado:*\n\n${text}`)
-    
-    
-    fs.unlinkSync(inputPath)
-    fs.unlinkSync(outputPath)
-  } catch (e) {
-    console.error(e)
-    m.reply('⚠️ Error al procesar el audio.')
-  }
+  }, { quoted: m })
 }
-
-handler.command = /^bt$/i
-handler.register = true
+handler.command = /^igcode$/i;
 export default handler
