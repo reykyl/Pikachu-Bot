@@ -1,49 +1,20 @@
-import fs from 'fs'
-import path from 'path'
+// En tu archivo 'copycode.js' (o similar) dentro de tu carpeta de comandos
+const handler = async (sock, m, chatUpdate, store) => {
+    // 'sock' es la instancia de Baileys socket
+    // 'm' es el objeto del mensaje
+    // 'chatUpdate' y 'store' son útiles para el contexto del chat y la gestión del estado
 
-let handler = async (m, { conn }) => {
-  const filePath = './temp/instagram-downloader.js'
-  const codeContent = `const handler = async (m, { conn, args }) => {
-  let url = args[0]
-  if (!url) throw '❌ Ingresa una URL válida.'
+    const prefix = '/'; // Define tu prefijo de comando aquí
 
-  let res = await fetch(\`https://api.instagram.fake/?url=\${url}\`)
-  let json = await res.json()
-
-  if (!json.ok) throw '⚠️ Error al descargar.'
-
-  await conn.sendFile(m.chat, json.result.url, 'video.mp4', '✅ Descargado', m)
-}
-
-handler.command = /^ig(dl)?$/i
-export default handler`
-
-  // Crea carpeta si no existe
-  const dir = path.dirname(filePath)
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
-
-  // Escribe el archivo
-  fs.writeFileSync(filePath, codeContent)
-
-  // Lee el archivo como buffer
-  const buffer = fs.readFileSync(filePath)
-
-  await conn.sendMessage(m.chat, {
-    document: buffer,
-    mimetype: 'text/javascript',
-    fileName: 'Instagram Downloader.js',
-    caption: '🍄 *Instagram Downloader*\n\nsყℓρհιҽttҽ\'s | αlphα v1',
-    contextInfo: {
-      externalAdReply: {
-        title: '🍄 Instagram Downloader',
-        body: 'sყℓρհιҽttҽ\'s | αlphα v1',
-        thumbnailUrl: 'https://telegra.ph/file/3f51c7b17f07100ae9ed6.jpg',
-        sourceUrl: 'https://github.com/Deylin-Eliac',
-        mediaType: 1,
-        renderLargerThumbnail: true,
-      }
+    // Verifica si el mensaje comienza con el comando /copycode
+    if (m.message && m.message.conversation && m.message.conversation.toLowerCase().startsWith(prefix + 'copycode')) {
+        await sock.sendMessage(m.key.remoteJid, { text: '¡Entendido! Estoy configurado para detectar códigos de restablecimiento de contraseña de Facebook automáticamente. Si me envías un mensaje con uno, lo procesaré.' });
+        // O podrías pedir al usuario que envíe el código:
+        // await sock.sendMessage(m.key.remoteJid, { text: 'Por favor, envíame el código de Facebook que deseas que procese.' });
     }
-  }, { quoted: m })
-}
-handler.command = /^copycode$/i
-export default handler
+};
+
+handler.command = /^copycode$/i; // El comando que activa este handler
+handler.description = 'Información sobre la detección de códigos de Facebook.'; // Una descripción para tu ayuda
+
+export default handler; // Exporta el handler
