@@ -537,6 +537,9 @@ function pickRandom(list) { return list[Math.floor(Math.random() * list.length)]
 }}
 
 global.dfail = (type, m, conn, comando = '') => {
+  let edadaleatoria = ['10', '28', '20', '40', '18', '21', '15', '11', '9', '17', '25'].getRandom();
+  let user2 = m.pushName || 'Anónimo';
+  let verifyaleatorio = ['registrar', 'reg', 'verificar', 'verify', 'register'].getRandom();
   let mensajes = getMensajeSistema(comando)
 
   const msg = {
@@ -548,6 +551,7 @@ global.dfail = (type, m, conn, comando = '') => {
     private: mensajes.smsprivate,
     admin: mensajes.smsadmin,
     botAdmin: mensajes.smsbotAdmin,
+    unreg: mensajes.smsunreg,
     restrict: mensajes.smsrestrict
   }[type]
 
