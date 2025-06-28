@@ -29,6 +29,5 @@ let handler = async (m, { conn, command, text, usedPrefix }) => {
 handler.help = ['play'].map((v) => v + ' <query>')
 handler.tags = ['downloader']
 handler.command = ['play', 'song']
-handler.disabled = false
 
 export default handler
