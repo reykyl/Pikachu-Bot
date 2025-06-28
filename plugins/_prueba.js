@@ -19,15 +19,6 @@ ${text}
 
   await conn.sendMessage(m.chat, {
     text: estilo,
-    contextInfo: {
-      externalAdReply: {
-        title: '✨ Pikachu Test v1',
-        body: 'ᴋɪʀɪᴛᴏ-ʙᴏᴛ | ᴘʀᴜᴇʙᴀ ᴅᴇ ᴄᴏᴘɪᴀ',
-        thumbnailUrl: 'https://telegra.ph/file/3f51c7b17f07100ae9ed6.jpg', // Puedes cambiarla
-        mediaType: 1,
-        renderLargerThumbnail: true,
-        sourceUrl: 'https://whatsapp.com/channel/0029VbB46nl2ER6dZac6Nd1o'
-      }
     }
   }, { quoted: m })
 }
