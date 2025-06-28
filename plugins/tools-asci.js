@@ -51,5 +51,6 @@ let handler = async (m, { args, text, conn }) => {
 handler.help = ['ascii <nombre>']
 handler.tags = ['tools']
 handler.command = /^ascii$/i
+handler.register = true
 
 export default handler
