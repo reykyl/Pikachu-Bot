@@ -70,6 +70,7 @@ global.emoji3 = '*⚡(｡♥‿♥｡) ピカチュウ！🧃*\n'
 global.emoji4 = '*⚡(˘▾˘) ピィ〜カ〜！🧃*\n'
 global.emoji5 = '*⚡ᰔᩚ ( ᜊ°-° )ᜊ ピカッ！.ᐟ .ᐟ 🧃*\n'
 global.emojis = [emoji0, emoji2, emoji3, emoji4, emoji5].getRandom()
+global.emoji = [emoji0, emoji2, emoji3, emoji4, emoji5].getRandom()
 
 global.wait = '⚡ *Espera un momento entrenador...*'
 global.waitt = global.wait
