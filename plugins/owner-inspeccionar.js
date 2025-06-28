@@ -286,7 +286,7 @@ await conn.sendMessage(ch, { text: `${emoji} ${botname} ha cambiando la imagen d
 externalAdReply: {
 title: "【 🔔 𝐍𝐎𝐓𝐈𝐅𝐈𝐂𝐀𝐂𝐈𝐎́𝐍 🔔 】",
 body: '👑 𝙽𝚞𝚎𝚟𝚊 𝚏𝚘𝚝𝚘 𝚙𝚊𝚛𝚊 𝚙𝚎𝚛𝚏𝚒𝚕 𝚍𝚎𝚕 𝚌𝚊𝚗𝚊𝚕.',
-thumbnailUrl: pp,
+thumbnailUrl: icono,
 sourceUrl: redes,
 mediaType: 1,
 showAdAttribution: false,
