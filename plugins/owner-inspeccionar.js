@@ -315,7 +315,7 @@ await conn.sendMessage(ch, { text: `👑 ${botname} ha eliminado la imagen del c
 externalAdReply: {
 title: "【 🔔 𝐍𝐎𝐓𝐈𝐅𝐈𝐂𝐀𝐂𝐈𝐎́𝐍 🔔 】",
 body: '⚡ 𝙵𝚘𝚝𝚘 𝚍𝚎 𝚙𝚎𝚛𝚏𝚕 𝚍𝚎𝚕 𝚌𝚊𝚗𝚊𝚕 𝚎𝚕𝚒𝚖𝚒𝚗𝚊𝚍𝚊.',
-thumbnailUrl: pp,
+thumbnailUrl: icono,
 sourceUrl: redes,
 mediaType: 1,
 showAdAttribution: false,
@@ -407,7 +407,7 @@ await conn.sendMessage(ch, { text: `${emoji} ${botname} ha establecido el modo d
 externalAdReply: {
 title: "【 🔔 𝐍𝐎𝐓𝐈𝐅𝐈𝐂𝐀𝐂𝐈𝐎́𝐍 🔔 】",
 body: '👑 𝙰𝚓𝚞𝚜𝚝𝚎𝚜 𝚎𝚗 𝚛𝚎𝚊𝚌𝚌𝚒𝚘𝚗𝚎𝚜.',
-thumbnailUrl: pp,
+thumbnailUrl: icono,
 sourceUrl: redes,
 mediaType: 1,
 showAdAttribution: false,
@@ -443,7 +443,7 @@ await conn.sendMessage(ch, { text: `${emoji} ${botname} ha cambiado el nombre de
 externalAdReply: {
 title: "【 🔔 𝐍𝐎𝐓𝐈𝐅𝐈𝐂𝐀𝐂𝐈𝐎́𝐍 🔔 】",
 body: '👑 𝚄𝚗 𝚗𝚞𝚎𝚟𝚘 𝚗𝚘𝚖𝚋𝚛𝚎 𝚙𝚊𝚛𝚊 𝚎𝚕 𝚌𝚊𝚗𝚊𝚕.',
-thumbnailUrl: pp,
+thumbnailUrl: icono,
 sourceUrl: redes,
 mediaType: 1,
 showAdAttribution: false,
@@ -478,7 +478,7 @@ await conn.sendMessage(ch, { text: `${emoji} ${botname} ha modificado la descrip
 externalAdReply: {
 title: "【 🔔 𝐍𝐎𝐓𝐈𝐅𝐈𝐂𝐀𝐂𝐈𝐎́𝐍 🔔 】",
 body: '👑 𝚄𝚗𝚊 𝚗𝚞𝚎𝚟𝚊 𝚍𝚎𝚜𝚌𝚛𝚒𝚙𝚌𝚒𝚘́𝚗 𝚊𝚕 𝚌𝚊𝚗𝚊𝚕.',
-thumbnailUrl: pp,
+thumbnailUrl: icono,
 sourceUrl: redes,
 mediaType: 1,
 showAdAttribution: false,
