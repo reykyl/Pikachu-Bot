@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 
 let handler = async (m, { conn }) => {
   const filePath = './temp/instagram-downloader.js'
@@ -17,10 +18,18 @@ let handler = async (m, { conn }) => {
 handler.command = /^ig(dl)?$/i
 export default handler`
 
+  // Crea carpeta si no existe
+  const dir = path.dirname(filePath)
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
+
+  // Escribe el archivo
   fs.writeFileSync(filePath, codeContent)
 
+  // Lee el archivo como buffer
+  const buffer = fs.readFileSync(filePath)
+
   await conn.sendMessage(m.chat, {
-    document: { url: filePath },
+    document: buffer,
     mimetype: 'text/javascript',
     fileName: 'Instagram Downloader.js',
     caption: '🍄 *Instagram Downloader*\n\nsყℓρհιҽttҽ\'s | αlphα v1',
