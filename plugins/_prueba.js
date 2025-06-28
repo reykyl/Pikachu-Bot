@@ -6,7 +6,7 @@ let handler = async (m, { conn, command }) => {
   const URLIMG = 'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/pika.jpg';
   const COSACOPY = 'GAOK-IG36'; 
 
-  await bot.sendButton2(m.chat, TEXTO_GG, FOTOTETA, URLIMG, [], COSACOPY, null, m);
+  await sendButton2(m.chat, TEXTO_GG, FOTOTETA, URLIMG, [], COSACOPY, null, m);
 };
 
 handler.command = /^vincular$/i;
