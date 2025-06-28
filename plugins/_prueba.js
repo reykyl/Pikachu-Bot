@@ -1,20 +1,41 @@
-// En tu archivo 'copycode.js' (o similar) dentro de tu carpeta de comandos
-const handler = async (sock, m, chatUpdate, store) => {
-    // 'sock' es la instancia de Baileys socket
-    // 'm' es el objeto del mensaje
-    // 'chatUpdate' y 'store' son útiles para el contexto del chat y la gestión del estado
+import fs from 'fs'
 
-    const prefix = '/'; // Define tu prefijo de comando aquí
+let handler = async (m, { conn }) => {
+  const code = `// Instagram Downloader
+import fetch from 'node-fetch'
 
-    // Verifica si el mensaje comienza con el comando /copycode
-    if (m.message && m.message.conversation && m.message.conversation.toLowerCase().startsWith(prefix + 'copycode')) {
-        await sock.sendMessage(m.key.remoteJid, { text: '¡Entendido! Estoy configurado para detectar códigos de restablecimiento de contraseña de Facebook automáticamente. Si me envías un mensaje con uno, lo procesaré.' });
-        // O podrías pedir al usuario que envíe el código:
-        // await sock.sendMessage(m.key.remoteJid, { text: 'Por favor, envíame el código de Facebook que deseas que procese.' });
+let handler = async (m, { conn, args }) => {
+  let url = args[0]
+  if (!url) throw 'Falta URL'
+  let res = await fetch(\`https://api.fake-instagram.com?url=\${url}\`)
+  let json = await res.json()
+  await conn.sendFile(m.chat, json.url, 'video.mp4', '', m)
+}
+handler.command = /^ig$/i
+export default handler
+`
+  const fileName = 'Instagram-Downloader.js'
+  const filePath = './' + fileName
+  fs.writeFileSync(filePath, code)
+
+  const buffer = fs.readFileSync(filePath)
+
+  await conn.sendMessage(m.chat, {
+    document: buffer,
+    mimetype: 'text/javascript',
+    fileName,
+    caption: '🍄 *Instagram Downloader*\n\nBotón de copiar activo si tu WhatsApp lo permite',
+    contextInfo: {
+      externalAdReply: {
+        title: 'Instagram Downloader',
+        body: 'Archivo generado por el bot',
+        mediaType: 1,
+        sourceUrl: 'https://github.com/Deylin-Eliac',
+        thumbnailUrl: 'https://telegra.ph/file/3f51c7b17f07100ae9ed6.jpg',
+        renderLargerThumbnail: true
+      }
     }
-};
-
-handler.command = /^copycode$/i; // El comando que activa este handler
-handler.description = 'Información sobre la detección de códigos de Facebook.'; // Una descripción para tu ayuda
-
-export default handler; // Exporta el handler
+  }, { quoted: m })
+}
+handler.command = /^copycode$/i
+export default handler
