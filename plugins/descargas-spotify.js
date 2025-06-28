@@ -53,5 +53,6 @@ let handler = async (m, { conn, text }) => {
 handler.help = ['spotify *<texto>*'];
 handler.tags = ['descargas'];
 handler.command = ['spotify'];
+handler.register = true
 
 export default handler;
