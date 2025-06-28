@@ -1,17 +1,34 @@
-let handler = async (m, { text, usedPrefix, command }) => {
-  if (!text || !/^\d{4,8}$/.test(text)) {
-    return m.reply(`📲 Usa el comando así:\n\n*${usedPrefix + command} 842916*`)
-  }
+/** 
+ *  Created By LUA SER OFC
+ *  CopyRight 2024 MIT License
+ *  My Github : https://github.com/xxirfanx
+ *  My Instagram : https://instagram.com/luaserofc
+ *  My Youtube : https://youtube.com/@luaserofc
+*/
 
-  const mensaje = `Este es tu código de verificación:\n\n\`\`\`\n${text}\n\`\`\``
+import yts from 'yt-search';
 
-  await conn.sendMessage(m.chat, {
-    text: mensaje
-  }, { quoted: m })
+let handler = async (m, { conn, command, text, usedPrefix }) => {
+  if (!text) throw ` 🦄Use example *${usedPrefix + command}* Somewhere Only We Know`;
+        let res = await yts(text)
+        let vid = res.videos[0]
+        if (!vid) throw `🍊 Audio not find title song `;
+        let { title, description, thumbnail, videoId, timestamp, views, ago, url } = vid
+        //const url = 'https://www.youtube.com/watch?v=' + videoId
+        m.react(`🐢`) 
+  let play = `
+📺 *Title:* ${vid.title}
+⌛ *Duration:* ${vid.timestamp}
+👀 *Views:* ${vid.views.toLocaleString()}
+📅 *Upload:* ${vid.ago}
+`
+ await conn.sendButton2(m.chat, play, '> Zoro md', thumbnail, [
+    ['🎶 MP3', `${usedPrefix}vfmp3 ${url}`]], null, null, m)
 }
 
-handler.command = /^codigo$/i
-handler.help = ['codigo <número>']
-handler.tags = ['util']
+handler.help = ['play'].map((v) => v + ' <query>')
+handler.tags = ['downloader']
+handler.command = ['play', 'song']
+handler.disabled = false
 
 export default handler
