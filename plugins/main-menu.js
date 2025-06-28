@@ -123,6 +123,7 @@ ${readMore}
 handler.help = ['menu', 'menú'];
 handler.tags = ['main'];
 handler.command = ['menú', 'menu']; 
+handler.register = true
 
 export default handler
 
