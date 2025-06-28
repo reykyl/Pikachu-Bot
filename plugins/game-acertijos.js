@@ -46,5 +46,6 @@ handler.before = async (m, { conn }) => {
 handler.help = ['acertijo']
 handler.tags = ['juegos']
 handler.command = ['acertijo']
+handler.register = true
 
 export default handler
