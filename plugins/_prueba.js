@@ -1,37 +1,38 @@
-let handler = async (m, { conn, command }) => {
-  const code = `
-const fetch = require('node-fetch');
+Con botón de copiar automático si WhatsApp lo permite.
 
-let handler = async (m, { conn, args }) => {
-  let url = args[0];
-  if (!url) throw '🚫 Ingresa una URL de Instagram.';
+---
 
-  let res = await fetch(\`https://api-instagram.fake/api?url=\${url}\`);
-  let json = await res.json();
+### ✅ Código del comando `.copy`:
 
-  if (!json.result) throw '❌ No se pudo obtener el contenido.';
+```js
+let handler = async (m, { text, args, usedPrefix, command }) => {
+  if (!text) return m.reply(`⚠️ Usa el comando así:\n\n${usedPrefix + command} texto que quieras copiar`);
 
-  await conn.sendFile(m.chat, json.result.url, 'insta.mp4', '✅ Descargado con éxito.', m);
-};
+  let estilo = `
+⚡ *𝙋𝙞𝙠𝙖𝙘𝙝𝙪 𝙥𝙧𝙪𝙚𝙗𝙖* ⚡
 
-handler.command = /^instagram|ig(dl)?$/i;
-module.exports = handler;
-`.trim()
+\`\`\`js
+${text}
+\`\`\`
+
+📋 *𝘾𝙤𝙥𝙞𝙖 𝙧á𝙥𝙞𝙙𝙖 𝙖𝙘𝙩𝙞𝙫𝙖𝙙𝙖*`.trim();
 
   await conn.sendMessage(m.chat, {
-    text: `🍄 *Instagram Downloader*\n\n` +
-          '```js\n' + code + '\n```',
+    text: estilo,
     contextInfo: {
       externalAdReply: {
-        title: '🍄 Instagram Downloader',
-        body: "𝘴ყℓρԋιҽttҽ's | αlphα v1",
-        renderLargerThumbnail: true,
+        title: '✨ Pikachu Test v1',
+        body: 'ᴋɪʀɪᴛᴏ-ʙᴏᴛ | ᴘʀᴜᴇʙᴀ ᴅᴇ ᴄᴏᴘɪᴀ',
+        thumbnailUrl: 'https://telegra.ph/file/3f51c7b17f07100ae9ed6.jpg', // Puedes cambiarla
         mediaType: 1,
-        thumbnailUrl: 'https://telegra.ph/file/4132fa15b4b7d238a6f40.jpg',
-        sourceUrl: 'https://github.com/Deylin-Eliac'
+        renderLargerThumbnail: true,
+        sourceUrl: 'https://whatsapp.com/channel/0029VbB46nl2ER6dZac6Nd1o'
       }
     }
   }, { quoted: m })
 }
-handler.command = /^igcode$/i;
+handler.help = ['copy <texto>']
+handler.tags = ['herramientas']
+handler.command = /^copy$/i
+
 export default handler
