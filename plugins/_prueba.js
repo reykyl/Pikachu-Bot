@@ -22,7 +22,7 @@ let handler = async (m, { conn, command, text, usedPrefix }) => {
 👀 *Views:* ${vid.views.toLocaleString()}
 📅 *Upload:* ${vid.ago}
 `
- await conn.sendButton2(m.chat, play, '> Zoro md', thumbnail, [
+ await conn.sendButton2(m.chat, play, thumbnail, [
     ['🎶 MP3', `${usedPrefix}vfmp3 ${url}`]], null, null, m)
 }
 
