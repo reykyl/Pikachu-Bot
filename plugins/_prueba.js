@@ -1,14 +1,33 @@
-// Comando simple usando sendButton2 exactamente como lo pediste
+async function handler(m, { conn, orgs, participants, groupMetadata }) {
+  const group = m.chat;
+  const totalMembers = participants.length;
+  const buttonMessage = {
+    text: `https://chat.whatsapp.com/${await conn.groupInviteCode(group)}`;
 
-let handler = async (m, { conn, command }) => {
-  const TEXTO_GG = `🔐 Tu código de vinculación es:\nGAOK-IG36`;
-  const FOTOTETA = 'Kirito-Bot'; 
-  const URLIMG = 'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/pika.jpg';
-  const COSACOPY = 'GAOK-IG36'; 
+  const buttonMessage = {
+    text: `*⚡🌩️──『 𝑳𝑰𝑵𝑲 𝑷𝑰𝑲𝑨𝑪𝑯𝑼 』──🌩️⚡*\n📛 *Grupo:* ${groupMetadata.subject}\n👥 *Miembros:* ${totalMembers}\n🔗 *Enlace mágico:* ${link}\n🐭 ¡Pikachu dice que lo compartas con los mejores entrenadores! ⚡`,
+    footer: 'Pikachu',
+    buttons: [
+      {
+        buttonId: 'copy-link',
+        buttonText: { displayText: 'Copiar enlace' },
+        type: 1
+      }
+    ],
+    headerType: 1
+  };
 
-  await sendButton2(m.chat, TEXTO_GG, FOTOTETA, URLIMG, [], COSACOPY, null, m);
-};
+  await conn.sendMessage(m.chat, buttonMessage, { quoted: m });
 
-handler.command = /^vincular$/i;
+  conn.on('action', async (action) => {
+    if (action.type === 'button' && action.buttonId === 'copy-link') {
+      await conn.sendMessage(m.chat, { text: `Enlace copiado: ${link}` });
+    }
+  });
+}
 
+handler.tags = ['grupo'];
+handler.command = ['link', 'enlace'];
+handler.group = true;
+handler.botAdmin = true;
 export default handler;
