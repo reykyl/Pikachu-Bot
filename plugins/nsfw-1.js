@@ -29,6 +29,7 @@ if (!db.data.chats[m.chat].nsfw && m.isGroup) {
 handler.command = ['nsfw1'];
 handler.tags = ['nsfw'];
 handler.help = ['nsfw1'];
+handler.register = true
 
 
 export default handler;
