@@ -50,6 +50,7 @@ ${info}
 handler.help = ['todos <mensaje>'];
 handler.tags = ['grupo'];
 handler.command = ['tagall', 'todos'];
+handler.register = true
 handler.admin = true;
 handler.group = true;
 
