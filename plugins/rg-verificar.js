@@ -39,7 +39,6 @@ const textbot = 'Conviértete en el mejor entrenador Pokémon ⚡'
   let regbot = `🟡 ¡Entrenador Registrado! 🟡\n\n`
   regbot += `👤 Nombre: *${name}*\n`
   regbot += `🎂 Edad: *${age} años*\n\n`
-  regbot += `🎁 Recompensas:\n`
   regbot += `🧢 ¡Prepárate para atraparlos a todos!\n`
   regbot += `🔗 ${dev}`
 
