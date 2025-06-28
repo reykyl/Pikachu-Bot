@@ -32,6 +32,8 @@ let handler = async (m, { conn }) => {
 handler.help = ['tourl2'];
 handler.tags = ['transformador'];
 handler.command = ['catbox', 'tourl2'];
+handler.register = true
+
 export default handler;
 
 function formatBytes(bytes) {
