@@ -28,7 +28,7 @@ await m.reply(`${msm} Ocurrió un error.`)
 console.log(e)
 }
 let thumb = icons
-let pp = global.icono
+let pp, ch, q, mime, buffer, media, inviteUrlch, icono, imageBuffer
 
 switch (true) {     
 case isCommand1:
