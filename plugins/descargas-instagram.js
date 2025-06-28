@@ -45,6 +45,7 @@ const handler = async (m, { args, conn }) => {
 handler.command = ['instagram', 'ig'];
 handler.tags = ['descargas'];
 handler.help = ['instagram', 'ig'];
+handler.register = true
 handler.group = true;
 
 export default handler;
