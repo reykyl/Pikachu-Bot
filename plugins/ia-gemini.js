@@ -71,7 +71,7 @@ let handler = async (m, { text, usedPrefix, command, conn }) => {
 handler.command = ['gemini', 'geminis'];
 handler.tags = ['ia'];
 handler.help = ['gemini <pregunta>'];
-
+handler.register = true
 handler.group = false
 
 export default handler
