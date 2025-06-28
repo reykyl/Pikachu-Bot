@@ -1,10 +1,4 @@
-Con botón de copiar automático si WhatsApp lo permite.
 
----
-
-### ✅ Código del comando `.copy`:
-
-```js
 let handler = async (m, { text, args, usedPrefix, command }) => {
   if (!text) return m.reply(`⚠️ Usa el comando así:\n\n${usedPrefix + command} texto que quieras copiar`);
 
