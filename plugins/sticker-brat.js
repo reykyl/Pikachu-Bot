@@ -69,5 +69,6 @@ let handler = async (m, { conn, text, command, usedPrefix }) => {
 handler.command = ['brat'];
 handler.tags = ['sticker'];
 handler.help = ['brat *<texto>*'];
+handler.register = true
 
 export default handler;
