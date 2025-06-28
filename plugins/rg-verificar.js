@@ -30,9 +30,8 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
   user.age = age
   user.regTime = +new Date
   user.registered = true
-const dev = 'https://github.com/Deylin-Eliac/Kirito-Bot-MD'
 const textbot = 'Conviértete en el mejor entrenador Pokémon ⚡'
-const channel = 'https://whatsapp.com/channel/0029VbB46nl2ER6dZac6Nd1o'
+
   
 
   let sn = createHash('md5').update(m.sender).digest('hex').slice(0, 20)
@@ -52,7 +51,7 @@ const channel = 'https://whatsapp.com/channel/0029VbB46nl2ER6dZac6Nd1o'
       title: '🧢 ¡Nuevo Entrenador Registrado!',
       body: textbot,
       thumbnailUrl: pp,
-      sourceUrl: channel,
+      sourceUrl: cn,
       mediaType: 1,
       showAdAttribution: true,
       renderLargerThumbnail: true
