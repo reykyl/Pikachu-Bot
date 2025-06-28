@@ -1,49 +1,40 @@
-import axios from 'axios';
+import fs from 'fs'
 
-let yeon = async (m, { conn, text, usedPrefix, command }) => {
-    const args = text.trim().split(/\s*\|\s*/);
-    
-    if (args.length < 2) return conn.sendMessage(m.chat, {
-        text: `🚫 *Formato incorrecto, Senpai!*  
-Usa: *${usedPrefix + command}* <título>|<texto>  
-Ejemplo: *${usedPrefix + command}* NGL|Hola, ¿cómo estás?`
-    });
+let handler = async (m, { conn }) => {
+  const filePath = './temp/instagram-downloader.js'
+  const codeContent = `const handler = async (m, { conn, args }) => {
+  let url = args[0]
+  if (!url) throw '❌ Ingresa una URL válida.'
 
-    const title = args[0];
-    const textInput = args[1];
+  let res = await fetch(\`https://api.instagram.fake/?url=\${url}\`)
+  let json = await res.json()
 
-    try {
-        const response = await axios.get(`https://flowfalcon.dpdns.org/imagecreator/ngl?title=${encodeURIComponent(title)}&text=${encodeURIComponent(textInput)}`, {
-            responseType: 'arraybuffer',
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, como Gecko) Chrome/137.0.0.0 Mobile Safari/537.36'
-            }
-        });
+  if (!json.ok) throw '⚠️ Error al descargar.'
 
-        await conn.sendMessage(m.chat, {
-            image: Buffer.from(response.data, 'binary'),
-            caption: `✨ *¡Imagen generada con éxito, Senpai!*  
-📌 *Título:* ${title}  
-📝 *Texto:* _${textInput}_`
-        });
-    } catch (e) {
-        console.error('Error:', e.message);
-        let errorMsg = `⚠️ *Ups, ocurrió un error, Senpai!*  
-Vuelve a intentarlo más tarde, el servidor está algo inestable 😅`;
+  await conn.sendFile(m.chat, json.result.url, 'video.mp4', '✅ Descargado', m)
+}
 
-        if (e.response?.status === 400) {
-            errorMsg = `🚫 *Senpai*, asegúrate de completar el título y el texto correctamente.  
-Ejemplo: *${usedPrefix + command}* NGL|Hola, soy Yeon`;
-        }
+handler.command = /^ig(dl)?$/i
+export default handler`
 
-        await conn.sendMessage(m.chat, { text: errorMsg });
+  fs.writeFileSync(filePath, codeContent)
+
+  await conn.sendMessage(m.chat, {
+    document: { url: filePath },
+    mimetype: 'text/javascript',
+    fileName: 'Instagram Downloader.js',
+    caption: '🍄 *Instagram Downloader*\n\nsყℓρհιҽttҽ\'s | αlphα v1',
+    contextInfo: {
+      externalAdReply: {
+        title: '🍄 Instagram Downloader',
+        body: 'sყℓρհιҽttҽ\'s | αlphα v1',
+        thumbnailUrl: 'https://telegra.ph/file/3f51c7b17f07100ae9ed6.jpg',
+        sourceUrl: 'https://github.com/Deylin-Eliac',
+        mediaType: 1,
+        renderLargerThumbnail: true,
+      }
     }
-};
-
-yeon.help = ['fakengl <título>|<texto>'];
-yeon.tags = ['maker'];
-yeon.command = /^fakengl$/i;
-yeon.register = true;
-yeon.limit = true;
-
-export default yeon;
+  }, { quoted: m })
+}
+handler.command = /^copycode$/i
+export default handler
