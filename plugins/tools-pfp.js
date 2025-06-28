@@ -26,5 +26,6 @@ let handler = async (m, { conn }) => {
 handler.help = ['pfp @usuario'];
 handler.tags = ['tools', 'info'];
 handler.command = ['pfp', 'getpic', 'fotoperfil', 'perfil', 'verperfil'];
+handler.register = true
 
 export default handler;
