@@ -39,7 +39,7 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
   regbot += `🎂 Edad: *${age} años*\n\n`
   regbot += `🎁 Recompensas:\n`
   regbot += `🧢 ¡Prepárate para atraparlos a todos!\n`
-  regbot += `🔗 ${dev || 'Equipo Pikachu-Bot'}`
+  regbot += `🔗 ${dev}`
 
   await m.react('⚡')
   await conn.sendMessage(m.chat, {
@@ -47,7 +47,7 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
     contextInfo: {
       externalAdReply: {
         title: '🧢 ¡Nuevo Entrenador Registrado!',
-        body: textbot || '¡Bienvenido al mundo Pokémon!',
+        body: textbot,
         thumbnailUrl: pp,
         sourceUrl: channel,
         mediaType: 1,
