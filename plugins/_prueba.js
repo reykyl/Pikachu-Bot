@@ -27,7 +27,7 @@ async function handler(m, { conn, orgs, participants, groupMetadata }) {
 }
 
 handler.tags = ['grupo'];
-handler.command = ['link', 'enlace'];
+handler.command = ['linkh', 'enlace'];
 handler.group = true;
 handler.botAdmin = true;
 export default handler;
