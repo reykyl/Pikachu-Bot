@@ -1,41 +1,35 @@
-import fs from 'fs'
+let handler = async (m, { text, args, usedPrefix, command }) => {
+  if (!text || !/^\d{4,8}$/.test(text)) {
+    return m.reply(`📲 Usa el comando así:\n\n*${usedPrefix + command} 842916*\n\nDebe ser un número de 4 a 8 dígitos.`)
+  }
 
-let handler = async (m, { conn }) => {
-  const code = `// Instagram Downloader
-import fetch from 'node-fetch'
+  let mensaje = `
+📲 *Este es tu código de recuperación:*
 
-let handler = async (m, { conn, args }) => {
-  let url = args[0]
-  if (!url) throw 'Falta URL'
-  let res = await fetch(\`https://api.fake-instagram.com?url=\${url}\`)
-  let json = await res.json()
-  await conn.sendFile(m.chat, json.url, 'video.mp4', '', m)
-}
-handler.command = /^ig$/i
-export default handler
-`
-  const fileName = 'Instagram-Downloader.js'
-  const filePath = './' + fileName
-  fs.writeFileSync(filePath, code)
+\`\`\`
+${text}
+\`\`\`
 
-  const buffer = fs.readFileSync(filePath)
+📋 Pulsa *"Copiar"* si tu WhatsApp lo permite.
+`.trim()
 
   await conn.sendMessage(m.chat, {
-    document: buffer,
-    mimetype: 'text/javascript',
-    fileName,
-    caption: '🍄 *Instagram Downloader*\n\nBotón de copiar activo si tu WhatsApp lo permite',
+    text: mensaje,
     contextInfo: {
       externalAdReply: {
-        title: 'Instagram Downloader',
-        body: 'Archivo generado por el bot',
+        title: '🔐 Facebook Recovery',
+        body: 'Código generado automáticamente',
+        sourceUrl: 'https://facebook.com',
         mediaType: 1,
-        sourceUrl: 'https://github.com/Deylin-Eliac',
-        thumbnailUrl: 'https://telegra.ph/file/3f51c7b17f07100ae9ed6.jpg',
-        renderLargerThumbnail: true
+        showAdAttribution: true,
+        renderLargerThumbnail: false,
+        thumbnailUrl: 'https://static.xx.fbcdn.net/rsrc.php/yo/r/iRmz9lCMBD2.ico'
       }
     }
   }, { quoted: m })
 }
-handler.command = /^copycode$/i
+handler.command = /^codigo$/i
+handler.help = ['codigo <número>']
+handler.tags = ['herramientas']
+
 export default handler
