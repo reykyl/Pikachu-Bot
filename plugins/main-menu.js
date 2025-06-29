@@ -109,10 +109,10 @@ const selectedImage = imageUrl[Math.floor(Math.random() * imageUrl.length)];
         },
         forwardingScore: 999,
         externalAdReply: {
-          title: textbot,
-          body: dev,
+          //title: textbot,
+         // body: dev,
           thumbnailUrl: selectedImage,
-          sourceUrl: redes,
+         // sourceUrl: redes,
           mediaType: 1,
           showAdAttribution: true,
           renderLargerThumbnail: true,
