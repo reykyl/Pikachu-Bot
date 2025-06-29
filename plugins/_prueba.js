@@ -3,37 +3,46 @@ import cheerio from 'cheerio';
 
 let handler = async (m, { conn, text, command }) => {
   if (!text || !/^https?:\/\/\S+/.test(text)) {
-   return conn.reply(m.chat, `🚫 Enlace inválido. Usa el comando así:\n\n*${command} https://sitio.com/video123*`, m, rcanal);
+    throw `🚫 Enlace inválido. Usa el comando así:\n\n*${command} <enlace del video xxx>*`;
   }
 
-  await m.reply('⏳ Obteniendo video...');
+  await m.reply('🔞 Buscando el video...');
 
   try {
-    const res = await fetch(text, {
-      headers: { 'User-Agent': 'Mozilla/5.0' }
-    });
-
+    const url = text.trim();
+    const res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
     const html = await res.text();
     const $ = cheerio.load(html);
 
-    const videoUrl =
-      $('video source').attr('src') ||
-      $('video').attr('src') ||
-      $('meta[property="og:video"]').attr('content') ||
-      $('meta[name="twitter:player:stream"]').attr('content');
+    let videoUrl = null;
 
+    
+    videoUrl = $('video source').attr('src') || $('video').attr('src');
+
+    
     if (!videoUrl) {
-      throw '❌ No se encontró el video. Puede que el sitio haya cambiado o el video esté protegido.';
+      const ldJson = $('script[type="application/ld+json"]').html();
+      if (ldJson) {
+        const json = JSON.parse(ldJson);
+        if (json.contentUrl) videoUrl = json.contentUrl;
+        if (json.embedUrl && !videoUrl) videoUrl = json.embedUrl;
+      }
     }
 
-    const finalUrl = videoUrl.startsWith('http') ? videoUrl : new URL(videoUrl, text).href;
+    
+    if (!videoUrl) {
+      const match = html.match(/https?:\/\/[^"' ]+\.mp4/g);
+      if (match && match.length > 0) videoUrl = match[0];
+    }
 
-    await conn.sendFile(m.chat, finalUrl, 'video.mp4', `✅ Video descargado correctamente`, m);
+    if (!videoUrl) throw '❌ No se encontró el video. El sitio puede estar protegido o haber cambiado.';
+
+    await conn.sendFile(m.chat, videoUrl, 'video.mp4', `✅ Video descargado desde:\n${url}`, m);
   } catch (e) {
     console.error(e);
-    m.reply(`⚠️ Error al obtener el video:\n${e.message || e}`);
+    m.reply(`⚠️ No se pudo descargar el video:\n${e.message || e}`);
   }
 };
 
-handler.command = ['xxx', 'porn', 'vdown'];
+handler.command = ['xxx', 'porn', 'vid', 'adulto'];
 export default handler;
