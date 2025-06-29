@@ -1,4 +1,6 @@
-//codigo creado por Deylin 
+/*codigo desarrollo por Deylin 
+https://github.com/deylin-eliac
+no quites créditos y no modifiques el código*/
 
 
 import fetch from 'node-fetch';
