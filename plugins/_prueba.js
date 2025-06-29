@@ -18,13 +18,16 @@ const transcribeAudio = async (filePath) => {
 }
 
 const handler = async (m, { conn }) => {
-  if (!m.quoted || !/audio/.test(m.quoted.mimetype)) {
-    throw '🎤 Responde a una nota de voz para transcribirla a texto.'
-  }
-
   try {
+    // Validar que sea un audio
+    if (!m.quoted || !m.quoted.mimetype || !m.quoted.mimetype.startsWith('audio/')) {
+      return m.reply('🎤 Responde a una nota de voz o audio para transcribirlo.')
+    }
+
+    console.log('✔️ Audio detectado')
+
     if (!fs.existsSync('./temp')) fs.mkdirSync('./temp')
-    
+
     const audioBuffer = await m.quoted.download()
     const filePath = path.join('./temp', `${Date.now()}.ogg`)
     fs.writeFileSync(filePath, audioBuffer)
@@ -35,14 +38,14 @@ const handler = async (m, { conn }) => {
     fs.unlinkSync(filePath)
 
     if (texto) {
-      await m.reply(`🗣️ *Texto transcrito:*\n${texto}`)
+      return m.reply(`🗣️ *Texto transcrito:*\n${texto}`)
     } else {
-      throw 'No se pudo obtener el texto.'
+      return m.reply('❌ No se pudo obtener el texto del audio.')
     }
 
   } catch (e) {
-    console.error(e)
-    m.reply('❎ Error al transcribir el audio.')
+    console.error('❌ Error:', e)
+    return m.reply('❎ Error al transcribir el audio.')
   }
 }
 
