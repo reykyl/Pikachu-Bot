@@ -88,11 +88,13 @@ ${readMore}
     menuText += `\n\n*👑 © Powered by Deylin - ${botname}*`
 
     const imageUrl = [ 
-'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/pika.jpg',
-'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/pikay.jpg',
-'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/pikachu.jpg',
-'https://kirito-bot-md.vercel.app/catalogo.jpg'
-]
+  'https://kirito-bot-md.vercel.app/IMG-20250606-WA0167.jpg',
+  'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/pika.jpg',
+  'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/pikay.jpg',
+  'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/pikachu.jpg',
+  'https://kirito-bot-md.vercel.app/catalogo.jpg'
+];
+const selectedImage = imageUrl[Math.floor(Math.random() * imageUrl.length)];
     await m.react('👑')
 
     await conn.sendMessage(m.chat, {
@@ -109,7 +111,7 @@ ${readMore}
         externalAdReply: {
           title: textbot,
           body: dev,
-          thumbnailUrl: imageUrl,
+          thumbnailUrl: selectedImage,
           sourceUrl: redes,
           mediaType: 1,
           showAdAttribution: true,
