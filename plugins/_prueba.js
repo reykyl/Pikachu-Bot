@@ -2,36 +2,48 @@ import fetch from 'node-fetch';
 import cheerio from 'cheerio';
 
 let handler = async (m, { conn, text, command }) => {
-  if (!text || !/^https?:\/\/(www\.)?(viddey\.cc|xnxx\.es)\/\S+/.test(text)) {
-    throw `🚫 Enlace inválido. Usa el comando así:\n\n*${command} <enlace de viddey.cc o xnxx.es>*`;
+  if (!text || !/^https?:\/\/(www\.)?\S+\.\S+/.test(text)) {
+    m.reply `🚫 Enlace inválido. Usa el comando así:\n\n*${command} https://sitio.com/video123*`;
   }
 
-  await m.reply('⏳ Procesando el video, por favor espera...');
+  await m.reply('🔍 Buscando video, espera un momento...');
 
   try {
-    const res = await fetch(text);
+    const res = await fetch(text, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+      }
+    });
+
     const html = await res.text();
     const $ = cheerio.load(html);
 
-    let videoUrl;
+    // Intenta encontrar el video por varios selectores comunes
+    let videoUrl =
+      $('video > source').attr('src') ||
+      $('video').attr('src') ||
+      $('meta[property="og:video"]').attr('content') ||
+      $('meta[name="twitter:player:stream"]').attr('content');
 
-    if (/viddey\.cc/.test(text)) {
-      videoUrl = $('video source').attr('src') || $('video').attr('src');
-      if (!videoUrl) throw '❌ No se encontró el video en Viddey.';
-      if (!videoUrl.startsWith('http')) videoUrl = `https://viddey.cc${videoUrl}`;
-    } else if (/xnxx\.es/.test(text)) {
-      const jsonScript = $('script[type="application/ld+json"]').html();
-      const jsonData = JSON.parse(jsonScript);
-      videoUrl = jsonData.contentUrl;
-      if (!videoUrl) throw '❌ No se encontró el video en XNXX.';
+    if (!videoUrl) {
+      throw '❌ No se encontró el video. Puede que el sitio haya cambiado o el video esté restringido.';
     }
 
-    await conn.sendFile(m.chat, videoUrl, 'video.mp4', `✅ Video descargado con éxito`, m);
+    // Si es relativo, lo volvemos absoluto
+    if (!/^https?:\/\//.test(videoUrl)) {
+      const baseUrl = new URL(text);
+      videoUrl = baseUrl.origin + videoUrl;
+    }
+
+    await conn.sendFile(m.chat, videoUrl, 'video.mp4', `✅ Video descargado desde:\n${text}`, m);
   } catch (e) {
     console.error(e);
-    m.reply(`⚠️ Error al obtener el video:\n${e.message || e}`);
+    await m.reply(`⚠️ Ocurrió un error:\n${e.message || e}`);
   }
 };
 
-handler.command = ['viddey', 'vdown', 'xnxx'];
+handler.command = ['pornvid', 'xxxvid', 'vdown', 'viddey'];
+handler.help = ['pornvid <url>'];
+handler.tags = ['downloader', 'nsfw'];
+
 export default handler;
