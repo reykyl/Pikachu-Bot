@@ -2,48 +2,38 @@ import fetch from 'node-fetch';
 import cheerio from 'cheerio';
 
 let handler = async (m, { conn, text, command }) => {
-  if (!text || !/^https?:\/\/(www\.)?\S+\.\S+/.test(text)) {
-        return conn.reply(m.chat, `🚫 Enlace inválido. Usa el comando así:\n\n*${command} https://sitio.com/video123*`, m, rcanal);
+  if (!text || !/^https?:\/\/\S+/.test(text)) {
+   return conn.reply(m.chat, `🚫 Enlace inválido. Usa el comando así:\n\n*${command} https://sitio.com/video123*`, m, rcanal);
   }
 
-  await m.reply('🔍 Buscando video, espera un momento...');
+  await m.reply('⏳ Obteniendo video...');
 
   try {
     const res = await fetch(text, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-      }
+      headers: { 'User-Agent': 'Mozilla/5.0' }
     });
 
     const html = await res.text();
     const $ = cheerio.load(html);
 
-    // Intenta encontrar el video por varios selectores comunes
-    let videoUrl =
-      $('video > source').attr('src') ||
+    const videoUrl =
+      $('video source').attr('src') ||
       $('video').attr('src') ||
       $('meta[property="og:video"]').attr('content') ||
       $('meta[name="twitter:player:stream"]').attr('content');
 
     if (!videoUrl) {
-      throw '❌ No se encontró el video. Puede que el sitio haya cambiado o el video esté restringido.';
+      throw '❌ No se encontró el video. Puede que el sitio haya cambiado o el video esté protegido.';
     }
 
-    // Si es relativo, lo volvemos absoluto
-    if (!/^https?:\/\//.test(videoUrl)) {
-      const baseUrl = new URL(text);
-      videoUrl = baseUrl.origin + videoUrl;
-    }
+    const finalUrl = videoUrl.startsWith('http') ? videoUrl : new URL(videoUrl, text).href;
 
-    await conn.sendFile(m.chat, videoUrl, 'video.mp4', `✅ Video descargado desde:\n${text}`, m);
+    await conn.sendFile(m.chat, finalUrl, 'video.mp4', `✅ Video descargado correctamente`, m);
   } catch (e) {
     console.error(e);
-    await m.reply(`⚠️ Ocurrió un error:\n${e.message || e}`);
+    m.reply(`⚠️ Error al obtener el video:\n${e.message || e}`);
   }
 };
 
-handler.command = ['pornvid', 'xxxvid', 'vdown', 'viddey'];
-handler.help = ['pornvid <url>'];
-handler.tags = ['downloader', 'nsfw'];
-
+handler.command = ['xxx', 'porn', 'vdown'];
 export default handler;
