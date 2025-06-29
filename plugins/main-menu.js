@@ -99,6 +99,7 @@ const selectedImage = imageUrl[Math.floor(Math.random() * imageUrl.length)];
 
     await conn.sendMessage(m.chat, {
       text: menuText,
+      thumbnailUrl: selectedImage,
       contextInfo: {
         mentionedJid: [m.sender],
         isForwarded: true,
@@ -113,7 +114,6 @@ const selectedImage = imageUrl[Math.floor(Math.random() * imageUrl.length)];
          // body: dev,
           thumbnailUrl: selectedImage,
          // sourceUrl: redes,
-          text: menuText,
           mediaType: 1,
           showAdAttribution: true,
           renderLargerThumbnail: true,
