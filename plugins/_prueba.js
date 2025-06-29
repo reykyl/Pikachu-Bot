@@ -3,7 +3,7 @@ import cheerio from 'cheerio';
 
 let handler = async (m, { conn, text, command }) => {
   if (!text || !/^https?:\/\/(www\.)?\S+\.\S+/.test(text)) {
-    throw m.reply`🚫 Enlace inválido. Usa el comando así:\n\n*${command} https://sitio.com/video123*`;
+        return conn.reply(m.chat, `🚫 Enlace inválido. Usa el comando así:\n\n*${command} https://sitio.com/video123*`, m, rcanal);
   }
 
   await m.reply('🔍 Buscando video, espera un momento...');
