@@ -8,7 +8,7 @@ const transcribeAudio = async (filePath) => {
   form.append('audio', fs.createReadStream(filePath))
 
   try {
-    const res = await fetch('https://g-mini-ia.vercel.app/api/transcribe', {
+    const res = await fetch('https://whisper.lablab.ai/asr', {
       method: 'POST',
       body: form,
       headers: form.getHeaders()
