@@ -1,39 +1,48 @@
 import fs from 'fs'
 import fetch from 'node-fetch'
-import path from 'path'
 import FormData from 'form-data'
+import path from 'path'
+
+const transcribeAudio = async (filePath) => {
+  const form = new FormData()
+  form.append('audio', fs.createReadStream(filePath))
+
+  const res = await fetch('https://g-mini-ia.vercel.app/api/transcribe', {
+    method: 'POST',
+    body: form,
+    headers: form.getHeaders()
+  })
+
+  const data = await res.json()
+  return data.text || null
+}
 
 const handler = async (m, { conn }) => {
-  if (!m.quoted || !/audio/.test(m.quoted.mimetype)) throw '🎤 Responde a un audio para transcribirlo a texto.'
+  if (!m.quoted || !/audio/.test(m.quoted.mimetype)) {
+    throw '🎤 Responde a una nota de voz para transcribirla a texto.'
+  }
 
   try {
     if (!fs.existsSync('./temp')) fs.mkdirSync('./temp')
-
-    const audio = await m.quoted.download()
+    
+    const audioBuffer = await m.quoted.download()
     const filePath = path.join('./temp', `${Date.now()}.ogg`)
-    fs.writeFileSync(filePath, audio)
+    fs.writeFileSync(filePath, audioBuffer)
 
-    const form = new FormData()
-    form.append('audio', fs.createReadStream(filePath))
+    await m.reply('🔄 Transcribiendo audio, espera un momento...')
 
-    const res = await fetch('https://whisper.lablab.ai/asr', {
-      method: 'POST',
-      body: form,
-      headers: form.getHeaders()
-    })
-
-    const data = await res.json()
+    const texto = await transcribeAudio(filePath)
     fs.unlinkSync(filePath)
 
-    if (data && data.text) {
-      await m.reply(`🗣️ *Texto transcrito:*\n${data.text}`)
+    if (texto) {
+      await m.reply(`🗣️ *Texto transcrito:*\n${texto}`)
     } else {
-      throw 'No se pudo transcribir el audio.'
+      throw 'No se pudo obtener el texto.'
     }
 
   } catch (e) {
     console.error(e)
-    m.reply('❎ Error al transcribir la nota de voz.')
+    m.reply('❎ Error al transcribir el audio.')
   }
 }
 
