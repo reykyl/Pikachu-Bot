@@ -22,7 +22,7 @@ let handler = async (m, { conn, text, command }) => {
     }
 
     
-    const finalUrl = videoUrl.startsWith('http') ? videoUrl : `https://viddey.cc${videoUrl}`;
+    const finalUrl = videoUrl.startsWith('http') ? videoUrl : `https://www.xnxx.es/${videoUrl}`;
 
     await conn.sendFile(m.chat, finalUrl, 'video.mp4', `✅ Video descargado desde Viddey`, m);
   } catch (e) {
