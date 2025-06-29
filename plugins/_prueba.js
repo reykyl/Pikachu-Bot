@@ -7,20 +7,14 @@ const transcribeAudio = async (filePath) => {
   const form = new FormData()
   form.append('audio', fs.createReadStream(filePath))
 
-  try {
-    const res = await fetch('https://whisper.lablab.ai/asr', {
-      method: 'POST',
-      body: form,
-      headers: form.getHeaders()
-    })
+  const res = await fetch('https://whisper.lablab.ai/asr', {
+    method: 'POST',
+    body: form,
+    headers: form.getHeaders()
+  })
 
-    const data = await res.json()
-    console.log('🧠 Respuesta de la API:', data)
-    return data.text || null
-  } catch (err) {
-    console.error('❌ Error al contactar la API:', err)
-    return null
-  }
+  const data = await res.json()
+  return data.text || null
 }
 
 const handler = async (m, { conn }) => {
@@ -29,20 +23,16 @@ const handler = async (m, { conn }) => {
       return m.reply('🎤 Responde a una nota de voz o audio para transcribirlo.')
     }
 
-    console.log('✔️ Audio detectado: ', m.quoted.mimetype)
-
     if (!fs.existsSync('./temp')) fs.mkdirSync('./temp')
 
     const audioBuffer = await m.quoted.download()
     const filePath = path.join('./temp', `${Date.now()}.ogg`)
     fs.writeFileSync(filePath, audioBuffer)
-    console.log('📁 Audio guardado en:', filePath)
 
     await m.reply('🔄 Transcribiendo audio, espera un momento...')
 
     const texto = await transcribeAudio(filePath)
     fs.unlinkSync(filePath)
-    console.log('🧹 Archivo eliminado:', filePath)
 
     if (texto) {
       return m.reply(`🗣️ *Texto transcrito:*\n${texto}`)
@@ -51,8 +41,8 @@ const handler = async (m, { conn }) => {
     }
 
   } catch (e) {
-    console.error('❌ Error inesperado:', e)
-    return m.reply(`❎ Error al transcribir el audio.\nDetalles: ${e.message}`)
+    console.error('❌ Error:', e)
+    return m.reply('❎ Error al transcribir el audio.')
   }
 }
 
