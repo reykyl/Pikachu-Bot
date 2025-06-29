@@ -1,3 +1,6 @@
+//codigo creado por Deylin 
+
+
 import fetch from 'node-fetch';
 import cheerio from 'cheerio';
 
