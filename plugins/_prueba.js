@@ -1,27 +1,19 @@
-async function handler(m, { conn, participants, groupMetadata }) {
-  const group = m.chat;
-  const totalMembers = participants.length;
-  const link = `https://chat.whatsapp.com/${await conn.groupInviteCode(group)}`;
+let handler = async (m, { conn }) => {
+  const textoCopia = '🔒 Este es tu código de verificación: *123456*';
+  const footer = 'Presiona el botón para copiar el código';
 
-  const buttonMessage = {
-    text: `*⚡🌩️──『 𝑳𝑰𝑵𝑲 𝑷𝑰𝑲𝑨𝑪𝑯𝑼 』──🌩️⚡*\n\n📛 *Grupo:* ${groupMetadata.subject}\n👥 *Miembros:* ${totalMembers}\n🔗 *Enlace mágico:* ${link}\n\n🐭 ¡Pikachu dice que lo compartas con los mejores entrenadores! ⚡`,
-    footer: 'Pikachu',
-    buttons: [
-      {
-        buttonId: '.link',
-        buttonText: { displayText: '📋 Copiar enlace' },
-        type: 1
-      }
+  await conn.sendButton2(
+    m.chat,
+    textoCopia,
+    [], // no imagen o URL
+    footer,
+    [
+      ['📋 Copiar', 'Copiar'] // Esto solo manda "Copiar" al chat cuando se pulsa
     ],
-    headerType: 1
-  };
+    null,
+    m
+  );
+};
 
-  await conn.sendMessage(group, buttonMessage, { quoted: m });
-}
-
-handler.tags = ['grupo'];
-handler.command = ['linkh', 'enlace'];
-handler.group = true;
-handler.botAdmin = true;
-
+handler.command = ['cop'];
 export default handler;
