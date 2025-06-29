@@ -1,54 +1,44 @@
-import fs from 'fs'
-import fetch from 'node-fetch'
-import FormData from 'form-data'
-import path from 'path'
+import fetch from 'node-fetch';
 
-const transcribeAudio = async (filePath) => {
-  const form = new FormData()
-  form.append('audio', fs.createReadStream(filePath))
+let handler = async (m, { conn, text, command }) => {
+  if (!text) throw '🚫 Escribe algo para buscar stickers. Ej: .sticker gato';
 
-  const res = await fetch('https://whisper.lablab.ai/asr', {
-    method: 'POST',
-    body: form,
-    headers: form.getHeaders()
-  })
+  m.reply(`🔍 Buscando stickers de *${text}*...`);
 
-  const data = await res.json()
-  return data.text || null
-}
+  // Usamos una API pública para buscar imágenes de Pinterest
+  const api = `https://api.akuari.my.id/pinterest?query=${encodeURIComponent(text)}`;
+  const res = await fetch(api);
+  const json = await res.json();
 
-const handler = async (m, { conn }) => {
-  try {
-    if (!m.quoted || !m.quoted.mimetype || !m.quoted.mimetype.startsWith('audio/')) {
-      return m.reply('🎤 Responde a una nota de voz o audio para transcribirlo.')
+  const links = json.result;
+
+  if (!links || links.length === 0) throw '❌ No encontré stickers. Intenta con otra palabra.';
+
+  // Tomamos máximo 8 imágenes para el álbum
+  const images = links.slice(0, 8);
+
+  const stickerBuffers = [];
+
+  for (let url of images) {
+    try {
+      let buffer = await conn.getFile(url);
+      let sticker = await sticker(buffer.data, false, {
+        packname: "KiritoBot",
+        author: "By Deylin"
+      });
+      stickerBuffers.push({ sticker });
+    } catch (e) {
+      console.error('Error generando sticker:', e);
     }
-
-    if (!fs.existsSync('./temp')) fs.mkdirSync('./temp')
-
-    const audioBuffer = await m.quoted.download()
-    const filePath = path.join('./temp', `${Date.now()}.ogg`)
-    fs.writeFileSync(filePath, audioBuffer)
-
-    await m.reply('🔄 Transcribiendo audio, espera un momento...')
-
-    const texto = await transcribeAudio(filePath)
-    fs.unlinkSync(filePath)
-
-    if (texto) {
-      return m.reply(`🗣️ *Texto transcrito:*\n${texto}`)
-    } else {
-      return m.reply('❌ No se pudo obtener el texto del audio.')
-    }
-
-  } catch (e) {
-    console.error('❌ Error:', e)
-    return m.reply('❎ Error al transcribir el audio.')
   }
-}
 
-handler.help = ['voztexto']
-handler.tags = ['tools', 'ia']
-handler.command = ['voztexto', 'transcribir']
-handler.register = true
+  if (stickerBuffers.length === 0) return m.reply('❌ No se pudieron crear los stickers.');
 
-export default handler
+  await conn.sendAlbumMessage(m.chat, stickerBuffers, m);
+};
+
+handler.command = ['sticker', 'stickers', 'buscarsticker'];
+handler.help = ['sticker <texto>'];
+handler.tags = ['sticker'];
+
+export default handler;
