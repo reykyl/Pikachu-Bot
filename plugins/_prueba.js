@@ -1,11 +1,14 @@
 import fs from 'fs'
 import fetch from 'node-fetch'
 import path from 'path'
+import FormData from 'form-data'
 
 const handler = async (m, { conn }) => {
-  if (!m.quoted || !m.quoted.audio) throw '🎤 Responde a un audio para transcribirlo a texto.'
+  if (!m.quoted || !/audio/.test(m.quoted.mimetype)) throw '🎤 Responde a un audio para transcribirlo a texto.'
 
   try {
+    if (!fs.existsSync('./temp')) fs.mkdirSync('./temp')
+
     const audio = await m.quoted.download()
     const filePath = path.join('./temp', `${Date.now()}.ogg`)
     fs.writeFileSync(filePath, audio)
@@ -13,10 +16,10 @@ const handler = async (m, { conn }) => {
     const form = new FormData()
     form.append('audio', fs.createReadStream(filePath))
 
-    // Usamos un servidor público que usa Whisper (ejemplo demostrativo)
     const res = await fetch('https://whisper.lablab.ai/asr', {
       method: 'POST',
-      body: form
+      body: form,
+      headers: form.getHeaders()
     })
 
     const data = await res.json()
