@@ -88,7 +88,6 @@ ${readMore}
     menuText += `\n\n*👑 © Powered by Deylin - ${botname}*`
 
     const imageUrl = [ 
-'https://kirito-bot-md.vercel.app/IMG-20250606-WA0167.jpg',
 'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/pika.jpg',
 'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/pikay.jpg',
 'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/pikachu.jpg',
