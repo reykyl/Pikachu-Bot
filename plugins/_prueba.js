@@ -1,35 +1,37 @@
-
 import fetch from 'node-fetch';
 import cheerio from 'cheerio';
 
 let handler = async (m, { conn, text, command }) => {
-  if (!text || !/^https?:\/\/(www\.)?viddey\.cc\/\S+/.test(text)) {
-    throw `🚫 Enlace inválido. Usa el comando así:\n\n*${command} https://viddey.cc/a41-2/*`;
+  if (!text || !/^https?:\/\/(www\.)?(viddey\.cc|xnxx\.es)\/\S+/.test(text)) {
+    throw `🚫 Enlace inválido. Usa el comando así:\n\n*${command} <enlace de viddey.cc o xnxx.es>*`;
   }
 
-  await m.reply('⏳ Obteniendo video desde Viddey...');
+  await m.reply('⏳ Procesando el video, por favor espera...');
 
   try {
     const res = await fetch(text);
     const html = await res.text();
     const $ = cheerio.load(html);
 
-    
-    const videoUrl = $('video source').attr('src') || $('video').attr('src');
+    let videoUrl;
 
-    if (!videoUrl) {
-      throw '❌ No se encontró el video. El sitio puede haber cambiado o el video fue eliminado.';
+    if (/viddey\.cc/.test(text)) {
+      videoUrl = $('video source').attr('src') || $('video').attr('src');
+      if (!videoUrl) throw '❌ No se encontró el video en Viddey.';
+      if (!videoUrl.startsWith('http')) videoUrl = `https://viddey.cc${videoUrl}`;
+    } else if (/xnxx\.es/.test(text)) {
+      const jsonScript = $('script[type="application/ld+json"]').html();
+      const jsonData = JSON.parse(jsonScript);
+      videoUrl = jsonData.contentUrl;
+      if (!videoUrl) throw '❌ No se encontró el video en XNXX.';
     }
 
-    
-    const finalUrl = videoUrl.startsWith('http') ? videoUrl : `https://www.xnxx.es/${videoUrl}`;
-
-    await conn.sendFile(m.chat, finalUrl, 'video.mp4', `✅ Video descargado desde Viddey`, m);
+    await conn.sendFile(m.chat, videoUrl, 'video.mp4', `✅ Video descargado con éxito`, m);
   } catch (e) {
     console.error(e);
     m.reply(`⚠️ Error al obtener el video:\n${e.message || e}`);
   }
 };
 
-handler.command = ['viddey', 'vdown'];
+handler.command = ['viddey', 'vdown', 'xnxx'];
 export default handler;
