@@ -114,20 +114,6 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
   audio: { url: api.downloadUrl },
   mimetype: 'audio/mpeg',
   fileName: `${title}.mp3`,
-  contextInfo: {
-    externalAdReply: { 
-     showAdAttribution: true, 
-     title: packname, 
-     body: dev, 
-     mediaUrl: null, 
-     description: null, 
-     //previewType: "PHOTO", 
-     thumbnailUrl: icono, 
-     sourceUrl: redes, 
-     mediaType: 1, 
-     renderLargerThumbnail: false,
-    }
-  }
 };
 
 
