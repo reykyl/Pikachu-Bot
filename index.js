@@ -1,38 +1,61 @@
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '1'
 
 import './config.js'
-import fs from 'fs'
+import fs, { readdirSync, statSync, watchFile, unwatchFile } from 'fs'
 import path from 'path'
 import cfonts from 'cfonts'
 import { platform } from 'process'
 import { fileURLToPath, pathToFileURL } from 'url'
 import chalk from 'chalk'
 import readline from 'readline'
-import pino from 'pino'
 import { Low, JSONFile } from 'lowdb'
-import { makeWASocket, fetchLatestBaileysVersion, useMultiFileAuthState, makeCacheableSignalKeyStore, jidNormalizedUser } from '@whiskeysockets/baileys'
+import { Boom } from '@hapi/boom'
 import NodeCache from 'node-cache'
+import pino from 'pino'
+import lodash from 'lodash'
+import { spawn } from 'child_process'
+import { tmpdir } from 'os'
+
+import { 
+  useMultiFileAuthState, 
+  makeWASocket, 
+  fetchLatestBaileysVersion, 
+  makeCacheableSignalKeyStore,
+  jidNormalizedUser 
+} from '@whiskeysockets/baileys'
 
 
-cfonts.say('Pikachu Bot', { font: 'block', align: 'center', colors: ['yellow'] })
-cfonts.say('Developed by Deylin', { font: 'console', align: 'center', colors: ['blue'] })
-
-
-global.__filename = function (pathURL = import.meta.url) {
-  return platform !== 'win32'
-    ? /file:\/\/\//.test(pathURL) ? fileURLToPath(pathURL) : pathURL
-    : pathToFileURL(pathURL).toString()
+global.__filename = function (pathURL = import.meta.url, rmPrefix = platform !== 'win32') {
+  return rmPrefix ? fileURLToPath(pathURL) : pathToFileURL(pathURL).toString()
 }
 global.__dirname = function (pathURL) {
-  return path.dirname(global.__filename(pathURL))
+  return path.dirname(global.__filename(pathURL, true))
 }
-
 const __dirname = global.__dirname(import.meta.url)
 
 
+cfonts.say('Pikachu Bot', {
+  font: 'block',
+  align: 'center',
+  colors: ['yellow']
+})
+cfonts.say('Developed by Deylin', {
+  font: 'console',
+  align: 'center',
+  colors: ['blue']
+})
+
+
 global.db = new Low(new JSONFile('./src/database/database.json'))
-global.db.data ||= { users: {}, chats: {}, settings: {}, stats: {} }
+global.db.data ||= {
+  users: {},
+  chats: {},
+  settings: {},
+  stats: {},
+  sticker: {},
+}
 await global.db.read()
+global.db.chain = lodash.chain(global.db.data)
 
 
 const { state, saveCreds } = await useMultiFileAuthState('./session')
@@ -40,16 +63,16 @@ const msgRetryCache = new NodeCache()
 const { version } = await fetchLatestBaileysVersion()
 
 
-const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
-const ask = (text) => new Promise(res => rl.question(text, res))
 let opcion = '1'
+const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
+const ask = (q) => new Promise((res) => rl.question(q, res))
 
 if (!fs.existsSync('./session/creds.json')) {
   do {
     opcion = await ask(
-      chalk.cyan('\n🧃 Elige el método de conexión:\n') +
-      chalk.green('1. Código QR\n') +
-      chalk.yellow('2. Código de emparejamiento\n') +
+      chalk.cyan('\n🧃 Selecciona el método de conexión:\n') +
+      chalk.green('1. Escanear QR\n') +
+      chalk.yellow('2. Código de emparejamiento (número de WhatsApp)\n') +
       chalk.white('--> ')
     )
   } while (!['1', '2'].includes(opcion))
@@ -57,44 +80,77 @@ if (!fs.existsSync('./session/creds.json')) {
 }
 
 
-const conn = makeWASocket({
+global.conn = makeWASocket({
   version,
-  printQRInTerminal: opcion === '1',
   logger: pino({ level: 'silent' }),
-  browser: ['Pikachu', 'Chrome', '1.0.0'],
+  printQRInTerminal: opcion === '1',
+  browser: ['PikachuBot', 'Chrome', '1.0.0'],
   auth: {
     creds: state.creds,
-    keys: makeCacheableSignalKeyStore(state.keys, undefined)
+    keys: makeCacheableSignalKeyStore(state.keys, pino({ level: 'silent' })),
   },
   msgRetryCounterCache: msgRetryCache,
-  getMessage: async (key) => {
+  getMessage: async key => {
     const jid = jidNormalizedUser(key.remoteJid)
-    const msg = global.store?.loadMessage ? await global.store.loadMessage(jid, key.id) : null
+    const msg = await global.store?.loadMessage?.(jid, key.id)
     return msg?.message || ''
-  }
+  },
 })
+
+
+if (opcion === '2' && !conn.authState.creds.registered) {
+  const rlCode = readline.createInterface({ input: process.stdin, output: process.stdout })
+  rlCode.question(chalk.magentaBright('📞 Ingresa tu número de WhatsApp (ej: 57300XXXXXXX): '), async numero => {
+    rlCode.close()
+    const code = await conn.requestPairingCode(numero.trim())
+    console.log(chalk.bold.green(`\n🔑 Tu código de emparejamiento:\n`), chalk.white(code.match(/.{1,4}/g).join('-')))
+  })
+}
 
 
 conn.ev.on('connection.update', async ({ connection, lastDisconnect, qr }) => {
   if (qr && opcion === '1') {
-    console.log(chalk.yellow('\n📸 Escanea el QR, expira en 45 segundos'))
+    console.log(chalk.yellow('📸 Escanea el QR para vincular el bot'))
   }
   if (connection === 'open') {
-    console.log(chalk.green('\n✅ ¡Bot conectado exitosamente!'))
+    console.log(chalk.green('✅ Bot conectado con éxito'))
   }
   if (connection === 'close') {
-    console.log(chalk.red('\n❌ Conexión cerrada. Reconectando...'))
-    process.exit()
+    const code = new Boom(lastDisconnect?.error)?.output?.statusCode
+    console.log(chalk.red(`❌ Conexión cerrada. Código: ${code}`))
+    if (code !== DisconnectReason.loggedOut) {
+      console.log(chalk.yellow('🔁 Intentando reconectar...'))
+      process.exit(1) 
+    }
   }
 })
-
 
 conn.ev.on('creds.update', saveCreds)
 
 
 setInterval(async () => {
-  await global.db.write()
+  if (global.db.data) await global.db.write()
 }, 30_000)
+
+
+global.plugins = {}
+const pluginFolder = './plugins'
+
+function loadPlugins() {
+  const files = readdirSync(pluginFolder).filter(file => file.endsWith('.js'))
+  for (const file of files) {
+    const filepath = path.resolve(pluginFolder, file)
+    import(filepath).then(plugin => {
+      global.plugins[file] = plugin.default || plugin
+    }).catch(err => console.error('❌ Error al cargar plugin', file, err))
+  }
+}
+loadPlugins()
+
+
+watchFile(path.resolve(pluginFolder), loadPlugins)
+
+console.log(chalk.blueBright('🚀 Listo para recibir comandos.'))
 
 
 
