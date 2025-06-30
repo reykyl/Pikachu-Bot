@@ -1,3 +1,103 @@
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '1'
+
+import './config.js'
+import fs from 'fs'
+import path from 'path'
+import cfonts from 'cfonts'
+import { platform } from 'process'
+import { fileURLToPath, pathToFileURL } from 'url'
+import chalk from 'chalk'
+import readline from 'readline'
+import { Low, JSONFile } from 'lowdb'
+import { makeWASocket, fetchLatestBaileysVersion, useMultiFileAuthState, makeCacheableSignalKeyStore, jidNormalizedUser } from '@whiskeysockets/baileys'
+import NodeCache from 'node-cache'
+
+
+cfonts.say('Pikachu Bot', { font: 'block', align: 'center', colors: ['yellow'] })
+cfonts.say('Developed by Deylin', { font: 'console', align: 'center', colors: ['blue'] })
+
+
+global.__filename = function (pathURL = import.meta.url) {
+  return platform !== 'win32'
+    ? /file:\/\/\//.test(pathURL) ? fileURLToPath(pathURL) : pathURL
+    : pathToFileURL(pathURL).toString()
+}
+global.__dirname = function (pathURL) {
+  return path.dirname(global.__filename(pathURL))
+}
+
+const __dirname = global.__dirname(import.meta.url)
+
+
+global.db = new Low(new JSONFile('./src/database/database.json'))
+global.db.data ||= { users: {}, chats: {}, settings: {}, stats: {} }
+await global.db.read()
+
+
+const { state, saveCreds } = await useMultiFileAuthState('./session')
+const msgRetryCache = new NodeCache()
+const { version } = await fetchLatestBaileysVersion()
+
+
+const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
+const ask = (text) => new Promise(res => rl.question(text, res))
+let opcion = '1'
+
+if (!fs.existsSync('./session/creds.json')) {
+  do {
+    opcion = await ask(
+      chalk.cyan('\n🧃 Elige el método de conexión:\n') +
+      chalk.green('1. Código QR\n') +
+      chalk.yellow('2. Código de emparejamiento\n') +
+      chalk.white('--> ')
+    )
+  } while (!['1', '2'].includes(opcion))
+  rl.close()
+}
+
+
+const conn = makeWASocket({
+  version,
+  printQRInTerminal: opcion === '1',
+  logger: { level: 'silent' },
+  browser: ['Pikachu', 'Chrome', '1.0.0'],
+  auth: {
+    creds: state.creds,
+    keys: makeCacheableSignalKeyStore(state.keys, undefined)
+  },
+  msgRetryCounterCache: msgRetryCache,
+  getMessage: async (key) => {
+    const jid = jidNormalizedUser(key.remoteJid)
+    const msg = global.store?.loadMessage ? await global.store.loadMessage(jid, key.id) : null
+    return msg?.message || ''
+  }
+})
+
+
+conn.ev.on('connection.update', async ({ connection, lastDisconnect, qr }) => {
+  if (qr && opcion === '1') {
+    console.log(chalk.yellow('\n📸 Escanea el QR, expira en 45 segundos'))
+  }
+  if (connection === 'open') {
+    console.log(chalk.green('\n✅ ¡Bot conectado exitosamente!'))
+  }
+  if (connection === 'close') {
+    console.log(chalk.red('\n❌ Conexión cerrada. Reconectando...'))
+    process.exit()
+  }
+})
+
+
+conn.ev.on('creds.update', saveCreds)
+
+
+setInterval(async () => {
+  await global.db.write()
+}, 30_000)
+
+
+
+
 /*process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '1'
 import './config.js'
 //import { iniciarMemeAutomatico } from './plugins/_prueba.js';
