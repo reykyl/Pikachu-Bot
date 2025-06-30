@@ -8,6 +8,7 @@ import { platform } from 'process'
 import { fileURLToPath, pathToFileURL } from 'url'
 import chalk from 'chalk'
 import readline from 'readline'
+import pino from 'pino'
 import { Low, JSONFile } from 'lowdb'
 import { makeWASocket, fetchLatestBaileysVersion, useMultiFileAuthState, makeCacheableSignalKeyStore, jidNormalizedUser } from '@whiskeysockets/baileys'
 import NodeCache from 'node-cache'
@@ -59,7 +60,7 @@ if (!fs.existsSync('./session/creds.json')) {
 const conn = makeWASocket({
   version,
   printQRInTerminal: opcion === '1',
-  logger: { level: 'silent' },
+  logger: pino({ level: 'silent' }),
   browser: ['Pikachu', 'Chrome', '1.0.0'],
   auth: {
     creds: state.creds,
