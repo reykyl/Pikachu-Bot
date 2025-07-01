@@ -53,7 +53,7 @@ return m.reply(`${emojis} No se han encontrado espacios para *Sub-Bots* disponib
 /*if (Object.values(global.conns).length === 30) {
 return m.reply(`${emojis} No se han encontrado espacios para *Sub-Bots* disponibles.`)
 }*/
-let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
+/*let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
 let id = `${who.split`@`[0]}`  //conn.getName(who)
 let pathpikaJadiBot = path.join(`./${jadi}/`, id)
 if (!fs.existsSync(pathpikaJadiBot)){
@@ -114,7 +114,7 @@ msgRetryCache,
 browser: mcode ? ['Ubuntu', 'Chrome', '110.0.5585.95'] : ['pikachu-Bot (Sub Bot)', 'Chrome','2.0.0'],
 version: version,
 generateHighQualityLinkPreview: true
-};
+};*/
 
 /*const connectionOptions = {
 printQRInTerminal: false,
