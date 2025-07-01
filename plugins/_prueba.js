@@ -3,50 +3,44 @@ import FormData from 'form-data';
 
 let handler = async (m, { conn, usedPrefix, command }) => {
   if (!m.quoted || !m.quoted.fileSha256) {
-    return m.reply(`📸 Responde a una imagen con *${usedPrefix + command}* para convertirla en anime.`);
+    return m.reply(`📸 Responde a una imagen con *${usedPrefix + command}* para convertirla en estilo animado.`);
   }
 
   let mime = m.quoted.mimetype || '';
   if (!/image\/(jpe?g|png)/.test(mime)) {
-    return m.reply('🚫 Solo se permiten imágenes en formato JPG o PNG.');
+    return m.reply('🚫 Solo imágenes JPG o PNG son soportadas.');
   }
 
   try {
     const imgBuffer = await m.quoted.download();
+    m.reply('🎨 Procesando tu imagen con estilo cartoon...');
 
-    m.reply('🎨 Convirtiendo tu imagen a estilo anime...');
-
-    
     const form = new FormData();
-    form.append('data', imgBuffer, { filename: 'input.jpg' });
+    form.append('image', imgBuffer, 'foto.jpg');
 
-    
-    const response = await fetch('https://hf.space/embed/TachibanaYoshino/AnimeGANv2/+/api/predict/', {
+    const response = await fetch('https://api.deepai.org/api/toonify', {
       method: 'POST',
-      body: form,
+      headers: {
+        'Api-Key': 'quickstart-QUdJIGlzIGNvbWluZy4uLi4K', // clave pública gratuita de DeepAI
+        ...form.getHeaders()
+      },
+      body: form
     });
 
     const json = await response.json();
 
-    const animeUrl = json?.data?.[0]?.[0];
-    if (!animeUrl) {
-      return m.reply('❌ No se pudo obtener la imagen estilo anime. Intenta con otra foto.');
-    }
+    if (!json || !json.output_url) throw 'No se obtuvo una imagen válida.';
 
-    
-    const animeRes = await fetch(animeUrl);
-    const animeBuffer = await animeRes.buffer();
+    await conn.sendFile(m.chat, json.output_url, 'toonify.jpg', '✨ Aquí está tu imagen animada estilo cartoon.', m);
 
-    await conn.sendFile(m.chat, animeBuffer, 'anime.jpg', '✨ Aquí está tu versión anime', m);
-
-  } catch (err) {
-    console.error(err);
-    m.reply('❌ Error al procesar tu imagen. Intenta nuevamente.');
+  } catch (e) {
+    console.error(e);
+    m.reply('❌ Ocurrió un error al convertir la imagen.');
   }
 };
 
-handler.help = ['anime'];
+handler.help = ['toon', 'cartoon'];
 handler.tags = ['ai', 'fun'];
-handler.command = /^anime$/i;
+handler.command = /^(toon|cartoon)$/i;
 
 export default handler;
