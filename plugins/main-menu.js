@@ -68,7 +68,6 @@ let handler = async (m, { conn }) => {
 │ 👥 *Usuarios registrados:* ${totalreg}
 │ ⏱️ *Tiempo activo:* ${uptime}
 │ 💾 *Comandos:* ${totalCommands}
-│ 🤖 *Sub-Bots activos:* ${users.length}
 ╰════════════════════════════╯
 🎮 *📋 COMANDOS DISPONIBLES 📋* ⚡
 ${readMore}
