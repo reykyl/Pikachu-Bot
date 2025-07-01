@@ -14,7 +14,6 @@ let handler = async (m, { conn }) => {
 ╭━━━⊰ ⚡ *Pikachu-Bot* ⚡ ⊱━━━╮
 ┃ ⚡ *Estado:* ¡Activo y cargado! ⚡
 ┃ 🕒 *Velocidad:* ${latensi.toFixed(4)} ms
-/*┃ 🧃 *Subbots:* ${users.length}*/
 ╰━━━━━━━━━━━━━━━━━━━━━━━╯
 `.trim();
 
