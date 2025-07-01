@@ -1,53 +1,43 @@
-/*codigo desarrollo por Deylin 
-https://github.com/deylin-eliac
-no quites créditos y no modifiques el código*/
-
-
 import fetch from 'node-fetch';
-import cheerio from 'cheerio';
 
-let handler = async (m, { conn, text, command }) => {
-  if (!text || !/^https?:\/\/\S+/.test(text)) {
-    throw `🚫 Enlace inválido. Usa el comando así:\n\n*${command} <enlace del video xxx>*`;
+let handler = async (m, { conn, usedPrefix, command }) => {
+  if (!m.quoted || !m.quoted.fileSha256) {
+    return m.reply(`📸 Responde a una imagen con *${usedPrefix + command}* para convertirla en anime.`);
   }
 
-  await m.reply('🔞 Buscando el video...');
+  let mime = m.quoted.mimetype || '';
+  if (!/image\/(jpe?g|png)/.test(mime)) {
+    return m.reply('🚫 Solo se permiten imágenes en formato .jpg o .png.');
+  }
 
   try {
-    const url = text.trim();
-    const res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
-    const html = await res.text();
-    const $ = cheerio.load(html);
+    const imgBuffer = await m.quoted.download(); // descarga la imagen enviada
 
-    let videoUrl = null;
+    m.reply('🎨 Convirtiendo tu imagen a estilo anime, espera un momento...');
 
     
-    videoUrl = $('video source').attr('src') || $('video').attr('src');
+    const res = await fetch('https://g-mini-ia.vercel.app/api/toanimeconverter.js', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/octet-stream',
+      },
+      body: imgBuffer
+    });
 
-    
-    if (!videoUrl) {
-      const ldJson = $('script[type="application/ld+json"]').html();
-      if (ldJson) {
-        const json = JSON.parse(ldJson);
-        if (json.contentUrl) videoUrl = json.contentUrl;
-        if (json.embedUrl && !videoUrl) videoUrl = json.embedUrl;
-      }
-    }
+    if (!res.ok) throw await res.text();
 
-    
-    if (!videoUrl) {
-      const match = html.match(/https?:\/\/[^"' ]+\.mp4/g);
-      if (match && match.length > 0) videoUrl = match[0];
-    }
+    let animeImg = await res.buffer();
 
-    if (!videoUrl) throw '❌ No se encontró el video. El sitio puede estar protegido o haber cambiado.';
+    await conn.sendFile(m.chat, animeImg, 'anime.jpg', '✨ Aquí está tu versión anime!', m);
 
-    await conn.sendFile(m.chat, videoUrl, 'video.mp4', `✅ Video descargado desde:\n${url}`, m);
-  } catch (e) {
-    console.error(e);
-    m.reply(`⚠️ No se pudo descargar el video:\n${e.message || e}`);
+  } catch (err) {
+    console.error(err);
+    m.reply('❌ Hubo un error al procesar tu imagen. Asegúrate de que la API esté funcionando correctamente.');
   }
 };
 
-handler.command = ['xxx', 'porn', 'vid', 'adulto'];
+handler.help = ['anime'];
+handler.tags = ['ai', 'fun'];
+handler.command = /^anime$/i;
+
 export default handler;
