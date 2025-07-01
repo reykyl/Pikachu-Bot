@@ -134,7 +134,7 @@ if (store) {
 conversation: 'pika-Bot',
 }}}*/
 
-let sock = makeWASocket(connectionOptions)
+/*let sock = makeWASocket(connectionOptions)
 sock.isInit = false
 let isInit = true
 
