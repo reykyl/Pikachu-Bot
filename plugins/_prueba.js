@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import FormData from 'form-data';
 
 let handler = async (m, { conn, usedPrefix, command }) => {
   if (!m.quoted || !m.quoted.fileSha256) {
@@ -7,32 +8,40 @@ let handler = async (m, { conn, usedPrefix, command }) => {
 
   let mime = m.quoted.mimetype || '';
   if (!/image\/(jpe?g|png)/.test(mime)) {
-    return m.reply('🚫 Solo se permiten imágenes en formato .jpg o .png.');
+    return m.reply('🚫 Solo se permiten imágenes en formato JPG o PNG.');
   }
 
   try {
-    const imgBuffer = await m.quoted.download(); // descarga la imagen enviada
+    const imgBuffer = await m.quoted.download();
 
-    m.reply('🎨 Convirtiendo tu imagen a estilo anime, espera un momento...');
+    m.reply('🎨 Convirtiendo tu imagen a estilo anime...');
 
     
-    const res = await fetch('https://g-mini-ia.vercel.app/api/toanimeconverter.js', {
+    const form = new FormData();
+    form.append('data', imgBuffer, { filename: 'input.jpg' });
+
+    
+    const response = await fetch('https://hf.space/embed/TachibanaYoshino/AnimeGANv2/+/api/predict/', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/octet-stream',
-      },
-      body: imgBuffer
+      body: form,
     });
 
-    if (!res.ok) throw await res.text();
+    const json = await response.json();
 
-    let animeImg = await res.buffer();
+    const animeUrl = json?.data?.[0]?.[0];
+    if (!animeUrl) {
+      return m.reply('❌ No se pudo obtener la imagen estilo anime. Intenta con otra foto.');
+    }
 
-    await conn.sendFile(m.chat, animeImg, 'anime.jpg', '✨ Aquí está tu versión anime!', m);
+    
+    const animeRes = await fetch(animeUrl);
+    const animeBuffer = await animeRes.buffer();
+
+    await conn.sendFile(m.chat, animeBuffer, 'anime.jpg', '✨ Aquí está tu versión anime', m);
 
   } catch (err) {
     console.error(err);
-    m.reply('❌ Hubo un error al procesar tu imagen. Asegúrate de que la API esté funcionando correctamente.');
+    m.reply('❌ Error al procesar tu imagen. Intenta nuevamente.');
   }
 };
 
