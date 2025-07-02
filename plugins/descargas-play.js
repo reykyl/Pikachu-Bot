@@ -80,9 +80,9 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
     const thumb = (await conn.getFile(thumbnail))?.data;
 
     const infoMessage = `
-╔═════ ∘◦ 🐭 ⚡ ◦∘ ═════╗
-   *ＰＩＫＡＣＨＵ-ＢＯＴ*
-╚═════ ∘◦ ⚡ 🐭 ◦∘ ═════╝
+    ╔═════ ∘◦ 🐭 ⚡ ◦∘ ═════╗
+        *ＰＩＫＡＣＨＵ-ＢＯＴ*
+    ╚═════ ∘◦ ⚡ 🐭 ◦∘ ═════╝
 
 > 🎵 *Título:* *${title}*
 > 🎬 *Duración:* ${timestamp}
@@ -94,21 +94,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
 ∘◦ ⚡ Descargado... ⚡ ◦∘
 `;
 
-    const JT = {
-      contextInfo: {
-        externalAdReply: {
-          //title: botname,
-          //body: "¡Pika Pikachu-bot! El bot eléctrico que necesitas.",
-         // mediaType: 1,
-          //previewType: 0,
-         // mediaUrl: url,
-       //   sourceUrl: url,
-          thumbnail: thumb,
-         // renderLargerThumbnail: true
-        }
-      }
-    };
-
+  
     await m.react('🎧');
     await conn.sendMessage(m.chat, {
   image: thumb,
