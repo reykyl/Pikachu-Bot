@@ -11,7 +11,7 @@ Contenido adaptado por:
 - elrebelde21 >> https://github.com/elrebelde21
 */
 
-/*const { useMultiFileAuthState, DisconnectReason, makeCacheableSignalKeyStore, fetchLatestBaileysVersion} = (await import("@whiskeysockets/baileys"));
+const { useMultiFileAuthState, DisconnectReason, makeCacheableSignalKeyStore, fetchLatestBaileysVersion} = (await import("@whiskeysockets/baileys"));
 import qrcode from "qrcode"
 import NodeCache from "node-cache"
 import fs from "fs"
@@ -53,7 +53,7 @@ return m.reply(`${emojis} No se han encontrado espacios para *Sub-Bots* disponib
 /*if (Object.values(global.conns).length === 30) {
 return m.reply(`${emojis} No se han encontrado espacios para *Sub-Bots* disponibles.`)
 }*/
-/*let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
+let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
 let id = `${who.split`@`[0]}`  //conn.getName(who)
 let pathpikaJadiBot = path.join(`./${jadi}/`, id)
 if (!fs.existsSync(pathpikaJadiBot)){
@@ -114,7 +114,7 @@ msgRetryCache,
 browser: mcode ? ['Ubuntu', 'Chrome', '110.0.5585.95'] : ['pikachu-Bot (Sub Bot)', 'Chrome','2.0.0'],
 version: version,
 generateHighQualityLinkPreview: true
-};*/
+};
 
 /*const connectionOptions = {
 printQRInTerminal: false,
@@ -134,7 +134,7 @@ if (store) {
 conversation: 'pika-Bot',
 }}}*/
 
-/*let sock = makeWASocket(connectionOptions)
+let sock = makeWASocket(connectionOptions)
 sock.isInit = false
 let isInit = true
 
@@ -304,4 +304,4 @@ return minutes + ' m y ' + seconds + ' s '
 async function joinChannels(conn) {
 for (const channelId of Object.values(global.ch)) {
 await conn.newsletterFollow(channelId).catch(() => {})
-}}*/
+}}
