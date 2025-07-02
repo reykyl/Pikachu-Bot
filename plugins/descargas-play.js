@@ -110,7 +110,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
     };
 
     await m.react('🎧');
-    await conn.reply(m.chat, infoMessage, m, JT);
+    await conn.reply(m.chat, infoMessage, m, thumb);
 
     // Audio (play/yta/ytmp3)
     if (["play", "yta", "ytmp3"].includes(command)) {
