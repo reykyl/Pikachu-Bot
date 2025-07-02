@@ -1,3 +1,4 @@
+import { sticker } from '../lib/sticker.js' // si usas tu sistema de sticker con exif
 import fetch from 'node-fetch'
 
 let handler = async (m, { conn, text, command }) => {
@@ -11,23 +12,25 @@ let handler = async (m, { conn, text, command }) => {
     if (!data.estado || !Array.isArray(data.resultados)) throw `⚠️ Respuesta inválida de la API.`
 
     const stickers = []
+
     for (let s of data.resultados) {
       const url = s.thumbnail
       if (!url || !url.startsWith('http')) continue
 
-      stickers.push({
-        sticker: { url }
+      const buffer = await fetch(url).then(res => res.buffer())
+
+      const stick = await sticker(buffer, false, {
+        packname: text,
+        author: 'Kirito-Bot',
       })
 
+      stickers.push({ sticker: stick })
       if (stickers.length >= 10) break
     }
 
     if (!stickers.length) throw '⚠️ No se encontraron stickers válidos.'
 
-    // Mensaje de aviso antes de enviar
     await m.reply(`🧩 Paquete de stickers encontrados para: *${text}*`)
-
-    // Enviar como paquete simulado (usando conn.sendAlbumMessage)
     await conn.sendAlbumMessage(m.chat, stickers, m)
 
   } catch (err) {
@@ -36,8 +39,8 @@ let handler = async (m, { conn, text, command }) => {
   }
 }
 
-handler.command = ['flasticker', 'stickerpack', 'buscarsticker']
-handler.help = ['flasticker <palabra>']
+handler.command = ['stickerpack', 'flasticker']
+handler.help = ['stickerpack <palabra>']
 handler.tags = ['sticker']
 
 export default handler
