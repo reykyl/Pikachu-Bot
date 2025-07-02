@@ -31,7 +31,7 @@ let handler = async (m, { conn, text, command }) => {
     await conn.sendMessage(m.chat, paquete[0], { quoted: m })
 
     // Si quieres enviar como paquete, descomenta esto cuando estés listo:
-    // await conn.sendAlbumMessage(m.chat, paquete, m)
+     await conn.sendAlbumMessage(m.chat, paquete, m)
 
   } catch (err) {
     let msg = typeof err === 'string' ? err : (err.message || JSON.stringify(err))
