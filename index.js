@@ -38,9 +38,7 @@ import NodeCache from 'node-cache'
 const {CONNECTING} = ws
 const {chain} = lodash
 const PORT = process.env.PORT || process.env.SERVER_PORT || 3000
-conn.sendAlbumMessage = function (jid, messages, quoted) {
-  return sendAlbumMessage(this, jid, messages, quoted)
-}
+
 //const yuw = dirname(fileURLToPath(import.meta.url))
 //let require = createRequire(megu)
 let { say } = cfonts
@@ -162,6 +160,10 @@ version,
 }
 
 global.conn = makeWASocket(connectionOptions);
+
+global.conn.sendAlbumMessage = function (jid, messages, quoted) {
+  return sendAlbumMessage(this, jid, messages, quoted)
+}
 
 if (!fs.existsSync(`./${sessions}/creds.json`)) {
 if (opcion === '2' || methodCode) {
