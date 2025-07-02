@@ -16,7 +16,7 @@ let handler = async (m, { conn, text, command }) => {
       if (!url || !url.startsWith('http')) continue
 
       stickers.push({
-        sticker: { url },
+        sticker: { url }
       })
 
       if (stickers.length >= 10) break
@@ -24,10 +24,10 @@ let handler = async (m, { conn, text, command }) => {
 
     if (!stickers.length) throw '⚠️ No se encontraron stickers válidos.'
 
-    if (typeof conn.sendAlbumMessage !== 'function') {
-      throw '❌ La función conn.sendAlbumMessage no está definida.'
-    }
+    // Mensaje de aviso antes de enviar
+    await m.reply(`🧩 Paquete de stickers encontrados para: *${text}*`)
 
+    // Enviar como paquete simulado (usando conn.sendAlbumMessage)
     await conn.sendAlbumMessage(m.chat, stickers, m)
 
   } catch (err) {
