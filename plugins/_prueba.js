@@ -28,7 +28,7 @@ let handler = async (m, { conn, text, command }) => {
     if (!paquete.length) throw '⚠️ No se encontraron stickers válidos.'
 
     // Prueba con 1 imagen
-    await conn.sendMessage(m.chat, paquete[0], { quoted: m })
+    //await conn.sendMessage(m.chat, paquete[0], { quoted: m })
 
     // Si quieres enviar como paquete, descomenta esto cuando estés listo:
      await conn.sendAlbumMessage(m.chat, paquete, m)
