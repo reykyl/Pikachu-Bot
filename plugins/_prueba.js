@@ -1,5 +1,4 @@
 import fetch from 'node-fetch'
-import cheerio from 'cheerio'
 import fs from 'fs'
 import path from 'path'
 import sharp from 'sharp'
@@ -10,94 +9,80 @@ import { addExif } from '../lib/sticker.js'
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 let handler = async (m, { conn, text, command }) => {
-  if (!text) return m.reply(`✳️ Escribe una palabra para buscar stickers\n\nEjemplo:\n*${command} gato*`)
+  if (!text) return m.reply(`✳️ Escribe una palabra para buscar stickers\n\nEjemplo:\n${command} gato`)
 
   try {
-  const res = await fetch(`https://www.sticker.ly/search?q=${encodeURIComponent(text)}`, {
-  headers: {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36',
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9',
-    'Accept-Language': 'en-US,en;q=0.9'
-  }
-})
-  const html = await res.text()
-  const $ = cheerio.load(html)
+    // 1. Llamar a la API externa que devuelve resultados de sticker.ly
+    const apiUrl = `https://tuapi.com/stickerly?q=${encodeURIComponent(text)}`
+    const res = await fetch(apiUrl)
+    if (!res.ok) throw `Error en API externa: ${res.status} ${res.statusText}`
+    const data = await res.json()
 
-  const jsonDataScript = $('script#__NEXT_DATA__').html()
-  if (!jsonDataScript) throw '❌ No se pudo cargar el script JSON de la página.'
+    if (!data || !Array.isArray(data.results) || data.results.length === 0)
+      return m.reply('⚠️ No se encontraron stickers para esa búsqueda.')
 
-  const json = JSON.parse(jsonDataScript)
-  const packs = json?.props?.pageProps?.searchResult?.packs
+    // 2. Tomar solo los primeros 3 resultados
+    const items = data.results.slice(0, 3)
 
-  if (!packs || packs.length === 0) throw '⚠️ No se encontraron packs.'
+    // 3. Descargar y convertir cada resultado a sticker webp
+    const stickers = []
 
-  const packId = packs[0]?.id
-  const userId = packs[0]?.userId
-  if (!packId || !userId) throw '❌ No se pudo acceder a packId o userId.'
+    for (const item of items) {
+      // item debe tener { type: 'image'|'video', url: '...' }
+      const tmpFile = path.join(tmpdir(), `${Date.now()}-${Math.random()}`)
+      const webpFile = `${tmpFile}.webp`
 
-  const packURL = `https://www.sticker.ly/api/v1/packs/${packId}?userId=${userId}&country=HN`
-  const packRes = await fetch(packURL)
-  const packData = await packRes.json()
+      try {
+        if (item.type === 'video') {
+          await new Promise((resolve, reject) => {
+            ffmpeg(item.url)
+              .inputOptions('-t', '5')
+              .outputOptions([
+                '-vf', 'scale=512:512:force_original_aspect_ratio=decrease',
+                '-ss', '0',
+                '-vcodec', 'libwebp',
+                '-loop', '0',
+                '-preset', 'default',
+                '-an',
+                '-vsync', '0',
+                '-s', '512:512'
+              ])
+              .save(webpFile)
+              .on('end', resolve)
+              .on('error', reject)
+          })
+        } else {
+          const imgRes = await fetch(item.url)
+          const buffer = await imgRes.buffer()
+          await sharp(buffer)
+            .resize(512, 512, { fit: 'inside' })
+            .webp()
+            .toFile(webpFile)
+        }
 
-  const items = packData?.stickers || []
-  if (!items.length) throw '⚠️ No se encontraron stickers en ese pack.'
+        const stickerBuffer = await addExif(fs.readFileSync(webpFile), 'Sticker Pack', 'Kirito-Bot')
+        stickers.push({ sticker: stickerBuffer })
+        fs.unlinkSync(webpFile)
 
-  const results = items.slice(0, 3)
-  const stickers = []
-
-  for (const item of results) {
-    const tmpFile = path.join(tmpdir(), `${Date.now()}-${Math.random()}`)
-    const webpFile = `${tmpFile}.webp`
-
-    try {
-      if (item.type === 'video') {
-        await new Promise((resolve, reject) => {
-          ffmpeg(item.url)
-            .inputOptions('-t', '5')
-            .outputOptions([
-              '-vf', 'scale=512:512:force_original_aspect_ratio=decrease',
-              '-ss', '0',
-              '-vcodec', 'libwebp',
-              '-loop', '0',
-              '-preset', 'default',
-              '-an',
-              '-vsync', '0',
-              '-s', '512:512'
-            ])
-            .save(webpFile)
-            .on('end', resolve)
-            .on('error', reject)
-        })
-      } else {
-        const img = await fetch(item.url)
-        const buffer = await img.buffer()
-        await sharp(buffer)
-          .resize(512, 512, { fit: 'inside' })
-          .webp()
-          .toFile(webpFile)
+      } catch (e) {
+        await m.reply(`⚠️ Error al procesar un sticker:\n${e.message || e}`)
       }
-
-      const stickerBuf = await addExif(fs.readFileSync(webpFile), packData.name, packData.authorName || 'Sticker.ly')
-      stickers.push({ sticker: stickerBuf })
-      fs.unlinkSync(webpFile)
-
-    } catch (e) {
-      await m.reply(`⚠️ Error con un sticker:\n\n${e}`)
     }
-  }
 
-  for (const s of stickers) {
-    await conn.sendMessage(m.chat, { sticker: s.sticker }, { quoted: m })
-    await sleep(300)
-  }
+    // 4. Enviar los stickers (uno por uno)
+    for (const s of stickers) {
+      await conn.sendMessage(m.chat, { sticker: s.sticker }, { quoted: m })
+      await sleep(400)
+    }
 
-} catch (e) {
-  console.error(e)
-  await m.reply(`❌ Error:\n\n${e}`)
-}
+  } catch (e) {
+    console.error(e)
+    await m.reply(`❌ Error al buscar o enviar stickers:\n${e.message || e}`)
+  }
 }
 
 handler.command = /^stickerly$/i
 handler.tags = ['sticker']
 handler.help = ['stickerly <texto>']
+
 export default handler
