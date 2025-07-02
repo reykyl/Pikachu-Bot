@@ -82,7 +82,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
     const infoMessage = `
 ╔═════ ∘◦ 🐭 ⚡ ◦∘ ═════╗
    *ＰＩＫＡＣＨＵ-ＢＯＴ*
- ╚═════ ∘◦ ⚡ 🐭 ◦∘ ═════╝
+╚═════ ∘◦ ⚡ 🐭 ◦∘ ═════╝
 
 > 🎵 *Título:* *${title}*
 > 🎬 *Duración:* ${timestamp}
@@ -99,11 +99,11 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
         externalAdReply: {
           //title: botname,
           //body: "¡Pika Pikachu-bot! El bot eléctrico que necesitas.",
-          mediaType: 1,
-          previewType: 0,
+         // mediaType: 1,
+          //previewType: 0,
           mediaUrl: url,
        //   sourceUrl: url,
-          //thumbnail: thumb,
+          thumbnail: thumb,
          // renderLargerThumbnail: true
         }
       }
