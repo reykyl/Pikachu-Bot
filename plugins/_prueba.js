@@ -1,4 +1,4 @@
-import { sticker } from '../lib/sticker.js' // si usas tu sistema de sticker con exif
+import { sticker } from '../lib/sticker.js'
 import fetch from 'node-fetch'
 
 let handler = async (m, { conn, text, command }) => {
