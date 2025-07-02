@@ -4,8 +4,8 @@ import fs from 'fs'
 import path from 'path'
 import sharp from 'sharp'
 import ffmpeg from 'fluent-ffmpeg'
-import { addExif } from '../lib/sticker.js'
 import { tmpdir } from 'os'
+import { addExif } from '../lib/sticker.js'
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -13,30 +13,28 @@ let handler = async (m, { conn, text, command }) => {
   if (!text) return m.reply(`✳️ Escribe una palabra para buscar stickers\n\nEjemplo:\n*${command} gato*`)
 
   try {
-    const res = await fetch(`https://sticker.ly/s/${encodeURIComponent(text)}`)
+    const res = await fetch(`https://www.sticker.ly/search?q=${encodeURIComponent(text)}`)
     const html = await res.text()
     const $ = cheerio.load(html)
 
-    let stickerLinks = []
+    // Buscar el primer pack desde el JSON del script de datos
+    const jsonDataScript = $('script#__NEXT_DATA__').html()
+    if (!jsonDataScript) throw '❌ No se pudo cargar la información del sitio.'
 
-    $('a[href^="/packs/"]').each((i, el) => {
-      const href = $(el).attr('href')
-      if (href && !stickerLinks.includes(href)) {
-        stickerLinks.push(`https://sticker.ly${href}`)
-      }
-    })
+    const json = JSON.parse(jsonDataScript)
+    const packs = json?.props?.pageProps?.searchResult?.packs
 
-    if (stickerLinks.length === 0) return m.reply('⚠️ No se encontraron resultados.')
+    if (!packs || packs.length === 0) return m.reply('⚠️ No se encontraron resultados.')
 
-    const packURL = stickerLinks[0] // Solo primer pack
-    const packPage = await fetch(packURL)
-    const packHtml = await packPage.text()
-    const $$ = cheerio.load(packHtml)
+    const packId = packs[0]?.id
+    const userId = packs[0]?.userId
+    if (!packId || !userId) return m.reply('❌ No se pudo acceder al pack.')
 
-    const scriptJson = $$('script#__NEXT_DATA__').html()
-    const jsonData = JSON.parse(scriptJson)
-    const items = jsonData.props.pageProps.pack.stickers || []
+    const packURL = `https://www.sticker.ly/api/v1/packs/${packId}?userId=${userId}&country=HN`
+    const packRes = await fetch(packURL)
+    const packData = await packRes.json()
 
+    const items = packData?.stickers || []
     if (!items.length) return m.reply('⚠️ No se encontraron stickers en ese pack.')
 
     const results = items.slice(0, 3) // solo 3 stickers
@@ -46,9 +44,9 @@ let handler = async (m, { conn, text, command }) => {
       const tmpFile = path.join(tmpdir(), `${Date.now()}-${Math.random()}`)
       const webpFile = `${tmpFile}.webp`
 
-      if (item.video) {
+      if (item.type === 'video') {
         await new Promise((resolve, reject) => {
-          ffmpeg(item.video)
+          ffmpeg(item.url)
             .inputOptions('-t', '5')
             .outputOptions([
               '-vf', 'scale=512:512:force_original_aspect_ratio=decrease',
@@ -65,7 +63,7 @@ let handler = async (m, { conn, text, command }) => {
             .on('error', reject)
         })
       } else {
-        const img = await fetch(item.image)
+        const img = await fetch(item.url)
         const buffer = await img.buffer()
         await sharp(buffer)
           .resize(512, 512, { fit: 'inside' })
@@ -73,25 +71,19 @@ let handler = async (m, { conn, text, command }) => {
           .toFile(webpFile)
       }
 
-      const stickerBuf = await addExif(fs.readFileSync(webpFile), 'Sticker.ly', 'Kirito-Bot')
+      const stickerBuf = await addExif(fs.readFileSync(webpFile), packData.name, packData.authorName || 'Sticker.ly')
       stickers.push({ sticker: stickerBuf })
       fs.unlinkSync(webpFile)
     }
 
-    await conn.sendMessage(m.chat, {
-      sticker: stickers[0].sticker
-    }, { quoted: m })
-
-    for (let i = 1; i < stickers.length; i++) {
-      await sleep(500)
-      await conn.sendMessage(m.chat, {
-        sticker: stickers[i].sticker
-      }, { quoted: m })
+    for (const s of stickers) {
+      await conn.sendMessage(m.chat, { sticker: s.sticker }, { quoted: m })
+      await sleep(300)
     }
 
   } catch (e) {
     console.error(e)
-    m.reply('❌ Error al buscar o convertir stickers.')
+    m.reply('❌ Error al buscar o convertir los stickers.')
   }
 }
 
