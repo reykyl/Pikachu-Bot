@@ -1,4 +1,4 @@
-import fetch from 'node-fetch'
+/*import fetch from 'node-fetch'
 import sharp from 'sharp'
 import { addExif } from '../lib/sticker.js'
 
@@ -44,5 +44,47 @@ let handler = async (m, { conn, text, command }) => {
 handler.command = ['stickerpack', 'flasticker']
 handler.help = ['stickerpack <palabra>']
 handler.tags = ['sticker']
+
+export default handler*/
+
+
+import fetch from 'node-fetch'
+import cheerio from 'cheerio'
+
+let handler = async (m, { conn, command }) => {
+  try {
+    const res = await fetch('https://www.wistickers.com/stickers/michis')
+    const html = await res.text()
+    const $ = cheerio.load(html)
+
+    const results = []
+    $('.stickers-pack').each((_, el) => {
+      const name = $(el).find('.title').text().trim()
+      const url = 'https://www.wistickers.com' + $(el).find('a').attr('href')
+      const thumbnail = $(el).find('img').attr('src')
+      if (name && url && thumbnail) {
+        results.push({ name, url, thumbnail })
+      }
+    })
+
+    if (results.length === 0) {
+      return m.reply('⚠️ No se encontraron stickers de michis.')
+    }
+
+    let texto = '🐱 *Stickers de Michis encontrados:*\n\n'
+    for (let i = 0; i < results.length && i < 10; i++) {
+      texto += `🔸 *${results[i].name}*\n🌐 ${results[i].url}\n🖼️ ${results[i].thumbnail}\n\n`
+    }
+
+    await conn.sendMessage(m.chat, { text: texto }, { quoted: m })
+  } catch (e) {
+    console.error(e)
+    await m.reply('❌ Ocurrió un error al buscar los stickers.')
+  }
+}
+
+handler.help = ['michis']
+handler.tags = ['sticker']
+handler.command = /^michis$/i
 
 export default handler
