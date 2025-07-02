@@ -18,19 +18,16 @@ let handler = async (m, { conn, text, command }) => {
       const url = s.thumbnail
       if (!url || !url.startsWith('http')) continue
 
-      // Obtener imagen como buffer
       const imgBuffer = await fetch(url).then(res => res.buffer())
 
-      // Convertir a webp
       const webpBuffer = await sharp(imgBuffer)
         .webp({ lossless: true })
         .toBuffer()
 
-      // Agregar exif
       const stickerBuffer = await addExif(webpBuffer, text, 'Kirito-Bot')
 
       stickers.push({ sticker: stickerBuffer })
-      if (stickers.length >= 10) break
+      if (stickers.length >= 5) break // ← ENVÍA SOLO 5 STICKERS
     }
 
     if (!stickers.length) throw '⚠️ No se encontraron stickers válidos.'
