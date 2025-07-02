@@ -30,8 +30,8 @@ let handler = async (m, { conn, text, args, command }) => {
   }
 }
 
-handler.help = ['catbox <url>']
+handler.help = ['dcatbox <url>']
 handler.tags = ['downloader']
-handler.command = /^catbox$/i
+handler.command = /^dcatbox$/i
 
 export default handler
