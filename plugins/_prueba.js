@@ -8,18 +8,23 @@ let handler = async (m, { conn, text, command }) => {
     if (!res.ok) return m.reply('❌ No se pudo conectar con la API.')
 
     let data = await res.json()
-
     if (!data.estado || !data.resultados.length) return m.reply('⚠️ No se encontraron stickers para tu búsqueda.')
 
     let paquete = []
 
-    for (let i = 0; i < Math.min(10, data.resultados.length); i++) {
-      let sticker = data.resultados[i]
+    for (let i = 0; i < data.resultados.length; i++) {
+      let s = data.resultados[i]
+      if (!s.thumbnail || !s.url || s.url.includes('undefined')) continue  // 👈 evita errores
+
       paquete.push({
-        image: { url: sticker.thumbnail },
-        caption: `🎨 ${sticker.nombre}\n👤 ${sticker.autor || 'Desconocido'}\n🔗 ${sticker.url}`
+        image: { url: s.thumbnail },
+        caption: `🎨 ${s.nombre}\n👤 ${s.autor || 'Desconocido'}\n🔗 ${s.url}`
       })
+
+      if (paquete.length >= 10) break
     }
+
+    if (!paquete.length) return m.reply('⚠️ Ningún sticker válido para mostrar.')
 
     await conn.sendAlbumMessage(m.chat, paquete, m)
 
