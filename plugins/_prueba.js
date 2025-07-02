@@ -13,37 +13,37 @@ let handler = async (m, { conn, text, command }) => {
   if (!text) return m.reply(`✳️ Escribe una palabra para buscar stickers\n\nEjemplo:\n*${command} gato*`)
 
   try {
-    const res = await fetch(`https://www.sticker.ly/search?q=${encodeURIComponent(text)}`)
-    const html = await res.text()
-    const $ = cheerio.load(html)
+  const res = await fetch(`https://www.sticker.ly/search?q=${encodeURIComponent(text)}`)
+  const html = await res.text()
+  const $ = cheerio.load(html)
 
-    // Buscar el primer pack desde el JSON del script de datos
-    const jsonDataScript = $('script#__NEXT_DATA__').html()
-    if (!jsonDataScript) throw '❌ No se pudo cargar la información del sitio.'
+  const jsonDataScript = $('script#__NEXT_DATA__').html()
+  if (!jsonDataScript) throw '❌ No se pudo cargar el script JSON de la página.'
 
-    const json = JSON.parse(jsonDataScript)
-    const packs = json?.props?.pageProps?.searchResult?.packs
+  const json = JSON.parse(jsonDataScript)
+  const packs = json?.props?.pageProps?.searchResult?.packs
 
-    if (!packs || packs.length === 0) return m.reply('⚠️ No se encontraron resultados.')
+  if (!packs || packs.length === 0) throw '⚠️ No se encontraron packs.'
 
-    const packId = packs[0]?.id
-    const userId = packs[0]?.userId
-    if (!packId || !userId) return m.reply('❌ No se pudo acceder al pack.')
+  const packId = packs[0]?.id
+  const userId = packs[0]?.userId
+  if (!packId || !userId) throw '❌ No se pudo acceder a packId o userId.'
 
-    const packURL = `https://www.sticker.ly/api/v1/packs/${packId}?userId=${userId}&country=HN`
-    const packRes = await fetch(packURL)
-    const packData = await packRes.json()
+  const packURL = `https://www.sticker.ly/api/v1/packs/${packId}?userId=${userId}&country=HN`
+  const packRes = await fetch(packURL)
+  const packData = await packRes.json()
 
-    const items = packData?.stickers || []
-    if (!items.length) return m.reply('⚠️ No se encontraron stickers en ese pack.')
+  const items = packData?.stickers || []
+  if (!items.length) throw '⚠️ No se encontraron stickers en ese pack.'
 
-    const results = items.slice(0, 3) // solo 3 stickers
-    const stickers = []
+  const results = items.slice(0, 3)
+  const stickers = []
 
-    for (const item of results) {
-      const tmpFile = path.join(tmpdir(), `${Date.now()}-${Math.random()}`)
-      const webpFile = `${tmpFile}.webp`
+  for (const item of results) {
+    const tmpFile = path.join(tmpdir(), `${Date.now()}-${Math.random()}`)
+    const webpFile = `${tmpFile}.webp`
 
+    try {
       if (item.type === 'video') {
         await new Promise((resolve, reject) => {
           ffmpeg(item.url)
@@ -74,17 +74,21 @@ let handler = async (m, { conn, text, command }) => {
       const stickerBuf = await addExif(fs.readFileSync(webpFile), packData.name, packData.authorName || 'Sticker.ly')
       stickers.push({ sticker: stickerBuf })
       fs.unlinkSync(webpFile)
-    }
 
-    for (const s of stickers) {
-      await conn.sendMessage(m.chat, { sticker: s.sticker }, { quoted: m })
-      await sleep(300)
+    } catch (e) {
+      await m.reply(`⚠️ Error con un sticker:\n\n${e}`)
     }
-
-  } catch (e) {
-    console.error(e)
-    m.reply('❌ Error al buscar o convertir los stickers.')
   }
+
+  for (const s of stickers) {
+    await conn.sendMessage(m.chat, { sticker: s.sticker }, { quoted: m })
+    await sleep(300)
+  }
+
+} catch (e) {
+  console.error(e)
+  await m.reply(`❌ Error:\n\n${e}`)
+}
 }
 
 handler.command = /^stickerly$/i
