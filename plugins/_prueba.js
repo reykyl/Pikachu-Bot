@@ -1,23 +1,32 @@
+import fetch from 'node-fetch'
+
 let handler = async (m, { conn, text, command }) => {
-  if (!text) throw `✳️ Escribe una palabra para buscar stickers.\n\nEjemplo:\n${command} gato`
+  if (!text) return m.reply(`✳️ Escribe una palabra para buscar stickers.\n\nEjemplo:\n*${command} gato*`)
 
-  let res = await fetch(`https://opendrip-api.onrender.com/api/sticker?q=${encodeURIComponent(text)}`)
-  if (!res.ok) throw '❌ No se pudo conectar con la API.'
-  let data = await res.json()
+  try {
+    let res = await fetch(`https://opendrip-api.onrender.com/api/sticker?q=${encodeURIComponent(text)}`)
+    if (!res.ok) return m.reply('❌ No se pudo conectar con la API.')
 
-  if (!data.estado || !data.resultados.length) throw '⚠️ No se encontraron stickers.'
+    let data = await res.json()
 
-  let paquete = []
+    if (!data.estado || !data.resultados.length) return m.reply('⚠️ No se encontraron stickers para tu búsqueda.')
 
-  for (let i = 0; i < Math.min(10, data.resultados.length); i++) {
-    let sticker = data.resultados[i]
-    paquete.push({
-      image: { url: sticker.thumbnail },
-      caption: `🎨 ${sticker.nombre}\n👤 ${sticker.autor || 'Desconocido'}\n🔗 ${sticker.url}`
-    })
+    let paquete = []
+
+    for (let i = 0; i < Math.min(10, data.resultados.length); i++) {
+      let sticker = data.resultados[i]
+      paquete.push({
+        image: { url: sticker.thumbnail },
+        caption: `🎨 ${sticker.nombre}\n👤 ${sticker.autor || 'Desconocido'}\n🔗 ${sticker.url}`
+      })
+    }
+
+    await conn.sendAlbumMessage(m.chat, paquete, m)
+
+  } catch (e) {
+    console.error(e)
+    m.reply('❌ Ocurrió un error inesperado.')
   }
-
-  await conn.sendAlbumMessage(m.chat, paquete, m)
 }
 
 handler.command = ['flasticker', 'stickerpack', 'buscarsticker']
