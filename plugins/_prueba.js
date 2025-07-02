@@ -24,7 +24,7 @@ let handler = async (m, { conn, text, command }) => {
         .webp({ lossless: true })
         .toBuffer()
 
-      const stickerBuffer = await addExif(webpBuffer, text, 'Kirito-Bot')
+      const stickerBuffer = await addExif(webpBuffer, text, dev)
 
       stickers.push({ sticker: stickerBuffer })
       if (stickers.length >= 5) break // ← ENVÍA SOLO 5 STICKERS
