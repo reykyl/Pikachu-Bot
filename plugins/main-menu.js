@@ -2,63 +2,63 @@ import { xpRange } from '../lib/levelling.js'
 import ws from 'ws'
 
 const tags = {
-  'anime': 'ANIME',
-  'juegos': 'JUEGOS',
-  'main': 'INFO',
-  'ia': 'IA',
-  'search': 'SEARCH',
-  'game': 'GAME',
-  'serbot': 'SUB BOTS',
-  'rpg': 'RPG',
-  'sticker': 'STICKER',
-  'group': 'GROUPS',
-  'nable': 'ON / OFF',
-  'premium': 'PREMIUM',
-  'downloader': 'DOWNLOAD',
-  'tools': 'TOOLS',
-  'fun': 'FUN',
-  'nsfw': 'NSFW',
-  'cmd': 'DATABASE',
-  'owner': 'OWNER',
-  'audio': 'AUDIOS',
-  'advanced': 'ADVANCED',
-  'weather': 'WEATHER',
-  'news': 'NEWS',
-  'finance': 'FINANCE',
-  'education': 'EDUCATION',
-  'health': 'HEALTH',
-  'entertainment': 'ENTERTAINMENT',
-  'sports': 'SPORTS',
-  'travel': 'TRAVEL',
-  'food': 'FOOD',
-  'shopping': 'SHOPPING',
-  'productivity': 'PRODUCTIVITY',
-  'social': 'SOCIAL',
-  'security': 'SECURITY',
-  'custom': 'CUSTOM'
+  anime: 'ANIME',
+  juegos: 'JUEGOS',
+  main: 'INFO',
+  ia: 'IA',
+  search: 'SEARCH',
+  game: 'GAME',
+  serbot: 'SUB BOTS',
+  rpg: 'RPG',
+  sticker: 'STICKER',
+  group: 'GROUPS',
+  nable: 'ON / OFF',
+  premium: 'PREMIUM',
+  downloader: 'DOWNLOAD',
+  tools: 'TOOLS',
+  fun: 'FUN',
+  nsfw: 'NSFW',
+  cmd: 'DATABASE',
+  owner: 'OWNER',
+  audio: 'AUDIOS',
+  advanced: 'ADVANCED',
+  weather: 'WEATHER',
+  news: 'NEWS',
+  finance: 'FINANCE',
+  education: 'EDUCATION',
+  health: 'HEALTH',
+  entertainment: 'ENTERTAINMENT',
+  sports: 'SPORTS',
+  travel: 'TRAVEL',
+  food: 'FOOD',
+  shopping: 'SHOPPING',
+  productivity: 'PRODUCTIVITY',
+  social: 'SOCIAL',
+  security: 'SECURITY',
+  custom: 'CUSTOM'
 }
 
 let handler = async (m, { conn }) => {
   try {
     const userId = m.mentionedJid?.[0] || m.sender
-    const user = global.db.data.users[userId]
+    const user = global.db.data.users[userId] || {}
     const name = await conn.getName(userId)
     const mode = global.opts["self"] ? "Privado" : "Público"
     const totalCommands = Object.keys(global.plugins).length
     const totalreg = Object.keys(global.db.data.users).length
     const uptime = clockString(process.uptime() * 1000)
 
-      const users = [...new Set([...global.conns.filter((conn) => conn.user && conn.ws.socket && conn.ws.socket.readyState !== ws.CLOSED).map((conn) => conn)])];
+    const { exp = 0, level = 0 } = user
+    const { min, xp, max } = xpRange(level, global.multiplier || 1)
 
-    const { exp, level } = user
-    const { min, xp, max } = xpRange(level, global.multiplier)
-
-    const help = Object.values(global.plugins).filter(p => !p.disabled).map(p => ({
-      help: Array.isArray(p.help) ? p.help : (p.help ? [p.help] : []),
-      tags: Array.isArray(p.tags) ? p.tags : (p.tags ? [p.tags] : []),
-      limit: p.limit,
-      premium: p.premium
-    }))
+    const help = Object.values(global.plugins)
+      .filter(p => !p.disabled)
+      .map(p => ({
+        help: Array.isArray(p.help) ? p.help : (p.help ? [p.help] : []),
+        tags: Array.isArray(p.tags) ? p.tags : (p.tags ? [p.tags] : []),
+        limit: p.limit,
+        premium: p.premium
+      }))
 
     let menuText = `
 ╭════〔 ⚡ 𝙋𝙄𝙆𝘼𝘾𝙃𝙐 - 𝘽𝙊𝙏 ⚡ 〕════╮
@@ -75,25 +75,28 @@ ${readMore}
 
     for (let tag in tags) {
       const comandos = help.filter(menu => menu.tags.includes(tag))
-      if (comandos.length === 0) continue
+      if (!comandos.length) continue
 
       menuText += `\n╭─🧃 *${tags[tag]}* ${getRandomEmoji()}\n`
-      menuText += comandos.map(menu => menu.help.map(cmd =>
-        `│ ✦ ${cmd}${menu.limit ? ' ◜⭐◞' : ''}${menu.premium ? ' ◜🪪◞' : ''}`
-      ).join('\n')).join('\n')
+      menuText += comandos.map(menu =>
+        menu.help.map(cmd =>
+          `│ ✦ ${cmd}${menu.limit ? ' ◜⭐◞' : ''}${menu.premium ? ' ◜🪪◞' : ''}`
+        ).join('\n')
+      ).join('\n')
       menuText += `\n╰────────────────────────────╯`
     }
 
-    menuText += `\n\n*👑 © Powered by Deylin - ${botname}*`
+    menuText += `\n\n*👑 © Powered by Deylin - Pikachu Bot*`
 
-    const imageUrl = [ 
-  'https://kirito-bot-md.vercel.app/IMG-20250606-WA0167.jpg',
-  'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/pika.jpg',
-  'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/pikay.jpg',
-  'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/pikachu.jpg',
-  'https://kirito-bot-md.vercel.app/catalogo.jpg'
-];
-const selectedImage = imageUrl[Math.floor(Math.random() * imageUrl.length)];
+    const imageUrl = [
+      'https://kirito-bot-md.vercel.app/IMG-20250606-WA0167.jpg',
+      'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/pika.jpg',
+      'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/pikay.jpg',
+      'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/pikachu.jpg',
+      'https://kirito-bot-md.vercel.app/catalogo.jpg'
+    ]
+    const selectedImage = imageUrl[Math.floor(Math.random() * imageUrl.length)]
+
     await m.react('👑')
 
     await conn.sendMessage(m.chat, {
@@ -101,34 +104,26 @@ const selectedImage = imageUrl[Math.floor(Math.random() * imageUrl.length)];
       contextInfo: {
         mentionedJid: [m.sender],
         isForwarded: true,
-        forwardedNewsletterMessageInfo: {
-          newsletterJid: channelRD.id,
-          newsletterName: channelRD.name,
-          serverMessageId: -1,
-        },
         forwardingScore: 999,
         externalAdReply: {
-          title: textbot,
-         // body: dev,
+          title: "📋 Menú general de comandos",
           thumbnailUrl: selectedImage,
-         // sourceUrl: redes,
           mediaType: 1,
           showAdAttribution: true,
-          renderLargerThumbnail: true,
-        },
-      },
+          renderLargerThumbnail: true
+        }
+      }
     }, { quoted: m })
 
   } catch (e) {
+    console.error(e)
     conn.reply(m.chat, '❎ Lo sentimos, el menú tiene un error.', m)
-    throw e
   }
 }
 
-
-handler.help = ['menu', 'menú'];
-handler.tags = ['main'];
-handler.command = ['menú', 'menu']; 
+handler.help = ['menu', 'menú']
+handler.tags = ['main']
+handler.command = ['menú', 'menu']
 handler.register = true
 
 export default handler
