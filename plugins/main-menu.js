@@ -106,7 +106,7 @@ ${readMore}
         isForwarded: true,
         forwardingScore: 999,
         externalAdReply: {
-          title: "📋 Menú general de comandos",
+          title: dev,
           thumbnailUrl: selectedImage,
           mediaType: 1,
           showAdAttribution: true,
