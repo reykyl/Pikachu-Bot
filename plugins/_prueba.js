@@ -1,4 +1,5 @@
 import fetch from 'node-fetch'
+import sharp from 'sharp'
 import { addExif } from '../lib/sticker.js'
 
 let handler = async (m, { conn, text, command }) => {
@@ -12,16 +13,23 @@ let handler = async (m, { conn, text, command }) => {
     if (!data.estado || !Array.isArray(data.resultados)) throw `⚠️ Respuesta inválida de la API.`
 
     const stickers = []
+
     for (let s of data.resultados) {
       const url = s.thumbnail
       if (!url || !url.startsWith('http')) continue
 
-      const buffer = await fetch(url).then(res => res.buffer())
+      // Obtener imagen como buffer
+      const imgBuffer = await fetch(url).then(res => res.buffer())
 
-      // Agregar Exif para que sea reconocido como parte de un pack
-      const webpWithExif = await addExif(buffer, text, 'pikachu')
+      // Convertir a webp
+      const webpBuffer = await sharp(imgBuffer)
+        .webp({ lossless: true })
+        .toBuffer()
 
-      stickers.push({ sticker: webpWithExif })
+      // Agregar exif
+      const stickerBuffer = await addExif(webpBuffer, text, 'Kirito-Bot')
+
+      stickers.push({ sticker: stickerBuffer })
       if (stickers.length >= 10) break
     }
 
