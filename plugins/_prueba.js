@@ -13,7 +13,13 @@ let handler = async (m, { conn, text, command }) => {
   if (!text) return m.reply(`✳️ Escribe una palabra para buscar stickers\n\nEjemplo:\n*${command} gato*`)
 
   try {
-  const res = await fetch(`https://www.sticker.ly/search?q=${encodeURIComponent(text)}`)
+  const res = await fetch(`https://www.sticker.ly/search?q=${encodeURIComponent(text)}`, {
+  headers: {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9',
+    'Accept-Language': 'en-US,en;q=0.9'
+  }
+})
   const html = await res.text()
   const $ = cheerio.load(html)
 
