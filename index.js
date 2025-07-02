@@ -14,9 +14,6 @@ import {spawn} from 'child_process'
 import lodash from 'lodash'
 //import { pikaJadiBot } from './plugins/jadibot-serbot.js';
 import { sendAlbumMessage } from './lib/sendAlbumMessage.js'
-conn.sendAlbumMessage = function (jid, messages, quoted) {
-  return sendAlbumMessage(this, jid, messages, quoted)
-}
 import chalk from 'chalk'
 import syntaxerror from 'syntax-error'
 import {tmpdir} from 'os'
@@ -41,7 +38,9 @@ import NodeCache from 'node-cache'
 const {CONNECTING} = ws
 const {chain} = lodash
 const PORT = process.env.PORT || process.env.SERVER_PORT || 3000
-
+conn.sendAlbumMessage = function (jid, messages, quoted) {
+  return sendAlbumMessage(this, jid, messages, quoted)
+}
 //const yuw = dirname(fileURLToPath(import.meta.url))
 //let require = createRequire(megu)
 let { say } = cfonts
