@@ -101,7 +101,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
           //body: "¡Pika Pikachu-bot! El bot eléctrico que necesitas.",
          // mediaType: 1,
           //previewType: 0,
-          mediaUrl: url,
+         // mediaUrl: url,
        //   sourceUrl: url,
           thumbnail: thumb,
          // renderLargerThumbnail: true
