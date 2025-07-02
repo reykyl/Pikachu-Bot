@@ -12,15 +12,13 @@ let handler = async (m, { conn, text, command }) => {
 
     const paquete = []
 
-    for (let i = 0; i < data.resultados.length; i++) {
-      let s = data.resultados[i]
-      if (!s.thumbnail || s.url.includes('undefined')) continue
+    for (let i = 0; i < data.resultados.length && paquete.length < 10; i++) {
+      const s = data.resultados[i]
+      if (!s.thumbnail || !s.thumbnail.startsWith('http')) continue
 
       paquete.push({
-        image: { url: s.thumbnail } // 👈 sin caption
+        image: { url: s.thumbnail }
       })
-
-      if (paquete.length >= 10) break // 👈 solo 10 stickers por paquete (WhatsApp límite recomendado)
     }
 
     if (!paquete.length) return m.reply('⚠️ No se encontraron stickers válidos.')
