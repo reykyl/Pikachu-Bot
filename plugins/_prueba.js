@@ -1,53 +1,27 @@
-import fetch from 'node-fetch';
-import FormData from 'form-data';
+let handler = async (m, { conn, text, command }) => {
+  if (!text) throw `✳️ Escribe una palabra para buscar stickers.\n\nEjemplo:\n${command} gato`
 
-let handler = async (m, { conn, usedPrefix, command }) => {
-  if (!m.quoted || !m.quoted.fileSha256) {
-    return m.reply(`📸 Responde a una imagen con *${usedPrefix + command}* para convertirla en estilo animado.`);
+  let res = await fetch(`https://opendrip-api.onrender.com/api/sticker?q=${encodeURIComponent(text)}`)
+  if (!res.ok) throw '❌ No se pudo conectar con la API.'
+  let data = await res.json()
+
+  if (!data.estado || !data.resultados.length) throw '⚠️ No se encontraron stickers.'
+
+  let paquete = []
+
+  for (let i = 0; i < Math.min(10, data.resultados.length); i++) {
+    let sticker = data.resultados[i]
+    paquete.push({
+      image: { url: sticker.thumbnail },
+      caption: `🎨 ${sticker.nombre}\n👤 ${sticker.autor || 'Desconocido'}\n🔗 ${sticker.url}`
+    })
   }
 
-  let mime = m.quoted.mimetype || '';
-  if (!/image\/(jpe?g|png)/.test(mime)) {
-    return m.reply('🚫 Solo imágenes JPG o PNG son soportadas.');
-  }
+  await conn.sendAlbumMessage(m.chat, paquete, m)
+}
 
-  try {
-    const imgBuffer = await m.quoted.download();
+handler.command = ['flasticker', 'stickerpack', 'buscarsticker']
+handler.help = ['flasticker <palabra>']
+handler.tags = ['sticker']
 
-    m.reply('🎨 Procesando tu imagen en estilo cartoon...');
-
-    const form = new FormData();
-    form.append('image', imgBuffer, {
-      filename: 'image.jpg',
-      contentType: mime
-    });
-
-    const response = await fetch('https://api.deepai.org/api/toonify', {
-      method: 'POST',
-      headers: {
-        'Api-Key': 'quickstart-QUdJIGlzIGNvbWluZy4uLi4K',
-        ...form.getHeaders()
-      },
-      body: form
-    });
-
-    const json = await response.json();
-
-    if (!json || !json.output_url) {
-      console.log('🛑 Error DeepAI:', json);
-      throw json.err || 'No se pudo obtener la imagen.';
-    }
-
-    await conn.sendFile(m.chat, json.output_url, 'toonify.jpg', '✨ Aquí está tu imagen estilo cartoon.', m);
-
-  } catch (e) {
-    console.error('❌ Error Toonify:', e);
-    m.reply('❌ Ocurrió un error al convertir la imagen:\n\n' + e.toString());
-  }
-};
-
-handler.help = ['toon', 'cartoon'];
-handler.tags = ['ai', 'fun'];
-handler.command = /^(toon|cartoon)$/i;
-
-export default handler;
+export default handler
