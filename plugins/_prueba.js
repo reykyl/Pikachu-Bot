@@ -8,30 +8,19 @@ let handler = async (m, { conn, text, command }) => {
     if (!res.ok) throw `❌ No se pudo conectar con la API. Código HTTP: ${res.status}`
 
     const data = await res.json()
+    if (!data.estado || !Array.isArray(data.resultados)) throw `⚠️ Respuesta inválida de la API.`
 
-    if (!data.estado || !Array.isArray(data.resultados)) {
-      throw `⚠️ Respuesta inválida de la API.\n\n${JSON.stringify(data, null, 2)}`
-    }
-
-    const paquete = []
-
-    for (let i = 0; i < data.resultados.length && paquete.length < 10; i++) {
-      const s = data.resultados[i]
+    let enviados = 0
+    for (let s of data.resultados) {
       const url = s.thumbnail
-
       if (!url || !url.startsWith('http')) continue
 
-      // Agrega solo la imagen, sin texto ni enlaces
-      paquete.push({ image: { url } })
+      await conn.sendMessage(m.chat, { sticker: { url } }, { quoted: m })
+      enviados++
+      if (enviados >= 10) break
     }
 
-    if (!paquete.length) throw '⚠️ No se encontraron stickers válidos.'
-
-    // Prueba con 1 imagen
-    //await conn.sendMessage(m.chat, paquete[0], { quoted: m })
-
-    // Si quieres enviar como paquete, descomenta esto cuando estés listo:
-     await conn.sendAlbumMessage(m.chat, paquete, m)
+    if (!enviados) throw '⚠️ No se encontraron stickers válidos.'
 
   } catch (err) {
     let msg = typeof err === 'string' ? err : (err.message || JSON.stringify(err))
