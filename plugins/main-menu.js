@@ -1,5 +1,5 @@
 import { xpRange } from '../lib/levelling.js'
-import ws from 'ws'
+import fetch from 'node-fetch'
 
 const tags = {
   anime: 'ANIME',
@@ -70,8 +70,7 @@ let handler = async (m, { conn }) => {
 │ 💾 *Comandos:* ${totalCommands}
 ╰════════════════════════════╯
 🎮 *📋 COMANDOS DISPONIBLES 📋* ⚡
-${readMore}
-`
+${readMore}`
 
     for (let tag in tags) {
       const comandos = help.filter(menu => menu.tags.includes(tag))
@@ -97,32 +96,23 @@ ${readMore}
     ]
     const selectedImage = imageUrl[Math.floor(Math.random() * imageUrl.length)]
 
+    
+    const res = await fetch(selectedImage)
+    const imageBuffer = await res.buffer()
+
+    
     await m.react('👑')
 
-    /*await conn.sendMessage(m.chat, {
-      text: menuText,
+    
+    await conn.sendMessage(m.chat, {
+      image: imageBuffer,
+      caption: menuText,
       contextInfo: {
         mentionedJid: [m.sender],
         isForwarded: true,
-        forwardingScore: 999,
-        externalAdReply: {
-          //title: dev,
-          image: selectedImage,
-        //  mediaType: 1,
-         // showAdAttribution: true,
-        //  renderLargerThumbnail: true
-        }
+        forwardingScore: 999
       }
-    }, { quoted: m })*/
-await conn.sendMessage(m.chat, {
-  image: selectedImage, // puede ser un buffer o una URL https
-  caption: menuText,
-  contextInfo: {
-    mentionedJid: [m.sender],
-    isForwarded: true,
-    forwardingScore: 999
-  }
-}, { quoted: m });
+    }, { quoted: m })
 
   } catch (e) {
     console.error(e)
