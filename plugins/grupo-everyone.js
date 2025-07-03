@@ -37,7 +37,9 @@ let handler = async (m, { conn, text, participants, groupMetadata }) => {
     }
   }
   
-  handler.command = ['everyone']
+  handler.command = ['everyone', 'tagtext', 'tagt']
+  handler.help = ['everyone', 'tagtext', 'tagt']
+  handler.tags = ['grupo']
   handler.admin = true
   handler.group = true
   
