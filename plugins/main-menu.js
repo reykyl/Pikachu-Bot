@@ -106,11 +106,11 @@ ${readMore}
         isForwarded: true,
         forwardingScore: 999,
         externalAdReply: {
-          title: dev,
+          //title: dev,
           thumbnailUrl: selectedImage,
-          mediaType: 1,
-          showAdAttribution: true,
-          renderLargerThumbnail: true
+        //  mediaType: 1,
+         // showAdAttribution: true,
+        //  renderLargerThumbnail: true
         }
       }
     }, { quoted: m })
