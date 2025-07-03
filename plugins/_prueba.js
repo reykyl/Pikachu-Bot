@@ -13,7 +13,7 @@ let handler = async (m, { conn, args, command, usedPrefix }) => {
       return m.reply('❌ No se encontró ningún resultado.');
     }
 
-    const song = json.resultado[0]; // Primer resultado
+    const song = json.resultado[0];
     const { titulo, duracion, miniatura, canal, publicado, url } = song;
 
     await conn.sendMessage(m.chat, {
@@ -25,14 +25,14 @@ let handler = async (m, { conn, args, command, usedPrefix }) => {
     const mp3Res = await fetch(mp3Url);
     const mp3Data = await mp3Res.json();
 
-    if (!mp3Data?.status || !mp3Data.result?.url) {
+    if (!mp3Data?.status || !mp3Data?.audio?.download?.url) {
       return m.reply('❌ No se pudo obtener el audio desde tu API.');
     }
 
     await conn.sendMessage(m.chat, {
-      audio: { url: mp3Data.result.url },
+      audio: { url: mp3Data.audio.download.url },
       mimetype: 'audio/mpeg',
-      fileName: `${titulo}.mp3`,
+      fileName: mp3Data.audio.download.filename || `${titulo}.mp3`,
     }, { quoted: m });
 
   } catch (e) {
