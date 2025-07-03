@@ -8,7 +8,7 @@ let handler = async (m, { conn, text, command }) => {
     const data = await response.json();
 
     if (!data.status || !data.results || data.results.length === 0) {
-      return m.reply('${msm} No se encontraron resultados.');
+      return m.reply(`${msm} No se encontraron resultados.`);
     }
 
     let texto = `🔎 *Resultados de búsqueda para:* ${text}\n\n`;
