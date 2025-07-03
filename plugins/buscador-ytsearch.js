@@ -7,25 +7,31 @@ let handler = async (m, { conn, text, command }) => {
     const response = await fetch(`https://ytumode-api.vercel.app/api/search?q=${encodeURIComponent(text)}`);
     const data = await response.json();
 
-    if (!data.status || !data.results || data.results.length === 0) {
-      return m.reply(`${msm} No se encontraron resultados.`);
+    if (!data.status || !data.resultado || data.resultado.length === 0) {
+      return m.reply(`❌ No se encontraron resultados para *${text}*.`);
     }
 
-    let texto = `🔎 *Resultados de búsqueda para:* ${text}\n\n`;
-    for (let i = 0; i < data.results.length; i++) {
-      let vid = data.results[i];
-      texto += `
-> 🎬 *${vid.title}*
-> 👤 ${vid.author}
-> 🕒 ${vid.timestamp} 
-> 👁 ${vid.views.toLocaleString()}
-> 🔗 ${vid.url}\n\n-------------------------`;
+    const resultados = data.resultado.slice(0, 10); // limitar a 10
+
+    let mensaje = `🔎 *Resultados de búsqueda para:* ${text}\n\n`;
+
+    for (let i = 0; i < resultados.length; i++) {
+      const vid = resultados[i];
+      mensaje += `
+╭─────────────
+│🎬 *${vid.titulo}*
+│📺 ${vid.canal}
+│⏱️ ${vid.duracion} | 🕒 ${vid.publicado || "Fecha desconocida"}
+│👁️ ${vid.vistas.toLocaleString()} vistas
+│🔗 ${vid.url}
+╰─────────────\n`;
     }
 
-    conn.sendMessage(m.chat, { text: texto.trim() }, { quoted: m });
+    conn.sendMessage(m.chat, { text: mensaje.trim() }, { quoted: m });
+
   } catch (e) {
     console.error(e);
-    m.reply(`❌ Ocurrió un error al buscar.\n\n${e.message}`);
+    m.reply(`❌ Error al buscar:\n${e.message}`);
   }
 };
 
