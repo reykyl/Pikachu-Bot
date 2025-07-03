@@ -1,88 +1,44 @@
+// comando: .applemusic Bad Bunny
+
 import fetch from 'node-fetch'
-import fs from 'fs'
-import path from 'path'
-import sharp from 'sharp'
-import ffmpeg from 'fluent-ffmpeg'
-import { tmpdir } from 'os'
-import { addExif } from '../lib/sticker.js'
 
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
-
-let handler = async (m, { conn, text, command }) => {
-  if (!text) return m.reply(`✳️ Escribe una palabra para buscar stickers\n\nEjemplo:\n${command} gato`)
+let handler = async (m, { conn, args, command, usedPrefix }) => {
+  if (!args[0]) return m.reply(`🎵 Escribe el nombre de la canción.\n\nEjemplo:\n${usedPrefix + command} Bad Bunny - Tití me preguntó`);
 
   try {
-    // 1. Llamar a la API externa que devuelve resultados de sticker.ly
-    const apiUrl = `https://tuapi.com/stickerly?q=${encodeURIComponent(text)}`
-    const res = await fetch(apiUrl)
-    if (!res.ok) throw `Error en API externa: ${res.status} ${res.statusText}`
-    const data = await res.json()
+    let query = args.join(" ");
+    let res = await fetch(`https://ytumode-api.vercel.app/api/search?q=${encodeURIComponent(query)}`);
+    let json = await res.json();
 
-    if (!data || !Array.isArray(data.results) || data.results.length === 0)
-      return m.reply('⚠️ No se encontraron stickers para esa búsqueda.')
+    if (!json?.status || !json.result?.[0]) throw '❌ No se encontró ningún resultado';
 
-    // 2. Tomar solo los primeros 3 resultados
-    const items = data.results.slice(0, 3)
+    let song = json.result[0];
+    let { title, url, duration, thumbnail } = song;
 
-    // 3. Descargar y convertir cada resultado a sticker webp
-    const stickers = []
+    await conn.sendMessage(m.chat, {
+      image: { url: thumbnail },
+      caption: `🎵 *Título:* ${title}\n⏱️ *Duración:* ${duration}\n📥 *Descargando audio...*`,
+    }, { quoted: m });
 
-    for (const item of items) {
-      // item debe tener { type: 'image'|'video', url: '...' }
-      const tmpFile = path.join(tmpdir(), `${Date.now()}-${Math.random()}`)
-      const webpFile = `${tmpFile}.webp`
+    // Ahora descargar el audio en mp3
+    let downloadRes = await fetch(`https://mode-api-sigma.vercel.app/api/mp3?url=${encodeURIComponent(url)}`);
+    let data = await downloadRes.json();
+    if (!data?.status) throw '❌ Error al obtener el audio';
 
-      try {
-        if (item.type === 'video') {
-          await new Promise((resolve, reject) => {
-            ffmpeg(item.url)
-              .inputOptions('-t', '5')
-              .outputOptions([
-                '-vf', 'scale=512:512:force_original_aspect_ratio=decrease',
-                '-ss', '0',
-                '-vcodec', 'libwebp',
-                '-loop', '0',
-                '-preset', 'default',
-                '-an',
-                '-vsync', '0',
-                '-s', '512:512'
-              ])
-              .save(webpFile)
-              .on('end', resolve)
-              .on('error', reject)
-          })
-        } else {
-          const imgRes = await fetch(item.url)
-          const buffer = await imgRes.buffer()
-          await sharp(buffer)
-            .resize(512, 512, { fit: 'inside' })
-            .webp()
-            .toFile(webpFile)
-        }
-
-        const stickerBuffer = await addExif(fs.readFileSync(webpFile), 'Sticker Pack', 'Kirito-Bot')
-        stickers.push({ sticker: stickerBuffer })
-        fs.unlinkSync(webpFile)
-
-      } catch (e) {
-        await m.reply(`⚠️ Error al procesar un sticker:\n${e.message || e}`)
-      }
-    }
-
-    // 4. Enviar los stickers (uno por uno)
-    for (const s of stickers) {
-      await conn.sendMessage(m.chat, { sticker: s.sticker }, { quoted: m })
-      await sleep(400)
-    }
+    await conn.sendMessage(m.chat, {
+      audio: { url: data.result.url },
+      mimetype: 'audio/mpeg',
+      fileName: `${title}.mp3`
+    }, { quoted: m });
 
   } catch (e) {
-    console.error(e)
-    await m.reply(`❌ Error al buscar o enviar stickers:\n${e.message || e}`)
+    console.log(e);
+    m.reply('❌ Ocurrió un error al buscar o descargar la canción.');
   }
-}
+};
 
-handler.command = /^stickerly$/i
-handler.tags = ['sticker']
-handler.help = ['stickerly <texto>']
+handler.help = ['applemusic'].map(v => v + ' <texto>');
+handler.tags = ['downloader'];
+handler.command = /^applemusic$/i;
 
-export default handler
+export default handler;
