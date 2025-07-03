@@ -9,16 +9,16 @@ let handler = async (m, { conn, args, command, usedPrefix }) => {
     const res = await fetch(searchUrl);
     const json = await res.json();
 
-    if (!json?.estado || !json.resultado?.length) {
+    if (!json?.status || !json.resultado?.length) {
       return m.reply('❌ No se encontró ningún resultado.');
     }
 
     const song = json.resultado[0]; // Primer resultado
-    const { titulo, duracion, miniatura, url } = song;
+    const { titulo, duracion, miniatura, canal, publicado, url } = song;
 
     await conn.sendMessage(m.chat, {
       image: { url: miniatura },
-      caption: `🎵 *Título:* ${titulo}\n⏱️ *Duración:* ${duracion}\n🔗 *Fuente:* YouTube\n\n📥 *Descargando audio...*`,
+      caption: `🎧 *${titulo}*\n📺 Canal: ${canal}\n🕒 Duración: ${duracion}\n📅 Publicado: ${publicado}\n\n🎵 Descargando audio...`,
     }, { quoted: m });
 
     const mp3Url = `https://mode-api-sigma.vercel.app/api/mp3?url=${encodeURIComponent(url)}`;
