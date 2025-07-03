@@ -99,7 +99,7 @@ ${readMore}
 
     await m.react('👑')
 
-    await conn.sendMessage(m.chat, {
+    /*await conn.sendMessage(m.chat, {
       text: menuText,
       contextInfo: {
         mentionedJid: [m.sender],
@@ -113,7 +113,16 @@ ${readMore}
         //  renderLargerThumbnail: true
         }
       }
-    }, { quoted: m })
+    }, { quoted: m })*/
+await conn.sendMessage(m.chat, {
+  image: selectedImage, // puede ser un buffer o una URL https
+  caption: menuText,
+  contextInfo: {
+    mentionedJid: [m.sender],
+    isForwarded: true,
+    forwardingScore: 999
+  }
+}, { quoted: m });
 
   } catch (e) {
     console.error(e)
