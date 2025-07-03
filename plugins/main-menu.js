@@ -107,7 +107,7 @@ ${readMore}
         forwardingScore: 999,
         externalAdReply: {
           //title: dev,
-          thumbnailUrl: selectedImage,
+          imagen: selectedImage,
         //  mediaType: 1,
          // showAdAttribution: true,
         //  renderLargerThumbnail: true
