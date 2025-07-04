@@ -52,7 +52,7 @@ let handler = async (m, { conn }) => {
     businessOwnerJid: "50433191934@s.whatsapp.net"
   }
 
-  const canal = '120363229276610692@newsletter'; // 🟡 Reemplaza por tu canal real
+  const canal = '120363403119941672@newsletter'; // 🟡 Reemplaza por tu canal real
 
   try {
     // Enviar al canal
