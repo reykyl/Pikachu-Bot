@@ -7,7 +7,7 @@ let handler = async (m, { conn }) => {
     const productMessage = {
       product: {
         productImage: {
-          url: 'https://example.com/image.jpg' // Pon aquí la URL pública de la imagen de tu producto
+          url: 'https://files.catbox.moe/b0woxx.jpg'
         },
         title: "Producto Ejemplo",
         description: "Descripción breve del producto",
