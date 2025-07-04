@@ -5,7 +5,7 @@ let handler = async (m, { conn }) => {
     const productMessage = {
       product: {
         productImage: {
-          url: 'https://files.catbox.moe/b0woxx.jpg'
+          url: icono
         },
         title: "Pikachu-bot - Development by Deylin ",
         description: " Alquila o compra Pikachu Bot para tus grupos.",
