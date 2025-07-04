@@ -37,7 +37,7 @@ export default handler;
 
 
 let handler = async (m, { conn }) => {
-  const canal = '120363229276610692@newsletter'; // Reemplaza por tu canal real
+  const canal = '120363403119941672@newsletter'; // Reemplaza por tu canal real
 
   try {
     await conn.sendMessage(canal, {
