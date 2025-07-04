@@ -8,7 +8,7 @@ let handler = async (m, { conn }) => {
           productImage: {
             url: 'https://files.catbox.moe/b0woxx.jpg'
           },
-          title: 'Pikachu-bot - Development by Deylin',
+          title: icono,
           description: 'Alquila o compra Pikachu Bot para tus grupos.',
           currencyCode: 'USD',
           priceAmount1000: 5000, // 5.00 USD (en milésimas)
