@@ -1,35 +1,35 @@
-import puppeteer from 'puppeteer';
+import axios from 'axios';
+import { CookieJar } from 'tough-cookie';
+import { wrapper } from 'axios-cookiejar-support';
 
-let handler = async (m, { conn, text, command }) => {
+let handler = async (m, { conn, text }) => {
   if (!text || !text.includes('youtube.com/watch')) {
     return m.reply('❌ Enlace inválido. Usa:\n.cookie https://www.youtube.com/watch?v=VIDEO_ID');
   }
 
-  m.reply('🔄 Obteniendo cookies del video...');
+  m.reply('🔄 Obteniendo cookies...');
 
   try {
-    const cookies = await getYouTubeCookies(text);
-    const cookieStr = cookies.map(c => `${c.name}=${c.value}`).join('; ');
+    const jar = new CookieJar();
+    const client = wrapper(axios.create({ jar }));
+
+    await client.get(text, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
+      }
+    });
+
+    const cookies = await jar.getCookies(text);
+    const cookieStr = cookies.map(c => `${c.key}=${c.value}`).join('; ');
+
     await conn.sendMessage(m.chat, {
       text: `✅ Cookies obtenidas:\n\`\`\`\n${cookieStr}\n\`\`\``
     }, { quoted: m });
+
   } catch (e) {
-    await m.reply(`⚠️ Error al obtener cookies:\n${e.message}`);
+    m.reply(`⚠️ Error al obtener cookies:\n${e.message}`);
   }
 };
-
-async function getYouTubeCookies(url) {
-  const browser = await puppeteer.launch({
-    headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
-  });
-
-  const page = await browser.newPage();
-  await page.goto(url, { waitUntil: 'domcontentloaded' });
-  const cookies = await page.cookies();
-  await browser.close();
-  return cookies;
-}
 
 handler.help = ['cookie <url>'];
 handler.tags = ['tools'];
