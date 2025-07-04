@@ -27,7 +27,7 @@ let handler = async (m, { conn }) => {
 }
 
 handler.help = ['comprar', 'producto', 'compra']
-handler.command = ['comprar', 'producto', 'compra', 'buy']
+handler.command = ['comprar', 'producto', 'compra', 'buys']
 handler.tags = ['ventas']
 handler.register = true
 
