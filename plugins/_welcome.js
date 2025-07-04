@@ -6,7 +6,6 @@ import { WAMessageStubType } from '@whiskeysockets/baileys'
 import fetch from 'node-fetch'
 
 const GRUPO_STAFF = '120363402481697721@g.us' // ← ID del grupo del staff
-const CHAT_PRIVADO = '50433191934@s.whatsapp.net' // ← Chat privado especial
 
 async function obtenerPais(numero) {
   try {
@@ -36,45 +35,50 @@ export async function before(m, { conn, participants, groupMetadata }) {
 
   try { ppUser = await conn.profilePictureUrl(who, 'image') } catch {}
 
-  // Frases genéricas (públicas)
   const frasesBienvenida = [
     "¡Pika Pika! Bienvenido al grupo.",
-    "¡Un rayo de energía ha llegado al grupo!",
-    "Pikachu dice que este grupo ahora es 100% más eléctrico ⚡",
-    "¡Esperamos que la pases genial, entrenador!",
-    "Bienvenido al equipo, ¡que empiece la aventura Pokémon!"
+    "¡Un nuevo rayo de energía se une a nosotros!",
+    "Pikachu está feliz de tenerte aquí ⚡",
+    "¡Que comience la aventura, entrenador!",
+    "Este grupo ahora tiene más chispa con tu llegada."
   ];
   const frasesDespedida = [
     "Pikachu te dice adiós con una descarga de cariño.",
-    "Otro entrenador deja el grupo... ¡Buena suerte!",
-    "¡Hasta la próxima, no olvides tus Pokéballs!",
-    "El grupo se queda con menos voltaje ⚡",
+    "Un entrenador deja el grupo... ¡Suerte!",
+    "¡Hasta la próxima! Recuerda tus Pokéballs.",
+    "El grupo pierde voltaje sin ti ⚡",
     "Pikachu te extrañará 🥺"
   ];
-
-  const fraseRandomBienvenida = frasesBienvenida[Math.floor(Math.random() * frasesBienvenida.length)];
-  const fraseRandomDespedida = frasesDespedida[Math.floor(Math.random() * frasesDespedida.length)];
 
   if (!chat.welcome) return;
 
   const enviarMensaje = async (tipo, frase) => {
     const texto = tipo === 'bienvenida' ? `
-*⚡─『 𝑩𝑰𝑬𝑵𝑽𝑬𝑵𝑰𝑫𝑶/𝑨 』─🧃*
+*🎉──『 𝑩𝑰𝑬𝑵𝑽𝑬𝑵𝑰𝑫𝑶/𝑨 』──⚡*
 👤 *Usuario:* ${taguser}
-🌍 *País:* ${pais}
+🌐 *País Detectado:* ${pais}
 💬 *Grupo:* *${groupMetadata.subject}*
-👥 *Miembros:* *${totalMembers + 1}*
-📅 *Fecha:* *${date}*
-⚡ *Mensaje:* ${frase}`.trim()
+👥 *Miembros Totales:* *${totalMembers + 1}*
+📆 *Fecha:* *${date}*
+
+🚀 *Mensaje de Bienvenida:*
+> ${frase}
+
+📲 Usa */menu* para descubrir lo que puedo hacer.
+🎮 ¡Disfruta y participa con respeto!`.trim()
     :
     `
-*⚡──『 𝑫𝑬𝑺𝑷𝑬𝑫𝑰𝑫𝑨 』──🧃*
+*👋──『 𝑫𝑬𝑺𝑷𝑬𝑫𝑰𝑫𝑨 』──⚡*
 👤 *Usuario:* ${taguser}
-🌍 *País:* ${pais}
+🌐 *País Detectado:* ${pais}
 💬 *Grupo:* *${groupMetadata.subject}*
-👥 *Miembros:* *${totalMembers - 1}*
-📅 *Fecha:* *${date}*
-⚡ *Mensaje:* ${frase}`.trim()
+👥 *Miembros Restantes:* *${totalMembers - 1}*
+📆 *Fecha:* *${date}*
+
+💔 *Mensaje de Despedida:*
+> ${frase}
+
+🕊️ Le deseamos lo mejor en su camino.`.trim();
 
     await conn.sendMessage(m.chat, {
       image: { url: ppUser },
@@ -83,31 +87,11 @@ export async function before(m, { conn, participants, groupMetadata }) {
     });
   };
 
-  // 👉 Chat privado personalizado
-  if (m.chat === CHAT_PRIVADO) {
-    if (m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD) {
-      await conn.sendMessage(m.chat, {
-        text: `🧃 Has sido agregado al chat privado de administración.\n👤 Usuario: ${taguser}`,
-        mentions: [who]
-      });
-    }
-    if (
-      m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_LEAVE ||
-      m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_REMOVE
-    ) {
-      await conn.sendMessage(m.chat, {
-        text: `👋 ${taguser} ha salido del chat privado.`,
-        mentions: [who]
-      });
-    }
-    return;
-  }
-
-  // 🛡️ Grupo del staff personalizado
   if (m.chat === GRUPO_STAFF) {
     const mensaje = m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD
-      ? `🛡️ Bienvenido al grupo del staff, ${taguser}. Aporta con responsabilidad.`
-      : `🛡️ El miembro del staff ${taguser} ha salido del grupo.`;
+      ? `🛡️ *Ingreso detectado en el grupo STAFF*\n👤 *Usuario:* ${taguser}\n📅 *Fecha:* ${date}\n\nBienvenido al equipo interno. Participa con responsabilidad.`
+      : `📤 *Salida del grupo STAFF*\n👤 *Usuario:* ${taguser}\n📅 *Fecha:* ${date}\n\nEste miembro ha dejado el grupo o fue removido.`;
+
     await conn.sendMessage(m.chat, {
       text: mensaje,
       mentions: [who]
@@ -117,12 +101,12 @@ export async function before(m, { conn, participants, groupMetadata }) {
 
   // 🌐 Público general
   if (m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD) {
-    await enviarMensaje('bienvenida', fraseRandomBienvenida);
+    await enviarMensaje('bienvenida', frasesBienvenida[Math.floor(Math.random() * frasesBienvenida.length)]);
   }
   if (
     m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_LEAVE ||
     m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_REMOVE
   ) {
-    await enviarMensaje('despedida', fraseRandomDespedida);
+    await enviarMensaje('despedida', frasesDespedida[Math.floor(Math.random() * frasesDespedida.length)]);
   }
 }
