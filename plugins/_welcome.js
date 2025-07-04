@@ -5,11 +5,6 @@
 import { WAMessageStubType } from '@whiskeysockets/baileys'
 import fetch from 'node-fetch'
 
-const icono = 'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/IMG-20250613-WA0194.jpg'
-const redes = 'https://whatsapp.com/channel/0029VbB46nl2ER6dZac6Nd1o'
-const textbot = 'Kirito-Bot-MD'
-const dev = 'Creado por Deylin'
-
 async function obtenerPais(numero) {
   try {
     let number = numero.replace("@s.whatsapp.net", "");
@@ -18,6 +13,7 @@ async function obtenerPais(numero) {
 
     if (data && data.pais) return data.pais;
     if (data && data.bandera && data.nombre) return `${data.bandera} ${data.nombre}`;
+
     return "🌐 Desconocido";
   } catch (e) {
     return "🌐 Desconocido";
@@ -26,6 +22,7 @@ async function obtenerPais(numero) {
 
 export async function before(m, { conn, participants, groupMetadata }) {
   if (!m.messageStubType || !m.isGroup) return;
+//  if (m.chat === "120363402481697721@g.us") return;
 
   const who = m.messageStubParameters?.[0];
   if (!who) return;
@@ -36,7 +33,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
   const date = new Date().toLocaleString("es-ES", { timeZone: "America/Mexico_City" });
 
   const pais = await obtenerPais(who);
-  let ppUser = icono;
+  let ppUser = global.icono
 
   try {
     ppUser = await conn.profilePictureUrl(who, 'image');
@@ -60,27 +57,6 @@ export async function before(m, { conn, participants, groupMetadata }) {
   const fraseRandomBienvenida = frasesBienvenida[Math.floor(Math.random() * frasesBienvenida.length)];
   const fraseRandomDespedida = frasesDespedida[Math.floor(Math.random() * frasesDespedida.length)];
 
-  const metadatos = {
-    contextInfo: {
-      isForwarded: true,
-      forwardedNewsletterMessageInfo: {
-        serverMessageId: 100
-      },
-      externalAdReply: {
-        showAdAttribution: true,
-        title: textbot,
-        body: dev,
-        mediaUrl: null,
-        description: null,
-        previewType: "PHOTO",
-        thumbnailUrl: icono,
-        sourceUrl: redes,
-        mediaType: 1,
-        renderLargerThumbnail: false
-      }
-    }
-  }
-
   if (chat.welcome) {
     if (m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD) {
       const bienvenida = `
@@ -95,8 +71,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
       await conn.sendMessage(m.chat, {
         image: { url: ppUser },
         caption: bienvenida,
-        mentions: [who],
-        ...metadatos
+        mentions: [who]
       });
     }
 
@@ -116,8 +91,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
       await conn.sendMessage(m.chat, {
         image: { url: ppUser },
         caption: despedida,
-        mentions: [who],
-        ...metadatos
+        mentions: [who]
       });
     }
   }
