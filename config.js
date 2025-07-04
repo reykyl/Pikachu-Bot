@@ -28,7 +28,7 @@ global.owner = [
 ['50433191934', '🔰 Creador 🔰', true],
 ['5217227584934', 'Angel', true],
 ['573001533523', 'BʀᴀʏᴀɴXD', true],
-['522202410659', 'Destroy', true],
+['5212202410659', 'Destroy', true],
 //['numero', 'nombre', true],
 ];
 
