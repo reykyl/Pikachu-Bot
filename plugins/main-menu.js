@@ -125,9 +125,9 @@ ${readMore}`
   }
 }
 
-handler.help = ['menu', 'menú']
+handler.help = ['menu', 'menú', 'help']
 handler.tags = ['main']
-handler.command = ['menú', 'menu']
+handler.command = ['menú', 'menu', 'help']
 handler.register = true
 
 export default handler
