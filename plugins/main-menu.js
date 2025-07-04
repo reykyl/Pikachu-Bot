@@ -105,19 +105,19 @@ ${readMore}`
 
     
     await conn.sendMessage(m.chat, {
-      image: imageBuffer,
-      caption: menuText,
-      contextInfo: {
-        mentionedJid: [m.sender],
-        isForwarded: true,
-        forwardingScore: 999
-        forwardedNewsletterMessageInfo: { 
-        newsletterJid: channelRD.id, 
-        newsletterName: channelRD.name, 
-        serverMessageId: 100,
-        }
-      }
-    }, { quoted: m })
+  image: imageBuffer,
+  caption: menuText,
+  contextInfo: {
+    mentionedJid: [m.sender],
+    isForwarded: true,
+    forwardingScore: 999,
+    forwardedNewsletterMessageInfo: { 
+      newsletterJid: channelRD.id, 
+      newsletterName: channelRD.name, 
+      serverMessageId: 100,
+    }
+  }
+}, { quoted: m })
 
   } catch (e) {
     console.error(e)
