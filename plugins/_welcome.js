@@ -31,6 +31,12 @@ export async function before(m, { conn, participants, groupMetadata }) {
   const totalMembers = participants.length;
   const date = new Date().toLocaleString("es-ES", { timeZone: "America/Mexico_City" });
   const pais = await obtenerPais(who);
+
+  
+  const participante = participants.find(p => p.id === who) || {};
+  const rol = participante.admin === 'superadmin' ? '👑 Superadmin' :
+              participante.admin === 'admin' ? '🛡️ Administrador' : '👤 Miembro';
+
   let ppUser = 'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/refs/heads/main/src/IMG-20250613-WA0194.jpg';
 
   try { ppUser = await conn.profilePictureUrl(who, 'image') } catch {}
@@ -87,37 +93,50 @@ export async function before(m, { conn, participants, groupMetadata }) {
     });
   };
 
+  
   if (m.chat === GRUPO_STAFF) {
-  const esIngreso = m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD;
+    const esIngreso = m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD;
+    const imagenStaff = 'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/staff-banner.jpg';
 
-  const mensajeStaff = esIngreso
-    ? `
-*🛡️──『 𝑵𝑼𝑬𝑽𝑶 𝑰𝑵𝑮𝑹𝑬𝑺𝑶 - 𝑺𝑻𝑨𝑭𝑭 』──⚙️*
+    const mensajeStaff = esIngreso
+      ? `
+*🛡️──『 NUEVO INGRESO AL STAFF 』──⚙️*
 👤 *Usuario:* ${taguser}
+🎖️ *Rol:* ${rol}
 🌐 *País Detectado:* ${pais}
-💬 *Grupo:* *${groupMetadata.subject}*
+🕐 *Fecha:* *${date}*
+📌 *Grupo Interno:* *${groupMetadata.subject}*
 👥 *Miembros Totales:* *${totalMembers + 1}*
-📅 *Fecha de ingreso:* *${date}*
 
-🔔 *Mensaje:* ¡Bienvenido al equipo! Usa tus privilegios con responsabilidad. Revisa los canales internos y las directrices del grupo.`.trim()
-    : `
-*📤──『 𝑺𝑨𝑳𝑰𝑫𝑨 𝑫𝑬𝑻𝑬𝑪𝑻𝑨𝑫𝑨 - 𝑺𝑻𝑨𝑭𝑭 』──⚠️*
+✅ *Estado:* Nuevo miembro ha sido integrado al equipo administrativo.
+
+
+⚠️ Usa tus privilegios con responsabilidad. ¡Bienvenido al equipo!
+`.trim()
+      : `
+*📤──『 SALIDA DE STAFF DETECTADA 』──⚠️*
 👤 *Usuario:* ${taguser}
+🎖️ *Rol:* ${rol}
 🌐 *País Detectado:* ${pais}
-💬 *Grupo:* *${groupMetadata.subject}*
+🕐 *Fecha:* *${date}*
+📌 *Grupo Interno:* *${groupMetadata.subject}*
 👥 *Miembros Restantes:* *${totalMembers - 1}*
-📅 *Fecha de salida:* *${date}*
 
-🕊️ *Mensaje:* Este miembro ya no forma parte del staff. Se ha registrado la salida para seguimiento.`.trim();
+❌ *Estado:* Se ha registrado la salida de un miembro del equipo.
 
-  await conn.sendMessage(m.chat, {
-    text: mensajeStaff,
-    mentions: [who]
-  });
-  return;
-}
 
-  // 🌐 Público general
+🕊️ Gracias por su tiempo y aportes mientras formó parte del staff.
+`.trim();
+
+    await conn.sendMessage(m.chat, {
+      image: { url: imagenStaff },
+      caption: mensajeStaff,
+      mentions: [who]
+    });
+    return;
+  }
+
+  
   if (m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD) {
     await enviarMensaje('bienvenida', frasesBienvenida[Math.floor(Math.random() * frasesBienvenida.length)]);
   }
