@@ -6,7 +6,7 @@ import { WAMessageStubType } from '@whiskeysockets/baileys'
 import fetch from 'node-fetch'
 
 const GRUPO_STAFF = '120363402481697721@g.us' // ← ID del grupo del staff
-const CHAT_PRIVADO = '5219991234567@s.whatsapp.net' // ← Chat privado especial
+const CHAT_PRIVADO = '50433191934@s.whatsapp.net' // ← Chat privado especial
 
 async function obtenerPais(numero) {
   try {
