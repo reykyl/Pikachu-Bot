@@ -1,31 +1,32 @@
-import axios from 'axios';
-import { CookieJar } from 'tough-cookie';
-import { wrapper } from 'axios-cookiejar-support';
+import fetch from 'node-fetch';
 
 let handler = async (m, { conn, text }) => {
-  if (!text || !text.includes('youtube.com/watch')) {
-    return m.reply('❌ Enlace inválido. Usa:\n.cookie https://www.youtube.com/watch?v=VIDEO_ID');
+  if (!text || !/^https?:\/\/(www\.)?youtube\.com\/watch\?v=/.test(text)) {
+    return m.reply('❌ Debes proporcionar un enlace válido de YouTube.\n\nEjemplo:\n.cookie https://www.youtube.com/watch?v=VIDEO_ID');
   }
 
-  m.reply('🔄 Obteniendo cookies...');
+  m.reply('🔄 Obteniendo cookies desde las cabeceras HTTP...');
 
   try {
-    const jar = new CookieJar();
-    const client = wrapper(axios.create({ jar }));
-
-    await client.get(text, {
+    const res = await fetch(text, {
+      method: 'GET',
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
+        'User-Agent': 'Mozilla/5.0',
+        'Accept': '*/*'
       }
     });
 
-    const cookies = await jar.getCookies(text);
-    const cookieStr = cookies.map(c => `${c.key}=${c.value}`).join('; ');
+    // Extraer cookies desde las cabeceras de respuesta
+    const rawCookies = res.headers.raw()['set-cookie'] || [];
+    if (rawCookies.length === 0) {
+      return m.reply('⚠️ No se encontraron cookies.');
+    }
+
+    const cookies = rawCookies.map(cookie => cookie.split(';')[0]).join('; ');
 
     await conn.sendMessage(m.chat, {
-      text: `✅ Cookies obtenidas:\n\`\`\`\n${cookieStr}\n\`\`\``
+      text: `✅ Cookies encontradas:\n\`\`\`\n${cookies}\n\`\`\``
     }, { quoted: m });
-
   } catch (e) {
     m.reply(`⚠️ Error al obtener cookies:\n${e.message}`);
   }
