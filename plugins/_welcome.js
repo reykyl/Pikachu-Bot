@@ -88,16 +88,34 @@ export async function before(m, { conn, participants, groupMetadata }) {
   };
 
   if (m.chat === GRUPO_STAFF) {
-    const mensaje = m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD
-      ? `🛡️ *Ingreso detectado en el grupo STAFF*\n👤 *Usuario:* ${taguser}\n📅 *Fecha:* ${date}\n\nBienvenido al equipo interno. Participa con responsabilidad.`
-      : `📤 *Salida del grupo STAFF*\n👤 *Usuario:* ${taguser}\n📅 *Fecha:* ${date}\n\nEste miembro ha dejado el grupo o fue removido.`;
+  const esIngreso = m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD;
 
-    await conn.sendMessage(m.chat, {
-      text: mensaje,
-      mentions: [who]
-    });
-    return;
-  }
+  const mensajeStaff = esIngreso
+    ? `
+*🛡️──『 𝑵𝑼𝑬𝑽𝑶 𝑰𝑵𝑮𝑹𝑬𝑺𝑶 - 𝑺𝑻𝑨𝑭𝑭 』──⚙️*
+👤 *Usuario:* ${taguser}
+🌐 *País Detectado:* ${pais}
+💬 *Grupo:* *${groupMetadata.subject}*
+👥 *Miembros Totales:* *${totalMembers + 1}*
+📅 *Fecha de ingreso:* *${date}*
+
+🔔 *Mensaje:* ¡Bienvenido al equipo! Usa tus privilegios con responsabilidad. Revisa los canales internos y las directrices del grupo.`.trim()
+    : `
+*📤──『 𝑺𝑨𝑳𝑰𝑫𝑨 𝑫𝑬𝑻𝑬𝑪𝑻𝑨𝑫𝑨 - 𝑺𝑻𝑨𝑭𝑭 』──⚠️*
+👤 *Usuario:* ${taguser}
+🌐 *País Detectado:* ${pais}
+💬 *Grupo:* *${groupMetadata.subject}*
+👥 *Miembros Restantes:* *${totalMembers - 1}*
+📅 *Fecha de salida:* *${date}*
+
+🕊️ *Mensaje:* Este miembro ya no forma parte del staff. Se ha registrado la salida para seguimiento.`.trim();
+
+  await conn.sendMessage(m.chat, {
+    text: mensajeStaff,
+    mentions: [who]
+  });
+  return;
+}
 
   // 🌐 Público general
   if (m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD) {
