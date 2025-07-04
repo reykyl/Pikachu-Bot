@@ -11,7 +11,7 @@ let handler = async (m, { conn }) => {
         description: " Alquila o compra Pikachu Bot para tus grupos.",
         currencyCode: "USD",
         priceAmount1000: 5000, // 5.00 USD
-       // retailerId: "1466", 
+        retailerId: "1466", 
         productId: "24502048122733040", 
         productImageCount: 1,
       },
