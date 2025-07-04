@@ -12,7 +12,6 @@ async function obtenerPais(numero) {
     let number = numero.replace("@s.whatsapp.net", "");
     const res = await fetch(`https://g-mini-ia.vercel.app/api/infonumero?numero=${number}`);
     const data = await res.json();
-    if (data && data.pais) return data.pais;
     if (data && data.bandera && data.nombre) return `${data.bandera} ${data.nombre}`;
     return "🌐 Desconocido";
   } catch {
@@ -31,14 +30,11 @@ export async function before(m, { conn, participants, groupMetadata }) {
   const totalMembers = participants.length;
   const date = new Date().toLocaleString("es-ES", { timeZone: "America/Mexico_City" });
   const pais = await obtenerPais(who);
-
-  
   const participante = participants.find(p => p.id === who) || {};
   const rol = participante.admin === 'superadmin' ? '👑 Superadmin' :
               participante.admin === 'admin' ? '🛡️ Administrador' : '👤 Miembro';
 
-  let ppUser = 'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/refs/heads/main/src/IMG-20250613-WA0194.jpg';
-
+  let ppUser = 'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/IMG-20250613-WA0194.jpg';
   try { ppUser = await conn.profilePictureUrl(who, 'image') } catch {}
 
   const frasesBienvenida = [
@@ -60,73 +56,64 @@ export async function before(m, { conn, participants, groupMetadata }) {
 
   const enviarMensaje = async (tipo, frase) => {
     const texto = tipo === 'bienvenida' ? `
-*🎉──『 𝑩𝑰𝑬𝑵𝑽𝑬𝑵𝑰𝑫𝑶/𝑨 』──⚡*
-👤 *Usuario:* ${taguser}
-🌐 *País Detectado:* ${pais}
-💬 *Grupo:* *${groupMetadata.subject}*
-👥 *Miembros Totales:* *${totalMembers + 1}*
-📆 *Fecha:* *${date}*
-
-🚀 *Mensaje de Bienvenida:*
-> ${frase}
-
-📲 Usa */menu* para descubrir lo que puedo hacer.
-🎮 ¡Disfruta y participa con respeto!`.trim()
-    :
-    `
-*👋──『 𝑫𝑬𝑺𝑷𝑬𝑫𝑰𝑫𝑨 』──⚡*
-👤 *Usuario:* ${taguser}
-🌐 *País Detectado:* ${pais}
-💬 *Grupo:* *${groupMetadata.subject}*
-👥 *Miembros Restantes:* *${totalMembers - 1}*
-📆 *Fecha:* *${date}*
-
-💔 *Mensaje de Despedida:*
-> ${frase}
-
-🕊️ Le deseamos lo mejor en su camino.`.trim();
+╭━━ 🎉 *NUEVO MIEMBRO* ━━⬣
+┃👤 *Usuario:* ${taguser}
+┃🌍 *País:* ${pais}
+┃🎖️ *Rol:* ${rol}
+┃💬 *Grupo:* ${groupMetadata.subject}
+┃👥 *Miembros:* ${totalMembers + 1}
+┃📅 *Fecha:* ${date}
+┃📣 *Mensaje:*
+┃${frase}
+╰━━━━━━━━━━━━⬣
+🧃 Usa */menu* para ver los comandos disponibles.`.trim()
+    : `
+╭━━ 👋 *MIEMBRO SALIENTE* ━━⬣
+┃👤 *Usuario:* ${taguser}
+┃🌍 *País:* ${pais}
+┃🎖️ *Rol:* ${rol}
+┃💬 *Grupo:* ${groupMetadata.subject}
+┃👥 *Miembros:* ${totalMembers - 1}
+┃📅 *Fecha:* ${date}
+┃📣 *Mensaje:*
+┃${frase}
+╰━━━━━━━━━━━━⬣
+🕊️ Que tengas suerte en tu camino.`.trim()
 
     await conn.sendMessage(m.chat, {
       image: { url: ppUser },
       caption: texto,
       mentions: [who]
     });
-  };
+  }
 
-  
   if (m.chat === GRUPO_STAFF) {
     const esIngreso = m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD;
     const imagenStaff = 'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/main/src/staff-banner.jpg';
 
     const mensajeStaff = esIngreso
       ? `
-*🛡️──『 NUEVO INGRESO AL STAFF 』──⚙️*
-👤 *Usuario:* ${taguser}
-🎖️ *Rol:* ${rol}
-🌐 *País Detectado:* ${pais}
-🕐 *Fecha:* *${date}*
-📌 *Grupo Interno:* *${groupMetadata.subject}*
-👥 *Miembros Totales:* *${totalMembers + 1}*
-
-✅ *Estado:* Nuevo miembro ha sido integrado al equipo administrativo.
-
-
-⚠️ Usa tus privilegios con responsabilidad. ¡Bienvenido al equipo!
-`.trim()
+╭━━ 🛡️ *NUEVO STAFF* ━━⬣
+┃👤 *Usuario:* ${taguser}
+┃🎖️ *Rol:* ${rol}
+┃🌍 *País:* ${pais}
+┃📌 *Grupo:* ${groupMetadata.subject}
+┃👥 *Miembros:* ${totalMembers + 1}
+┃📅 *Fecha:* ${date}
+┃✅ *Estado:* Ingreso al equipo interno
+╰━━━━━━━━━━━━⬣
+⚠️ Usa tus privilegios con responsabilidad.`.trim()
       : `
-*📤──『 SALIDA DE STAFF DETECTADA 』──⚠️*
-👤 *Usuario:* ${taguser}
-🎖️ *Rol:* ${rol}
-🌐 *País Detectado:* ${pais}
-🕐 *Fecha:* *${date}*
-📌 *Grupo Interno:* *${groupMetadata.subject}*
-👥 *Miembros Restantes:* *${totalMembers - 1}*
-
-❌ *Estado:* Se ha registrado la salida de un miembro del equipo.
-
-
-🕊️ Gracias por su tiempo y aportes mientras formó parte del staff.
-`.trim();
+╭━━ 📤 *STAFF SALIENTE* ━━⬣
+┃👤 *Usuario:* ${taguser}
+┃🎖️ *Rol:* ${rol}
+┃🌍 *País:* ${pais}
+┃📌 *Grupo:* ${groupMetadata.subject}
+┃👥 *Miembros:* ${totalMembers - 1}
+┃📅 *Fecha:* ${date}
+┃❌ *Estado:* Ha salido del staff
+╰━━━━━━━━━━━━⬣
+🕊️ Gracias por tu tiempo y aportes.`.trim()
 
     await conn.sendMessage(m.chat, {
       image: { url: imagenStaff },
@@ -136,10 +123,10 @@ export async function before(m, { conn, participants, groupMetadata }) {
     return;
   }
 
-  
   if (m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD) {
     await enviarMensaje('bienvenida', frasesBienvenida[Math.floor(Math.random() * frasesBienvenida.length)]);
   }
+
   if (
     m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_LEAVE ||
     m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_REMOVE
