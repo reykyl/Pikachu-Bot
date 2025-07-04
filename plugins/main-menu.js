@@ -111,6 +111,11 @@ ${readMore}`
         mentionedJid: [m.sender],
         isForwarded: true,
         forwardingScore: 999
+        forwardedNewsletterMessageInfo: { 
+        newsletterJid: channelRD.id, 
+        newsletterName: channelRD.name, 
+        serverMessageId: 100,
+        }
       }
     }, { quoted: m })
 
