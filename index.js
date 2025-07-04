@@ -324,9 +324,9 @@ if (global.pikaJadibts) {
           usedPrefix: '/',
           command: 'serbot'
         })
-        console.log(chalk.green(`✅ Subbot cargado: ${nombreSubbot}`))
+       // console.log(chalk.green(`✅ Subbot cargado: ${nombreSubbot}`))
       } catch (e) {
-        console.error(chalk.red(`❌ Error cargando subbot: ${nombreSubbot}`), e)
+        // console.error(chalk.red(`❌ Error cargando subbot: ${nombreSubbot}`), e)
       }
     }
   }
