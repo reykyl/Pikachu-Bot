@@ -1,6 +1,6 @@
 //© código creado por Deylin 
 //https://github.com/Deylin-eliac 
-//➤  no quites creditos 
+//➤  no quites créditos 
 
 import { WAMessageStubType } from '@whiskeysockets/baileys'
 import fetch from 'node-fetch'
@@ -20,7 +20,7 @@ async function obtenerPais(numero) {
   }
 }
 
-export async function before(m, { conn, participants, groupMetadata }) {
+export async function before(m, { conn, participants, groupMetadata, imageBuffer, menuText, channelRD }) {
   if (!m.messageStubType || !m.isGroup) return;
 //  if (m.chat === "120363402481697721@g.us") return;
 
@@ -33,7 +33,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
   const date = new Date().toLocaleString("es-ES", { timeZone: "America/Mexico_City" });
 
   const pais = await obtenerPais(who);
-  let ppUser = global.icono
+  let ppUser = global.icono;
 
   try {
     ppUser = await conn.profilePictureUrl(who, 'image');
@@ -57,9 +57,10 @@ export async function before(m, { conn, participants, groupMetadata }) {
   const fraseRandomBienvenida = frasesBienvenida[Math.floor(Math.random() * frasesBienvenida.length)];
   const fraseRandomDespedida = frasesDespedida[Math.floor(Math.random() * frasesDespedida.length)];
 
-  if (chat.welcome) {
-    if (m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD) {
-      const bienvenida = `
+  if (!chat.welcome) return;
+
+  if (m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD) {
+    const bienvenida = `
 *⚡─『 𝑩𝑰𝑬𝑵𝑽𝑬𝑵𝑰𝑫𝑶/𝑨 』─🧃*
 👤 *Usuario:* ${taguser}
 🌍 *País:* ${pais}
@@ -68,18 +69,28 @@ export async function before(m, { conn, participants, groupMetadata }) {
 📅 *Fecha:* *${date}*
 ⚡ *Mensaje:* ${fraseRandomBienvenida}`.trim();
 
-      await conn.sendMessage(m.chat, {
-        image: { url: ppUser },
-        caption: bienvenida,
-        mentions: [who]
-      });
-    }
+    await conn.sendMessage(m.chat, {
+      image: { url: ppUser },
+      caption: bienvenida,
+      mentions: [who],
+      contextInfo: {
+        mentionedJid: [who],
+        isForwarded: true,
+        forwardingScore: 999,
+        forwardedNewsletterMessageInfo: { 
+          newsletterJid: channelRD.id, 
+          newsletterName: channelRD.name, 
+          serverMessageId: 100,
+        }
+      }
+    }, { quoted: m });
+  }
 
-    if (
-      m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_LEAVE ||
-      m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_REMOVE
-    ) {
-      const despedida = `
+  if (
+    m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_LEAVE ||
+    m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_REMOVE
+  ) {
+    const despedida = `
 *⚡──『 𝑫𝑬𝑺𝑷𝑬𝑫𝑰𝑫𝑨 』──🧃*
 👤 *Usuario:* ${taguser}
 🌍 *País:* ${pais}
@@ -88,11 +99,20 @@ export async function before(m, { conn, participants, groupMetadata }) {
 📅 *Fecha:* *${date}*
 ⚡ *Mensaje:* ${fraseRandomDespedida}`.trim();
 
-      await conn.sendMessage(m.chat, {
-        image: { url: ppUser },
-        caption: despedida,
-        mentions: [who]
-      });
-    }
+    await conn.sendMessage(m.chat, {
+      image: { url: ppUser },
+      caption: despedida,
+      mentions: [who],
+      contextInfo: {
+        mentionedJid: [who],
+        isForwarded: true,
+        forwardingScore: 999,
+        forwardedNewsletterMessageInfo: { 
+          newsletterJid: channelRD.id, 
+          newsletterName: channelRD.name, 
+          serverMessageId: 100,
+        }
+      }
+    }, { quoted: m });
   }
 }
