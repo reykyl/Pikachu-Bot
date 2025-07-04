@@ -37,37 +37,28 @@ export default handler;
 
 
 let handler = async (m, { conn }) => {
-  const productMessage = {
-    product: {
-      productImage: {
-        url: 'https://files.catbox.moe/b0woxx.jpg'
-      },
-      title: "Pikachu-bot - Development by Deylin",
-      description: "Alquila o compra Pikachu Bot para tus grupos.",
-      currencyCode: "USD",
-      priceAmount1000: 5000, // 5.00 USD
-      productId: "24502048122733040",
-      productImageCount: 1,
-    },
-    businessOwnerJid: "50433191934@s.whatsapp.net"
-  }
-
-  const canal = '120363403119941672@newsletter'; // 🟡 Reemplaza por tu canal real
+  const canal = '120363229276610692@newsletter'; // Reemplaza por tu canal real
 
   try {
-    // Enviar al canal
-    await conn.sendMessage(canal, productMessage, { messageType: 'product' });
+    await conn.sendMessage(canal, {
+      image: { url: 'https://files.catbox.moe/b0woxx.jpg' },
+      caption: `🛒 *Pikachu-bot - By Deylin*\n\nAlquila o compra Pikachu Bot para tus grupos por solo *$5.00 USD*.
 
-    // Opcional: enviar también en el chat actual
-    await conn.sendMessage(m.chat, productMessage, { messageType: 'product' });
-  } catch (error) {
-    console.error('Error enviando catálogo:', error);
-    conn.reply(m.chat, '❌ No se pudo enviar el catálogo. Verifica que el productId y el número Business sean correctos.', m);
+📦 Ver producto: https://wa.me/p/24502048122733040/50433191934`,
+    });
+
+    // Opcional: también enviar en el chat actual
+    await conn.sendMessage(m.chat, {
+      text: '✅ El anuncio fue enviado al canal correctamente.',
+    });
+  } catch (e) {
+    console.error('Error enviando al canal:', e);
+    conn.reply(m.chat, '❌ No se pudo enviar el anuncio al canal.', m);
   }
 };
 
-handler.help = ['comprar', 'producto', 'compra'];
-handler.command = ['comprar', 'producto', 'compra'];
+handler.help = ['publicarbot'];
+handler.command = ['publicarbot'];
 handler.tags = ['ventas'];
 handler.register = true;
 
