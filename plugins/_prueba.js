@@ -1,6 +1,6 @@
 
 
-/*let handler = async (m, { conn }) => {
+let handler = async (m, { conn }) => {
   const jid = m.chat;
 
   try {
@@ -33,33 +33,6 @@ handler.tags = ['ventas'];
 handler.register = true;
 
 export default handler;
-*/
 
 
-let handler = async (m, { conn }) => {
-  const canal = '120363403119941672@newsletter'; // Reemplaza por tu canal real
 
-  try {
-    await conn.sendMessage(canal, {
-      image: { url: 'https://files.catbox.moe/b0woxx.jpg' },
-      caption: `🛒 *Pikachu-bot - By Deylin*\n\nAlquila o compra Pikachu Bot para tus grupos por solo *$5.00 USD*.
-
-📦 Ver producto: https://wa.me/p/24502048122733040/50433191934`,
-    });
-
-    // Opcional: también enviar en el chat actual
-    await conn.sendMessage(m.chat, {
-      text: '✅ El anuncio fue enviado al canal correctamente.',
-    });
-  } catch (e) {
-    console.error('Error enviando al canal:', e);
-    conn.reply(m.chat, '❌ No se pudo enviar el anuncio al canal.', m);
-  }
-};
-
-handler.help = ['publicarbot'];
-handler.command = ['publicarbot'];
-handler.tags = ['ventas'];
-handler.register = true;
-
-export default handler;
