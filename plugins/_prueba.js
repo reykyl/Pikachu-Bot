@@ -1,48 +1,38 @@
-import fetch from 'node-fetch';
+import puppeteer from 'puppeteer';
 
-let handler = async (m, { conn, args, command, usedPrefix }) => {
-  if (!args[0]) return m.reply(`🎵 Escribe el nombre de la canción.\n\nEjemplo:\n${usedPrefix + command} Bad Bunny - Tití me preguntó`);
+let handler = async (m, { conn, text, command }) => {
+  if (!text || !text.includes('youtube.com/watch')) {
+    return m.reply('❌ Enlace inválido. Usa:\n.cookie https://www.youtube.com/watch?v=VIDEO_ID');
+  }
+
+  m.reply('🔄 Obteniendo cookies del video...');
 
   try {
-    const query = args.join(' ');
-    const searchUrl = `https://ytumode-api.vercel.app/api/search?q=${encodeURIComponent(query)}`;
-    const res = await fetch(searchUrl);
-    const json = await res.json();
-
-    if (!json?.status || !json.resultado?.length) {
-      return m.reply('❌ No se encontró ningún resultado.');
-    }
-
-    const song = json.resultado[0];
-    const { titulo, duracion, miniatura, canal, publicado, url } = song;
-
+    const cookies = await getYouTubeCookies(text);
+    const cookieStr = cookies.map(c => `${c.name}=${c.value}`).join('; ');
     await conn.sendMessage(m.chat, {
-      image: { url: miniatura },
-      caption: `🎧 *${titulo}*\n📺 Canal: ${canal}\n🕒 Duración: ${duracion}\n📅 Publicado: ${publicado}\n\n🎵 Descargando audio...`,
+      text: `✅ Cookies obtenidas:\n\`\`\`\n${cookieStr}\n\`\`\``
     }, { quoted: m });
-
-    const mp3Url = `https://mode-api-sigma.vercel.app/api/mp3?url=${encodeURIComponent(url)}`;
-    const mp3Res = await fetch(mp3Url);
-    const mp3Data = await mp3Res.json();
-
-    if (!mp3Data?.status || !mp3Data?.audio?.download?.url) {
-      return m.reply('❌ No se pudo obtener el audio desde tu API.');
-    }
-
-    await conn.sendMessage(m.chat, {
-      audio: { url: mp3Data.audio.download.url },
-      mimetype: 'audio/mpeg',
-      fileName: mp3Data.audio.download.filename || `${titulo}.mp3`,
-    }, { quoted: m });
-
   } catch (e) {
-    console.error('[❌ ERROR en .applemusic]:', e);
-    m.reply('❌ Ocurrió un error al buscar o descargar la canción.');
+    await m.reply(`⚠️ Error al obtener cookies:\n${e.message}`);
   }
 };
 
-handler.help = ['applemusic'].map(v => v + ' <texto>');
-handler.tags = ['downloader'];
-handler.command = /^applemusic$/i;
+async function getYouTubeCookies(url) {
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  });
+
+  const page = await browser.newPage();
+  await page.goto(url, { waitUntil: 'domcontentloaded' });
+  const cookies = await page.cookies();
+  await browser.close();
+  return cookies;
+}
+
+handler.help = ['cookie <url>'];
+handler.tags = ['tools'];
+handler.command = /^cookie$/i;
 
 export default handler;
