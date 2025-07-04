@@ -9,12 +9,12 @@ let handler = async (m, { conn }) => {
         productImage: {
           url: 'https://files.catbox.moe/b0woxx.jpg'
         },
-        title: "Producto Ejemplo",
-        description: "Descripción breve del producto",
+        title: "Pikachu-bot - Development by Deylin ",
+        description: " Alquila o compra Pikachu Bot para tus grupos.",
         currencyCode: "USD",
         priceAmount1000: 19990, // 19.99 USD (multiplica por 1000)
-        retailerId: "1234567890", // Tu ID de negocio
-        productId: "1234567890123456", // El productId real de tu catálogo WhatsApp Business
+        retailerId: "1466", // Tu ID de negocio
+        productId: "24502048122733040", 
         productImageCount: 1,
       },
       businessOwnerJid: "50433191934@s.whatsapp.net" 
