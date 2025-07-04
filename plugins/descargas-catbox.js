@@ -7,6 +7,7 @@ let handler = async (m, { conn, text, args, command }) => {
     return m.reply(`✳️ Usa el comando con un enlace válido de catbox.\n\n📌 Ejemplo:\n${command} https://files.catbox.moe/abcd12.mp4`)
   }
 
+  await m.reply('Buscando el contenido...');
   try {
     const res = await fetch(text)
     if (!res.ok) throw new Error('❌ Error al descargar el archivo')
