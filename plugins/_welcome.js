@@ -20,9 +20,8 @@ async function obtenerPais(numero) {
   }
 }
 
-export async function before(m, { conn, participants, groupMetadata, imageBuffer, menuText, channelRD }) {
+export async function before(m, { conn, participants, groupMetadata }) {
   if (!m.messageStubType || !m.isGroup) return;
-//  if (m.chat === "120363402481697721@g.us") return;
 
   const who = m.messageStubParameters?.[0];
   if (!who) return;
@@ -33,7 +32,7 @@ export async function before(m, { conn, participants, groupMetadata, imageBuffer
   const date = new Date().toLocaleString("es-ES", { timeZone: "America/Mexico_City" });
 
   const pais = await obtenerPais(who);
-  let ppUser = global.icono;
+  let ppUser = global.icono || 'https://i.imgur.com/0f2Nw7H.jpeg'; // fallback
 
   try {
     ppUser = await conn.profilePictureUrl(who, 'image');
@@ -54,10 +53,16 @@ export async function before(m, { conn, participants, groupMetadata, imageBuffer
     "Pikachu te extrañará 🥺"
   ];
 
+  if (!chat.welcome) return;
+
   const fraseRandomBienvenida = frasesBienvenida[Math.floor(Math.random() * frasesBienvenida.length)];
   const fraseRandomDespedida = frasesDespedida[Math.floor(Math.random() * frasesDespedida.length)];
 
-  if (!chat.welcome) return;
+  // Define datos para metadatos (reemplaza o configura según tu canal real)
+ /* const channelRD = {
+    id: '120363402481697721@g.us',
+    name: 'Canal Oficial',
+  };*/
 
   if (m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD) {
     const bienvenida = `
