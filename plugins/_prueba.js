@@ -1,48 +1,50 @@
-// © Comando creado por Deylin - https://github.com/Deylin-Eliac
-
 import fetch from 'node-fetch';
-import axios from 'axios';
+import fs from 'fs';
+import { Sticker } from 'wa-sticker-formatter';
 
-const APIKEY = "Sylphiette's";
+let handler = async (m, { conn, args, usedPrefix, command }) => {
+  const texto = args.join(' ');
+  if (!texto) return m.reply(`🔍 Escribe un término para buscar stickers.\n\nEjemplo:\n${usedPrefix + command} gato`);
 
-let handler = async (m, { conn, args, text }) => {
-  let query = text || m.quoted?.text;
+  
+  const apikey = 'Sylphiette\'s';
+  const res = await fetch(`https://api.sylphy.xyz/stickerly/search?q=${encodeURIComponent(texto)}&apikey=${apikey}`);
+  const data = await res.json();
 
-  if (!query) return m.reply('*✳️ Escribe o responde un mensaje con el nombre del pack de stickers*\n\nEj: .stickerly gatos');
+  if (!data || data.length === 0) return m.reply('❌ No se encontraron stickers.');
 
-  try {
-    m.reply(`🔍 Buscando stickers para: *${query}*...`);
+  
+  const resultados = data.slice(0, 10);
+  const stickers = [];
 
-    const res = await fetch(`https://api.sylphy.xyz/stickerly/search?q=${encodeURIComponent(query)}&apikey=${APIKEY}`);
-    const json = await res.json();
+  for (const pack of resultados) {
+    try {
+      
+      const stickerBuffer = await fetch(pack.thumbnail).then(res => res.buffer());
+      
+      
+      const sticker = new Sticker(stickerBuffer, {
+        pack: pack.name,
+        author: pack.author,
+        type: 'default',
+        categories: ['🌟'],
+        id: `stickerly-${Math.random().toString(36).slice(2)}`,
+      });
+      const buffer = await sticker.toBuffer();
 
-    if (!json.status || !json.result || json.result.length === 0)
-      return m.reply('❌ No se encontraron packs de stickers.');
-
-    const pack = json.result[0]; // Primer resultado
-    const packUrl = pack.url;
-
-    const res2 = await fetch(`https://api.sylphy.xyz/stickerly/download?url=${encodeURIComponent(packUrl)}&apikey=${APIKEY}`);
-    const json2 = await res2.json();
-
-    if (!json2.status || !json2.result || json2.result.length === 0)
-      return m.reply('❌ No se pudieron obtener los stickers del pack.');
-
-    const stickers = json2.result.slice(0, 10); // Máximo 10
-    const stickerBuffers = [];
-
-    for (let i = 0; i < stickers.length; i++) {
-      const url = stickers[i];
-      const { data } = await axios.get(url, { responseType: 'arraybuffer' });
-      stickerBuffers.push({ sticker: data });
+      
+      stickers.push({ sticker: buffer });
+    } catch (e) {
+      console.log(`Error en ${pack.name}:`, e);
     }
-
-    await conn.sendMessage(m.chat, stickerBuffers, { quoted: m });
-
-  } catch (e) {
-    console.error(e);
-    m.reply('⚠️ Ocurrió un error al obtener los stickers.');
   }
+
+  if (stickers.length === 0) return m.reply('⚠️ No se pudieron generar los stickers.');
+
+  
+  await conn.sendMessage(m.chat, {
+    sticker: stickers.map(s => s.sticker)
+  }, { quoted: m });
 };
 
 handler.help = ['stickerly <texto>'];
