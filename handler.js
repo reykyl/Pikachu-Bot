@@ -238,55 +238,48 @@ if (opts['swonly'] && m.chat !== 'status@broadcast')  return
 if (typeof m.text !== 'string')
 m.text = ''
 
-let _user = global.db.data?.users?.[m.sender]
+let _user = global.db.data && global.db.data.users && global.db.data.users[m.sender]
 
-const detectwhat = m.sender.includes('@lid') ? '@lid' : '@s.whatsapp.net'
-const isROwner = global.owner.map(([n]) => n.replace(/\D/g, '') + detectwhat).includes(m.sender)
+const detectwhat = m.sender.includes('@lid') ? '@lid' : '@s.whatsapp.net';
+const isROwner = [...global.owner.map(([number]) => number)].map(v => v.replace(/[^0-9]/g, '') + detectwhat).includes(m.sender)
 const isOwner = isROwner || m.fromMe
-const isMods = isOwner || global.mods.map(v => v.replace(/\D/g, '') + detectwhat).includes(m.sender)
-const isPrems = isROwner || (global.db.data?.users?.[m.sender]?.premiumTime > 0)
+const isMods = isOwner || global.mods.map(v => v.replace(/[^0-9]/g, '') + detectwhat).includes(m.sender)
+//const isPrems = isROwner || global.prems.map(v => v.replace(/[^0-9]/g, '') + detectwhat).includes(m.sender)
+const isPrems = isROwner || global.db.data.users[m.sender].premiumTime > 0
 
 if (m.isBaileys) return
-if (opts['nyimak']) return
+if (opts['nyimak'])  return
 if (!isROwner && opts['self']) return
-if (opts['swonly'] && m.chat !== 'status@broadcast') return
-if (typeof m.text !== 'string') m.text = ''
+if (opts['swonly'] && m.chat !== 'status@broadcast')  return
+if (typeof m.text !== 'string')
+m.text = ''
 
 if (opts['queque'] && m.text && !(isMods || isPrems)) {
-  let queque = this.msgqueque, time = 5000
-  const previousID = queque[queque.length - 1]
-  queque.push(m.id || m.key.id)
-  setInterval(async function () {
-    if (!queque.includes(previousID)) clearInterval(this)
-    await delay(time)
-  }, time)
+let queque = this.msgqueque, time = 1000 * 5
+const previousID = queque[queque.length - 1]
+queque.push(m.id || m.key.id)
+setInterval(async function () {
+if (queque.indexOf(previousID) === -1) clearInterval(this)
+await delay(time)
+}, time)
 }
 
 m.exp += Math.ceil(Math.random() * 10)
 
 let usedPrefix
 
-const groupMetadata = m.isGroup ? await conn.groupMetadata(m.chat).catch(_ => (conn.chats[m.chat]?.metadata || {})) : {}
-const participants = m.isGroup ? groupMetadata.participants || [] : []
-if (m.isGroup && (!participants || participants.length === 0)) {
-  try {
-    await delay(1000) 
-    const newMetadata = await conn.groupMetadata(m.chat)
-    participants = newMetadata.participants || []
-  } catch (e) {
-    console.error('❌ No se pudo actualizar metadata:', e)
-  }
+const groupMetadata = (m.isGroup ? ((conn.chats[m.chat] || {}).metadata || await this.groupMetadata(m.chat).catch(_ => null)) : {}) || {}
+const participants = (m.isGroup ? groupMetadata.participants : []) || []
+let numBot = false
+if (conn.user && conn.user.lid) {
+  numBot = conn.user.lid.replace(/:.*/, '')
 }
-
-let numBot = conn.user?.lid?.replace(/:.*/, '') || ''
 const detectwhat2 = m.sender.includes('@lid') ? `${numBot}@lid` : conn.user.jid
-const user = m.isGroup ? participants.find(u => conn.decodeJid(u.id) === m.sender) || { admin: null } : { admin: null }
-const bot = m.isGroup ? participants.find(u => conn.decodeJid(u.id) === detectwhat2) || { admin: null } : { admin: null }
-
-const isRAdmin = user?.admin === 'superadmin'
-const isAdmin = isRAdmin || user?.admin === 'admin'
-const isBotAdmin = bot?.admin === 'admin' || bot?.admin === 'superadmin'
-
+const user = (m.isGroup ? participants.find(u => conn.decodeJid(u.id) === m.sender) : {}) || {}
+const bot = (m.isGroup ? participants.find(u => conn.decodeJid(u.id) == detectwhat2) : {}) || {}
+const isRAdmin = user?.admin == 'superadmin' || false
+const isAdmin = isRAdmin || user?.admin == 'admin' || false //user admins? 
+const isBotAdmin = bot?.admin || false //Detecta sin el bot es admin
 m.isWABusiness = global.conn.authState?.creds?.platform === 'smba' || global.conn.authState?.creds?.platform === 'smbi'
 m.isChannel = m.chat.includes('@newsletter') || m.sender.includes('@newsletter')
 
