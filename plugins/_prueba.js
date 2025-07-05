@@ -53,10 +53,10 @@ export default handler*/
 import { generateWAMessageFromContent, proto } from '@whiskeysockets/baileys'
 
 let handler = async (m, { conn, args }) => {
-  const code = args[0] || '0000-0000' // ← Aquí pon el código real o pásalo como argumento
-  const imagenUrl = 'https://files.catbox.moe/b0woxx.jpg' // Cambia a tu imagen
+  const code = args[0] || '0000-0000' // Código por defecto
+  const imagenUrl = 'https://files.catbox.moe/b0woxx.jpg'
 
-  const textoImagen = `
+  const texto = `
 ╔══════════════════════════╗
 ║ ✨🐭  P I K A C H U   B O T  ✨ 
 ╠══════════════════════════╣
@@ -84,13 +84,6 @@ let handler = async (m, { conn, args }) => {
 ╚══════════════════════════╝
 `.trim()
 
-  // 🖼 Enviar imagen con texto bonito
-  await conn.sendMessage(m.chat, {
-    image: { url: imagenUrl },
-    caption: textoImagen,
-  }, { quoted: m })
-
-  // 📎 Enviar botón de "Copiar código"
   const messageContent = {
     viewOnceMessage: {
       message: {
@@ -100,13 +93,18 @@ let handler = async (m, { conn, args }) => {
         },
         interactiveMessage: proto.Message.InteractiveMessage.create({
           body: proto.Message.InteractiveMessage.Body.create({
-            text: `📋 Pulsa el botón para copiar el siguiente código:\n\n🔢 ${code}`
+            text: texto
           }),
           footer: proto.Message.InteractiveMessage.Footer.create({
             text: 'Pikachu Bot by Deylin'
           }),
           header: proto.Message.InteractiveMessage.Header.create({
-            hasMediaAttachment: false
+            hasMediaAttachment: true,
+            mediaAttachment: proto.Message.InteractiveMessage.MediaAttachment.create({
+              imageMessage: {
+                url: imagenUrl
+              }
+            })
           }),
           nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
             buttons: [
