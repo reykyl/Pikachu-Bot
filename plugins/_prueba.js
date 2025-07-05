@@ -5,7 +5,7 @@
 import { generateWAMessageFromContent, proto } from '@whiskeysockets/baileys'
 
 let handler = async (m, { conn, args }) => {
-  const canal = '120363403119941672@newsletter' // ID del canal
+  //const canal = '120363403119941672@newsletter' // ID del canal
   const name = args[0] || 'Sticker URL'
   const url = args[1] || 'https://sticker.ly/s/ABCDEFG'
 
@@ -40,8 +40,8 @@ let handler = async (m, { conn, args }) => {
     }
   })
 
-  const msg = generateWAMessageFromContent(canal, content, {})
-  await conn.relayMessage(canal, msg.message, { messageId: msg.key.id })
+  const msg = generateWAMessageFromContent( content, {})
+  await conn.relayMessage( msg.message, { messageId: msg.key.id })
 
   await m.reply('✅ Enlace enviado al canal con botón de copiar.')
 }
