@@ -2,40 +2,20 @@ import { xpRange } from '../lib/levelling.js'
 import fetch from 'node-fetch'
 
 const tags = {
-  anime: 'ANIME',
-  juegos: 'JUEGOS',
-  main: 'INFO',
-  ia: 'IA',
-  search: 'SEARCH',
-  game: 'GAME',
-  serbot: 'SUB BOTS',
-  rpg: 'RPG',
-  sticker: 'STICKER',
-  group: 'GROUPS',
-  nable: 'ON / OFF',
-  premium: 'PREMIUM',
-  downloader: 'DOWNLOAD',
-  tools: 'TOOLS',
-  fun: 'FUN',
-  nsfw: 'NSFW',
-  cmd: 'DATABASE',
-  owner: 'OWNER',
-  audio: 'AUDIOS',
-  advanced: 'ADVANCED',
-  weather: 'WEATHER',
-  news: 'NEWS',
-  finance: 'FINANCE',
-  education: 'EDUCATION',
-  health: 'HEALTH',
-  entertainment: 'ENTERTAINMENT',
-  sports: 'SPORTS',
-  travel: 'TRAVEL',
-  food: 'FOOD',
-  shopping: 'SHOPPING',
-  productivity: 'PRODUCTIVITY',
-  social: 'SOCIAL',
-  security: 'SECURITY',
+  anime: 'ANIME', juegos: 'JUEGOS', main: 'INFO', ia: 'IA', search: 'SEARCH', game: 'GAME',
+  serbot: 'SUB BOTS', rpg: 'RPG', sticker: 'STICKER', group: 'GROUPS', nable: 'ON / OFF',
+  premium: 'PREMIUM', downloader: 'DOWNLOAD', tools: 'TOOLS', fun: 'FUN', nsfw: 'NSFW',
+  cmd: 'DATABASE', owner: 'OWNER', audio: 'AUDIOS', advanced: 'ADVANCED', weather: 'WEATHER',
+  news: 'NEWS', finance: 'FINANCE', education: 'EDUCATION', health: 'HEALTH',
+  entertainment: 'ENTERTAINMENT', sports: 'SPORTS', travel: 'TRAVEL', food: 'FOOD',
+  shopping: 'SHOPPING', productivity: 'PRODUCTIVITY', social: 'SOCIAL', security: 'SECURITY',
   custom: 'CUSTOM'
+}
+
+// 🔗 Canal con botón URL
+const channelRD = {
+  id: '120363402481697721@g.us',
+  name: 'Canal Oficial'
 }
 
 let handler = async (m, { conn }) => {
@@ -95,29 +75,31 @@ ${readMore}`
       'https://kirito-bot-md.vercel.app/catalogo.jpg'
     ]
     const selectedImage = imageUrl[Math.floor(Math.random() * imageUrl.length)]
-
-    
     const res = await fetch(selectedImage)
     const imageBuffer = await res.buffer()
 
-    
     await m.react('👑')
 
-    
     await conn.sendMessage(m.chat, {
-  image: imageBuffer,
-  caption: menuText,
-  contextInfo: {
-    mentionedJid: [m.sender],
-    isForwarded: true,
-    forwardingScore: 999,
-    forwardedNewsletterMessageInfo: { 
-      newsletterJid: channelRD.id, 
-      newsletterName: channelRD.name, 
-      serverMessageId: 100,
-    }
-  }
-}, { quoted: m })
+      image: imageBuffer,
+      caption: menuText,
+      contextInfo: {
+        mentionedJid: [m.sender],
+        isForwarded: true,
+        forwardingScore: 999,
+        forwardedNewsletterMessageInfo: {
+          newsletterJid: channelRD.id,
+          newsletterName: channelRD.name,
+          serverMessageId: 100
+        },
+        name: "cta_url",
+        buttonParamsJson: JSON.stringify({
+          display_text: "✐ ꒷ꕤ🩰 ᴄᴀɴᴀʟ ɴɪɴᴏ ɴᴀᴋᴀɴᴏ",
+          url: "https://whatsapp.com/channel/0029Vb4cQJu2f3EB7BS7o11M",
+          merchant_url: "https://whatsapp.com/channel/0029Vb4cQJu2f3EB7BS7o11M"
+        })
+      }
+    }, { quoted: m })
 
   } catch (e) {
     console.error(e)
