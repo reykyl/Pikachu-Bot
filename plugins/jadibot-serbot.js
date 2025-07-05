@@ -214,15 +214,10 @@ secret = secret.match(/.{1,4}/g)?.join("-")
 
 const msg = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
   interactiveMessage: {
-    body: { text: rtx2 },
+    body: { text: rtx2 }, // Tu mensaje tipo caja
     footer: { text: 'Pikachu Bot by Deylin' },
     header: {
-      hasMediaAttachment: true,
-      mediaAttachment: {
-        imageMessage: {
-          url: imagenUrl
-        }
-      }
+      hasMediaAttachment: false // ❌ Sin imagen
     },
     nativeFlowMessage: {
       buttons: [
