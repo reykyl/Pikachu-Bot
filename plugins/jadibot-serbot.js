@@ -162,6 +162,44 @@ txtCode = await conn.sendMessage(m.chat, {
     quoted: m
 });
 codeBot = await conn.reply(m.chat, `${secret}`, m)
+
+// Botón para copiar el código generado
+const copyMsg = {
+  viewOnceMessage: {
+    message: {
+      messageContextInfo: {
+        deviceListMetadata: {},
+        deviceListMetadataVersion: 2
+      },
+      interactiveMessage: proto.Message.InteractiveMessage.create({
+        body: proto.Message.InteractiveMessage.Body.create({
+          text: '📋 Pulsa el botón para copiar el código'
+        }),
+        footer: proto.Message.InteractiveMessage.Footer.create({
+          text: 'Pikachu Bot by Deylin'
+        }),
+        header: proto.Message.InteractiveMessage.Header.create({
+          hasMediaAttachment: false
+        }),
+        nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+          buttons: [
+            {
+              name: 'cta_copy',
+              buttonParamsJson: JSON.stringify({
+                display_text: '📎 Copiar código',
+                copy_code: secret
+              })
+            }
+          ]
+        })
+      })
+    }
+  }
+}
+
+const copyBot = generateWAMessageFromContent(m.chat, copyMsg, {})
+await conn.relayMessage(m.chat, copyBot.message, { messageId: copyBot.key.id })
+
 //} else {
 //txtCode = await conn.sendButton(m.chat, rtx2.trim(), wm, null, [], secret, null, m) 
 //}
