@@ -8,6 +8,8 @@ import { sticker } from '../lib/sticker.js'
 let handler = async (m, { conn, args, usedPrefix, command }) => {
   if (!args[0]) throw `📦 Usa el comando así:\n\n${usedPrefix + command} gato`;
 
+  await m.reply('Buscando el contenido...');
+
   let query = args.join(" ")
   const apikey = "Sylphiette's"
   const res = await fetch(`https://api.sylphy.xyz/stickerly/search?q=${encodeURIComponent(query)}&apikey=${apikey}`)
