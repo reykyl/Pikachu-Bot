@@ -58,16 +58,16 @@ let rtx = `
 ╚══════════════════════════╝`;
 
 let rtx2 = `
-╔══════════════════════════╗
+╔═══════════════════════╗
 ║ ✨🐭  P I K A C H U   B O T  ✨ 
-╠══════════════════════════╣
+╠═══════════════════════╣
 ║   ╭───(⚡◕ᴥ◕⚡)───╮         
 ║   │  P I K A   │ C H U !  
 ║   │   C O D E  │   ⚡      
 ║   ╰─────────────╯         
-╠══════════════════════════╣
+╠═══════════════════════╣
 ║ 🛠️  Sub-Bot – Modo Código    
-╟──────────────────────────╢
+╟───────────────────────╢
 ║ ⟿ Usa este código para un   
 ║   irte con la fuerza        
 ║    eléctrica de Pikachu ⚡   
@@ -78,13 +78,13 @@ let rtx2 = `
 ║ ➥ ❹ Ingresa el código ¡y    
 ║       Pikaaa! Ya eres parte 
 ║       del equipo eléctrico  
-╟──────────────────────────╢
+╟───────────────────────╢
 ║ ⚠  Si ya tienes otra sesión 
 ║    abierta, desconecta para 
 ║    evitar sobrecarga ⚡      
-╚══════════════════════════╝`;
+╚═══════════════════════╝`;
 
-let imagenUrl = 'src/catalogo.jpg';
+//let imagenUrl = 'src/catalogo.jpg';
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -214,10 +214,10 @@ secret = secret.match(/.{1,4}/g)?.join("-")
 
 const msg = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
   interactiveMessage: {
-    body: { text: rtx2 }, // Tu mensaje tipo caja
+    body: { text: rtx2 }, 
     footer: { text: 'Pikachu Bot by Deylin' },
     header: {
-      hasMediaAttachment: false // ❌ Sin imagen
+      hasMediaAttachment: false 
     },
     nativeFlowMessage: {
       buttons: [
