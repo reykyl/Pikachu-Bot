@@ -1,51 +1,41 @@
-// © código creado por Deylin 
-// https://github.com/Deylin-Eliac 
-// ➤ no quites créditos
-
-import fetch from 'node-fetch'
-import { sticker } from '../lib/sticker.js'
+import { exec } from 'child_process'
+import path from 'path'
+import fs from 'fs'
 
 let handler = async (m, { conn, args, usedPrefix, command }) => {
-  if (!args[0]) throw `📦 Usa el comando así:\n\n${usedPrefix + command} gato`;
+  if (!args[0]) return await m.reply(`Uso: ${usedPrefix + command} URL_de_qu.ax\nEjemplo:\n${usedPrefix + command} https://qu.ax/abc123`);
 
-  await m.reply('🔍 Buscando el contenido...');
+  const url = args[0];
+  const tmpFileName = `video_${Date.now()}.mp4`;
+  const tmpFilePath = path.join('/tmp', tmpFileName); // en Linux /tmp, cambia si usas otro SO
 
-  let query = args.join(" ")
-  const apikey = "Sylphiette's"
-  const url = `https://api.sylphy.xyz/stickerly/search?q=${encodeURIComponent(query)}&apikey=${apikey}`
+  await m.reply('⏳ Descargando video...');
 
-  const res = await fetch(url)
-  if (!res.ok) throw '❌ Error al consultar la API'
+  // Comando yt-dlp para descargar video mp4
+  const cmd = `yt-dlp -f best -o ${tmpFilePath} ${url}`;
 
-  const json = await res.json()
-  if (!json.res || json.res.length === 0) throw '❌ No se encontraron paquetes de stickers.'
-
-  let packs = json.res.slice(0, 10)
-  let stickers = []
-
-  for (let pack of packs) {
-    try {
-      // Normalizamos claves del objeto
-      const lowerKeys = Object.fromEntries(Object.entries(pack).map(([k, v]) => [k.toLowerCase(), v]))
-      let thumb = lowerKeys['url de la miniatura'] || lowerKeys['url'] || null
-
-      if (!thumb) continue
-
-      let buffer = await fetch(thumb).then(res => res.buffer())
-      let stk = await sticker(buffer, false, lowerKeys.name || 'Paquete', lowerKeys.autor || 'Sticker.ly')
-
-      if (stk) stickers.push(stk)
-    } catch (e) {
-      console.error(`❌ Error con el paquete "${pack.name}":`, e)
+  exec(cmd, async (error, stdout, stderr) => {
+    if (error) {
+      console.error('Error en yt-dlp:', error);
+      await m.reply('❌ Error al descargar el video. Asegúrate que la URL es válida.');
+      return;
     }
-  }
 
-  if (!stickers.length) throw '⚠️ No se pudieron convertir los stickers.'
+    if (!fs.existsSync(tmpFilePath)) {
+      await m.reply('❌ No se pudo descargar el video.');
+      return;
+    }
 
-  await conn.sendMessage(m.chat, {
-    sticker: stickers
-  }, { quoted: m })
+    // Enviar video al chat
+    await conn.sendMessage(m.chat, { video: fs.readFileSync(tmpFilePath), mimetype: 'video/mp4', caption: '🎥 Aquí tienes tu video de qu.ax' }, { quoted: m });
+
+    // Borrar archivo temporal
+    fs.unlinkSync(tmpFilePath);
+  });
 }
 
-handler.command = /^stickerly$/i
-export default handler
+handler.help = ['quax <url>'];
+handler.tags = ['downloader'];
+handler.command = /^quax$/i;
+
+export default handler;
