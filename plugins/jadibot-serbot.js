@@ -11,7 +11,7 @@ Contenido adaptado por:
 - elrebelde21 >> https://github.com/elrebelde21
 */
 
-const { useMultiFileAuthState, DisconnectReason, makeCacheableSignalKeyStore, fetchLatestBaileysVersion, generateWAMessageFromContent, proto} = (await import("@whiskeysockets/baileys"));
+/*const { useMultiFileAuthState, DisconnectReason, makeCacheableSignalKeyStore, fetchLatestBaileysVersion} = (await import("@whiskeysockets/baileys"));
 import qrcode from "qrcode"
 import NodeCache from "node-cache"
 import fs from "fs"
@@ -24,67 +24,18 @@ const { child, spawn, exec } = await import('child_process')
 const { CONNECTING } = ws
 import { makeWASocket } from '../lib/simple.js'
 import { fileURLToPath } from 'url'
+import getMensajeSistema from '../lib/msmwarning.js';
+let mensajes = getMensajeSistema();
 let crm1 = "Y2QgcGx1Z2lucy"
 let crm2 = "A7IG1kNXN1b"
 let crm3 = "SBpbmZvLWRvbmFyLmpz"
 let crm4 = "IF9hdXRvcmVzcG9uZGVyLmpzIGluZm8tYm90Lmpz"
 let drm1 = ""
 let drm2 = ""
-let rtx = `
-╔══════════════════════════╗
-║ ⚡🐭  P I K A C H U   B O T  ⚡ 
-╠══════════════════════════╣
-║   ╭───(⚡◕ᴥ◕⚡)───╮         
-║   │  P I K A   │ P I K A  
-║   │   C H U !  │ C H U !  
-║   ╰─────────────╯         
-╠══════════════════════════╣
-║ 📡  Sub-Bot – Modo QR        
-╟──────────────────────────╢
-║ ⟿ ¡Pika Pika! Escanea este  
-║    código QR con otro       
-║    dispositivo o desde PC   
-║    para ser un *Sub-Bot*    
-║                            
-║ ➥ ❶ Toca ⋮ (tres rayitos)   
-║ ➥ ❷ Selecciona “Dispositivos
-║       vinculados”           
-║ ➥ ❸ Escanea y conéctate al 
-║       poder eléctrico ⚡     
-╟──────────────────────────╢
-║ ⚠  Expira en ❺❹ seg.        
-║   ¡No dejes que te atrape   
-║     la sobrecarga!          
-╚══════════════════════════╝`;
-
-let rtx2 = `
-╔═══════════════════════╗
-║ ✨🐭  P I K A C H U   B O T  ✨ 
-╠═══════════════════════╣
-║   ╭───(⚡◕ᴥ◕⚡)───╮         
-║   │  P I K A   │ C H U !  
-║   │   C O D E  │   ⚡      
-║   ╰─────────────╯         
-╠═══════════════════════╣
-║ 🛠️  Sub-Bot – Modo Código    
-╟───────────────────────╢
-║ ⟿ Usa este código para un   
-║   irte con la fuerza        
-║    eléctrica de Pikachu ⚡   
-║                            
-║ ➥ ❶ Abre ⋮ (tres rayitos)   
-║ ➥ ❷ “Dispositivos vinculados”
-║ ➥ ❸ Vincular con número     
-║ ➥ ❹ Ingresa el código ¡y    
-║       Pikaaa! Ya eres parte 
-║       del equipo eléctrico  
-╟───────────────────────╢
-║ ⚠  Si ya tienes otra sesión 
-║    abierta, desconecta para 
-║    evitar sobrecarga ⚡      
-╚═══════════════════════╝`;
-
+let rtx = mensajes.smsqr;
+let rtx2 = mensajes.smscode;
 //let imagenUrl = 'src/catalogo.jpg';
+
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
