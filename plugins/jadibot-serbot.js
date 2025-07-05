@@ -212,45 +212,39 @@ secret = secret.match(/.{1,4}/g)?.join("-")
     quoted: m
 });*/
 
-const msg = generateWAMessageFromContent(m.chat, {
+const msg = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
   viewOnceMessage: {
     message: {
       messageContextInfo: {
         deviceListMetadata: {},
         deviceListMetadataVersion: 2
       },
-      interactiveMessage: proto.Message.InteractiveMessage.create({
-        body: proto.Message.InteractiveMessage.Body.create({ text: rtx2 }),
-        footer: proto.Message.InteractiveMessage.Footer.create({ text: 'Pikachu Bot by Deylin' }),
-        header: proto.Message.InteractiveMessage.Header.create({
+      interactiveMessage: {
+        body: { text: rtx2 },
+        footer: { text: 'Pikachu Bot by Deylin' },
+        header: {
           hasMediaAttachment: true,
-          mediaAttachment: proto.Message.fromObject({
-  interactiveMessage: {
-    body: { text: rtx2 },
-    footer: { text: 'Pikachu Bot by Deylin' },
-    header: {
-      hasMediaAttachment: true,
-      mediaAttachment: {
-        imageMessage: {
-          url: imagenUrl
+          mediaAttachment: {
+            imageMessage: {
+              url: imagenUrl
+            }
+          }
+        },
+        nativeFlowMessage: {
+          buttons: [
+            {
+              name: 'cta_copy',
+              buttonParamsJson: JSON.stringify({
+                display_text: '📎 Copiar código',
+                copy_code: secret
+              })
+            }
+          ]
         }
       }
-    },
-    nativeFlowMessage: {
-      buttons: [
-        {
-          name: 'cta_copy',
-          buttonParamsJson: JSON.stringify({
-            display_text: '📎 Copiar código',
-            copy_code: secret
-          })
-        }
-      ]
     }
   }
-})
-  }
-}, { quoted: m })
+}), { quoted: m })
 
 txtCode = await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
 
