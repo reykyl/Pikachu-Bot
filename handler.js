@@ -274,12 +274,16 @@ let numBot = false
 if (conn.user && conn.user.lid) {
   numBot = conn.user.lid.replace(/:.*/, '')
 }
+let participants = m.isGroup ? (await conn.groupMetadata(m.chat)).participants : []
+
 const detectwhat2 = m.sender.includes('@lid') ? `${numBot}@lid` : conn.user.jid
-const user = (m.isGroup ? participants.find(u => conn.decodeJid(u.id) === m.sender) : {}) || {}
-const bot = (m.isGroup ? participants.find(u => conn.decodeJid(u.id) == detectwhat2) : {}) || {}
-const isRAdmin = user?.admin == 'superadmin' || false
-const isAdmin = isRAdmin || user?.admin == 'admin' || false //user admins? 
-const isBotAdmin = bot?.admin || false //Detecta sin el bot es admin
+const user = m.isGroup ? participants.find(u => conn.decodeJid(u.id) === m.sender) || {} : {}
+const bot = m.isGroup ? participants.find(u => conn.decodeJid(u.id) === detectwhat2) || {} : {}
+
+const isRAdmin = user?.admin === 'superadmin'
+const isAdmin = isRAdmin || user?.admin === 'admin'
+const isBotAdmin = bot?.admin === 'admin' || bot?.admin === 'superadmin'
+
 m.isWABusiness = global.conn.authState?.creds?.platform === 'smba' || global.conn.authState?.creds?.platform === 'smbi'
 m.isChannel = m.chat.includes('@newsletter') || m.sender.includes('@newsletter')
 
