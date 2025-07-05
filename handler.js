@@ -286,7 +286,7 @@ if (m.isGroup && !this.groupAdmins[m.chat]) {
 const isAdmin = m.isGroup && this.groupAdmins[m.chat]?.includes(m.sender)
 const isBotAdmin = m.isGroup && this.groupAdmins[m.chat]?.includes(this.user.jid)
 
-/)"""""""
+//"""""""
 
 let numBot = conn.user?.lid?.replace(/:.*/, '') || ''
 const detectwhat2 = m.sender.includes('@lid') ? `${numBot}@lid` : conn.user.jid
