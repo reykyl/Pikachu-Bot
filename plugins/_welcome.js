@@ -62,7 +62,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
  // const channelRD = {
  //   id: '120363402481697721@g.us',
  //   name: 'Canal Oficial',
-  };
+  //};
 
   if (m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD) {
     const bienvenida = `
