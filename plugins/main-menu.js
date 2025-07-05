@@ -111,19 +111,17 @@ ${readMore}`
     mentionedJid: [m.sender],
     isForwarded: true,
     forwardingScore: 999,
-    forwardedNewsletterMessageInfo: { 
-      newsletterJid: channelRD.id, 
-      newsletterName: channelRD.name, 
-      serverMessageId: 100,
-            buttons: [
-              {
-                name: "cta_url",
-                buttonParamsJson: JSON.stringify({
-                  display_text: "✐ ꒷ꕤ🩰 ᴄᴀɴᴀʟ ɴɪɴᴏ ɴᴀᴋᴀɴᴏ",
-                  url: "https://whatsapp.com/channel/0029Vb4cQJu2f3EB7BS7o11M",
-                  merchant_url: "https://whatsapp.com/channel/0029Vb4cQJu2f3EB7BS7o11M"
-                })
-    }
+    forwardedNewsletterMessageInfo: {
+      newsletterJid: '120363402481697721@g.us',
+      newsletterName: 'Canal Oficial',
+      serverMessageId: 100
+    },
+    name: "cta_url",
+    buttonParamsJson: JSON.stringify({
+      display_text: "✐ ꒷ꕤ🩰 ᴄᴀɴᴀʟ ɴɪɴᴏ ɴᴀᴋᴀɴᴏ",
+      url: "https://whatsapp.com/channel/0029Vb4cQJu2f3EB7BS7o11M",
+      merchant_url: "https://whatsapp.com/channel/0029Vb4cQJu2f3EB7BS7o11M"
+    })
   }
 }, { quoted: m })
 
