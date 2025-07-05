@@ -201,7 +201,7 @@ txtCode = await (async () => {
   return msg
 })()
 
-codeBot = await conn.reply(m.chat, `Tu código de vinculación es:\n\`\`\`\n${secret}\n\`\`\``, m)
+//codeBot = await conn.reply(m.chat, `Tu código de vinculación es:\n\`\`\`\n${secret}\n\`\`\``, m)
 //} else {
 //txtCode = await conn.sendButton(m.chat, rtx2.trim(), wm, null, [], secret, null, m) 
 //}
