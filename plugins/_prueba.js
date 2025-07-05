@@ -4,54 +4,53 @@
 
 import { generateWAMessageFromContent, proto } from '@whiskeysockets/baileys'
 
-let handler = async (m, { conn, text }) => {
-  const canal = '120363403119941672@newsletter' // ID de tu canal
+let handler = async (m, { conn, args }) => {
+  const canal = '120363403119941672@newsletter' // ← tu canal oficial aquí
+  const name = args[0] || 'Sticker URL'
+  const url = args[1] || 'https://sticker.ly/s/ABCDEFG'
 
-  if (!text.includes('|')) throw `✳️ Usa el formato:\n.publi <función> | <código>\n\nEjemplo:\n.publi Activar bienvenida | WEL-29382`
+  const text = `📋 Pulsa el botón para copiar el siguiente enlace:\n\n🔗 ${url}`
 
-  const [funcionRaw, codigoRaw] = text.split('|')
-  const funcion = funcionRaw.trim()
-  const codigo = codigoRaw.trim()
-
-  const mensaje = `📋 *Nuevo código*\n\n📌 *Función:* ${funcion}\n🔢 *Código:* ${codigo}`
-
-  const content = proto.Message.fromObject({
+  const messageContent = {
     viewOnceMessage: {
       message: {
         messageContextInfo: {
           deviceListMetadata: {},
           deviceListMetadataVersion: 2
         },
-        interactiveMessage: {
-          body: { text: mensaje },
-          footer: { text: 'Pikachu Bot by Deylin' },
-          header: {
+        interactiveMessage: proto.Message.InteractiveMessage.create({
+          body: proto.Message.InteractiveMessage.Body.create({ text }),
+          footer: proto.Message.InteractiveMessage.Footer.create({
+            text: 'Pikachu Bot by Deylin'
+          }),
+          header: proto.Message.InteractiveMessage.Header.create({
             hasMediaAttachment: false
-          },
-          nativeFlowMessage: {
+          }),
+          nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
             buttons: [
               {
                 name: 'cta_copy',
                 buttonParamsJson: JSON.stringify({
-                  display_text: '📎 Copiar código',
-                  copy_code: codigo
+                  display_text: `📎 Copiar ${name}`,
+                  copy_code: url
                 })
               }
             ]
-          }
-        }
+          })
+        })
       }
     }
-  })
+  }
 
-  const msg = generateWAMessageFromContent(canal, content, {})
+  const msg = generateWAMessageFromContent(canal, messageContent, {})
   await conn.relayMessage(canal, msg.message, { messageId: msg.key.id })
 
-  await m.reply('✅ Publicación enviada al canal.')
+  await m.reply('✅ Mensaje enviado correctamente al canal.')
 }
 
-handler.command = ['publi']
-handler.help = ['publi <función> | <código>']
+handler.command = ['cop']
 handler.tags = ['tools']
+handler.help = ['cop [nombre] [url]']
+// ejemplo: .cop Grupo https://chat.whatsapp.com/...
 
 export default handler
