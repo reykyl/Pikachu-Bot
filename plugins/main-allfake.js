@@ -77,6 +77,40 @@ global.waitt = global.wait
 global.waittt = global.wait
 global.waitttt = global.wait
 
+global.botonCanal = {
+  viewOnceMessage: {
+    message: {
+      messageContextInfo: {
+        deviceListMetadata: {},
+        deviceListMetadataVersion: 2
+      },
+      interactiveMessage: proto.Message.InteractiveMessage.create({
+        body: proto.Message.InteractiveMessage.Body.create({
+          text: '✨ Pulsa el botón para unirte al canal oficial'
+        }),
+        footer: proto.Message.InteractiveMessage.Footer.create({
+          text: 'Pikachu Bot by Deylin'
+        }),
+        header: proto.Message.InteractiveMessage.Header.create({
+          hasMediaAttachment: false
+        }),
+        nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+          buttons: [
+            {
+              name: 'cta_url',
+              buttonParamsJson: JSON.stringify({
+                display_text: '✐ Canal oficial',
+                url: 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m',
+                merchant_url: 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
+              })
+            }
+          ]
+        })
+      })
+    }
+  }
+}
+
 
 global.edadaleatoria = ['10', '28', '20', '40', '18', '21', '15', '11', '9', '17', '25'].getRandom();
 global.user2 = m.pushName || 'Anónimo';
