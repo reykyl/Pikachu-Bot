@@ -24,16 +24,66 @@ const { child, spawn, exec } = await import('child_process')
 const { CONNECTING } = ws
 import { makeWASocket } from '../lib/simple.js'
 import { fileURLToPath } from 'url'
-import getMensajeSistema from '../lib/msmwarning.js';
-let mensajes = getMensajeSistema();
 let crm1 = "Y2QgcGx1Z2lucy"
 let crm2 = "A7IG1kNXN1b"
 let crm3 = "SBpbmZvLWRvbmFyLmpz"
 let crm4 = "IF9hdXRvcmVzcG9uZGVyLmpzIGluZm8tYm90Lmpz"
 let drm1 = ""
 let drm2 = ""
-let rtx = mensajes.smsqr;
-let rtx2 = mensajes.smscode;
+let rtx = `
+╔══════════════════════════╗
+║ ⚡🐭  P I K A C H U   B O T  ⚡ 
+╠══════════════════════════╣
+║   ╭───(⚡◕ᴥ◕⚡)───╮         
+║   │  P I K A   │ P I K A  
+║   │   C H U !  │ C H U !  
+║   ╰─────────────╯         
+╠══════════════════════════╣
+║ 📡  Sub-Bot – Modo QR        
+╟──────────────────────────╢
+║ ⟿ ¡Pika Pika! Escanea este  
+║    código QR con otro       
+║    dispositivo o desde PC   
+║    para ser un *Sub-Bot*    
+║                            
+║ ➥ ❶ Toca ⋮ (tres rayitos)   
+║ ➥ ❷ Selecciona “Dispositivos
+║       vinculados”           
+║ ➥ ❸ Escanea y conéctate al 
+║       poder eléctrico ⚡     
+╟──────────────────────────╢
+║ ⚠  Expira en ❺❹ seg.        
+║   ¡No dejes que te atrape   
+║     la sobrecarga!          
+╚══════════════════════════╝`;
+
+let rtx2 = `
+╔══════════════════════════╗
+║ ✨🐭  P I K A C H U   B O T  ✨ 
+╠══════════════════════════╣
+║   ╭───(⚡◕ᴥ◕⚡)───╮         
+║   │  P I K A   │ C H U !  
+║   │   C O D E  │   ⚡      
+║   ╰─────────────╯         
+╠══════════════════════════╣
+║ 🛠️  Sub-Bot – Modo Código    
+╟──────────────────────────╢
+║ ⟿ Usa este código para un   
+║   irte con la fuerza        
+║    eléctrica de Pikachu ⚡   
+║                            
+║ ➥ ❶ Abre ⋮ (tres rayitos)   
+║ ➥ ❷ “Dispositivos vinculados”
+║ ➥ ❸ Vincular con número     
+║ ➥ ❹ Ingresa el código ¡y    
+║       Pikaaa! Ya eres parte 
+║       del equipo eléctrico  
+╟──────────────────────────╢
+║ ⚠  Si ya tienes otra sesión 
+║    abierta, desconecta para 
+║    evitar sobrecarga ⚡      
+╚══════════════════════════╝`;
+
 let imagenUrl = 'src/catalogo.jpg';
 
 const __filename = fileURLToPath(import.meta.url)
@@ -42,7 +92,7 @@ const pikaJBOptions = {}
 if (global.conns instanceof Array) console.log()
 else global.conns = []
 let handler = async (m, { conn, args, usedPrefix, command, isOwner }) => {
-if (!globalThis.db.data.settings[conn.user.jid].jadibotmd) return conn.reply(m.chat,`${emojis} Comando desactivado temporalmente. \n\n *Desarrollador:* ${global.creador} \n\n *Bot principal:* ${global.ofcbot}`, m, fake)
+if (!globalThis.db.data.settings[conn.user.jid].jadibotmd) return conn.reply(m.chat,`${emojis} Comando desactivado temporalmente. \n\n *Desarrollador:* ${global.creador} \n\n *Bot principal:* ${global.ofcbot}`, m, rcanal)
 let time = global.db.data.users[m.sender].Subs + 120000
 //if (new Date - global.db.data.users[m.sender].Subs < 120000) return conn.reply(m.chat, `${emoji} Debes esperar ${msToTime(time - new Date())} para volver a vincular un *Sub-Bot.*`, m)
 const subBots = [...new Set([...global.conns.filter((conn) => conn.user && conn.ws.socket && conn.ws.socket.readyState !== ws.CLOSED).map((conn) => conn)])]
@@ -161,6 +211,7 @@ secret = secret.match(/.{1,4}/g)?.join("-")
     caption: rtx2,
     quoted: m
 });*/
+
 const messageContent = {
   imageMessage: {
     url: imagenUrl,
@@ -201,7 +252,8 @@ txtCode = await (async () => {
   return msg
 })()
 
-//codeBot = await conn.reply(m.chat, `Tu código de vinculación es:\n\`\`\`\n${secret}\n\`\`\``, m)
+
+//codeBot = await conn.reply(m.chat, `${secret}`, m, rcanal);
 //} else {
 //txtCode = await conn.sendButton(m.chat, rtx2.trim(), wm, null, [], secret, null, m) 
 //}
@@ -250,7 +302,7 @@ if (options.fromCommand) m?.chat ? await conn.sendMessage(`${path.basename(pathp
 } catch (error) {
 console.error(chalk.bold.yellow(`Error 405 no se pudo enviar mensaje a: +${path.basename(pathpikaJadiBot)}`))
 }
-fs.rmSync(pathpikaJadiBot, { recursive: true, force: true })
+fs.rmdirSync(pathpikaJadiBot, { recursive: true })
 }
 if (reason === 500) {
 console.log(chalk.bold.magentaBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡\n┆ Conexión perdida en la sesión (+${path.basename(pathpikaJadiBot)}). Borrando datos...\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡`))
@@ -264,7 +316,7 @@ await creloadHandler(true).catch(console.error)
 }
 if (reason === 403) {
 console.log(chalk.bold.magentaBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡\n┆ Sesión cerrada o cuenta en soporte para la sesión (+${path.basename(pathpikaJadiBot)}).\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡`))
-fs.rmSync(pathpikaJadiBot, { recursive: true, force: true })
+fs.rmdirSync(pathpikaJadiBot, { recursive: true })
 }}
 if (global.db.data == null) loadDatabase()
 if (connection == `open`) {
