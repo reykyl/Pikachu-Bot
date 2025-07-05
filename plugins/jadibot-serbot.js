@@ -224,7 +224,7 @@ const msg = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
         {
           name: 'cta_copy',
           buttonParamsJson: JSON.stringify({
-            display_text: ' Copiar código para vincular',
+            display_text: ' Copiar código para vincular a subbot...',
             copy_code: secret
           })
         }
