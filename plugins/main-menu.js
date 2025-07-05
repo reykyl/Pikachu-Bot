@@ -133,9 +133,9 @@ const msg = generateWAMessageFromContent(m.chat, {
             {
               name: 'cta_url',
               buttonParamsJson: JSON.stringify({
-                display_text: '✐ ꒷ꕤ🩰 CANAL NINO NAKANO',
-                url: 'https://whatsapp.com/channel/0029Vb4cQJu2f3EB7BS7o11M',
-                merchant_url: 'https://whatsapp.com/channel/0029Vb4cQJu2f3EB7BS7o11M'
+                display_text: '✐ canal oficial',
+                url: 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m',
+                merchant_url: 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
               })
             }
           ]
