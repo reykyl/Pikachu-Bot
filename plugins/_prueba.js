@@ -5,7 +5,7 @@
 import { generateWAMessageFromContent, proto } from '@whiskeysockets/baileys'
 
 let handler = async (m, { conn, args, text }) => {
-  const canal = '120363402481697721@newsletter' // ID del canal oficial
+  const canal = '120363403119941672@newsletter'
 
   if (!text.includes('|')) throw `✳️ Usa el formato:\n.publi <función> | <código>\n\nEjemplo:\n.publi Activar bienvenida | WEL-29382`
 
