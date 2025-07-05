@@ -268,6 +268,15 @@ let usedPrefix
 
 const groupMetadata = m.isGroup ? await conn.groupMetadata(m.chat).catch(_ => (conn.chats[m.chat]?.metadata || {})) : {}
 const participants = m.isGroup ? groupMetadata.participants || [] : []
+if (m.isGroup && (!participants || participants.length === 0)) {
+  try {
+    await delay(1000) 
+    const newMetadata = await conn.groupMetadata(m.chat)
+    participants = newMetadata.participants || []
+  } catch (e) {
+    console.error('❌ No se pudo actualizar metadata:', e)
+  }
+}
 
 let numBot = conn.user?.lid?.replace(/:.*/, '') || ''
 const detectwhat2 = m.sender.includes('@lid') ? `${numBot}@lid` : conn.user.jid
