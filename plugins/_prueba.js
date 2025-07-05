@@ -1,4 +1,4 @@
-//© Código creado por Deylin
+// © Código creado por Deylin
 // https://github.com/Deylin-Eliac
 // ➤ No quites créditos
 
@@ -6,13 +6,13 @@ let handler = async (m, { conn }) => {
   const canal = 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
 
   await conn.sendMessage(m.chat, {
-    text: '🪄 *Canal oficial de Pikachu-Bot*',
-    footer: 'Síguelo para más actualizaciones',
+    text: '🌟 *Canal oficial de Pikachu-Bot*',
+    footer: 'Haz clic en el botón para unirte',
     buttons: [
       {
         name: 'cta_url',
         buttonParamsJson: JSON.stringify({
-          display_text: '✐ Canal oficial',
+          display_text: '🔗 Ir al canal',
           url: canal,
           merchant_url: canal
         })
@@ -20,10 +20,10 @@ let handler = async (m, { conn }) => {
     ],
     headerType: 1,
     contextInfo: {
-      // Aquí está el truco: debes simular que es reenviado desde un canal
+      // Este campo es importante para que el botón aparezca correctamente
       forwardedNewsletterMessageInfo: {
-        newsletterJid: '120363217179176783@newsletter', // ID de canal real o simulado
-        newsletterName: 'Pikachu-Bot Oficial 🧪',
+        newsletterJid: '120363403119941672@newsletter',
+        newsletterName: 'Pikachu-Bot Canal 🧪',
         serverMessageId: '',
       }
     }
