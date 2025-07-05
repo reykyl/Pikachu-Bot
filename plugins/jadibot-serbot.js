@@ -156,12 +156,27 @@ if (qr && mcode) {
 let secret = await sock.requestPairingCode((m.sender.split`@`[0]))
 secret = secret.match(/.{1,4}/g)?.join("-")
 //if (m.isWABusiness) {
-txtCode = await conn.sendMessage(m.chat, {
-    image: { url: imagenUrl },
-    caption: rtx2,
-    quoted: m
-});
+const buttonMsg = {
+  interactiveMessage: proto.Message.InteractiveMessage.create({
+    body: proto.Message.InteractiveMessage.Body.create({ text2 }),
+    footer: proto.Message.InteractiveMessage.Footer.create({ text: 'Pikachu Bot by Deylin' }),
+    header: proto.Message.InteractiveMessage.Header.create({ hasMediaAttachment: false }),
+    nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+      buttons: [
+        {
+          name: 'cta_copy',
+          buttonParamsJson: JSON.stringify({
+            display_text: '📎 Copiar código',
+            copy_code: secret
+          })
+        }
+      ]
+    })
+  })
+}
 
+const msg = generateWAMessageFromContent(m.chat, buttonMsg, {})
+await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
 
 // Envía primero el mensaje sencillo con el código (opcional, puedes omitirlo)
 codeBot = await conn.reply(m.chat, `${secret}`, m)
