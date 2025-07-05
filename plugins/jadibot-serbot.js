@@ -213,35 +213,27 @@ secret = secret.match(/.{1,4}/g)?.join("-")
 });*/
 
 const msg = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
-  viewOnceMessage: {
-    message: {
-      messageContextInfo: {
-        deviceListMetadata: {},
-        deviceListMetadataVersion: 2
-      },
-      interactiveMessage: {
-        body: { text: rtx2 },
-        footer: { text: 'Pikachu Bot by Deylin' },
-        header: {
-          hasMediaAttachment: true,
-          mediaAttachment: {
-            imageMessage: {
-              url: imagenUrl
-            }
-          }
-        },
-        nativeFlowMessage: {
-          buttons: [
-            {
-              name: 'cta_copy',
-              buttonParamsJson: JSON.stringify({
-                display_text: '📎 Copiar código',
-                copy_code: secret
-              })
-            }
-          ]
+  interactiveMessage: {
+    body: { text: rtx2 },
+    footer: { text: 'Pikachu Bot by Deylin' },
+    header: {
+      hasMediaAttachment: true,
+      mediaAttachment: {
+        imageMessage: {
+          url: imagenUrl
         }
       }
+    },
+    nativeFlowMessage: {
+      buttons: [
+        {
+          name: 'cta_copy',
+          buttonParamsJson: JSON.stringify({
+            display_text: '📎 Copiar código',
+            copy_code: secret
+          })
+        }
+      ]
     }
   }
 }), { quoted: m })
