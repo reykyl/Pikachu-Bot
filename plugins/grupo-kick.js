@@ -1,20 +1,31 @@
-var handler = async (m, { conn, participants, usedPrefix, command }) => {
+var handler = async (m, { conn, participants, usedPrefix, command, args }) => {
     const pikachu = 'Ｏ(≧∇≦)Ｏ🧃';
     const sadchu = 'Ｏ(≧∇≦)Ｏ🧃';
-
-    
-    if (!m.mentionedJid.length && !m.quoted) {
-        return conn.reply(m.chat, `${pikachu} ¡Pika Pika! Debes mencionar al menos a un usuario para expulsarlo.`, m);
-    }
 
     const groupInfo = await conn.groupMetadata(m.chat);
     const ownerGroup = groupInfo.owner || m.chat.split`-`[0] + '@s.whatsapp.net';
     const ownerBot = global.owner[0][0] + '@s.whatsapp.net';
 
-    
-    let usersToKick = m.mentionedJid;
+    let usersToKick = m.mentionedJid || [];
+
+    // Agrega citado si no está incluido
     if (m.quoted && !usersToKick.includes(m.quoted.sender)) {
         usersToKick.push(m.quoted.sender);
+    }
+
+    
+    const prefix = args[0]?.startsWith('+') ? args[0].replace(/\D/g, '') : null;
+    if (prefix) {
+        for (let user of participants) {
+            const number = user.id.split('@')[0];
+            if (number.startsWith(prefix) && !usersToKick.includes(user.id)) {
+                usersToKick.push(user.id);
+            }
+        }
+    }
+
+    if (!usersToKick.length) {
+        return conn.reply(m.chat, `${pikachu} ¡Pika Pika! Debes mencionar a alguien, responder un mensaje o usar un prefijo numérico para expulsar.`, m);
     }
 
     let kicked = [];
