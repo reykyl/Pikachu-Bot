@@ -1,24 +1,23 @@
 import speed from 'performance-now'
 import { exec } from 'child_process'
-import ws from 'ws'
+import { generateWAMessageFromContent } from '@whiskeysockets/baileys'
 
 let handler = async (m, { conn }) => {
-  let timestamp = speed();
-  let latensi = speed() - timestamp;
-  const users = [...new Set([...global.conns.filter((conn) => conn.user && conn.ws.socket && conn.ws.socket.readyState !== ws.CLOSED).map((conn) => conn)])];
+  let timestamp = speed()
+  let latensi = speed() - timestamp
 
-  exec(`neofetch --stdout`, (error, stdout, stderr) => {
-    let sysinfo = stdout.toString("utf-8").replace(/Memory:/, "Ram:");
-
-    const pikachuPing = `
+  exec('neofetch --stdout', async (error, stdout, stderr) => {
+    const texto = `
 ╭━━━⊰ ⚡ *Pikachu-Bot* ⚡ ⊱━━━╮
-┃ ⚡ *Estado:* ¡Activo y cargado! ⚡
+┃ ⚡ *Estado:* ¡Activo y cargado!
 ┃ 🕒 *Velocidad:* ${latensi.toFixed(4)} ms
 ╰━━━━━━━━━━━━━━━━━━━━━━━╯
-`.trim();
+`.trim()
 
-    conn.reply(m.chat, pikachuPing, fkontak, fake);
-  });
+    const messageContent = global.botonCanal(texto)
+    const msg = generateWAMessageFromContent(m.chat, messageContent, {})
+    await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
+  })
 }
 
 handler.help = ['ping']
