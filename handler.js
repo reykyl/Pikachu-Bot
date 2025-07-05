@@ -277,6 +277,16 @@ if (m.isGroup && (!participants || participants.length === 0)) {
     console.error('❌ No se pudo actualizar metadata:', e)
   }
 }
+//""""""
+this.groupAdmins = this.groupAdmins || {}
+
+if (m.isGroup && !this.groupAdmins[m.chat]) {
+  this.groupAdmins[m.chat] = participants.filter(p => p.admin).map(p => p.id)
+}
+const isAdmin = m.isGroup && this.groupAdmins[m.chat]?.includes(m.sender)
+const isBotAdmin = m.isGroup && this.groupAdmins[m.chat]?.includes(this.user.jid)
+
+/)"""""""
 
 let numBot = conn.user?.lid?.replace(/:.*/, '') || ''
 const detectwhat2 = m.sender.includes('@lid') ? `${numBot}@lid` : conn.user.jid
