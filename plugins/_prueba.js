@@ -93,7 +93,7 @@ let handler = async (m, { conn }) => {
   await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id });
 };
 
-handler.command = ['menu', 'help', 'commands'];
+handler.command = ['menuh', 'help', 'commands'];
 export default handler;
 
 // Funciones auxiliares
