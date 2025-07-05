@@ -1,5 +1,7 @@
-import { xpRange } from '../lib/levelling.js'
+import pkg from '@whiskeysockets/baileys'
+const { generateWAMessageFromContent, prepareWAMessageMedia, proto } = pkg
 import fetch from 'node-fetch'
+import { xpRange } from '../lib/levelling.js'
 
 const tags = {
   anime: 'ANIME',
@@ -47,7 +49,6 @@ let handler = async (m, { conn }) => {
     const totalCommands = Object.keys(global.plugins).length
     const totalreg = Object.keys(global.db.data.users).length
     const uptime = clockString(process.uptime() * 1000)
-
     const { exp = 0, level = 0 } = user
     const { min, xp, max } = xpRange(level, global.multiplier || 1)
 
@@ -95,35 +96,45 @@ ${readMore}`
       'https://kirito-bot-md.vercel.app/catalogo.jpg'
     ]
     const selectedImage = imageUrl[Math.floor(Math.random() * imageUrl.length)]
+    const imageBuffer = await (await fetch(selectedImage)).buffer()
+    const media = await prepareWAMessageMedia({ image: imageBuffer }, { upload: conn.waUploadToServer })
 
+    const msg = generateWAMessageFromContent(m.chat, {
+      viewOnceMessage: {
+        message: {
+          messageContextInfo: {
+            deviceListMetadata: {},
+            deviceListMetadataVersion: 2
+          },
+          interactiveMessage: proto.Message.InteractiveMessage.create({
+            body: proto.Message.InteractiveMessage.Body.create({
+              text: menuText
+            }),
+            footer: proto.Message.InteractiveMessage.Footer.create({
+              text: 'Pikachu Bot by Deylin'
+            }),
+            header: proto.Message.InteractiveMessage.Header.create({
+              hasMediaAttachment: true
+            }),
+            nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+              buttons: [
+                {
+                  name: "cta_url",
+                  buttonParamsJson: JSON.stringify({
+                    display_text: "✐ ꒷ꕤ🩰 ᴄᴀɴᴀʟ ɴɪɴᴏ ɴᴀᴋᴀɴᴏ",
+                    url: "https://whatsapp.com/channel/0029Vb4cQJu2f3EB7BS7o11M",
+                    merchant_url: "https://whatsapp.com/channel/0029Vb4cQJu2f3EB7BS7o11M"
+                  })
+                }
+              ]
+            })
+          })
+        }
+      }
+    }, { userJid: m.chat })
 
-    const res = await fetch(selectedImage)
-    const imageBuffer = await res.buffer()
-
-
-    await m.react('👑')
-
-
-    await conn.sendMessage(m.chat, {
-  image: imageBuffer,
-  caption: menuText,
-  contextInfo: {
-    mentionedJid: [m.sender],
-    isForwarded: true,
-    forwardingScore: 999,
-    forwardedNewsletterMessageInfo: {
-      newsletterJid: '120363402481697721@g.us',
-      newsletterName: 'Canal Oficial',
-      serverMessageId: 100
-    },
-    name: "cta_url",
-    buttonParamsJson: JSON.stringify({
-      display_text: "✐ ꒷ꕤ🩰 ᴄᴀɴᴀʟ ɴɪɴᴏ ɴᴀᴋᴀɴᴏ",
-      url: "https://whatsapp.com/channel/0029Vb4cQJu2f3EB7BS7o11M",
-      merchant_url: "https://whatsapp.com/channel/0029Vb4cQJu2f3EB7BS7o11M"
-    })
-  }
-}, { quoted: m })
+    msg.message.viewOnceMessage.message.interactiveMessage.header.imageMessage = proto.Message.ImageMessage.fromObject(media.imageMessage)
+    await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
 
   } catch (e) {
     console.error(e)
