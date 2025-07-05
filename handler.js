@@ -271,8 +271,8 @@ const participants = m.isGroup ? groupMetadata.participants || [] : []
 
 let numBot = conn.user?.lid?.replace(/:.*/, '') || ''
 const detectwhat2 = m.sender.includes('@lid') ? `${numBot}@lid` : conn.user.jid
-const user = m.isGroup ? participants.find(u => conn.decodeJid(u.id) === m.sender) || {} : {}
-const bot = m.isGroup ? participants.find(u => conn.decodeJid(u.id) === detectwhat2) || {} : {}
+const user = m.isGroup ? participants.find(u => conn.decodeJid(u.id) === m.sender) || { admin: null } : { admin: null }
+const bot = m.isGroup ? participants.find(u => conn.decodeJid(u.id) === detectwhat2) || { admin: null } : { admin: null }
 
 const isRAdmin = user?.admin === 'superadmin'
 const isAdmin = isRAdmin || user?.admin === 'admin'
