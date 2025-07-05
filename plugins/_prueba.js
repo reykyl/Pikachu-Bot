@@ -1,4 +1,4 @@
-// © Código creado por Deylin
+//© Código creado por Deylin
 // https://github.com/Deylin-Eliac
 // ➤ No quites créditos
 
@@ -20,20 +20,11 @@ let handler = async (m, { conn }) => {
     ],
     headerType: 1,
     contextInfo: {
+      // Aquí está el truco: debes simular que es reenviado desde un canal
       forwardedNewsletterMessageInfo: {
-        newsletterJid: '120363217179176783@newsletter',
+        newsletterJid: '120363217179176783@newsletter', // ID de canal real o simulado
         newsletterName: 'Pikachu-Bot Oficial 🧪',
         serverMessageId: '',
-      },
-      externalAdReply: {
-        title: 'Pikachu-Bot Oficial',
-        body: 'Únete al canal y entérate de todo',
-        mediaUrl: canal,
-        sourceUrl: canal,
-        thumbnailUrl: 'https://files.catbox.moe/b0woxx.jpg',
-        mediaType: 1,
-        renderLargerThumbnail: true,
-        showAdAttribution: true
       }
     }
   }, { quoted: m })
