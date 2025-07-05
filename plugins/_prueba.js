@@ -4,8 +4,8 @@
 
 import { generateWAMessageFromContent, proto } from '@whiskeysockets/baileys'
 
-let handler = async (m, { conn, args, text }) => {
-  const canal = '120363403119941672@newsletter'
+let handler = async (m, { conn, text }) => {
+  const canal = '120363403119941672@newsletter' // ID de tu canal
 
   if (!text.includes('|')) throw `✳️ Usa el formato:\n.publi <función> | <código>\n\nEjemplo:\n.publi Activar bienvenida | WEL-29382`
 
@@ -15,20 +15,20 @@ let handler = async (m, { conn, args, text }) => {
 
   const mensaje = `📋 *Nuevo código*\n\n📌 *Función:* ${funcion}\n🔢 *Código:* ${codigo}`
 
-  const messageContent = {
+  const content = proto.Message.fromObject({
     viewOnceMessage: {
       message: {
         messageContextInfo: {
           deviceListMetadata: {},
           deviceListMetadataVersion: 2
         },
-        interactiveMessage: proto.Message.InteractiveMessage.create({
-          body: proto.Message.InteractiveMessage.Body.create({ text: mensaje }),
-          footer: proto.Message.InteractiveMessage.Footer.create({ text: 'Pikachu Bot by Deylin' }),
-          header: proto.Message.InteractiveMessage.Header.create({
+        interactiveMessage: {
+          body: { text: mensaje },
+          footer: { text: 'Pikachu Bot by Deylin' },
+          header: {
             hasMediaAttachment: false
-          }),
-          nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+          },
+          nativeFlowMessage: {
             buttons: [
               {
                 name: 'cta_copy',
@@ -38,16 +38,16 @@ let handler = async (m, { conn, args, text }) => {
                 })
               }
             ]
-          })
-        })
+          }
+        }
       }
     }
-  }
+  })
 
-  const msg = generateWAMessageFromContent(canal, messageContent, {})
+  const msg = generateWAMessageFromContent(canal, content, {})
   await conn.relayMessage(canal, msg.message, { messageId: msg.key.id })
 
-  await m.reply('✅ Mensaje enviado al canal correctamente.')
+  await m.reply('✅ Publicación enviada al canal.')
 }
 
 handler.command = ['publi']
