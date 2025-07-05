@@ -1,54 +1,45 @@
-import fetch from 'node-fetch';
-import fs from 'fs';
-import { Sticker } from 'wa-sticker-formatter';
+// © código creado por Deylin 
+// https://github.com/Deylin-Eliac 
+// ➤ no quites créditos
+
+import fetch from 'node-fetch'
+import { sticker } from '../lib/sticker.js'
 
 let handler = async (m, { conn, args, usedPrefix, command }) => {
-  const texto = args.join(' ');
-  if (!texto) return m.reply(`🔍 Escribe un término para buscar stickers.\n\nEjemplo:\n${usedPrefix + command} gato`);
+  if (!args[0]) throw `📦 Usa el comando así:\n\n${usedPrefix + command} gato`;
 
+  let query = args.join(" ")
+  const apikey = "Sylphiette's"
+  const res = await fetch(`https://api.sylphy.xyz/stickerly/search?q=${encodeURIComponent(query)}&apikey=${apikey}`)
+  if (!res.ok) throw '❌ Error al consultar la API'
   
-  const apikey = 'Sylphiette\'s';
-  const res = await fetch(`https://api.sylphy.xyz/stickerly/search?q=${encodeURIComponent(texto)}&apikey=${apikey}`);
-  const data = await res.json();
+  const json = await res.json()
+  if (!json.res || json.res.length === 0) throw '❌ No se encontraron paquetes.'
 
-  if (!data || data.length === 0) return m.reply('❌ No se encontraron stickers.');
+  let packs = json.res.slice(0, 10)
+  let stickers = []
 
-  
-  const resultados = data.slice(0, 10);
-  const stickers = [];
-
-  for (const pack of resultados) {
+  for (let pack of packs) {
     try {
-      
-      const stickerBuffer = await fetch(pack.thumbnail).then(res => res.buffer());
-      
-      
-      const sticker = new Sticker(stickerBuffer, {
-        pack: pack.name,
-        author: pack.author,
-        type: 'default',
-        categories: ['🌟'],
-        id: `stickerly-${Math.random().toString(36).slice(2)}`,
-      });
-      const buffer = await sticker.toBuffer();
-
-      
-      stickers.push({ sticker: buffer });
+      let thumb = pack['URL de la miniatura'] || pack['Url de la miniatura'] || pack['Url de miniatura']
+      if (!thumb) continue
+      let buffer = await fetch(thumb).then(res => res.buffer())
+      let stk = await sticker(buffer, false, pack.name || 'Paquete', pack.autor || 'Sticker.ly')
+      if (stk) stickers.push(stk)
     } catch (e) {
-      console.log(`Error en ${pack.name}:`, e);
+      console.error(`❌ Error con el paquete "${pack.name}":`, e)
     }
   }
 
-  if (stickers.length === 0) return m.reply('⚠️ No se pudieron generar los stickers.');
+  if (!stickers.length) throw '❌ No se pudieron convertir los stickers.'
 
-  
+  // Enviamos como álbum de stickers
   await conn.sendMessage(m.chat, {
-    sticker: stickers.map(s => s.sticker)
-  }, { quoted: m });
-};
+    sticker: stickers
+  }, {
+    quoted: m
+  })
+}
 
-handler.help = ['stickerly <texto>'];
-handler.tags = ['sticker'];
-handler.command = /^stickerly$/i;
-
-export default handler;
+handler.command = /^stickerly$/i
+export default handler
