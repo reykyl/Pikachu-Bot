@@ -1,5 +1,5 @@
 let handler = async (m, { conn, args, usedPrefix, command }) => {
-return conn.reply(m.chat,`*APIs desarrolladas por Deylin*
+const text = `*APIs desarrolladas por Deylin*
 *Prueba APIs directamente aquí:* 
 https://paka-apis.vercel.app/
 
@@ -41,7 +41,46 @@ https://g-mini-ia.vercel.app/api/infonumero?numero=
 > Obten información de un número de teléfono como nombre del país y un emoji de su bandera usando en tagall y welcome.
 
 *🔒 Nota:* Usa estas APIs con precaución. Evita hacer múltiples solicitudes en un corto período de tiempo para prevenir bloqueos o fallos del servicio.
-`, m, fake)};
+`,
+
+    const messageContent = {
+      viewOnceMessage: {
+        message: {
+          messageContextInfo: {
+            deviceListMetadata: {},
+            deviceListMetadataVersion: 2
+          },
+          interactiveMessage: proto.Message.InteractiveMessage.create({
+            body: proto.Message.InteractiveMessage.Body.create({
+              text: text
+            }),
+            footer: proto.Message.InteractiveMessage.Footer.create({
+              text: 'Pikachu Bot by Deylin'
+            }),
+            header: proto.Message.InteractiveMessage.Header.create({
+              hasMediaAttachment: false
+            }),
+            nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+              buttons: [
+                {
+                  name: 'cta_url',
+                  buttonParamsJson: JSON.stringify({
+                    display_text: '✐ Canal oficial',
+                    url: 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m',
+                    merchant_url: 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
+                  })
+                }
+              ]
+            })
+          })
+        }
+      }
+    }
+
+    const msg = generateWAMessageFromContent(m.chat, messageContent, {})
+    await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
+  })
+}
 
 
 handler.command = ['api', 'apis', 'servicios']
