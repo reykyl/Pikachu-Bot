@@ -224,26 +224,31 @@ const msg = generateWAMessageFromContent(m.chat, {
         footer: proto.Message.InteractiveMessage.Footer.create({ text: 'Pikachu Bot by Deylin' }),
         header: proto.Message.InteractiveMessage.Header.create({
           hasMediaAttachment: true,
-          mediaAttachment: proto.Message.InteractiveMessage.MediaAttachment.create({
-            imageMessage: {
-              url: imagenUrl,
-              mimetype: 'image/jpeg' // ⚠️ obligatorio para que funcione
-            }
+          mediaAttachment: proto.Message.fromObject({
+  interactiveMessage: {
+    body: { text: rtx2 },
+    footer: { text: 'Pikachu Bot by Deylin' },
+    header: {
+      hasMediaAttachment: true,
+      mediaAttachment: {
+        imageMessage: {
+          url: imagenUrl
+        }
+      }
+    },
+    nativeFlowMessage: {
+      buttons: [
+        {
+          name: 'cta_copy',
+          buttonParamsJson: JSON.stringify({
+            display_text: '📎 Copiar código',
+            copy_code: secret
           })
-        }),
-        nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-          buttons: [
-            {
-              name: 'cta_copy',
-              buttonParamsJson: JSON.stringify({
-                display_text: '📎 Copiar código',
-                copy_code: secret
-              })
-            }
-          ]
-        })
-      })
+        }
+      ]
     }
+  }
+})
   }
 }, { quoted: m })
 
