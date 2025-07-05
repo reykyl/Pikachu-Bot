@@ -1,8 +1,8 @@
 //© código creado por Deylin 
 //https://github.com/Deylin-eliac 
-//➤ no quites créditos
+//➤  no quites créditos 
 
-import { WAMessageStubType, proto } from '@whiskeysockets/baileys'
+import { WAMessageStubType } from '@whiskeysockets/baileys'
 import fetch from 'node-fetch'
 
 async function obtenerPais(numero) {
@@ -28,16 +28,15 @@ export async function before(m, { conn, participants, groupMetadata }) {
 
   const taguser = `@${who.split("@")[0]}`;
   const chat = global.db?.data?.chats?.[m.chat] || {};
-  if (!chat.welcome) return;
-
   const totalMembers = participants.length;
   const date = new Date().toLocaleString("es-ES", { timeZone: "America/Mexico_City" });
-  const pais = await obtenerPais(who);
 
-  let ppUser = 'https://i.imgur.com/0f2Nw7H.jpeg'; // imagen por defecto
+  const pais = await obtenerPais(who);
+  let ppUser = global.icono || 'https://i.imgur.com/0f2Nw7H.jpeg'; // fallback
+
   try {
     ppUser = await conn.profilePictureUrl(who, 'image');
-  } catch {}
+  } catch (e) {}
 
   const frasesBienvenida = [
     "¡Pika Pika! Bienvenido al grupo.",
@@ -54,16 +53,20 @@ export async function before(m, { conn, participants, groupMetadata }) {
     "Pikachu te extrañará 🥺"
   ];
 
+  if (!chat.welcome) return;
+
   const fraseRandomBienvenida = frasesBienvenida[Math.floor(Math.random() * frasesBienvenida.length)];
   const fraseRandomDespedida = frasesDespedida[Math.floor(Math.random() * frasesDespedida.length)];
 
-  // Enlace para el botón (modifica aquí el enlace que quieras)
-  const enlaceBoton = "https://whatsapp.com/channel/0029Vb4cQJu2f3EB7BS7o11M";
-  const textoBoton = "✐ ꒷ꕤ🩰 Canal Nino Nakano";
+  // Define datos para metadatos (reemplaza o configura según tu canal real)
+ // const channelRD = {
+ //   id: '120363402481697721@g.us',
+ //   name: 'Canal Oficial',
+  //};
 
   if (m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD) {
-    const texto = `
-*⚡──『 𝑩𝑰𝑬𝑵𝑽𝑬𝑵𝑰𝑫𝑶/𝑨 』──🧃*
+    const bienvenida = `
+*⚡─『 𝑩𝑰𝑬𝑵𝑽𝑬𝑵𝑰𝑫𝑶/𝑨 』─🧃*
 👤 *Usuario:* ${taguser}
 🌍 *País:* ${pais}
 💬 *Grupo:* *${groupMetadata.subject}*
@@ -71,35 +74,28 @@ export async function before(m, { conn, participants, groupMetadata }) {
 📅 *Fecha:* *${date}*
 ⚡ *Mensaje:* ${fraseRandomBienvenida}`.trim();
 
-    // Prepara media
-    const media = await conn.prepareWAMessageMedia(
-      { image: { url: ppUser } },
-      { upload: conn.waUploadToServer }
-    );
-
-    // Construye mensaje interactivo con botón y imagen
-    const msg = proto.Message.fromObject({
-      imageMessage: media.imageMessage,
-      caption: texto,
-      footer: "𝙋𝙞𝙠𝙖𝙘𝙝𝙪 - 𝘽𝙤𝙩",
-      buttons: [
-        {
-          buttonId: 'url_button',
-          buttonText: { displayText: textoBoton },
-          type: 1
+    await conn.sendMessage(m.chat, {
+      image: { url: ppUser },
+      caption: bienvenida,
+      mentions: [who],
+      contextInfo: {
+        mentionedJid: [who],
+        isForwarded: true,
+        forwardingScore: 999,
+        forwardedNewsletterMessageInfo: { 
+          newsletterJid: channelRD.id, 
+          newsletterName: channelRD.name, 
+          serverMessageId: 100,
         }
-      ],
-      headerType: 4 // imagen con botón
-    });
-
-    await conn.sendMessage(m.chat, msg, { quoted: m });
+      }
+    }, { quoted: m });
   }
 
   if (
     m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_LEAVE ||
     m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_REMOVE
   ) {
-    const texto = `
+    const despedida = `
 *⚡──『 𝑫𝑬𝑺𝑷𝑬𝑫𝑰𝑫𝑨 』──🧃*
 👤 *Usuario:* ${taguser}
 🌍 *País:* ${pais}
@@ -108,25 +104,20 @@ export async function before(m, { conn, participants, groupMetadata }) {
 📅 *Fecha:* *${date}*
 ⚡ *Mensaje:* ${fraseRandomDespedida}`.trim();
 
-    const media = await conn.prepareWAMessageMedia(
-      { image: { url: ppUser } },
-      { upload: conn.waUploadToServer }
-    );
-
-    const msg = proto.Message.fromObject({
-      imageMessage: media.imageMessage,
-      caption: texto,
-      footer: "𝙋𝙞𝙠𝙖𝙘𝙝𝙪 - 𝘽𝙤𝙩",
-      buttons: [
-        {
-          buttonId: 'url_button',
-          buttonText: { displayText: textoBoton },
-          type: 1
+    await conn.sendMessage(m.chat, {
+      image: { url: ppUser },
+      caption: despedida,
+      mentions: [who],
+      contextInfo: {
+        mentionedJid: [who],
+        isForwarded: true,
+        forwardingScore: 999,
+        forwardedNewsletterMessageInfo: { 
+          newsletterJid: channelRD.id, 
+          newsletterName: channelRD.name, 
+          serverMessageId: 100,
         }
-      ],
-      headerType: 4
-    });
-
-    await conn.sendMessage(m.chat, msg, { quoted: m });
+      }
+    }, { quoted: m });
   }
 }
