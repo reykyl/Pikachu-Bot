@@ -99,42 +99,53 @@ ${readMore}`
     const imageBuffer = await (await fetch(selectedImage)).buffer()
     const media = await prepareWAMessageMedia({ image: imageBuffer }, { upload: conn.waUploadToServer })
 
-    const msg = generateWAMessageFromContent(m.chat, {
-      viewOnceMessage: {
-        message: {
-          messageContextInfo: {
-            deviceListMetadata: {},
-            deviceListMetadataVersion: 2
-          },
-          interactiveMessage: proto.Message.InteractiveMessage.create({
-            body: proto.Message.InteractiveMessage.Body.create({
-              text: menuText
-            }),
-            footer: proto.Message.InteractiveMessage.Footer.create({
-              text: 'Pikachu Bot by Deylin'
-            }),
-            header: proto.Message.InteractiveMessage.Header.create({
-              hasMediaAttachment: true
-            }),
-            nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-              buttons: [
-                {
-                  name: "cta_url",
-                  buttonParamsJson: JSON.stringify({
-                    display_text: "✐ ꒷ꕤ🩰 ᴄᴀɴᴀʟ ɴɪɴᴏ ɴᴀᴋᴀɴᴏ",
-                    url: "https://whatsapp.com/channel/0029Vb4cQJu2f3EB7BS7o11M",
-                    merchant_url: "https://whatsapp.com/channel/0029Vb4cQJu2f3EB7BS7o11M"
-                  })
-                }
-              ]
-            })
-          })
-        }
-      }
-    }, { userJid: m.chat })
+    // Paso 1: Enviar imagen + menú normal
+await conn.sendMessage(m.chat, {
+  image: imageBuffer,
+  caption: menuText,
+  contextInfo: {
+    mentionedJid: [m.sender],
+    forwardingScore: 999,
+    isForwarded: true
+  }
+}, { quoted: m })
 
-    msg.message.viewOnceMessage.message.interactiveMessage.header.imageMessage = proto.Message.ImageMessage.fromObject(media.imageMessage)
-    await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
+// Paso 2: Enviar solo el botón como mensaje interactivo
+const msg = generateWAMessageFromContent(m.chat, {
+  viewOnceMessage: {
+    message: {
+      messageContextInfo: {
+        deviceListMetadata: {},
+        deviceListMetadataVersion: 2
+      },
+      interactiveMessage: proto.Message.InteractiveMessage.create({
+        body: proto.Message.InteractiveMessage.Body.create({
+          text: '✨ Pulsa el botón para unirte al canal oficial'
+        }),
+        footer: proto.Message.InteractiveMessage.Footer.create({
+          text: 'Pikachu Bot by Deylin'
+        }),
+        header: proto.Message.InteractiveMessage.Header.create({
+          hasMediaAttachment: false
+        }),
+        nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+          buttons: [
+            {
+              name: 'cta_url',
+              buttonParamsJson: JSON.stringify({
+                display_text: '✐ ꒷ꕤ🩰 CANAL NINO NAKANO',
+                url: 'https://whatsapp.com/channel/0029Vb4cQJu2f3EB7BS7o11M',
+                merchant_url: 'https://whatsapp.com/channel/0029Vb4cQJu2f3EB7BS7o11M'
+              })
+            }
+          ]
+        })
+      })
+    }
+  }
+}, {})
+
+await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
 
   } catch (e) {
     console.error(e)
