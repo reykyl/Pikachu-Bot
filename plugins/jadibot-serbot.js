@@ -212,45 +212,42 @@ secret = secret.match(/.{1,4}/g)?.join("-")
     quoted: m
 });*/
 
-const messageContent = {
-  imageMessage: {
-    url: imagenUrl,
-    caption: rtx2
-  },
-  contextInfo: {
-    deviceListMetadata: {},
-    deviceListMetadataVersion: 2
-  },
-  interactiveMessage: proto.Message.InteractiveMessage.create({
-    body: proto.Message.InteractiveMessage.Body.create({ text: rtx2 }),
-    footer: proto.Message.InteractiveMessage.Footer.create({ text: 'Pikachu Bot by Deylin' }),
-    header: proto.Message.InteractiveMessage.Header.create({
-      hasMediaAttachment: true,
-      mediaAttachment: proto.Message.InteractiveMessage.MediaAttachment.create({
-        imageMessage: {
-          url: imagenUrl
-        }
-      }),
-    }),
-    nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-      buttons: [
-        {
-          name: 'cta_copy',
-          buttonParamsJson: JSON.stringify({
-            display_text: '📎 Copiar código',
-            copy_code: secret
+const msg = generateWAMessageFromContent(m.chat, {
+  viewOnceMessage: {
+    message: {
+      messageContextInfo: {
+        deviceListMetadata: {},
+        deviceListMetadataVersion: 2
+      },
+      interactiveMessage: proto.Message.InteractiveMessage.create({
+        body: proto.Message.InteractiveMessage.Body.create({ text: rtx2 }),
+        footer: proto.Message.InteractiveMessage.Footer.create({ text: 'Pikachu Bot by Deylin' }),
+        header: proto.Message.InteractiveMessage.Header.create({
+          hasMediaAttachment: true,
+          mediaAttachment: proto.Message.InteractiveMessage.MediaAttachment.create({
+            imageMessage: {
+              url: imagenUrl,
+              mimetype: 'image/jpeg' // ⚠️ obligatorio para que funcione
+            }
           })
-        }
-      ]
-    })
-  })
-}
+        }),
+        nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+          buttons: [
+            {
+              name: 'cta_copy',
+              buttonParamsJson: JSON.stringify({
+                display_text: '📎 Copiar código',
+                copy_code: secret
+              })
+            }
+          ]
+        })
+      })
+    }
+  }
+}, { quoted: m })
 
-txtCode = await (async () => {
-  const msg = generateWAMessageFromContent(m.chat, messageContent, { quoted: m })
-  await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
-  return msg
-})()
+txtCode = await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
 
 
 //codeBot = await conn.reply(m.chat, `${secret}`, m, rcanal);
