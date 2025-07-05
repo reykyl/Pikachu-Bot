@@ -156,43 +156,30 @@ if (qr && mcode) {
 let secret = await sock.requestPairingCode((m.sender.split`@`[0]))
 secret = secret.match(/.{1,4}/g)?.join("-")
 //if (m.isWABusiness) {
-const buttonMsg = {
-  interactiveMessage: proto.Message.InteractiveMessage.create({
-    body: proto.Message.InteractiveMessage.Body.create({ text2 }),
-    footer: proto.Message.InteractiveMessage.Footer.create({ text: 'Pikachu Bot by Deylin' }),
-    header: proto.Message.InteractiveMessage.Header.create({ hasMediaAttachment: false }),
-    nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-      buttons: [
-        {
-          name: 'cta_copy',
-          buttonParamsJson: JSON.stringify({
-            display_text: '📎 Copiar código',
-            copy_code: secret
-          })
-        }
-      ]
-    })
-  })
-}
-
-const msg = generateWAMessageFromContent(m.chat, buttonMsg, {})
-await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
-
-// Envía primero el mensaje sencillo con el código (opcional, puedes omitirlo)
-codeBot = await conn.reply(m.chat, `${secret}`, m)
-
-// Luego envía el mensaje interactivo con botón copiar
-
+/*txtCode = await conn.sendMessage(m.chat, {
+    image: { url: imagenUrl },
+    caption: rtx2,
+    quoted: m
+});*/
 const messageContent = {
+  imageMessage: {
+    url: imagenUrl,
+    caption: rtx2
+  },
+  contextInfo: {
+    deviceListMetadata: {},
+    deviceListMetadataVersion: 2
+  },
   interactiveMessage: proto.Message.InteractiveMessage.create({
-    body: proto.Message.InteractiveMessage.Body.create({
-      text: `🔐 Código generado:\n\n${secret}\n\nPulsa el botón para copiarlo.`
-    }),
-    footer: proto.Message.InteractiveMessage.Footer.create({
-      text: 'Pikachu Bot by Deylin'
-    }),
+    body: proto.Message.InteractiveMessage.Body.create({ text: rtx2 }),
+    footer: proto.Message.InteractiveMessage.Footer.create({ text: 'Pikachu Bot by Deylin' }),
     header: proto.Message.InteractiveMessage.Header.create({
-      hasMediaAttachment: false
+      hasMediaAttachment: true,
+      mediaAttachment: proto.Message.InteractiveMessage.MediaAttachment.create({
+        imageMessage: {
+          url: imagenUrl
+        }
+      }),
     }),
     nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
       buttons: [
@@ -208,9 +195,13 @@ const messageContent = {
   })
 }
 
-const msg = generateWAMessageFromContent(m.chat, messageContent, { quoted: m })
-await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
+txtCode = await (async () => {
+  const msg = generateWAMessageFromContent(m.chat, messageContent, { quoted: m })
+  await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
+  return msg
+})()
 
+codeBot = await conn.reply(m.chat, `Tu código de vinculación es:\n\`\`\`\n${secret}\n\`\`\``, m)
 //} else {
 //txtCode = await conn.sendButton(m.chat, rtx2.trim(), wm, null, [], secret, null, m) 
 //}
