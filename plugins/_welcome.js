@@ -110,6 +110,18 @@ export async function before(m, { conn, participants, groupMetadata }) {
         buttonId: 'contacto',
         buttonText: { displayText: '#canal' },
       },
+      {
+        buttonId: 'contacto',
+        buttonText: { displayText: '#canal' },
+      },
+      {
+        buttonId: 'contacto',
+        buttonText: { displayText: '#canal' },
+      },
+      {
+        buttonId: 'contacto',
+        buttonText: { displayText: '#canal' },
+      },
        ],
         headerType: 4,
         mentions: [who]
