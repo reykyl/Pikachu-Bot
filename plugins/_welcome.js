@@ -33,16 +33,6 @@ export async function before(m, { conn, participants, groupMetadata }) {
 
     if (m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD) {
       let welcomeMsg = `
-╭┈ ↷
-│ ✐ ꒷ꕤ💜ദ ɴᴜᴇᴠᴏ ᴍɪᴇᴍʙʀᴏ ᴇɴ ᴇʟ ɢʀᴜᴘᴏ
-│ *🎉 ᴜsᴜᴀʀɪᴏ:* ${taguser}
-│ *👥 ᴍɪᴇᴍʙʀᴏs:* ${newMemberCount} (¡Bienvenido!)
-│ *🍬 ɢʀᴜᴘᴏ:* ${groupMetadata.subject}
-│ *👑 ᴏᴡɴᴇʀ:* ${ownerTag}
-│ *🕒 ʜᴏʀᴀ:* ${time}
-│ *📅 ғᴇᴄʜᴀ:* ${date}
-│ *🗓️ ᴅíᴀ:* ${week}
-╰─────────────────
 
 > ✐ Usa *#menu* para ver los comandos disponibles`;
 
