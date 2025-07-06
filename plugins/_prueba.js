@@ -1,43 +1,62 @@
-import fetch from 'node-fetch'
+import fetch from 'node-fetch';
+import { sticker } from '../lib/sticker.js'; // opcional si quieres responder como sticker
 
 let handler = async (m, { conn, args, usedPrefix, command }) => {
-  if (!args[0]) return conn.reply(m.chat, `Usa: ${usedPrefix}${command} https://qu.ax/abc123`, m);
-  const url = args[0];
+  let texto = args.join(" ");
+  if (!texto) throw `📸 Usa el comando así:\n\n${usedPrefix + command} gato`;
 
-  await m.reply('⏳ Obteniendo video de qu.ax...');
+  let loading = '🎨 Generando imágenes con IA... espera un momento.\n\n🧠 *Pollinations*\n🎨 *Craiyon*\n🤖 *DeepAI*';
+  await m.reply(loading);
 
+  // 1. Pollinations (instantáneo)
   try {
-    
-    const res = await fetch(url);
-    const html = await res.text();
-
-    
-    const videoUrlMatch = html.match(/<source[^>]+src="([^"]+)"/i);
-
-    if (!videoUrlMatch) {
-      return conn.reply(m.chat, '❌ No se pudo encontrar la URL directa del video.', m);
-    }
-
-    const videoUrl = videoUrlMatch[1];
-
-    await m.reply('⏳ Descargando video...');
-
-    
-    const videoRes = await fetch(videoUrl);
-    if (!videoRes.ok) throw new Error('Error descargando video');
-    const buffer = await videoRes.arrayBuffer();
-
-    
-    await conn.sendMessage(m.chat, { video: Buffer.from(buffer), mimetype: 'video/mp4', caption: '🎥 Aquí tienes tu video de qu.ax' }, { quoted: m });
-
+    let pollinationsURL = `https://image.pollinations.ai/prompt/${encodeURIComponent(texto)}`;
+    await conn.sendFile(m.chat, pollinationsURL, 'pollinations.jpg', `🧠 *Pollinations AI*\n🔗 ${pollinationsURL}`, m);
   } catch (e) {
-    console.error(e);
-    await conn.reply(m.chat, '❌ Ocurrió un error descargando el video.', m);
+    console.log('Pollinations Error:', e);
   }
-}
 
-handler.help = ['quax <url>'];
-handler.tags = ['downloader'];
-handler.command = /^quax$/i;
+  // 2. Craiyon (ex DALL·E mini)
+  try {
+    let res = await fetch('https://backend.craiyon.com/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: texto })
+    });
+    let json = await res.json();
+    let image = json.images?.[0];
+    if (image) {
+      let buffer = Buffer.from(image, 'base64');
+      await conn.sendFile(m.chat, buffer, 'craiyon.jpg', '🎨 *Craiyon (DALL·E mini)*', m);
+    }
+  } catch (e) {
+    console.log('Craiyon Error:', e);
+  }
+
+  // 3. DeepAI (gratis con limitaciones)
+  try {
+    let r = await fetch("https://api.deepai.org/api/text2img", {
+      method: "POST",
+      headers: {
+        'Api-Key': 'quickstart-QUdJIGlzIGNvbWluZy4uLi4K', // Llave de prueba pública
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({ text: texto }),
+    });
+    let j = await r.json();
+    if (j.output_url) {
+      await conn.sendFile(m.chat, j.output_url, 'deepai.jpg', '🤖 *DeepAI Generator*', m);
+    }
+  } catch (e) {
+    console.log('DeepAI Error:', e);
+  }
+
+  // 4. Mage.Space - opcional, sin API directa
+  // Para usar Mage.Space deberías hacer scraping o integrar su WebUI (no recomendado sin permisos)
+
+};
+handler.help = ['imagen <texto>'];
+handler.tags = ['ia'];
+handler.command = /^imagen$/i;
 
 export default handler;
