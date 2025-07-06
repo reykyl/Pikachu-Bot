@@ -102,12 +102,14 @@ export async function before(m, { conn, participants, groupMetadata }) {
         caption: despedida,
         footer: "Pikachu Bot by Deylin",
         buttons: [
-          {
-            buttonId: '.can',
-            buttonText: { displayText: '✐ Canal oficial' },
-            type: 1
-          }
-        ],
+  {
+    name: "quick_reply",
+    buttonParamsJson: JSON.stringify({
+      "display_text": "✐ Canal oficial",
+      "id": "#can"
+    })
+  }
+]
         headerType: 4,
         mentions: [who]
       });
