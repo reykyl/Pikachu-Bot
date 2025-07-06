@@ -82,41 +82,48 @@ handler.help = ['api', 'apis', 'servicios']
 
 export default handler*/
 
-const handler = async (m, { conn, command }) => {
-  const texto = `✨ Pulsa el botón para unirte al canal oficial`.trim();
+conn.ev.on('messages.upsert', async ({ messages }) => {
+  const m = messages[0];
+  if (!m?.message) return;
 
-  const messageContent = {
-    viewOnceMessage: {
-      message: {
-        messageContextInfo: {
-          deviceListMetadata: {},
-          deviceListMetadataVersion: 2
-        },
-        interactiveMessage: proto.Message.InteractiveMessage.create({
-          body: proto.Message.InteractiveMessage.Body.create({ text: texto }),
-          footer: proto.Message.InteractiveMessage.Footer.create({ text: 'Pikachu Bot by Deylin' }),
-          header: proto.Message.InteractiveMessage.Header.create({ hasMediaAttachment: false }),
-          nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-            buttons: [
-              {
-                name: 'cta_url',
-                buttonParamsJson: JSON.stringify({
-                  display_text: '✐ Canal oficial',
-                  url: 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m',
-                  merchant_url: 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
-                })
-              }
-            ]
+  const msg = m.message;
+  const buttonId =
+    msg?.buttonsResponseMessage?.selectedButtonId ||
+    msg?.buttonReplyMessage?.selectedButtonId;
+
+  if (buttonId === '.can') {
+    // Ejecutar el mismo handler que `.can`
+    const texto = `✨ Pulsa el botón para unirte al canal oficial`.trim();
+
+    const messageContent = {
+      viewOnceMessage: {
+        message: {
+          messageContextInfo: {
+            deviceListMetadata: {},
+            deviceListMetadataVersion: 2
+          },
+          interactiveMessage: proto.Message.InteractiveMessage.create({
+            body: proto.Message.InteractiveMessage.Body.create({ text: texto }),
+            footer: proto.Message.InteractiveMessage.Footer.create({ text: 'Pikachu Bot by Deylin' }),
+            header: proto.Message.InteractiveMessage.Header.create({ hasMediaAttachment: false }),
+            nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+              buttons: [
+                {
+                  name: 'cta_url',
+                  buttonParamsJson: JSON.stringify({
+                    display_text: '✐ Canal oficial',
+                    url: 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m',
+                    merchant_url: 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
+                  })
+                }
+              ]
+            })
           })
-        })
+        }
       }
     }
+
+    const gen = generateWAMessageFromContent(m.key.remoteJid, messageContent, { quoted: m });
+    await conn.relayMessage(m.key.remoteJid, gen.message, { messageId: gen.key.id });
   }
-
-  const msg = generateWAMessageFromContent(m.chat, messageContent, { quoted: m });
-  await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id });
-}
-
-handler.command = ['can']
-handler.register = true
-export default handler
+});
