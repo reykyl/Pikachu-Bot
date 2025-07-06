@@ -1,4 +1,4 @@
-import { generateWAMessageFromContent, proto } from '@whiskeysockets/baileys'
+//import { generateWAMessageFromContent, proto } from '@whiskeysockets/baileys'
 
 /*let handler = async (m, { conn }) => {
   const text = `*🔧 APIs desarrolladas por Deylin*
@@ -83,8 +83,30 @@ handler.help = ['api', 'apis', 'servicios']
 export default handler*/
 
 
+//© código creado por Deylin 
+//https://github.com/Deylin-eliac 
+//➤ no quites créditos
+
+import { generateWAMessageFromContent, proto } from '@whiskeysockets/baileys'
+
+// Objeto para guardar tiempos de uso por usuario
+const cooldown = new Map()
+
 const handler = async (m, { conn }) => {
-  const texto = `✨ Pulsa el botón para unirte al canal oficial`.trim();
+  const user = m.sender
+
+  const now = Date.now()
+  const waitTime = 2000 
+
+  
+  if (cooldown.has(user) && now - cooldown.get(user) < waitTime) {
+    return conn.reply(m.chat, '🕒 Espera 2 segundos para volver a usar este comando.', m)
+  }
+
+  
+  cooldown.set(user, now)
+
+  const texto = `✨ Pulsa el botón para unirte al canal oficial`.trim()
 
   const messageContent = {
     viewOnceMessage: {
@@ -114,10 +136,13 @@ const handler = async (m, { conn }) => {
     }
   }
 
-  const msg = generateWAMessageFromContent(m.chat, messageContent, { quoted: m });
-  await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id });
+  const msg = generateWAMessageFromContent(m.chat, messageContent, { quoted: m })
+  await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
 }
 
 handler.command = ['can']
 handler.register = true
+handler.help = ['can']
+handler.tags = ['info']
+
 export default handler
