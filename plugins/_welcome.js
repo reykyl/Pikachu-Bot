@@ -101,13 +101,16 @@ export async function before(m, { conn, participants, groupMetadata }) {
         image: { url: ppUser },
         caption: despedida,
         footer: "Pikachu Bot by Deylin",
-        buttons: [
-          {
-            buttonId: '/canal',
-            buttonText: { displayText: '/canal    oficial' },
-            type: 1
-          }
-        ],
+            buttons: [
+      {
+        buttonId: 'servicios',
+        buttonText: { displayText: '#canal' },
+      },
+      {
+        buttonId: 'contacto',
+        buttonText: { displayText: '#canal' },
+      },
+       ],
         headerType: 4,
         mentions: [who]
       });
