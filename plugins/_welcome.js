@@ -59,45 +59,20 @@ async function enviarBienvenidaDespedida({ conn, m, tipo, quien, groupMetadata, 
 
   // Prepara el mensaje con estructura proto para el botón
   const buttonMessage = {
-    imageMessage: await conn.prepareMessageMedia({ image: { url: ppUser } }, { upload: conn.waUploadToServer }),
-    caption: texto,
-    footer: 'Pikachu Bot by Deylin',
-    viewOnceMessage: {
-      message: {
-        messageContextInfo: {
-          deviceListMetadata: {},
-          deviceListMetadataVersion: 2
-        },
-        interactiveMessage: proto.Message.InteractiveMessage.create({
-          body: proto.Message.InteractiveMessage.Body.create({
-            text: '✨ Pulsa el botón para unirte al canal oficial'
-          }),
-          footer: proto.Message.InteractiveMessage.Footer.create({
-            text: 'Pikachu Bot by Deylin'
-          }),
-          header: proto.Message.InteractiveMessage.Header.create({
-            hasMediaAttachment: false
-          }),
-          nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-            buttons: [
-              {
-                name: 'cta_url',
-                buttonParamsJson: JSON.stringify({
-                  display_text: '✐ Canal oficial',
-                  url: 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m',
-                  merchant_url: 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
-                })
-              }
-            ]
-          })
-        })
-      }
+    await conn.sendMessage(m.chat, {
+  image: { url: ppUser },
+  caption: texto,
+  footer: 'Pikachu Bot by Deylin',
+  buttons: [
+    {
+      buttonId: 'urlbutton1',
+      buttonText: { displayText: '✐ Canal oficial' },
+      type: 1
     }
-  }
-
-  // Envía el mensaje con botón
-  await conn.sendMessage(m.chat, buttonMessage, { mentions: [quien], quoted: m })
-}
+  ],
+  headerType: 4,
+  mentions: [quien]
+}, { quoted: m })
 
 // Hook principal del plugin
 export async function before(m, { conn, participants, groupMetadata }) {
