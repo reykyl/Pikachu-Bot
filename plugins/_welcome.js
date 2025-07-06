@@ -22,7 +22,6 @@ async function obtenerPais(numero) {
 
 export async function before(m, { conn, participants, groupMetadata }) {
   if (!m.messageStubType || !m.isGroup) return;
-//  if (m.chat === "120363402481697721@g.us") return;
 
   const who = m.messageStubParameters?.[0];
   if (!who) return;
@@ -74,9 +73,10 @@ export async function before(m, { conn, participants, groupMetadata }) {
         footer: "Pikachu Bot by Deylin",
         buttons: [
           {
-            buttonId: 'canal_oficial',
-            buttonText: { displayText: '✐ Canal oficial' },
-            type: 1
+            urlButton: {
+              displayText: '✐ Canal oficial',
+              url: 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
+            }
           }
         ],
         headerType: 4,
@@ -102,13 +102,13 @@ export async function before(m, { conn, participants, groupMetadata }) {
         caption: despedida,
         footer: "Pikachu Bot by Deylin",
         buttons: [
-  {
-    urlButton: {
-      displayText: '✐ Canal oficial',
-      url: 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
-    }
-  }
-]
+          {
+            urlButton: {
+              displayText: '✐ Canal oficial',
+              url: 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
+            }
+          }
+        ],
         headerType: 4,
         mentions: [who]
       });
