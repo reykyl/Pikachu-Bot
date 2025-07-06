@@ -109,7 +109,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
       "id": "#can"
     })
   }
-]
+],
         headerType: 4,
         mentions: [who]
       });
