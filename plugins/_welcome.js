@@ -70,8 +70,8 @@ export async function before(m, { conn, participants, groupMetadata }) {
                   {
                     name: "quick_reply",
                     buttonParamsJson: JSON.stringify({
-                      "display_text": "Grupos 🦋",
-                      "id": "#groups"
+                      "display_text": "canal 🧢",
+                      "id": "#canal"
                     })
                   },
                   {
@@ -85,7 +85,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
                     name: "quick_reply",
                     buttonParamsJson: JSON.stringify({
                       "display_text": "Menu Completo ⚡️",
-                      "id": "#allmenu"
+                      "id": "#menu"
                     })
                   }
                 ]
