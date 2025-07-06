@@ -83,12 +83,9 @@ handler.help = ['api', 'apis', 'servicios']
 export default handler*/
 
 
-//© código creado por Deylin 
-//https://github.com/Deylin-eliac 
-//➤ no quites créditos
-
 import { generateWAMessageFromContent, proto } from '@whiskeysockets/baileys'
 
+const handler = async (m, { conn }) => {
   const texto = `✨ Pulsa el botón para unirte al canal oficial`.trim()
 
   const messageContent = {
@@ -119,13 +116,17 @@ import { generateWAMessageFromContent, proto } from '@whiskeysockets/baileys'
     }
   }
 
-  const msg = generateWAMessageFromContent(m.chat, messageContent, { quoted: m })
+  const msg = generateWAMessageFromContent(m.chat, messageContent, {
+    userJid: m.sender,
+    quoted: m
+  })
+
   await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
 }
 
-handler.command = ['Canal']
+handler.command = /^canal$/i
 handler.register = true
-handler.help = ['can']
+handler.help = ['canal']
 handler.tags = ['info']
 
 export default handler
