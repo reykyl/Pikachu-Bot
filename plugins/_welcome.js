@@ -2,14 +2,8 @@
 //https://github.com/Deylin-eliac 
 //➤  no quites creditos 
 
-import makeWASocket, { useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion, makeCacheableSignalKeyStore, getContentType, proto, generateWAMessageFromContent } from '@whiskeysockets/baileys'
-import { Boom } from '@hapi/boom'
-import pino from 'pino'
+import { WAMessageStubType } from '@whiskeysockets/baileys'
 import fetch from 'node-fetch'
-import { Low, JSONFile } from 'lowdb'
-import { join } from 'path'
-import { fileURLToPath } from 'url'
-import NodeCache from 'node-cache'
 
 async function obtenerPais(numero) {
   try {
@@ -120,53 +114,3 @@ export async function before(m, { conn, participants, groupMetadata }) {
     }
   }
 }
-
-  // ───── Comando .can ─────
-  sock.ev.on('messages.upsert', async ({ messages }) => {
-    const m = messages[0]
-    const text = m.message?.conversation || m.message?.extendedTextMessage?.text
-    if (!text) return
-
-    const command = text.trim().toLowerCase()
-    if (command === '.can') {
-      const content = {
-        viewOnceMessage: {
-          message: {
-            messageContextInfo: {
-              deviceListMetadata: {},
-              deviceListMetadataVersion: 2
-            },
-            interactiveMessage: proto.Message.InteractiveMessage.create({
-              body: proto.Message.InteractiveMessage.Body.create({
-                text: '✨ Pulsa el botón para unirte al canal oficial'
-              }),
-              footer: proto.Message.InteractiveMessage.Footer.create({
-                text: 'Pikachu Bot by Deylin'
-              }),
-              header: proto.Message.InteractiveMessage.Header.create({
-                hasMediaAttachment: false
-              }),
-              nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-                buttons: [
-                  {
-                    name: 'cta_url',
-                    buttonParamsJson: JSON.stringify({
-                      display_text: '✐ Canal oficial',
-                      url: 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m',
-                      merchant_url: 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
-                    })
-                  }
-                ]
-              })
-            })
-          }
-        }
-      }
-
-      const msg = generateWAMessageFromContent(m.key.remoteJid, content, { quoted: m })
-      await sock.relayMessage(m.key.remoteJid, msg.message, { messageId: msg.key.id })
-    }
-  })
-}
-
-connectBot()
