@@ -68,17 +68,9 @@ export async function before(m, { conn, participants, groupMetadata }) {
 📅 *Fecha:* *${date}*
 ⚡ *Mensaje:* ${fraseRandomBienvenida}`.trim();
 
-            await conn.sendMessage(m.chat, {
+      await conn.sendMessage(m.chat, {
         image: { url: ppUser },
         caption: bienvenida,
-        buttons: [
-          {
-            buttonId: '/menu',
-            buttonText: { displayText: '✐ menu' },
-            type: 1
-          }
-        ],
-        headerType: 4,
         mentions: [who]
       });
     }
@@ -96,17 +88,9 @@ export async function before(m, { conn, participants, groupMetadata }) {
 📅 *Fecha:* *${date}*
 ⚡ *Mensaje:* ${fraseRandomDespedida}`.trim();
 
-            await conn.sendMessage(m.chat, {
+      await conn.sendMessage(m.chat, {
         image: { url: ppUser },
         caption: despedida,
-        buttons: [
-          {
-            buttonId: '/menu',
-            buttonText: { displayText: '✐ menu' },
-            type: 1
-          }
-        ],
-        headerType: 4,
         mentions: [who]
       });
     }
