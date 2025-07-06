@@ -82,7 +82,6 @@ handler.help = ['api', 'apis', 'servicios']
 
 export default handler*/
 
-import { generateWAMessageFromContent, proto } from '@whiskeysockets/baileys'
 
 const handler = async (m, { conn }) => {
   const texto = `✨ Pulsa el botón para unirte al canal oficial`.trim();
