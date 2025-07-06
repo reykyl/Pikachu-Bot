@@ -89,23 +89,6 @@ export default handler*/
 
 import { generateWAMessageFromContent, proto } from '@whiskeysockets/baileys'
 
-// Objeto para guardar tiempos de uso por usuario
-const cooldown = new Map()
-
-const handler = async (m, { conn }) => {
-  const user = m.sender
-
-  const now = Date.now()
-  const waitTime = 2000 
-
-  
-  if (cooldown.has(user) && now - cooldown.get(user) < waitTime) {
-    return conn.reply(m.chat, '🕒 Espera 2 segundos para volver a usar este comando.', m)
-  }
-
-  
-  cooldown.set(user, now)
-
   const texto = `✨ Pulsa el botón para unirte al canal oficial`.trim()
 
   const messageContent = {
