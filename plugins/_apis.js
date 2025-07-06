@@ -123,7 +123,7 @@ import { generateWAMessageFromContent, proto } from '@whiskeysockets/baileys'
   await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
 }
 
-handler.command = ['can']
+handler.command = ['Canal']
 handler.register = true
 handler.help = ['can']
 handler.tags = ['info']
