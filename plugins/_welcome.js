@@ -70,8 +70,8 @@ await conn.sendMessage(m.chat, {
     footer: "Pikachu Bot by Deylin",  
     buttons: [  
       {  
-        buttonId: 'canal_oficial',  
-        buttonText: { displayText: '✐ Canal oficial' },  
+        buttonId: '.owner',  
+        buttonText: { displayText: '✐ creador' },  
         type: 1  
       }  
     ],  
@@ -100,8 +100,8 @@ await conn.sendMessage(m.chat, {
     footer: "Pikachu Bot by Deylin",  
     buttons: [  
       {  
-        buttonId: 'canal_oficial',  
-        buttonText: { displayText: '✐ Canal oficial' },  
+        buttonId: '/menu',  
+        buttonText: { displayText: '✐ menu' },  
         type: 1  
       }  
     ],  
