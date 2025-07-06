@@ -58,8 +58,8 @@ export async function before(m, { conn, participants, groupMetadata }) {
   const fraseRandomDespedida = frasesDespedida[Math.floor(Math.random() * frasesDespedida.length)];
 
   if (chat.welcome) {
-    if (m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD) {
-      const bienvenida = `
+  if (m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD) {
+    const bienvenida = `
 *⚡─『 𝑩𝑰𝑬𝑵𝑽𝑬𝑵𝑰𝑫𝑶/𝑨 』─🧃*
 👤 *Usuario:* ${taguser}
 🌍 *País:* ${pais}
@@ -68,27 +68,37 @@ export async function before(m, { conn, participants, groupMetadata }) {
 📅 *Fecha:* *${date}*
 ⚡ *Mensaje:* ${fraseRandomBienvenida}`.trim();
 
-      await conn.sendMessage(m.chat, {
-        image: { url: ppUser },
-        caption: bienvenida,
-        footer: "Pikachu Bot by Deylin",
-        buttons: [
-          {
-            buttonId: '/canal',
-            buttonText: { displayText: '/Canal    oficial' },
-            type: 1
-          }
-        ],
-        headerType: 4,
-        mentions: [who]
-      });
-    }
+    await conn.sendMessage(m.chat, {
+      image: { url: ppUser },
+      caption: bienvenida,
+      footer: "Pikachu Bot by Deylin",
+      buttons: [
+        {
+          buttonId: '.canal',
+          buttonText: { displayText: '✨ Canal Oficial' },
+          type: 1
+        },
+        {
+          buttonId: '.info',
+          buttonText: { displayText: '🧾 Información' },
+          type: 1
+        },
+        {
+          buttonId: '.menu',
+          buttonText: { displayText: '📍 Menú' },
+          type: 1
+        }
+      ],
+      headerType: 4,
+      mentions: [who]
+    }, { quoted: null }); // 👈🏼 Evita que el mensaje cite el anterior
+  }
 
-    if (
-      m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_LEAVE ||
-      m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_REMOVE
-    ) {
-      const despedida = `
+  if (
+    m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_LEAVE ||
+    m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_REMOVE
+  ) {
+    const despedida = `
 *⚡──『 𝑫𝑬𝑺𝑷𝑬𝑫𝑰𝑫𝑨 』──🧃*
 👤 *Usuario:* ${taguser}
 🌍 *País:* ${pais}
@@ -97,35 +107,24 @@ export async function before(m, { conn, participants, groupMetadata }) {
 📅 *Fecha:* *${date}*
 ⚡ *Mensaje:* ${fraseRandomDespedida}`.trim();
 
-      await conn.sendMessage(m.chat, {
-        image: { url: ppUser },
-        caption: despedida,
-        footer: "Pikachu Bot by Deylin",
-            buttons: [
-      {
-        buttonId: 'servicios',
-        buttonText: { displayText: '#canal' },
-      },
-      {
-        buttonId: 'contacto',
-        buttonText: { displayText: '#canal' },
-      },
-      {
-        buttonId: 'contacto',
-        buttonText: { displayText: '#canal' },
-      },
-      {
-        buttonId: 'contacto',
-        buttonText: { displayText: '#canal' },
-      },
-      {
-        buttonId: 'contacto',
-        buttonText: { displayText: '#canal' },
-      },
-       ],
-        headerType: 4,
-        mentions: [who]
-      });
-    }
+    await conn.sendMessage(m.chat, {
+      image: { url: ppUser },
+      caption: despedida,
+      footer: "Pikachu Bot by Deylin",
+      buttons: [
+        {
+          buttonId: '.canal',
+          buttonText: { displayText: '✨ Canal Oficial' },
+          type: 1
+        },
+        {
+          buttonId: '.contacto',
+          buttonText: { displayText: '📞 Contacto' },
+          type: 1
+        }
+      ],
+      headerType: 4,
+      mentions: [who]
+    }, { quoted: null }); // 👈🏼 También evita cita
   }
 }
