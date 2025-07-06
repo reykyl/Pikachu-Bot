@@ -3,7 +3,7 @@
 //➤ no quites créditos
 
 import fetch from 'node-fetch'
-import { WAMessageStubType } from '@whiskeysockets/baileys'
+import { WAMessageStubType, proto } from '@whiskeysockets/baileys'
 
 // Función para obtener país
 async function obtenerPais(numero) {
@@ -21,7 +21,7 @@ async function obtenerPais(numero) {
   }
 }
 
-// Función para enviar bienvenida/despedida
+// Función para enviar bienvenida/despedida con botón nativeFlowMessage
 async function enviarBienvenidaDespedida({ conn, m, tipo, quien, groupMetadata, totalMembers }) {
   const taguser = `@${quien.split('@')[0]}`
   const fecha = new Date().toLocaleString("es-ES", { timeZone: "America/Mexico_City" })
@@ -57,22 +57,46 @@ async function enviarBienvenidaDespedida({ conn, m, tipo, quien, groupMetadata, 
     ? `*⚡──『 𝑩𝑰𝑬𝑵𝑽𝑬𝑵𝑰𝑫𝑶/𝑨 』──🧃*\n👤 *Usuario:* ${taguser}\n🌍 *País:* ${pais}\n💬 *Grupo:* *${groupMetadata.subject}*\n👥 *Miembros:* *${totalMembers + 1}*\n📅 *Fecha:* *${fecha}*\n⚡ *Mensaje:* ${frase}`
     : `*⚡──『 𝑫𝑬𝑺𝑷𝑬𝑫𝑰𝑫𝑨 』──🧃*\n👤 *Usuario:* ${taguser}\n🌍 *País:* ${pais}\n💬 *Grupo:* *${groupMetadata.subject}*\n👥 *Miembros:* *${totalMembers - 1}*\n📅 *Fecha:* *${fecha}*\n⚡ *Mensaje:* ${frase}`
 
-  const enlaceBoton = "https://whatsapp.com/channel/0029Vb4cQJu2f3EB7BS7o11M"
-  const textoBoton = "✐ Canal de Pikachu"
-
-  await conn.sendMessage(m.chat, {
-    image: { url: ppUser },
+  // Prepara el mensaje con estructura proto para el botón
+  const buttonMessage = {
+    imageMessage: await conn.prepareMessageMedia({ image: { url: ppUser } }, { upload: conn.waUploadToServer }),
     caption: texto,
-    footer: "𝙋𝙞𝙠𝙖𝙘𝙝𝙪 - 𝘽𝙤𝙩",
-    buttons: [
-      {
-        buttonId: enlaceBoton,
-        buttonText: { displayText: textoBoton },
-        type: 1
+    footer: 'Pikachu Bot by Deylin',
+    viewOnceMessage: {
+      message: {
+        messageContextInfo: {
+          deviceListMetadata: {},
+          deviceListMetadataVersion: 2
+        },
+        interactiveMessage: proto.Message.InteractiveMessage.create({
+          body: proto.Message.InteractiveMessage.Body.create({
+            text: '✨ Pulsa el botón para unirte al canal oficial'
+          }),
+          footer: proto.Message.InteractiveMessage.Footer.create({
+            text: 'Pikachu Bot by Deylin'
+          }),
+          header: proto.Message.InteractiveMessage.Header.create({
+            hasMediaAttachment: false
+          }),
+          nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+            buttons: [
+              {
+                name: 'cta_url',
+                buttonParamsJson: JSON.stringify({
+                  display_text: '✐ Canal oficial',
+                  url: 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m',
+                  merchant_url: 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
+                })
+              }
+            ]
+          })
+        })
       }
-    ],
-    mentions: [quien]
-  }, { quoted: m })
+    }
+  }
+
+  // Envía el mensaje con botón
+  await conn.sendMessage(m.chat, buttonMessage, { mentions: [quien], quoted: m })
 }
 
 // Hook principal del plugin
