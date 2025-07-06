@@ -2,7 +2,7 @@
 //https://github.com/Deylin-eliac 
 //➤  no quites creditos 
 
-import { WAMessageStubType } from '@whiskeysockets/baileys'
+import { WAMessageStubType, generateWAMessageFromContent, proto } from '@whiskeysockets/baileys'
 import fetch from 'node-fetch'
 
 async function obtenerPais(numero) {
@@ -74,7 +74,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
         footer: "Pikachu Bot by Deylin",
         buttons: [
           {
-            buttonId: 'canal_oficial',
+            buttonId: '.can',
             buttonText: { displayText: '✐ Canal oficial' },
             type: 1
           }
@@ -103,7 +103,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
         footer: "Pikachu Bot by Deylin",
         buttons: [
           {
-            buttonId: 'canal_oficial',
+            buttonId: '.can',
             buttonText: { displayText: '✐ Canal oficial' },
             type: 1
           }
@@ -116,5 +116,58 @@ export async function before(m, { conn, participants, groupMetadata }) {
 }
 
 
+
+
+
+
+let handler = async (m, { conn }) => {
+    if (["can"].includes(command)) {
+  const texto = `
+✨ Pulsa el botón para unirte al canal oficial
+  `.trim()
+
+  const messageContent = {
+    viewOnceMessage: {
+      message: {
+        messageContextInfo: {
+          deviceListMetadata: {},
+          deviceListMetadataVersion: 2
+        },
+        interactiveMessage: proto.Message.InteractiveMessage.create({
+          body: proto.Message.InteractiveMessage.Body.create({
+            text: texto
+          }),
+          footer: proto.Message.InteractiveMessage.Footer.create({
+            text: 'Pikachu Bot by Deylin'
+          }),
+          header: proto.Message.InteractiveMessage.Header.create({
+            hasMediaAttachment: false
+          }),
+          nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+            buttons: [
+              {
+                name: 'cta_url',
+                buttonParamsJson: JSON.stringify({
+                  display_text: '✐ Canal oficial',
+                  url: 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m',
+                  merchant_url: 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
+                })
+              }
+            ]
+          })
+        })
+      }
+    }
+  }
+
+  const msg = generateWAMessageFromContent(m.chat, messageContent, { quoted: m })
+  await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
+}
+}
+
+handler.command = ['can']
+handler.register = true
+
+export default handler
 
 
