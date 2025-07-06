@@ -124,7 +124,7 @@ const handler = async (m, { conn }) => {
   await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
 }
 
-handler.command = /^canal$/i
+handler.command = /^([.#/!])?canal$/i
 handler.register = true
 handler.help = ['canal']
 handler.tags = ['info']
