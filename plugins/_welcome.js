@@ -74,8 +74,8 @@ export async function before(m, { conn, participants, groupMetadata }) {
         footer: "Pikachu Bot by Deylin",
         buttons: [
           {
-            buttonId: 'canal',
-            buttonText: { displayText: '⚡Canal oficial' },
+            buttonId: '/canal',
+            buttonText: { displayText: '/Canal    oficial' },
             type: 1
           }
         ],
@@ -103,8 +103,8 @@ export async function before(m, { conn, participants, groupMetadata }) {
         footer: "Pikachu Bot by Deylin",
         buttons: [
           {
-            buttonId: 'canal',
-            buttonText: { displayText: '⚡Canal oficial' },
+            buttonId: '/canal',
+            buttonText: { displayText: '/canal    oficial' },
             type: 1
           }
         ],
