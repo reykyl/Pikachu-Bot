@@ -1,130 +1,167 @@
-//© código creado por Deylin 
-//https://github.com/Deylin-eliac 
-//➤  no quites creditos 
-
-import { WAMessageStubType } from '@whiskeysockets/baileys'
-import fetch from 'node-fetch'
-
-async function obtenerPais(numero) {
-  try {
-    let number = numero.replace("@s.whatsapp.net", "");
-    const res = await fetch(`https://g-mini-ia.vercel.app/api/infonumero?numero=${number}`);
-    const data = await res.json();
-
-    if (data && data.pais) return data.pais;
-    if (data && data.bandera && data.nombre) return `${data.bandera} ${data.nombre}`;
-
-    return "🌐 Desconocido";
-  } catch (e) {
-    return "🌐 Desconocido";
-  }
-}
+import { WAMessageStubType } from '@whiskeysockets/baileys';
+import fetch from 'node-fetch';
+import pkg from '@whiskeysockets/baileys';
+const { generateWAMessageFromContent, prepareWAMessageMedia, proto } = pkg;
+import moment from 'moment-timezone';
 
 export async function before(m, { conn, participants, groupMetadata }) {
-  if (!m.messageStubType || !m.isGroup) return;
-//  if (m.chat === "120363402481697721@g.us") return;
+  if (!m.messageStubType || !m.isGroup) return true;
+  
+  moment.tz.setDefault('America/Lima');
+  const date = moment().format('DD/MM/YYYY');
+  const time = moment().format('HH:mm:ss');
+  const week = moment().format('dddd');
+  
+  let who = m.messageStubParameters[0];
+  let taguser = `+${who.split('@')[0]}`;
+  let chat = global.db.data.chats[m.chat];
+  let defaultImage = 'https://files.catbox.moe/evwxsx.jpg';
 
-  const who = m.messageStubParameters?.[0];
-  if (!who) return;
+  let welcomeAudioUrl = 'https://qu.ax/ejKuy.mp3';
+  let farewellAudioUrl = 'https://qu.ax/syuTL.mp4';
 
-  const taguser = `@${who.split("@")[0]}`;
-  const chat = global.db?.data?.chats?.[m.chat] || {};
-  const totalMembers = participants.length;
-  const date = new Date().toLocaleString("es-ES", { timeZone: "America/Mexico_City" });
-
-  const pais = await obtenerPais(who);
-  let ppUser = 'https://raw.githubusercontent.com/Deylin-Eliac/Pikachu-Bot/refs/heads/main/src/IMG-20250613-WA0194.jpg';
-
-  try {
-    ppUser = await conn.profilePictureUrl(who, 'image');
-  } catch (e) {}
-
-  const frasesBienvenida = [
-    "¡Pika Pika! Bienvenido al grupo.",
-    "¡Un rayo de energía ha llegado al grupo!",
-    "Pikachu dice que este grupo ahora es 100% más eléctrico ⚡",
-    "¡Esperamos que la pases genial, entrenador!",
-    "Bienvenido al equipo, ¡que empiece la aventura Pokémon!"
-  ];
-  const frasesDespedida = [
-    "Pikachu te dice adiós con una descarga de cariño.",
-    "Otro entrenador deja el grupo... ¡Buena suerte!",
-    "¡Hasta la próxima, no olvides tus Pokéballs!",
-    "El grupo se queda con menos voltaje ⚡",
-    "Pikachu te extrañará 🥺"
-  ];
-
-  const fraseRandomBienvenida = frasesBienvenida[Math.floor(Math.random() * frasesBienvenida.length)];
-  const fraseRandomDespedida = frasesDespedida[Math.floor(Math.random() * frasesDespedida.length)];
+  let owner = groupMetadata.owner || (participants.length ? participants[0].id : null);
+  let ownerTag = owner ? `+${owner.split('@')[0]}` : 'Desconocido';
+  
+  let memberCount = participants.length;
+  let newMemberCount = m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD ? memberCount : memberCount - 1;
 
   if (chat.welcome) {
-  if (m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD) {
-    const bienvenida = `
-*⚡─『 𝑩𝑰𝑬𝑵𝑽𝑬𝑵𝑰𝑫𝑶/𝑨 』─🧃*
-👤 *Usuario:* ${taguser}
-🌍 *País:* ${pais}
-💬 *Grupo:* *${groupMetadata.subject}*
-👥 *Miembros:* *${totalMembers + 1}*
-📅 *Fecha:* *${date}*
-⚡ *Mensaje:* ${fraseRandomBienvenida}`.trim();
+    let pp = await conn.profilePictureUrl(m.messageStubParameters[0], 'image').catch(_ => 'https://files.catbox.moe/xr2m6u.jpg')
+    let img = await (await fetch(`${pp}`)).buffer()
+    let media = await prepareWAMessageMedia({ image: img }, { upload: conn.waUploadToServer });
 
-    await conn.sendMessage(m.chat, {
-      image: { url: ppUser },
-      caption: bienvenida,
-      footer: "Pikachu Bot by Deylin",
-      buttons: [
-        {
-          buttonId: '.canal',
-          buttonText: { displayText: '✨ Canal Oficial' },
-          type: 1
-        },
-        {
-          buttonId: '.info',
-          buttonText: { displayText: '🧾 Información' },
-          type: 1
-        },
-        {
-          buttonId: '.menu',
-          buttonText: { displayText: '📍 Menú' },
-          type: 1
+    if (m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD) {
+      let welcomeMsg = `
+╭┈ ↷
+│ ✐ ꒷ꕤ💜ദ ɴᴜᴇᴠᴏ ᴍɪᴇᴍʙʀᴏ ᴇɴ ᴇʟ ɢʀᴜᴘᴏ
+│ *🎉 ᴜsᴜᴀʀɪᴏ:* ${taguser}
+│ *👥 ᴍɪᴇᴍʙʀᴏs:* ${newMemberCount} (¡Bienvenido!)
+│ *🍬 ɢʀᴜᴘᴏ:* ${groupMetadata.subject}
+│ *👑 ᴏᴡɴᴇʀ:* ${ownerTag}
+│ *🕒 ʜᴏʀᴀ:* ${time}
+│ *📅 ғᴇᴄʜᴀ:* ${date}
+│ *🗓️ ᴅíᴀ:* ${week}
+╰─────────────────
+
+> ✐ Usa *#menu* para ver los comandos disponibles`;
+
+      let msg = generateWAMessageFromContent(m.chat, {
+        viewOnceMessage: {
+          message: {
+            messageContextInfo: {
+              deviceListMetadata: {},
+              deviceListMetadataVersion: 2
+            },
+            interactiveMessage: proto.Message.InteractiveMessage.create({
+              body: proto.Message.InteractiveMessage.Body.create({
+                text: welcomeMsg
+              }),
+              footer: proto.Message.InteractiveMessage.Footer.create({
+                text: '¡Disfruta tu estadía en el grupo!'
+              }),
+              header: proto.Message.InteractiveMessage.Header.create({
+                title: "",
+                subtitle: "",
+                hasMediaAttachment: true
+              }),
+              nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+                buttons: [
+                  {
+                    name: "quick_reply",
+                    buttonParamsJson: JSON.stringify({
+                      "display_text": "Grupos 🦋",
+                      "id": "#groups"
+                    })
+                  },
+                  {
+                    name: "quick_reply",
+                    buttonParamsJson: JSON.stringify({
+                      "display_text": "👤 AutoReg",
+                      "id": "#reg user.19"
+                    })
+                  },
+                  {
+                    name: "quick_reply",
+                    buttonParamsJson: JSON.stringify({
+                      "display_text": "Menu Completo ⚡️",
+                      "id": "#allmenu"
+                    })
+                  }
+                ]
+              })
+            })
+          }
         }
-      ],
-      headerType: 4,
-      mentions: [who]
-    }, { quoted: null }); // 👈🏼 Evita que el mensaje cite el anterior
-  }
+      }, {});
 
-  if (
-    m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_LEAVE ||
-    m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_REMOVE
-  ) {
-    const despedida = `
-*⚡──『 𝑫𝑬𝑺𝑷𝑬𝑫𝑰𝑫𝑨 』──🧃*
-👤 *Usuario:* ${taguser}
-🌍 *País:* ${pais}
-💬 *Grupo:* *${groupMetadata.subject}*
-👥 *Miembros:* *${totalMembers - 1}*
-📅 *Fecha:* *${date}*
-⚡ *Mensaje:* ${fraseRandomDespedida}`.trim();
+      msg.message.viewOnceMessage.message.interactiveMessage.header.imageMessage = proto.Message.ImageMessage.fromObject(media.imageMessage);
+      await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id });
+      await conn.sendMessage(m.chat, { audio: { url: welcomeAudioUrl }, mimetype: 'audio/mpeg', ptt: true });
+    }
 
-    await conn.sendMessage(m.chat, {
-      image: { url: ppUser },
-      caption: despedida,
-      footer: "Pikachu Bot by Deylin",
-      buttons: [
-        {
-          buttonId: '.canal',
-          buttonText: { displayText: '✨ Canal Oficial' },
-          type: 1
-        },
-        {
-          buttonId: '.contacto',
-          buttonText: { displayText: '📞 Contacto' },
-          type: 1
+    if (m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_LEAVE || 
+        m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_REMOVE) {
+      let farewellMsg = `
+╭┈ ↷
+│ ✐ ꒷ꕤ💜ദ ᴜsᴜᴀʀɪᴏ sᴀʟɪᴏ ᴅᴇʟ ɢʀᴜᴘᴏ
+│ *👋 ᴜsᴜᴀʀɪᴏ:* ${taguser}
+│ *👥 ᴍɪᴇᴍʙʀᴏs ʀᴇsᴛᴀɴᴛᴇs:* ${memberCount - 1}
+│ *🍬 ɢʀᴜᴘᴏ:* ${groupMetadata.subject}
+│ *👑 ᴏᴡɴᴇʀ:* ${ownerTag}
+│ *🕒 ʜᴏʀᴀ:* ${time}
+│ *📅 ғᴇᴄʜᴀ:* ${date}
+│ *🗓️ ᴅíᴀ:* ${week}
+╰─────────────────
+
+> ✐ Esperamos verte de nuevo pronto`;
+
+      let msg = generateWAMessageFromContent(m.chat, {
+        viewOnceMessage: {
+          message: {
+            messageContextInfo: {
+              deviceListMetadata: {},
+              deviceListMetadataVersion: 2
+            },
+            interactiveMessage: proto.Message.InteractiveMessage.create({
+              body: proto.Message.InteractiveMessage.Body.create({
+                text: farewellMsg
+              }),
+              footer: proto.Message.InteractiveMessage.Footer.create({
+                text: '¡Hasta pronto!'
+              }),
+              header: proto.Message.InteractiveMessage.Header.create({
+                title: "",
+                subtitle: "",
+                hasMediaAttachment: true
+              }),
+              nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+                buttons: [
+                  {
+                    name: "quick_reply",
+                    buttonParamsJson: JSON.stringify({
+                      "display_text": "Creador 🍟",
+                      "id": "#owner"
+                    })
+                  },
+                  {
+                    name: "quick_reply",
+                    buttonParamsJson: JSON.stringify({
+                      "display_text": "Menu 📚",
+                      "id": "#menu"
+                    })
+                  }
+                ]
+              })
+            })
+          }
         }
-      ],
-      headerType: 4,
-      mentions: [who]
-    }, { quoted: null }); // 👈🏼 También evita cita
+      }, {});
+
+      msg.message.viewOnceMessage.message.interactiveMessage.header.imageMessage = proto.Message.ImageMessage.fromObject(media.imageMessage);
+      await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id });
+      await conn.sendMessage(m.chat, { audio: { url: farewellAudioUrl }, mimetype: 'audio/mp4', ptt: true });
+    }
   }
+  return true;
 }
