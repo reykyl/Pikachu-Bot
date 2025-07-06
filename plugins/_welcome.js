@@ -1,6 +1,6 @@
-// © código creado por Deylin 
-// https://github.com/Deylin-eliac 
-// ➤  no quites creditos 
+//© código creado por Deylin 
+//https://github.com/Deylin-eliac 
+//➤  no quites creditos 
 
 import { WAMessageStubType } from '@whiskeysockets/baileys'
 import fetch from 'node-fetch'
@@ -22,7 +22,7 @@ async function obtenerPais(numero) {
 
 export async function before(m, { conn, participants, groupMetadata }) {
   if (!m.messageStubType || !m.isGroup) return;
-  // if (m.chat === "120363402481697721@g.us") return;
+//  if (m.chat === "120363402481697721@g.us") return;
 
   const who = m.messageStubParameters?.[0];
   if (!who) return;
@@ -58,7 +58,6 @@ export async function before(m, { conn, participants, groupMetadata }) {
   const fraseRandomDespedida = frasesDespedida[Math.floor(Math.random() * frasesDespedida.length)];
 
   if (chat.welcome) {
-    // ─────── Bienvenida ───────
     if (m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD) {
       const bienvenida = `
 *⚡─『 𝑩𝑰𝑬𝑵𝑽𝑬𝑵𝑰𝑫𝑶/𝑨 』─🧃*
@@ -69,7 +68,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
 📅 *Fecha:* *${date}*
 ⚡ *Mensaje:* ${fraseRandomBienvenida}`.trim();
 
-      await conn.sendMessage(m.chat, {
+            await conn.sendMessage(m.chat, {
         image: { url: ppUser },
         caption: bienvenida,
         buttons: [
@@ -84,7 +83,6 @@ export async function before(m, { conn, participants, groupMetadata }) {
       });
     }
 
-    // ─────── Despedida ───────
     if (
       m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_LEAVE ||
       m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_REMOVE
@@ -98,7 +96,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
 📅 *Fecha:* *${date}*
 ⚡ *Mensaje:* ${fraseRandomDespedida}`.trim();
 
-      await conn.sendMessage(m.chat, {
+            await conn.sendMessage(m.chat, {
         image: { url: ppUser },
         caption: despedida,
         buttons: [
