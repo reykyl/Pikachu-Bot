@@ -98,21 +98,16 @@ export async function before(m, { conn, participants, groupMetadata }) {
 ⚡ *Mensaje:* ${fraseRandomDespedida}`.trim();
 
       await conn.sendMessage(m.chat, {
-        image: { url: ppUser },
-        caption: despedida,
-        footer: "Pikachu Bot by Deylin",
-        buttons: [
-  {
-    name: "quick_reply",
-    buttonParamsJson: JSON.stringify({
-      "display_text": "✐ Canal oficial",
-      "id": "#can"
-    })
-  }
-],
-        headerType: 4,
-        mentions: [who]
-      });
+  image: { url: ppUser },
+  caption: despedida,
+  footer: "Pikachu Bot by Deylin",
+  buttons: [
+    {
+      buttonId: '#can',
+      buttonText: { displayText: '✐ Canal oficial' },
+      type: 1
     }
-  }
-}
+  ],
+  headerType: 4,
+  mentions: [who]
+});
