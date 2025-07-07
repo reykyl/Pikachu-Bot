@@ -11,7 +11,7 @@ let handler = async function (m, { conn, participants, groupMetadata }) {
     const estado = p.admin || 'miembro'
     return `╭━━ 👤 Participante ${index + 1}
 ┃ 🆔 ID: ${id}
-┃ 🔗 LID: ${lid}
+┃ 👤 usar: 
 ┃ 🛡️ Estado: ${estado}
 ╰━━━━━━━━━━━━━━`
   })
