@@ -476,21 +476,33 @@ if (gruposPermitidos.includes(m.chat) &&!comandosPermitidos.includes(command)) {
   }
 }
 
-global.dfail = (type, m, conn, usedPrefix) => {
-    const msg = {
-        rowner: "👑 *Comando exclusivo del Creador Principal de Pixelap.*",
-        owner: "🧰 *Este comando solo está disponible para desarrolladores de Pixelap.*",
-        mods: "🧩 *Este comando solo puede ser usado por moderadores autorizados.*",
-        premium: "💎 *Este comando es solo para usuarios Premium.*\nSolicita acceso a través del equipo Pixelap.",
-        premsubs: "📡 *Función habilitada únicamente para instancias premium.*",
-        group: "👥 *Este comando solo funciona en grupos.*",
-        private: "💬 *Este comando solo funciona en el chat privado.*",
-        admin: "🔐 *Solo administradores del grupo pueden usar este comando.*",
-        botAdmin: "🤖 *El bot necesita permisos de administrador para ejecutar esta acción.*",
-        unreg: `📛 *Usuario no registrado en Pixelap.*\n\n🔰 *Para registrarte:* \n> .reg TuNombre.Edad\n\n📌 *Ejemplo:*\n> .reg Pixelap.18`,
-        restrict: "🚫 *Este comando ha sido restringido por el administrador del sistema.*"
-    }[type];
-    if (msg) return conn.reply(m.chat, msg, m, rcanal).then(_ => m.react('✖️'))
+global.dfail = (type, m, conn, comando = '') => {
+  let edadaleatoria = ['10', '28', '20', '40', '18', '21', '15', '11', '9', '17', '25'].getRandom();
+  let user2 = m.pushName || 'Anónimo';
+  let verifyaleatorio = ['registrar', 'reg', 'verificar', 'verify', 'register'].getRandom();
+  let edades = Array.from({ length: 3 }, () => ['10', '28', '20', '40', '18', '21', '15', '11', '9', '17', '25'].getRandom());
+
+  let mensajes = getMensajeSistema({
+    comando,
+    verifyaleatorio,
+    user2,
+    edades
+  });
+
+  const msg = {
+    rowner: mensajes.smsrowner,
+    owner: mensajes.smsowner,
+    mods: mensajes.smsmods,
+    premium: mensajes.smspremium,
+    group: mensajes.smsgroup,
+    private: mensajes.smsprivate,
+    admin: mensajes.smsadmin,
+    botAdmin: mensajes.smsbotAdmin,
+    unreg: mensajes.smsunreg,
+    restrict: mensajes.smsrestrict
+  }[type];
+
+  if (msg) return conn.reply(m.chat, msg, m, fake).then(_ => m.react('✖️'))
 }
 
 let file = global.__filename(import.meta.url, true)
