@@ -23,7 +23,7 @@ const text = ` *Lid del grupo*
 ╰━━━━━━━━━━━━━━/n/n
 `
 
-return m.reply(JSON.stringify(text, null, 2))
+return m.reply(JSON.stringify(text, m))
 }
 
 handler.command = ['lid']
