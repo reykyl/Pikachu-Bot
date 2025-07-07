@@ -1,29 +1,23 @@
 let handler = async function (m, { conn, participants, groupMetadata }) {
-if (!m.isGroup) return m.reply('Este comando solo funciona en grupos.')
+  if (!m.isGroup) return m.reply('❌ Este comando solo funciona en grupos.')
 
-const normalizeJid = jid => jid?.replace(/[^0-9]/g, '')
-const participantList = groupMetadata.participants || []
+  const normalizeJid = jid => jid?.replace(/[^0-9]/g, '')
 
-const result = participantList.map(participant => ({
-id: participant.id,
-lid: participant.lid || null,
-admin: participant.admin || null
-}))
+  const participantList = groupMetadata.participants || []
 
-const id = participant.id
-const lid = participant.lid
-const estado = participant.admin
+  const lista = participantList.map((p, index) => {
+    const id = p.id
+    const lid = p.lid || 'N/A'
+    const estado = p.admin || 'miembro'
+    return `╭━━ 👤 Participante ${index + 1}
+┃ 🆔 ID: ${id}
+┃ 🔗 LID: ${lid}
+┃ 🛡️ Estado: ${estado}
+╰━━━━━━━━━━━━━━`
+  })
 
-const text = ` *Lid del grupo*
-
-╭━━━━━━━━━━━━━━
-┃ID: ${id}
-┃LID: ${lid}
-┃ESTADO: ${estado}
-╰━━━━━━━━━━━━━━/n/n
-`
-
-return m.reply(JSON.stringify(text, m))
+  const text = `*📋 Lista de Participantes*\n\n${lista.join('\n\n')}`
+  return m.reply(text)
 }
 
 handler.command = ['lid']
