@@ -10,7 +10,20 @@ lid: participant.lid || null,
 admin: participant.admin || null
 }))
 
-return m.reply(JSON.stringify(result, null, 2))
+const id = participant.id
+const lid = participant.lid
+const estado = participant.admin
+
+const text = ` *Lid del grupo*
+
+╭━━━━━━━━━━━━━━
+┃ID: ${id}
+┃LID: ${lid}
+┃ESTADO: ${estado}
+╰━━━━━━━━━━━━━━/n/n
+`
+
+return m.reply(JSON.stringify(text, null, 2))
 }
 
 handler.command = ['lid']
