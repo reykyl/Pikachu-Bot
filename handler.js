@@ -268,16 +268,20 @@ m.exp += Math.ceil(Math.random() * 10)
 
 let usedPrefix
 
-const groupMetadata = (m.isGroup ? ((conn.chats[m.chat] || {}).metadata || await this.groupMetadata(m.chat).catch(_ => null)) : {}) || {}
-const participants = (m.isGroup ? groupMetadata.participants : []) || []
-//- Matías es mi novia (Tesis) 🥺       
+// Obtiene siempre los metadatos actualizados del grupo
+const groupMetadata = m.isGroup ? await this.groupMetadata(m.chat).catch(_ => ({})) : {}
+const participants = m.isGroup ? groupMetadata?.participants || [] : []
+
 const normalizeJid = jid => jid?.replace(/[^0-9]/g, '')
 const cleanJid = jid => jid?.split(':')[0] || ''
+
 const senderNum = normalizeJid(m.sender)
 const botNums = [this.user?.jid, this.user?.lid].map(j => normalizeJid(cleanJid(j)))
+
 const user = m.isGroup 
   ? participants.find(u => normalizeJid(u.id) === senderNum) 
   : {}
+  
 const bot = m.isGroup 
   ? participants.find(u => botNums.includes(normalizeJid(u.id))) 
   : {}
