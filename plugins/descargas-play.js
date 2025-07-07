@@ -65,7 +65,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
   await m.react('⚡️');
 
   if (!text.trim()) {
-    return conn.reply(m.chat, "*Ｏ(≧∇≦)Ｏ🧃* *Pikachu-Bot* | Dime el nombre de la canción que estás buscando, ¡Pika!", m, rcanal);
+    return conn.reply(m.chat, "*Ｏ(≧∇≦)Ｏ🧃* *Pikachu-Bot* | Dime el nombre de la canción que estás buscando, ¡Pika!", m, estilo);
   }
 
   try {
