@@ -18,7 +18,7 @@ let handler = async function (m, { conn, groupMetadata }) {
 ┣━━━━━━━━━━━━━━━━━━━`
   })
 
-  const textoFinal = `*📋 Lista de Participantes del Grupo*\n\n${lista.join('\n┣\n')}`
+  const textoFinal = `*📋 Lista de Participantes del Grupo*\n\n${lista.join('\n┃\n┃')}`
 
   const mencionados = participantes.map(p => p.id).filter(Boolean)
   return conn.reply(m.chat, textoFinal, m, { mentions: mencionados })
