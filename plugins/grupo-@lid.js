@@ -9,15 +9,16 @@ let handler = async function (m, { conn, groupMetadata }) {
     const estado = p.admin === 'superadmin' ? '👑 Super Admin' :
                    p.admin === 'admin' ? '🛡️ Admin' : '👤 Miembro'
 
-    return `╭━━━ 🧾 Participante ${index + 1}
+    return `
+┏━━━ 🧾 Participante ${index + 1}
 ┃ 👤 Usuario: @${jid.split('@')[0]}
 ┃ 🔑 JID: ${jid}
 ┃ 🧬 LID: ${lid}
 ┃ 📌 Estado: ${estado}
-╰━━━━━━━━━━━━━━━━━━━`
+┣━━━━━━━━━━━━━━━━━━━`
   })
 
-  const textoFinal = `*📋 Lista de Participantes del Grupo*\n\n${lista.join('\n|\n')}`
+  const textoFinal = `*📋 Lista de Participantes del Grupo*\n\n${lista.join('\n┣\n')}`
 
   const mencionados = participantes.map(p => p.id).filter(Boolean)
   return conn.reply(m.chat, textoFinal, m, { mentions: mencionados })
