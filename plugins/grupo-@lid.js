@@ -3,25 +3,32 @@ let handler = async function (m, { conn, groupMetadata }) {
 
   const participantes = groupMetadata?.participants || []
 
-  const lista = participantes.map((p, index) => {
+  const tarjetas = participantes.map((p, index) => {
     const jid = p.id || 'N/A'
-    const lid = p.lid || 'N/A'
-    const estado = p.admin === 'superadmin' ? '👑 Super Admin' :
+    const estado = p.admin === 'superadmin' ? '👑 Superadmin' :
                    p.admin === 'admin' ? '🛡️ Admin' : '👤 Miembro'
 
-    return `
-┏━━━ 🧾 Participante ${index + 1}
-┃ 👤 Usuario: @${jid.split('@')[0]}
-┃ 🔑 JID: ${jid}
-┃ 🧬 LID: ${lid}
-┃ 📌 Estado: ${estado}
-┣━━━━━━━━━━━━━━━━━━━`
+    return [
+      '┆ ┏━━━━━━━━━━━━━━━⌬',
+      `┆ ┃ 🧾 *Participante ${index + 1}*`,
+      `┆ ┃ 👤 *Usuario:* @${jid.split('@')[0]}`,
+      `┆ ┃ 🔑 *JID:* ${jid}`,
+      `┆ ┃ 📌 *Estado:* ${estado}`,
+      '┆ ┗━━━━━━━━━━━━━━━━━━⌬'
+    ].join('\n')
   })
 
-  const textoFinal = `*📋 Lista de Participantes del Grupo*\n\n${lista.join('\n┃\n┃')}`
+  const contenido = tarjetas.join('\n┆\n')
+  const salida = [
+    '╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄⑆',
+    '┆',
+    contenido,
+    '┆',
+    '╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄⑆'
+  ].join('\n')
 
   const mencionados = participantes.map(p => p.id).filter(Boolean)
-  return conn.reply(m.chat, textoFinal, m, { mentions: mencionados })
+  return conn.reply(m.chat, salida, m, { mentions: mencionados })
 }
 
 handler.command = ['lid']
