@@ -3,9 +3,6 @@ import { generateWAMessageFromContent, proto } from '@whiskeysockets/baileys'
 let handler = async (m, { conn }) => {
   const text = `*🔧 APIs desarrolladas por Deylin*
 
-*🌐 Prueba APIs directamente aquí:* 
-https://paka-apis.vercel.app/
-
 _________________________________
 
 [1] https://anime-xi-wheat.vercel.app/api/pinterest?q=
