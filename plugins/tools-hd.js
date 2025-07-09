@@ -8,7 +8,7 @@ let handler = async (m, { conn, usedPrefix, command }) => {
   
   if (!/image\/(jpe?g|png)/i.test(mime)) {
     await conn.sendMessage(m.chat, { react: { text: '❗', key: m.key } })
-    return m.reply(`Envía o *responde a una imagen* con el comando:\n*${usedPrefix + command}*`)
+    return m.reply(`${emojis} Envía o *responde a una imagen* con el comando:\n*${usedPrefix + command}*`)
   }
 
   try {
@@ -47,10 +47,6 @@ let handler = async (m, { conn, usedPrefix, command }) => {
       image: resultBuffer,
       caption: `
 ✨ Tu imagen ha sido mejorada al doble de resolución.
-
-📈 Mayor nitidez y más detalles.
-
-🔧 _Usa esta función cuando necesites mejorar una imagen borrosa._
 `.trim()
     }, { quoted: m })
 
