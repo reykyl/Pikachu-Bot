@@ -9,8 +9,12 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
     await m.react('🌟')
     conn.sendPresenceUpdate('composing', m.chat)
 
-    let response = await fetch(`https://mode-ia.onrender.com/mode-ia?prompt=${encodeURIComponent(text)}`)
-    let data = await response.json()
+    
+    const id = m.sender || 'anon'
+    const url = `https://g-mini-ia.vercel.app/api/mode-ia?prompt=${encodeURIComponent(text)}&id=${encodeURIComponent(id)}`
+
+    const response = await fetch(url)
+    const data = await response.json()
 
     if (!data.response) throw 'Sin respuesta válida'
     await m.reply(data.response.trim())
@@ -21,10 +25,10 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
   }
 }
 
-handler.help = ['ia *<texto>*'];
-handler.tags = ['ia'];
-handler.command = ['ia'];
+handler.help = ['ia *<texto>*']
+handler.tags = ['ia']
+handler.command = ['ia']
 handler.register = true
-handler.group = true;
+handler.group = true
 
-export default handler;
+export default handler
