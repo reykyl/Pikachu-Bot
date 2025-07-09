@@ -2,7 +2,7 @@ import { igdl } from 'ruhend-scraper';
 
 const handler = async (m, { args, conn }) => {
   if (!args[0]) {
-    return conn.reply(m.chat, `${emojis} ¡Pika! Necesitas enviar un enlace de *Instagram*.`, m, fake);
+    return conn.reply(m.chat, `${emojis} Necesitas enviar un enlace de *Instagram*.`, m, fake);
   }
 
   try {
@@ -12,7 +12,7 @@ const handler = async (m, { args, conn }) => {
 
     if (!data || data.length === 0) {
       await m.react(error);
-      return conn.reply(m.chat, `${emojis} Pikachu no encontró ningún archivo... prueba con otro link.`, m, fake);
+      return conn.reply(m.chat, `${emojis} No encontró ningún archivo... prueba con otro link.`, m, fake);
     }
 
     for (let media of data) {
@@ -21,13 +21,10 @@ const handler = async (m, { args, conn }) => {
         media.url,
         'instagram.mp4',
         `
-⚡─────『 𝑷𝒊𝒌𝒂𝒄𝒉𝒖 𝑩𝒐𝒕 ⚡️』─────⚡
+⚡─────『 *Resultado* 』─────⚡
 
 📷 *Instagram Downloader*
 🔗 *Link:* ${args[0]}
-
-💛 ¡Pika-Pika! Aquí tienes tu media:
-⟢ ¡Disfruta el contenido!
 
 ─────────────────────────
 `.trim(),
@@ -38,7 +35,7 @@ const handler = async (m, { args, conn }) => {
     await m.react(done);
   } catch (e) {
     await m.react(error);
-    return conn.reply(m.chat, `${emojis} Pikachu se cayó intentando descargar... ocurrió un error.`, m, fake);
+    return conn.reply(m.chat, `${emojis} ocurrió un error.`, m, fake);
   }
 };
 
