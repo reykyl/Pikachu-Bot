@@ -65,13 +65,13 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
   await m.react('⚡️');
 
   if (!text.trim()) {
-    return conn.reply(m.chat, "*Ｏ(≧∇≦)Ｏ🧃* *Pikachu-Bot* | Dime el nombre de la canción que estás buscando, ¡Pika!", m, estilo);
+    return conn.reply(m.chat, "*Ｏ(≧∇≦)Ｏ🧃\nDime el nombre de la canción que estás buscando", m, fake);
   }
 
   try {
     const search = await yts(text);
     if (!search.all.length) {
-      return m.reply("*(>_<)🧃* Pikachu no encontró nada con ese nombre...");
+      return m.reply("*(>_<)🧃*\n No se encontró nada con ese nombre...");
     }
 
     const videoInfo = search.all[0];
@@ -80,9 +80,9 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
     const thumb = (await conn.getFile(thumbnail))?.data;
 
     const infoMessage = `
-    ╔═════ ∘◦ 🐭 ⚡ ◦∘ ═════╗
-        *ＰＩＫＡＣＨＵ-ＢＯＴ*
-    ╚═════ ∘◦ ⚡ 🐭 ◦∘ ═════╝
+    ╔═════ ∘◦ 🎧 ◦∘ ═════╗
+        *YouTube Download*
+    ╚═════ ∘◦ 🎧 ◦∘ ═════╝
 
 > 🎵 *Título:* *${title}*
 > 🎬 *Duración:* ${timestamp}
