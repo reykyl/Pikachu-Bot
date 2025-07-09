@@ -139,7 +139,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
         video: { url: downloadUrl },
         fileName: `${title}.mp4`,
         mimetype: "video/mp4",
-        caption: "🎬 Aquí tienes tu video, descargado* ",
+        // caption: "🎬 Aquí tienes tu video, descargado* ",
         thumbnail: thumb,
         contextInfo: {
           externalAdReply: { 
