@@ -2,7 +2,7 @@ import { igdl } from 'ruhend-scraper';
 
 const handler = async (m, { text, conn, args }) => {
   if (!args[0]) {
-    return conn.reply(m.chat, `${emojis} ¡Pika! Necesitas enviar un enlace de Facebook para descargar.`, m, fake);
+    return conn.reply(m.chat, `${emojis} Necesitas enviar un enlace de Facebook para descargar.`, m, fake);
   }
 
   let res;
@@ -10,19 +10,19 @@ const handler = async (m, { text, conn, args }) => {
     await m.react(rwait);
     res = await igdl(args[0]);
   } catch (e) {
-    return conn.reply(m.chat, `${emojis} Pika... hubo un error al obtener los datos. ¿Seguro que el enlace es válido?`, m, fake);
+    return conn.reply(m.chat, `${emojis} hubo un error al obtener los datos. ¿Seguro que el enlace es válido?`, m, fake);
   }
 
   let result = res?.data;
   if (!result || result.length === 0) {
-    return conn.reply(m.chat, `${emojis} Pikachu no encontró nada... prueba con otro link.`, m, fake);
+    return conn.reply(m.chat, `${emojis} No se encontró nada... prueba con otro link.`, m, fake);
   }
 
   let data;
   try {
     data = result.find(i => i.resolution === "720p (HD)") || result.find(i => i.resolution === "360p (SD)");
   } catch (e) {
-    return conn.reply(m.chat, `${emojis} Pika... no se pudo procesar el video.`, m, fake);
+    return conn.reply(m.chat, `${emojis} no se pudo procesar el video.`, m, fake);
   }
 
   if (!data) {
@@ -41,13 +41,11 @@ const handler = async (m, { text, conn, args }) => {
   } = data;
 
   let infoMsg = `
-⚡─────『 𝑷𝒊𝒌𝒂𝒄𝒉𝒖 𝑩𝒐𝒕 ⚡️』─────⚡
+⚡─────『 *Resultado* 』─────⚡
 
 🎞️ *Resolución:* ${resolution}
 🌐 *Origen:* Facebook
 🔗 *Enlace:* ${args[0]}
-
-💛 ¡Pika-Pika! Aquí tienes tu video listo para ver y compartir. ¡Disfrútalo!
 
 ─────────────────────────`.trim();
 
@@ -62,7 +60,7 @@ const handler = async (m, { text, conn, args }) => {
     await m.react(done);
   } catch (e) {
     await m.react(error);
-    return conn.reply(m.chat, `${emojis} Pikachu se enredó con los cables... no se pudo enviar el video.`, m, fake);
+    return conn.reply(m.chat, `${emojis} no se pudo obtener el vídeo...`, m, fake);
   }
 };
 
