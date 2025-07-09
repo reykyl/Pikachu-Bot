@@ -75,7 +75,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
         buttons: [
           {
             buttonId: '/menu',
-            buttonText: { displayText: '✐ menu' },
+            buttonText: { displayText: `Hola, me presento soy ${taguser}` },
             type: 1
           }
         ],
@@ -104,7 +104,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
         buttons: [
           {
             buttonId: '/menu',
-            buttonText: { displayText: '✐ menu' },
+            buttonText: { displayText: `Ya sol somos *${totalMembers - 1}* miembros.` },
             type: 1
           }
         ],
