@@ -104,7 +104,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
         buttons: [
           {
             buttonId: '/menu',
-            buttonText: { displayText: `Ya sol somos *${totalMembers - 1}* miembros.` },
+            buttonText: { displayText: `Ya solo somos *${totalMembers - 1}* miembros.` },
             type: 1
           }
         ],
