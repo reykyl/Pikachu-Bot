@@ -39,7 +39,7 @@ let handler = async (m, { conn, usedPrefix, command }) => {
 │ 📅 *Lanzamiento:* ${release_date || 'Desconocida'}
 ╰─────────────๑✨๑
 `.trim()
-
+return conn.reply(m.chat, `${album?.name || 'Desconocido'}`, m)
     await conn.reply(m.chat, info, m)
   } catch (e) {
     console.error(e)
