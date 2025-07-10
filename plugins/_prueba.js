@@ -1,19 +1,26 @@
-import { generateWAMessageFromContent, proto } from '@whiskeysockets/baileys';
+// Creado por Deylin no quites creditos.
+
 
 const handler = async (m, { conn }) => {
-  await conn.sendMessage(m.chat, {
-    text: 'Gracias por usar el bot. ¿Qué deseas hacer ahora?',
-    footer: '¡Hasta pronto!',
+  await conn.sendMessage(m.chat, { 
+    text: 'Uso correcto del comando:',
     buttons: [
-      { buttonId: '#owner', buttonText: { displayText: 'Creador 🍟' }, type: 1 },
-      { buttonId: '#menu', buttonText: { displayText: 'Menu 📚' }, type: 1 }
-    ],
-    headerType: 1
-  });
+      {
+        buttonId: 'servicios',
+        buttonText: { displayText: '#serbot --code 💐' },
+      },
+      {
+        buttonId: 'contacto',
+        buttonText: { displayText: '#serbot 🐝' },
+      },
+       ],
+    footer: '¡MITSURI - KANROJI - BOT!',
+    viewOnce: true,
+  }, { quoted: m });
 };
 
-handler.help = ['m'];
 handler.tags = ['tools'];
-handler.command = ['m'];
+handler.help = ['webinfo'];
+handler.command = ['code','Code'];
 
 export default handler;
