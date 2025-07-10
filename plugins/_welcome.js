@@ -75,7 +75,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
         buttons: [
           {
             buttonId: '/menu',
-            buttonText: { displayText: `Hola, me presento soy ${global.user2}` },
+            buttonText: { displayText: `Este botón no tiene ninguna función.` },
             type: 1
           }
         ],
