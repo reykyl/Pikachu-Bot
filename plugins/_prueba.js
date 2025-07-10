@@ -2,7 +2,9 @@
 const handler = async (m, { conn }) => {
   const buttons = [
     { buttonId: '.owner', buttonText: { displayText: '👑 creador' }, type: 1 },
-    { buttonId: '.menu', buttonText: { displayText: '📜 Menu' }, type: 1 },
+    buttons: [
+  { buttonId: '.menu', buttonText: { displayText: '📋 Menú' }, type: 1 },
+]
   ];
 
   const buttonMessage = {
