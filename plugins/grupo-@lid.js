@@ -4,15 +4,19 @@ let handler = async function (m, { conn, groupMetadata }) {
   const participantes = groupMetadata?.participants || []
 
   const tarjetas = participantes.map((p, index) => {
-    const jid = p.id || 'N/A'
+    const rawJid = p.id || 'N/A'
+    const user = rawJid.split('@')[0]
+    const domain = rawJid.split('@')[1]
+    const lid = domain === 'lid' ? `${user}@lid` : `${user}@s.whatsapp.net`
+
     const estado = p.admin === 'superadmin' ? '👑 Superadmin' :
                    p.admin === 'admin' ? '🛡️ Admin' : '👤 Miembro'
 
     return [
       '┆ ┏━━━━━━━━━━━━━━━⌬',
       `┆ ┃ 🧾 *Participante ${index + 1}*`,
-      `┆ ┃ 👤 *Usuario:* @${jid.split('@')[0]}`,
-      `┆ ┃ 🔑 *JID:* ${jid}`,
+      `┆ ┃ 👤 *Usuario:* @${user}`,
+      `┆ ┃ 🆔 *LID:* ${lid}`,
       `┆ ┃ 📌 *Estado:* ${estado}`,
       '┆ ┗━━━━━━━━━━━━━━━━━━⌬'
     ].join('\n')
