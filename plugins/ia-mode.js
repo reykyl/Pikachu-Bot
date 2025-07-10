@@ -9,17 +9,20 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
     await m.react('🌟')
     conn.sendPresenceUpdate('composing', m.chat)
 
-    
     const id = m.sender || 'anon'
-    const url = `https://g-mini-ia.vercel.app/api/mode-ia?prompt=${encodeURIComponent(text)}&id=${encodeURIComponent(id)}`
+    const apiUrl = `https://g-mini-ia.vercel.app/api/mode-ia?prompt=${encodeURIComponent(text)}&id=${encodeURIComponent(id)}`
 
-    const response = await fetch(url)
-    const data = await response.json()
+    const res = await fetch(apiUrl)
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
 
-    if (!data.response) throw 'Sin respuesta válida'
-    await m.reply(data.response.trim())
-  } catch (e) {
-    console.error(e)
+    const json = await res.json()
+    const reply = json?.response?.trim()
+
+    if (!reply) throw new Error('Sin respuesta de Mode IA')
+
+    await conn.reply(m.chat, reply, m, fake)
+  } catch (err) {
+    console.error('[Mode-IA Error]', err)
     await m.react('⚡️')
     await conn.reply(m.chat, `⚡ Mode IA no puede responder a esa pregunta.`, m, fake)
   }
