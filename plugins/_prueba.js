@@ -1,23 +1,22 @@
+
 const handler = async (m, { conn }) => {
-  await conn.sendMessage(m.chat, { 
-    text: 'prueba:',
-    buttons: [
-      {
-        buttonId: '.owner',
-        buttonText: { displayText: '.creador' },
-      },
-      {
-        buttonId: '.menu',
-        buttonText: { displayText: '.menu' },
-      },
-       ],
-    footer: '¡ - BOT!',
-    viewOnce: true,
-  }, { quoted: m });
+  const buttons = [
+    { buttonId: '.owner', buttonText: { displayText: '👑 creador' }, type: 1 },
+    { buttonId: '.menu', buttonText: { displayText: '📜 Menu' }, type: 1 },
+  ];
+
+  const buttonMessage = {
+    text: '✨ *Prueba del botsito* ✨',
+    footer: '⚡ ¡Pikachu-Bot en acción!',
+    buttons: buttons,
+    headerType: 1
+  };
+
+  await conn.sendMessage(m.chat, buttonMessage, { quoted: m });
 };
 
+handler.help = ['m'];
 handler.tags = ['tools'];
-handler.help = ['webinfo'];
 handler.command = ['m'];
 
 export default handler;
