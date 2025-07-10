@@ -4,7 +4,6 @@ import { fileURLToPath } from 'url'
 import path, { join } from 'path'
 import { unwatchFile, watchFile } from 'fs'
 import chalk from 'chalk'
-import getMensajeSistema from './lib/msmwarning.js'
 import fetch from 'node-fetch'
 
 const { proto } = (await import('@whiskeysockets/baileys')).default
@@ -539,34 +538,25 @@ if (!m.fromMe) return this.sendMessage(m.chat, { react: { text: emot, key: m.key
 function pickRandom(list) { return list[Math.floor(Math.random() * list.length)]}
 }}
 
-global.dfail = (type, m, conn, comando = '') => {
-  let edadaleatoria = ['10', '28', '20', '40', '18', '21', '15', '11', '9', '17', '25'].getRandom();
-  let user2 = m.pushName || 'Anónimo';
-  let verifyaleatorio = ['registrar', 'reg', 'verificar', 'verify', 'register'].getRandom();
-  let edades = Array.from({ length: 3 }, () => ['10', '28', '20', '40', '18', '21', '15', '11', '9', '17', '25'].getRandom());
+global.dfail = (type, m, usedPrefix, command, conn) => {
 
-  let mensajes = getMensajeSistema({
-    comando,
-    verifyaleatorio,
-    user2,
-    edades
-  });
+let edadaleatoria = ['10', '28', '20', '40', '18', '21', '15', '11', '9', '17', '25'].getRandom()
+let user2 = m.pushName || 'Anónimo'
+let verifyaleatorio = ['registrar', 'reg', 'verificar', 'verify', 'register'].getRandom()
 
-  const msg = {
-    rowner: mensajes.smsrowner,
-    owner: mensajes.smsowner,
-    mods: mensajes.smsmods,
-    premium: mensajes.smspremium,
-    group: mensajes.smsgroup,
-    private: mensajes.smsprivate,
-    admin: mensajes.smsadmin,
-    botAdmin: mensajes.smsbotAdmin,
-    unreg: mensajes.smsunreg,
-    restrict: mensajes.smsrestrict
-  }[type];
-
-  if (msg) return conn.reply(m.chat, msg, m, fake).then(_ => m.react('✖️'))
-}
+const msg = {
+rowner: `『✦』El comando *${comando}* solo puede ser usado por los creadores del bot.`, 
+owner: `『✦』El comando *${comando}* solo puede ser usado por los desarrolladores del bot.`, 
+mods: `『✦』El comando *${comando}* solo puede ser usado por los moderadores del bot.`, 
+premium: `『✦』El comando *${comando}* solo puede ser usado por los usuarios premium.`, 
+group: `『✦』El comando *${comando}* solo puede ser usado en grupos.`,
+private: `『✦』El comando *${comando}* solo puede ser usado al chat privado del bot.`,
+admin: `『✦』El comando *${comando}* solo puede ser usado por los administradores del grupo.`, 
+botAdmin: `『✦』Para ejecutar el comando *${comando}* debo ser administrador del grupo.`,
+unreg: `『✦』El comando *${comando}* solo puede ser usado por los usuarios registrado, registrate usando:\n> » #${verifyaleatorio} ${user2}.${edadaleatoria}`,
+restrict: `『✦』Esta caracteristica está desactivada.`
+}[type];
+if (msg) return m.reply(msg).then(_ => m.react('✖️'))}
 
 let file = global.__filename(import.meta.url, true)
 watchFile(file, async () => {
