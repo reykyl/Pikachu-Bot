@@ -1,51 +1,62 @@
 import fs from 'fs'
 
-let respuestasPendientes = {}
+global.adivinanzasActivas = global.adivinanzasActivas || {}
 
-let handler = async (m, { command, conn }) => {
-  const json = JSON.parse(fs.readFileSync('./src/database/adivinanzas.json'))
-  const aleatoria = json[Math.floor(Math.random() * json.length)]
+let handler = async (m, { conn, command }) => {
+  if (command === 'adivinanza' || command === 'prueba') {
+    let preguntas = JSON.parse(fs.readFileSync('./src/database/adivinanzas.json'))
+    let pregunta = preguntas[Math.floor(Math.random() * preguntas.length)]
 
-  const texto = `🧠 *Adivinanza:*\n\n${aleatoria.pregunta}\n\n` + Object.entries(aleatoria.opciones).map(([num, txt]) => `*${num}.* ${txt}`).join('\n') + `\n\n📌 Responde con el número correcto etiquetando este mensaje. ¡Tienes 2 intentos!`
+    let texto = `🧠 *Adivinanza:*\n\n${pregunta.pregunta}\n\n` +
+      Object.entries(pregunta.opciones).map(([k, v]) => `*${k}.* ${v}`).join('\n') +
+      `\n\n📌 *Responde con el número correcto (1, 2 o 3) citando este mensaje.* Tienes *2 intentos*.`
 
-  const sentMsg = await m.reply(texto)
+    let enviado = await conn.reply(m.chat, texto, m)
+
+    global.adivinanzasActivas[m.sender] = {
+      pregunta,
+      intentos: 2,
+      responded: false,
+      msgId: enviado.key.id
+    }
+
+    return
+  }
+}
+
+handler.before = async (m, { conn }) => {
+  global.adivinanzasActivas = global.adivinanzasActivas || {}
+
+  let juego = global.adivinanzasActivas[m.sender]
+  if (!juego || juego.responded) return
 
   
-  respuestasPendientes[sentMsg.key.id] = {
-    user: m.sender,
-    correcta: aleatoria.respuesta_correcta,
-    intentos: 0,
-    msgId: sentMsg.key.id
+  if (!m.quoted || m.quoted.id !== juego.msgId) return
+
+  let respuestaUsuario = m.text.trim()
+
+  if (!['1', '2', '3'].includes(respuestaUsuario)) return conn.reply(m.chat, '❌ Responde con el número correcto (1, 2 o 3).', m)
+
+  if (respuestaUsuario === juego.pregunta.respuesta_correcta) {
+    juego.responded = true
+    delete global.adivinanzasActivas[m.sender]
+    return conn.reply(m.chat, `✅ *¡Correcto!* ${m.name} lo adivinó: *${juego.pregunta.opciones[respuestaUsuario]}*`, m, { mentions: [m.sender] })
+  } else {
+    juego.intentos--
+    if (juego.intentos <= 0) {
+      juego.responded = true
+      let correcta = juego.pregunta.opciones[juego.pregunta.respuesta_correcta]
+      delete global.adivinanzasActivas[m.sender]
+      return conn.reply(m.chat, `❌ *Perdiste.* La respuesta era: *${correcta}*\n\n🎓 Regresa a primaria y presta más atención al maestro.`, m)
+    } else {
+      return conn.reply(m.chat, `❌ *Incorrecto.* Te queda *${juego.intentos}* intento.`, m)
+    }
   }
 }
 
-handler.command = ['prueba', 'adivinanza', 'adivinanzas']
-handler.tags = ['rpg']
-handler.help = ['prueba', 'adivinanza', 'adivinanzas']
+handler.help = ['adivinanza', 'prueba']
+handler.tags = ['juegos']
+handler.command = ['adivinanza', 'prueba']
+handler.register = true
 
 export default handler
-
-
-export async function before(m, { conn }) {
-  if (!m.quoted || !respuestasPendientes[m.quoted.id]) return
-  const data = respuestasPendientes[m.quoted.id]
-  if (m.sender !== data.user) return // Solo quien invocó puede responder
-
-  const respuesta = m.text.trim()
-
-  if (!['1', '2', '3'].includes(respuesta)) return m.reply('❌ Responde solo con el número correcto (1, 2 o 3).')
-
-  data.intentos++
-
-  if (respuesta === data.correcta) {
-    delete respuestasPendientes[m.quoted.id]
-    return m.reply('✅ ¡Correcto! 🎉 Bien pensado.')
-  }
-
-  if (data.intentos >= 2) {
-    m.reply(`❌ Perdiste. La respuesta era *${data.correcta}*. Regresa a primaria y presta más atención al maestro. 🎓`)
-    delete respuestasPendientes[m.quoted.id]
-  } else {
-    m.reply('❌ Incorrecto. Te queda *1 intento*.')
-  }
-}
