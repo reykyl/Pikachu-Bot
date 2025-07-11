@@ -1,7 +1,7 @@
 import fs from 'fs'
 
-const usuariosPath = './database/usuarios.json'
-const pokemonesPath = './database/pokemones.json'
+const usuariosPath = '..src/database/usuarios.json'
+const pokemonesPath = '..src/database/pokemones.json'
 
 let handler = async (m, { conn, command, args }) => {
   const userId = m.sender.replace(/[^0-9]/g, '')
