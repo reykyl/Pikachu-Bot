@@ -1,0 +1,272 @@
+[
+  {
+    "pregunta": "¿Qué planeta es conocido como el planeta rojo?",
+    "opciones": {
+      "1": "Venus",
+      "2": "Marte",
+      "3": "Júpiter"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "¿Cuál es la capital de Japón?",
+    "opciones": {
+      "1": "Seúl",
+      "2": "Pekín",
+      "3": "Tokio"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "¿Qué gas necesitamos para respirar?",
+    "opciones": {
+      "1": "Nitrógeno",
+      "2": "Oxígeno",
+      "3": "Dióxido de carbono"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "¿Cuál es el metal más ligero?",
+    "opciones": {
+      "1": "Aluminio",
+      "2": "Litio",
+      "3": "Plomo"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "¿Qué parte del cuerpo humano produce insulina?",
+    "opciones": {
+      "1": "Hígado",
+      "2": "Riñón",
+      "3": "Páncreas"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "¿Qué invento revolucionó la lectura en la Edad Moderna?",
+    "opciones": {
+      "1": "La imprenta",
+      "2": "El telégrafo",
+      "3": "El microscopio"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "¿Cuántos continentes existen?",
+    "opciones": {
+      "1": "5",
+      "2": "6",
+      "3": "7"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "¿Qué animal pone huevos y también amamanta?",
+    "opciones": {
+      "1": "Murciélago",
+      "2": "Ornitorrinco",
+      "3": "Canguro"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "¿En qué año se lanzó el primer iPhone?",
+    "opciones": {
+      "1": "2005",
+      "2": "2007",
+      "3": "2009"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "¿Qué número sigue en la secuencia: 2, 4, 8, 16, __?",
+    "opciones": {
+      "1": "24",
+      "2": "30",
+      "3": "32"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "¿Qué vitamina se obtiene principalmente del sol?",
+    "opciones": {
+      "1": "Vitamina C",
+      "2": "Vitamina D",
+      "3": "Vitamina B12"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "¿Cuál es el océano más grande del planeta?",
+    "opciones": {
+      "1": "Atlántico",
+      "2": "Pacífico",
+      "3": "Índico"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "¿Qué instrumento mide la temperatura?",
+    "opciones": {
+      "1": "Termómetro",
+      "2": "Barómetro",
+      "3": "Anemómetro"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "¿Qué país tiene forma de bota?",
+    "opciones": {
+      "1": "Chile",
+      "2": "Italia",
+      "3": "México"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "¿Cuántos lados tiene un hexágono?",
+    "opciones": {
+      "1": "5",
+      "2": "6",
+      "3": "7"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "¿Cuál es el río más largo del mundo?",
+    "opciones": {
+      "1": "Amazonas",
+      "2": "Nilo",
+      "3": "Yangtsé"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "¿Quién pintó la Mona Lisa?",
+    "opciones": {
+      "1": "Picasso",
+      "2": "Van Gogh",
+      "3": "Leonardo da Vinci"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "¿Qué tipo de animal es una ballena?",
+    "opciones": {
+      "1": "Pez",
+      "2": "Mamífero",
+      "3": "Anfibio"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "¿Cuál es el sistema operativo más usado en computadoras personales?",
+    "opciones": {
+      "1": "macOS",
+      "2": "Linux",
+      "3": "Windows"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "¿En qué continente está Egipto?",
+    "opciones": {
+      "1": "Asia",
+      "2": "África",
+      "3": "Europa"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "¿Qué representa el símbolo 'O₂' según la tabla periódica?",
+    "opciones": {
+      "1": "Agua",
+      "2": "Luz solar",
+      "3": "Oxígeno molecular"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "¿Cuál es el proceso por el cual las plantas producen su alimento?",
+    "opciones": {
+      "1": "Fotosíntesis",
+      "2": "Evaporación",
+      "3": "Respiración"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "¿Cuál de estos elementos NO es un metal?",
+    "opciones": {
+      "1": "Hierro",
+      "2": "Oxígeno",
+      "3": "Cobre"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "¿Qué órgano del cuerpo humano bombea la sangre?",
+    "opciones": {
+      "1": "Cerebro",
+      "2": "Pulmón",
+      "3": "Corazón"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "¿Cuántos planetas hay en el sistema solar?",
+    "opciones": {
+      "1": "7",
+      "2": "8",
+      "3": "9"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "¿Quién escribió 'Cien años de soledad'?",
+    "opciones": {
+      "1": "Pablo Neruda",
+      "2": "Gabriel García Márquez",
+      "3": "Mario Vargas Llosa"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "¿Cuál es el animal terrestre más rápido del mundo?",
+    "opciones": {
+      "1": "Tigre",
+      "2": "León",
+      "3": "Guepardo"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "¿Qué produce vitamina D en el cuerpo humano?",
+    "opciones": {
+      "1": "El sol",
+      "2": "El agua",
+      "3": "El oxígeno"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "¿Cuál es el país más grande del mundo?",
+    "opciones": {
+      "1": "Estados Unidos",
+      "2": "China",
+      "3": "Rusia"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "¿Cuál es el idioma más hablado del mundo como lengua materna?",
+    "opciones": {
+      "1": "Inglés",
+      "2": "Chino mandarín",
+      "3": "Español"
+    },
+    "respuesta_correcta": "2"
+  }
+]
