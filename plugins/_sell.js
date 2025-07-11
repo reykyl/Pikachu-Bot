@@ -25,8 +25,8 @@ let handler = async (m, { conn }) => {
   }
 };
 
-handler.help = ['comprar', 'producto', 'compra'];
-handler.command = ['comprar', 'producto', 'compra', 'buy'];
+handler.help = ['producto', 'compra'];
+handler.command = ['producto', 'compra', 'buy'];
 handler.tags = ['ventas'];
 handler.register = true;
 
