@@ -539,5 +539,905 @@
       "3": "El recuerdo"
     },
     "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "Tiene dientes pero no muerde ¿Qué es?",
+    "opciones": {
+      "1": "Un peine",
+      "2": "Una cremallera",
+      "3": "Una sierra"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Sube pero no baja ¿Qué es?",
+    "opciones": {
+      "1": "La edad",
+      "2": "La marea",
+      "3": "El humo"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Sube pero no baja ¿Qué es?",
+    "opciones": {
+      "1": "El humo",
+      "2": "La marea",
+      "3": "La edad"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "Tiene cabeza pero no piensa ¿Qué es?",
+    "opciones": {
+      "1": "Un alfiler",
+      "2": "Una muñeca",
+      "3": "Un tornillo"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Tiene cabeza pero no piensa ¿Qué es?",
+    "opciones": {
+      "1": "Un alfiler",
+      "2": "Una muñeca",
+      "3": "Un tornillo"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Pasa pero no camina ¿Qué es?",
+    "opciones": {
+      "1": "El tiempo",
+      "2": "La suerte",
+      "3": "El viento"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Ladra pero no muerde ¿Qué es?",
+    "opciones": {
+      "1": "El trueno",
+      "2": "La radio",
+      "3": "El altavoz"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Se moja pero seca ¿Qué es?",
+    "opciones": {
+      "1": "Un pañuelo",
+      "2": "Una toalla",
+      "3": "Una esponja"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "Se moja pero seca ¿Qué es?",
+    "opciones": {
+      "1": "Un pañuelo",
+      "2": "Una toalla",
+      "3": "Una esponja"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "Tiene dientes pero no muerde ¿Qué es?",
+    "opciones": {
+      "1": "Un peine",
+      "2": "Una cremallera",
+      "3": "Una sierra"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Se moja pero seca ¿Qué es?",
+    "opciones": {
+      "1": "Un pañuelo",
+      "2": "Una esponja",
+      "3": "Una toalla"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "No tiene boca pero te habla ¿Qué es?",
+    "opciones": {
+      "1": "El eco",
+      "2": "La tele",
+      "3": "La radio"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "Tiene dientes pero no muerde ¿Qué es?",
+    "opciones": {
+      "1": "Una sierra",
+      "2": "Un peine",
+      "3": "Una cremallera"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "No tiene ojos pero ve ¿Qué es?",
+    "opciones": {
+      "1": "El radar",
+      "2": "La cámara",
+      "3": "El bastón"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "No tiene ojos pero ve ¿Qué es?",
+    "opciones": {
+      "1": "La cámara",
+      "2": "El radar",
+      "3": "El bastón"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Cae pero no se rompe ¿Qué es?",
+    "opciones": {
+      "1": "La noche",
+      "2": "La sombra",
+      "3": "La lluvia"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Se moja pero seca ¿Qué es?",
+    "opciones": {
+      "1": "Una toalla",
+      "2": "Un pañuelo",
+      "3": "Una esponja"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "No tiene boca pero te habla ¿Qué es?",
+    "opciones": {
+      "1": "El eco",
+      "2": "La radio",
+      "3": "La tele"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "Tiene dientes pero no muerde ¿Qué es?",
+    "opciones": {
+      "1": "Una cremallera",
+      "2": "Una sierra",
+      "3": "Un peine"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "Se moja pero seca ¿Qué es?",
+    "opciones": {
+      "1": "Una esponja",
+      "2": "Una toalla",
+      "3": "Un pañuelo"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Sube pero no baja ¿Qué es?",
+    "opciones": {
+      "1": "La edad",
+      "2": "La marea",
+      "3": "El humo"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Sube pero no baja ¿Qué es?",
+    "opciones": {
+      "1": "El humo",
+      "2": "La edad",
+      "3": "La marea"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "Pasa pero no camina ¿Qué es?",
+    "opciones": {
+      "1": "La suerte",
+      "2": "El viento",
+      "3": "El tiempo"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "Sube pero no baja ¿Qué es?",
+    "opciones": {
+      "1": "La edad",
+      "2": "El humo",
+      "3": "La marea"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Pasa pero no camina ¿Qué es?",
+    "opciones": {
+      "1": "El tiempo",
+      "2": "El viento",
+      "3": "La suerte"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Tiene patas pero no camina ¿Qué es?",
+    "opciones": {
+      "1": "Una mesa",
+      "2": "Un perro dormido",
+      "3": "Una alfombra"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Cae pero no se rompe ¿Qué es?",
+    "opciones": {
+      "1": "La noche",
+      "2": "La sombra",
+      "3": "La lluvia"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Se moja pero seca ¿Qué es?",
+    "opciones": {
+      "1": "Una esponja",
+      "2": "Un pañuelo",
+      "3": "Una toalla"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Sube pero no baja ¿Qué es?",
+    "opciones": {
+      "1": "El humo",
+      "2": "La marea",
+      "3": "La edad"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "Pasa pero no camina ¿Qué es?",
+    "opciones": {
+      "1": "El tiempo",
+      "2": "La suerte",
+      "3": "El viento"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Cae pero no se rompe ¿Qué es?",
+    "opciones": {
+      "1": "La lluvia",
+      "2": "La sombra",
+      "3": "La noche"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "Tiene cabeza pero no piensa ¿Qué es?",
+    "opciones": {
+      "1": "Una muñeca",
+      "2": "Un tornillo",
+      "3": "Un alfiler"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "No tiene ojos pero ve ¿Qué es?",
+    "opciones": {
+      "1": "El radar",
+      "2": "La cámara",
+      "3": "El bastón"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "Tiene patas pero no camina ¿Qué es?",
+    "opciones": {
+      "1": "Un perro dormido",
+      "2": "Una mesa",
+      "3": "Una alfombra"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "No tiene boca pero te habla ¿Qué es?",
+    "opciones": {
+      "1": "El eco",
+      "2": "La tele",
+      "3": "La radio"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "Pasa pero no camina ¿Qué es?",
+    "opciones": {
+      "1": "El viento",
+      "2": "El tiempo",
+      "3": "La suerte"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "Cae pero no se rompe ¿Qué es?",
+    "opciones": {
+      "1": "La noche",
+      "2": "La sombra",
+      "3": "La lluvia"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Tiene patas pero no camina ¿Qué es?",
+    "opciones": {
+      "1": "Un perro dormido",
+      "2": "Una alfombra",
+      "3": "Una mesa"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "Sube pero no baja ¿Qué es?",
+    "opciones": {
+      "1": "La marea",
+      "2": "La edad",
+      "3": "El humo"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "Ladra pero no muerde ¿Qué es?",
+    "opciones": {
+      "1": "La radio",
+      "2": "El altavoz",
+      "3": "El trueno"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "Tiene dientes pero no muerde ¿Qué es?",
+    "opciones": {
+      "1": "Una cremallera",
+      "2": "Una sierra",
+      "3": "Un peine"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "Tiene cabeza pero no piensa ¿Qué es?",
+    "opciones": {
+      "1": "Una muñeca",
+      "2": "Un alfiler",
+      "3": "Un tornillo"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "Cae pero no se rompe ¿Qué es?",
+    "opciones": {
+      "1": "La noche",
+      "2": "La lluvia",
+      "3": "La sombra"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "No tiene ojos pero ve ¿Qué es?",
+    "opciones": {
+      "1": "La cámara",
+      "2": "El bastón",
+      "3": "El radar"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Se moja pero seca ¿Qué es?",
+    "opciones": {
+      "1": "Un pañuelo",
+      "2": "Una esponja",
+      "3": "Una toalla"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "Se moja pero seca ¿Qué es?",
+    "opciones": {
+      "1": "Una esponja",
+      "2": "Una toalla",
+      "3": "Un pañuelo"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Cae pero no se rompe ¿Qué es?",
+    "opciones": {
+      "1": "La noche",
+      "2": "La sombra",
+      "3": "La lluvia"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Cae pero no se rompe ¿Qué es?",
+    "opciones": {
+      "1": "La noche",
+      "2": "La sombra",
+      "3": "La lluvia"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "No tiene boca pero te habla ¿Qué es?",
+    "opciones": {
+      "1": "El eco",
+      "2": "La radio",
+      "3": "La tele"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "Pasa pero no camina ¿Qué es?",
+    "opciones": {
+      "1": "La suerte",
+      "2": "El tiempo",
+      "3": "El viento"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "Se moja pero seca ¿Qué es?",
+    "opciones": {
+      "1": "Un pañuelo",
+      "2": "Una esponja",
+      "3": "Una toalla"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "Cae pero no se rompe ¿Qué es?",
+    "opciones": {
+      "1": "La lluvia",
+      "2": "La sombra",
+      "3": "La noche"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "No tiene ojos pero ve ¿Qué es?",
+    "opciones": {
+      "1": "El bastón",
+      "2": "El radar",
+      "3": "La cámara"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "Tiene dientes pero no muerde ¿Qué es?",
+    "opciones": {
+      "1": "Una sierra",
+      "2": "Un peine",
+      "3": "Una cremallera"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "Tiene patas pero no camina ¿Qué es?",
+    "opciones": {
+      "1": "Un perro dormido",
+      "2": "Una mesa",
+      "3": "Una alfombra"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "Pasa pero no camina ¿Qué es?",
+    "opciones": {
+      "1": "El viento",
+      "2": "El tiempo",
+      "3": "La suerte"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "No tiene ojos pero ve ¿Qué es?",
+    "opciones": {
+      "1": "El radar",
+      "2": "El bastón",
+      "3": "La cámara"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "Pasa pero no camina ¿Qué es?",
+    "opciones": {
+      "1": "El tiempo",
+      "2": "La suerte",
+      "3": "El viento"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Pasa pero no camina ¿Qué es?",
+    "opciones": {
+      "1": "El tiempo",
+      "2": "El viento",
+      "3": "La suerte"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Cae pero no se rompe ¿Qué es?",
+    "opciones": {
+      "1": "La noche",
+      "2": "La sombra",
+      "3": "La lluvia"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Tiene dientes pero no muerde ¿Qué es?",
+    "opciones": {
+      "1": "Una sierra",
+      "2": "Un peine",
+      "3": "Una cremallera"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "No tiene boca pero te habla ¿Qué es?",
+    "opciones": {
+      "1": "El eco",
+      "2": "La radio",
+      "3": "La tele"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "Tiene dientes pero no muerde ¿Qué es?",
+    "opciones": {
+      "1": "Una cremallera",
+      "2": "Un peine",
+      "3": "Una sierra"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "Cae pero no se rompe ¿Qué es?",
+    "opciones": {
+      "1": "La sombra",
+      "2": "La noche",
+      "3": "La lluvia"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "Tiene dientes pero no muerde ¿Qué es?",
+    "opciones": {
+      "1": "Un peine",
+      "2": "Una sierra",
+      "3": "Una cremallera"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Tiene cabeza pero no piensa ¿Qué es?",
+    "opciones": {
+      "1": "Un tornillo",
+      "2": "Una muñeca",
+      "3": "Un alfiler"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "Se moja pero seca ¿Qué es?",
+    "opciones": {
+      "1": "Una esponja",
+      "2": "Un pañuelo",
+      "3": "Una toalla"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "No tiene ojos pero ve ¿Qué es?",
+    "opciones": {
+      "1": "El radar",
+      "2": "El bastón",
+      "3": "La cámara"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "Tiene patas pero no camina ¿Qué es?",
+    "opciones": {
+      "1": "Una alfombra",
+      "2": "Una mesa",
+      "3": "Un perro dormido"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "Ladra pero no muerde ¿Qué es?",
+    "opciones": {
+      "1": "La radio",
+      "2": "El altavoz",
+      "3": "El trueno"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "Sube pero no baja ¿Qué es?",
+    "opciones": {
+      "1": "El humo",
+      "2": "La edad",
+      "3": "La marea"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "Tiene patas pero no camina ¿Qué es?",
+    "opciones": {
+      "1": "Un perro dormido",
+      "2": "Una alfombra",
+      "3": "Una mesa"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "Pasa pero no camina ¿Qué es?",
+    "opciones": {
+      "1": "El tiempo",
+      "2": "El viento",
+      "3": "La suerte"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Cae pero no se rompe ¿Qué es?",
+    "opciones": {
+      "1": "La noche",
+      "2": "La sombra",
+      "3": "La lluvia"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "No tiene boca pero te habla ¿Qué es?",
+    "opciones": {
+      "1": "El eco",
+      "2": "La radio",
+      "3": "La tele"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "Cae pero no se rompe ¿Qué es?",
+    "opciones": {
+      "1": "La lluvia",
+      "2": "La sombra",
+      "3": "La noche"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "Cae pero no se rompe ¿Qué es?",
+    "opciones": {
+      "1": "La noche",
+      "2": "La sombra",
+      "3": "La lluvia"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Tiene patas pero no camina ¿Qué es?",
+    "opciones": {
+      "1": "Un perro dormido",
+      "2": "Una mesa",
+      "3": "Una alfombra"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "Tiene cabeza pero no piensa ¿Qué es?",
+    "opciones": {
+      "1": "Un alfiler",
+      "2": "Un tornillo",
+      "3": "Una muñeca"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Ladra pero no muerde ¿Qué es?",
+    "opciones": {
+      "1": "El trueno",
+      "2": "El altavoz",
+      "3": "La radio"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "No tiene ojos pero ve ¿Qué es?",
+    "opciones": {
+      "1": "La cámara",
+      "2": "El bastón",
+      "3": "El radar"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Sube pero no baja ¿Qué es?",
+    "opciones": {
+      "1": "La edad",
+      "2": "El humo",
+      "3": "La marea"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Se moja pero seca ¿Qué es?",
+    "opciones": {
+      "1": "Un pañuelo",
+      "2": "Una toalla",
+      "3": "Una esponja"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "Tiene dientes pero no muerde ¿Qué es?",
+    "opciones": {
+      "1": "Una sierra",
+      "2": "Un peine",
+      "3": "Una cremallera"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "Se moja pero seca ¿Qué es?",
+    "opciones": {
+      "1": "Una esponja",
+      "2": "Una toalla",
+      "3": "Un pañuelo"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "No tiene ojos pero ve ¿Qué es?",
+    "opciones": {
+      "1": "La cámara",
+      "2": "El radar",
+      "3": "El bastón"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Tiene cabeza pero no piensa ¿Qué es?",
+    "opciones": {
+      "1": "Un tornillo",
+      "2": "Una muñeca",
+      "3": "Un alfiler"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "No tiene ojos pero ve ¿Qué es?",
+    "opciones": {
+      "1": "El radar",
+      "2": "La cámara",
+      "3": "El bastón"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "Tiene patas pero no camina ¿Qué es?",
+    "opciones": {
+      "1": "Una alfombra",
+      "2": "Un perro dormido",
+      "3": "Una mesa"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "No tiene boca pero te habla ¿Qué es?",
+    "opciones": {
+      "1": "La radio",
+      "2": "La tele",
+      "3": "El eco"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Tiene cabeza pero no piensa ¿Qué es?",
+    "opciones": {
+      "1": "Una muñeca",
+      "2": "Un alfiler",
+      "3": "Un tornillo"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "Tiene dientes pero no muerde ¿Qué es?",
+    "opciones": {
+      "1": "Un peine",
+      "2": "Una cremallera",
+      "3": "Una sierra"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Ladra pero no muerde ¿Qué es?",
+    "opciones": {
+      "1": "La radio",
+      "2": "El altavoz",
+      "3": "El trueno"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "Se moja pero seca ¿Qué es?",
+    "opciones": {
+      "1": "Una esponja",
+      "2": "Una toalla",
+      "3": "Un pañuelo"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Tiene patas pero no camina ¿Qué es?",
+    "opciones": {
+      "1": "Una alfombra",
+      "2": "Una mesa",
+      "3": "Un perro dormido"
+    },
+    "respuesta_correcta": "2"
+  },
+  {
+    "pregunta": "Tiene dientes pero no muerde ¿Qué es?",
+    "opciones": {
+      "1": "Una cremallera",
+      "2": "Una sierra",
+      "3": "Un peine"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "Se moja pero seca ¿Qué es?",
+    "opciones": {
+      "1": "Un pañuelo",
+      "2": "Una toalla",
+      "3": "Una esponja"
+    },
+    "respuesta_correcta": "3"
+  },
+  {
+    "pregunta": "Tiene patas pero no camina ¿Qué es?",
+    "opciones": {
+      "1": "Una mesa",
+      "2": "Una alfombra",
+      "3": "Un perro dormido"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "Tiene patas pero no camina ¿Qué es?",
+    "opciones": {
+      "1": "Una mesa",
+      "2": "Un perro dormido",
+      "3": "Una alfombra"
+    },
+    "respuesta_correcta": "1"
+  },
+  {
+    "pregunta": "No tiene ojos pero ve ¿Qué es?",
+    "opciones": {
+      "1": "El radar",
+      "2": "El bastón",
+      "3": "La cámara"
+    },
+    "respuesta_correcta": "3"
   }
 ]
