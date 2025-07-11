@@ -1,7 +1,7 @@
 import fs from 'fs'
 
-const usuariosPath = path.join('./src/database/usuarios.json')
-const pokemonesPath = path.join('./src/database/pokemones.json')
+const usuariosPath = './src/database/usuarios.json')
+const pokemonesPath = './src/database/pokemones.json')
 
 function cargarJSONSeguro(ruta, valorDefault = {}) {
   try {
