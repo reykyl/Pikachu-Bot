@@ -1,8 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
-const usuariosPath = JSON.parse(fs.readFileSync('./src/database/usuarios.json')
-const pokemonesPath = JSON.parse(fs.readFileSync('./src/src/database/pokemones.json')
+const usuariosPath = path.join('./src/database/usuarios.json')
+const pokemonesPath = path.join('./src/database/pokemones.json')
 
 function cargarJSONSeguro(ruta, defaultValue = {}) {
   try {
