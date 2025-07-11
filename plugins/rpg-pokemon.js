@@ -41,6 +41,7 @@ let handler = async (m, { conn }) => {
       nombre: pokemon.nombre,
       alias: pokemon.nombre,
       nivel: 1,
+      dinero: 5, 
       vida: pokemon.vidaBase,
       vidaMax: pokemon.vidaBase,
       fechaCaptura: new Date().toISOString()
