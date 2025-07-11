@@ -239,10 +239,6 @@
     "vidaBase": 100,
     "ataques": ["colmilloVeneno", "picotazo"]
   },
-
-  // Agrega más del 031 al 050 si quieres extender más.
-  // Te puedo enviar la continuación completa también.
-  
   {
     "id": "050",
     "nombre": "Diglett",
