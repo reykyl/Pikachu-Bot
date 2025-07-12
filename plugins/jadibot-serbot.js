@@ -6,27 +6,26 @@ let handler = async (m, { conn }) => {
     await conn.reply(jid, `⚡🐭 *¡Hola, humano! Soy Pikachu-Bot* ⚡\n\nActualmente soy un bot privado y no tengo subbots activos.\n\n¡Pero puedes tenerme en tu grupo o proyecto! 🤖✨\n\nPara más información sobre cómo alquilar mis servicios, revisa el siguiente catálogo:`, m, fake)
 
     
-    await conn.sendMessage(jid, {
-      productMessage: {
-        product: {
-          productImage: {
-            url: icono, 
-          },
-          productId: '24502048122733040',
-          title: 'Pikachu-Bot • Dev by Deylin',
-          description: 'Alquila o compra Pikachu Bot para tus grupos de WhatsApp.',
-          currencyCode: 'USD',
-          priceAmount1000: 5000, // 5.00 USD
-          retailerId: 'PikachuBotStore',
-          productImageCount: 1,
+        const productMessage = {
+      product: {
+        productImage: {
+          url: icono
         },
-        businessOwnerJid: '50433191934@s.whatsapp.net',
-      }
-    }, { quoted: m });
+        title: "Pikachu-bot - Development by Deylin ",
+        description: " Alquila o compra Pikachu Bot para tus grupos.",
+        currencyCode: "USD",
+        priceAmount1000: 5000, // 5.00 USD
+        retailerId: "1466", 
+        productId: "24502048122733040", 
+        productImageCount: 1,
+      },
+      businessOwnerJid: "50433191934@s.whatsapp.net" 
+    };
 
+    await conn.sendMessage(jid, productMessage, { messageType: 'product' });
   } catch (error) {
-    console.error('❌ Error al enviar catálogo:', error);
-    conn.reply(jid, '❌ No se pudo enviar el catálogo. Verifica que el `productId`, la imagen y el número de WhatsApp Business sean correctos.', m);
+    console.error('Error enviando catálogo:', error);
+    conn.reply(jid, '❌ No se pudo enviar el catálogo. Verifica que el productId y el número Business sean correctos.', m);
   }
 };
 
