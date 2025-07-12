@@ -31,7 +31,7 @@ let handler = async (m, { conn }) => {
                           header: "Kirito Bot",
                           title: "Compartir Kirito",
                           description: "Bot para grupos y comandos",
-                          id: "share_kirito"
+                          id: ".menu"
                         }
                       ]
                     }
