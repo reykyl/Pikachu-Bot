@@ -26,7 +26,7 @@ let handler = async (m, { conn }) => {
     await conn.sendMessage(jid, productMessage, { messageType: 'product' });
   } catch (error) {
     console.error('Error enviando catálogo:', error);
-    conn.reply(jid, '❌ No se pudo enviar el catálogo. Verifica que el productId y el número Business sean correctos.', m);
+    conn.reply(jid, '❌ No se pudo enviar el catálogo. Verifica que el productId y el número Business sean correctos.', m)
   }
 };
 
