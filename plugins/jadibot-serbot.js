@@ -4,7 +4,7 @@ let handler = async (m, { conn }) => {
 
 
   try {
-return conn.reply(m.chat, `⚡🐭 *¡Hola, humano! Soy Pikachu-Bot* ⚡\n\nPor ahora, soy un bot privado y no tengo subbots activos. Pero no te preocupes...\n\n¡Puedes tenerme en tu grupo o proyecto! 🤖✨\n\nPara más información sobre cómo alquilar mis servicios, contacta a mi creador o visita el siguiente mensaje.`, m, fake)
+const conn.reply(m.chat, `⚡🐭 *¡Hola, humano! Soy Pikachu-Bot* ⚡\n\nPor ahora, soy un bot privado y no tengo subbots activos. Pero no te preocupes...\n\n¡Puedes tenerme en tu grupo o proyecto! 🤖✨\n\nPara más información sobre cómo alquilar mis servicios, contacta a mi creador o visita el siguiente mensaje.`, m, fake)
 
     const productMessage = {
       product: {
