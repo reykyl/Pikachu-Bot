@@ -2,31 +2,33 @@ let handler = async (m, { conn }) => {
   const jid = m.chat;
 
   try {
-    // Mensaje informativo
-    await conn.reply(jid, `⚡🐭 *¡Hola, humano! Soy Pikachu-Bot* ⚡\n\nActualmente soy un bot privado y no tengo subbots activos.\n\n¡Pero puedes tenerme en tu grupo o proyecto! 🤖✨\n\nPara más información sobre cómo alquilar mis servicios, revisa el siguiente catálogo:`, m, fake)
+    
+    await conn.reply(jid, `⚡🐭 *¡Hola, humano! Soy Pikachu-Bot* ⚡\n\nActualmente soy un bot privado y no tengo subbots activos.\n\n¡Pero puedes tenerme en tu grupo o proyecto! 🤖✨\n\nPara más información sobre cómo alquilar mis servicios, revisa el siguiente catálogo:`, m, fake);
 
-    // Enviar producto (catálogo)
-    await conn.sendMessage(jid, {
+   
+    const productMessage = {
       productMessage: {
-      product: {
-        productImage: {
-          url: icono
+        product: {
+          productImage: {
+            url: icono
+          },
+          title: "Pikachu-bot - Development by Deylin",
+          description: "Alquila o compra Pikachu Bot para tus grupos.",
+          currencyCode: "USD",
+          priceAmount1000: 5000, // 5.00 USD
+          retailerId: "1466",
+          productId: "24502048122733040",
+          productImageCount: 1
         },
-        title: "Pikachu-bot - Development by Deylin ",
-        description: " Alquila o compra Pikachu Bot para tus grupos.",
-        currencyCode: "USD",
-        priceAmount1000: 5000, // 5.00 USD
-        retailerId: "1466", 
-        productId: "24502048122733040", 
-        productImageCount: 1,
-      },
-      businessOwnerJid: "50433191934@s.whatsapp.net" 
+        businessOwnerJid: "50433191934@s.whatsapp.net"
+      }
     };
 
-    await conn.sendMessage(jid, productMessage, { messageType: 'product' });
+    
+    await conn.sendMessage(jid, productMessage);
   } catch (error) {
     console.error('Error enviando catálogo:', error);
-    conn.reply(jid, '❌ No se pudo enviar el catálogo. Verifica que el productId y el número Business sean correctos.', m)
+    conn.reply(jid, '❌ No se pudo enviar el catálogo. Verifica que el productId y el número Business sean correctos.', m);
   }
 };
 
