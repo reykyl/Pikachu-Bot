@@ -2,11 +2,12 @@ let handler = async (m, { conn }) => {
   const jid = m.chat;
 
   try {
-    
+    // Mensaje informativo
     await conn.reply(jid, `⚡🐭 *¡Hola, humano! Soy Pikachu-Bot* ⚡\n\nActualmente soy un bot privado y no tengo subbots activos.\n\n¡Pero puedes tenerme en tu grupo o proyecto! 🤖✨\n\nPara más información sobre cómo alquilar mis servicios, revisa el siguiente catálogo:`, m, fake)
 
-    
-        const productMessage = {
+    // Enviar producto (catálogo)
+    await conn.sendMessage(jid, {
+      productMessage: {
       product: {
         productImage: {
           url: icono
