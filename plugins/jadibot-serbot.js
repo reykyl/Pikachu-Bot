@@ -54,7 +54,7 @@ return m.reply(`${emojis} No se han encontrado espacios para *Sub-Bots* disponib
 /*if (Object.values(global.conns).length === 30) {
 return m.reply(`${emojis} No se han encontrado espacios para *Sub-Bots* disponibles.`)
 }*/
-let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
+/*let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
 let id = `${who.split`@`[0]}`  //conn.getName(who)
 let pathpikaJadiBot = path.join(`./${jadi}/`, id)
 if (!fs.existsSync(pathpikaJadiBot)){
@@ -155,7 +155,7 @@ return
 } 
 if (qr && mcode) {
 let secret = await sock.requestPairingCode((m.sender.split`@`[0]))
-secret = secret.match(/.{1,4}/g)?.join("-")
+secret = secret.match(/.{1,4}/g)?.join("-")*/
 //if (m.isWABusiness) {
 /*txtCode = await conn.sendMessage(m.chat, {
     image: { url: imagenUrl },
