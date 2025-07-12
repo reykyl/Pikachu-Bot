@@ -15,7 +15,6 @@ let handler = async (m, { conn }) => {
   await conn.sendMessage(m.chat, { buttonsMessage: buttonMessage }, { quoted: m })
 }
 
-handler.customPrefix = ['copilot']
-handler.command = new RegExp
 
+handler.command = ['copilot']
 export default handler
