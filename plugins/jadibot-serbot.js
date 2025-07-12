@@ -135,7 +135,7 @@ if (store) {
 conversation: 'pika-Bot',
 }}}*/
 
-let sock = makeWASocket(connectionOptions)
+/*let sock = makeWASocket(connectionOptions)
 sock.isInit = false
 let isInit = true
 
@@ -163,7 +163,7 @@ secret = secret.match(/.{1,4}/g)?.join("-")*/
     quoted: m
 });*/
 
-const msg = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
+/*const msg = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
   interactiveMessage: {
     body: { text: rtx2 }, 
     footer: { text: 'Pikachu Bot by Deylin' },
