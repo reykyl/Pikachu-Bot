@@ -72,14 +72,6 @@ export async function before(m, { conn, participants, groupMetadata }) {
       await conn.sendMessage(m.chat, {
         image: { url: ppUser },
         caption: bienvenida,
-        buttons: [
-          {
-            buttonId: '/menu',
-            buttonText: { displayText: `Este botón no tiene ninguna función.` },
-            type: 1
-          }
-        ],
-        headerType: 4,
         mentions: [who]
       });
     }
@@ -101,14 +93,6 @@ export async function before(m, { conn, participants, groupMetadata }) {
       await conn.sendMessage(m.chat, {
         image: { url: ppUser },
         caption: despedida,
-        buttons: [
-          {
-            buttonId: '/menu',
-            buttonText: { displayText: `Ya solo somos *${totalMembers - 1}* miembros.` },
-            type: 1
-          }
-        ],
-        headerType: 4,
         mentions: [who]
       });
     }
