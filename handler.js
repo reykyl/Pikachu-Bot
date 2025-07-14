@@ -162,21 +162,23 @@ export async function handler(chatUpdate) {
     m.exp += Math.ceil(Math.random() * 10)
 
     
-    async function getLidFromJid(id, conn) {
-      if (id.endsWith('@lid')) return id
-      const res = await conn.onWhatsApp(id).catch(() => [])
-      return res[0]?.lid || id
-    }
-    const senderLid = await getLidFromJid(m.sender, conn)
-    const botLid = await getLidFromJid(conn.user.jid, conn)
-    const groupMetadata = m.isGroup ? ((conn.chats[m.chat] || {}).metadata || await this.groupMetadata(m.chat).catch(_ => null)) : {}
-    const participants = m.isGroup ? (groupMetadata.participants || []) : []
-    const groupUser = participants.find(p => p.id === senderLid || p.id === m.sender) || {}
-    const groupBot = participants.find(p => p.id === botLid || p.id === conn.user.jid) || {}
-
-    const isRAdmin = groupUser?.admin === "superadmin"
-    const isAdmin = isRAdmin || groupUser?.admin === "admin"
-    const isBotAdmin = !!groupBot?.admin
+    // fragmento de código creado por Destroy para yuki-Bot //
+async function getLidFromJid(id, conn) {
+if (id.endsWith('@lid')) return id
+const res = await conn.onWhatsApp(id).catch(() => [])
+return res[0]?.lid || id
+}
+const senderLid = await getLidFromJid(m.sender, conn)
+const botLid = await getLidFromJid(conn.user.jid, conn)
+const senderJid = m.sender
+const botJid = conn.user.jid
+const groupMetadata = m.isGroup ? ((conn.chats[m.chat] || {}).metadata || await this.groupMetadata(m.chat).catch(_ => null)) : {}
+const participants = m.isGroup ? (groupMetadata.participants || []) : []
+const user = participants.find(p => p.id === senderLid || p.id === senderJid) || {}
+const bot = participants.find(p => p.id === botLid || p.id === botJid) || {}
+const isRAdmin = user?.admin === "superadmin"
+const isAdmin = isRAdmin || user?.admin === "admin"
+const isBotAdmin = !!bot?.admin
 
     m.isWABusiness = global.conn.authState?.creds?.platform === 'smba' || global.conn.authState?.creds?.platform === 'smbi'
     m.isChannel = m.chat.includes('@newsletter') || m.sender.includes('@newsletter')
