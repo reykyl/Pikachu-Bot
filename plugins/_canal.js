@@ -26,7 +26,8 @@ const handler = async (m, { conn }) => {
               },
               {
         buttonId: '.creador',
-        buttonText: { displayText: 'Creador' }
+        buttonText: { displayText: 'Creador' 
+              },
             ]
           })
         })
