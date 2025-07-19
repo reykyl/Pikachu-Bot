@@ -16,19 +16,20 @@ const handler = async (m, { conn }) => {
           header: proto.Message.InteractiveMessage.Header.create({ hasMediaAttachment: false }),
           nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
             buttons: [
-              {
-                name: 'cta_url',
-                buttonParamsJson: JSON.stringify({
-                  display_text: '✐ Canal oficial',
-                  url: 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m',
-                  merchant_url: 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
-                })
-              },
-              {
-        buttonId: '.creador',
-        buttonText: { displayText: 'Creador' 
-              },
-            ]
+  {
+    name: 'cta_url',
+    buttonParamsJson: JSON.stringify({
+      display_text: '✐ Canal oficial',
+      url: 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m',
+      merchant_url: 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
+    })
+  },
+  {
+    buttonId: '.creador',
+    buttonText: { displayText: 'Creador' },
+    type: 1
+  }
+]
           })
         })
       }
