@@ -23,7 +23,10 @@ const handler = async (m, { conn }) => {
                   url: 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m',
                   merchant_url: 'https://whatsapp.com/channel/0029VawF8fBBvvsktcInIz3m'
                 })
-              }
+              },
+              {
+        buttonId: '.creador',
+        buttonText: { displayText: 'Creador' }
             ]
           })
         })
