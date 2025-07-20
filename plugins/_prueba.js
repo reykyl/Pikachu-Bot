@@ -1,25 +1,50 @@
 import fetch from 'node-fetch'
 
-let handler = async (m, { conn, args, text }) => {
-  if (!text) return m.reply('📽️ Escribe el texto para generar el video.\nEjemplo: *.videoai Un gato ninja corriendo en Tokio futurista*')
+let handler = async (m, { conn, args }) => {
+  if (!m.quoted || !/image/.test(m.quoted.mimetype)) return m.reply('📸 Responde a una imagen para convertirla al estilo anime.')
+  let img = await m.quoted.download()
 
-  m.reply('🎞️ Generando video con IA, espera 20-30 segundos...')
+  let api_token = 'TU_API_KEY_DE_REPLICATE' // Consíguelo gratis en https://replicate.com/account/api-tokens
 
-  try {
-    let res = await fetch('https://genmo-api-dummy.vercel.app/api/video', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt: text })
-    })
-
-    let json = await res.json()
-    if (!json.url) return m.reply('❌ No se pudo generar el video.')
-
-    await conn.sendFile(m.chat, json.url, 'video.mp4', `📹 Video generado con IA para:\n"${text}"`, m)
-  } catch (e) {
-    console.log(e)
-    m.reply('❌ Error al generar el video.')
+  let body = {
+    version: "c826e480eddf51f3a1c5fd4b124d9e7ee4e65092ec1984a2c1b2599cbed7a214", // AnimeGANv2
+    input: {
+      image: `data:image/jpeg;base64,${img.toString('base64')}`
+    }
   }
+
+  m.reply('🎨 Procesando imagen en estilo anime, espera unos segundos...')
+
+  let res = await fetch('https://api.replicate.com/v1/predictions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Token ${api_token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  })
+
+  let json = await res.json()
+  let getResult = json?.urls?.get
+  if (!getResult) return m.reply('❌ Error al obtener la respuesta.')
+
+  // Esperar a que termine el procesamiento
+  let outputUrl = ''
+  for (let i = 0; i < 20; i++) {
+    let poll = await fetch(getResult, {
+      headers: { 'Authorization': `Token ${api_token}` }
+    })
+    let pollJson = await poll.json()
+    if (pollJson.status === 'succeeded') {
+      outputUrl = pollJson.output
+      break
+    }
+    await new Promise(res => setTimeout(res, 3000))
+  }
+
+  if (!outputUrl) return m.reply('⏳ Se tardó mucho. Intenta más tarde.')
+
+  await conn.sendFile(m.chat, outputUrl, 'anime.jpg', '🎌 Aquí está tu imagen estilo anime', m)
 }
-handler.command = /^videoai$/i
+handler.command = /^anime(style)?$/i
 export default handler
