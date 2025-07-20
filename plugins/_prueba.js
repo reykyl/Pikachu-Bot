@@ -51,5 +51,5 @@ const token = part1 + part2 + part3;
 
   await conn.sendFile(m.chat, outputUrl, 'anime.jpg', '🎌 Aquí está tu imagen estilo anime', m)
 }
-handler.command = /^anime(style)?$/i
+handler.command = ['anim']
 export default handler
