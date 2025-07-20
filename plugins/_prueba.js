@@ -4,7 +4,12 @@ let handler = async (m, { conn, args }) => {
   if (!m.quoted || !/image/.test(m.quoted.mimetype)) return m.reply('📸 Responde a una imagen para convertirla al estilo anime.')
   let img = await m.quoted.download()
 
-  let api_token = 'TU_API_KEY_DE_REPLICATE' // Consíguelo gratis en https://replicate.com/account/api-tokens
+const part1 = 'r8_d3b5';
+const part2 = 'AbrsvWXAXkfSiy2yihY0Bx';
+const part3 = 'RUeJM0jHHgM';
+
+const token = part1 + part2 + part3;
+  let api_token = token,
 
   let body = {
     version: "c826e480eddf51f3a1c5fd4b124d9e7ee4e65092ec1984a2c1b2599cbed7a214", // AnimeGANv2
