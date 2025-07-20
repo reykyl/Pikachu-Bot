@@ -1,74 +1,25 @@
-import { generateWAMessageFromContent } from '@whiskeysockets/baileys';
+import fetch from 'node-fetch'
 
-let handler = async (m, { conn }) => {
-  const msg = generateWAMessageFromContent(m.chat, {
-    viewOnceMessage: {
-      message: {
-        interactiveMessage: {
-          body: {
-            text: "🚀 *¡Comparte este bot con tus contactos!*"
-          },
-          footer: {
-            text: "✨ Copilot para todos"
-          },
-          header: {
-            title: "🤖 Kirito-Bot MD",
-            subtitle: "Invítalo a tu grupo",
-            hasMediaAttachment: false
-          },
-          nativeFlowMessage: {
-            buttons: [
-              {
-                name: 'single_select',
-                buttonParamsJson: JSON.stringify({
-                  title: 'Compartir Kirito',
-                  sections: [
-                    {
-                      title: "Enviar a un contacto",
-                      highlight_label: "Recomendar",
-                      rows: [
-                        {
-                          header: "Kirito Bot",
-                          title: "Compartir Kirito",
-                          description: "Bot para grupos y comandos",
-                          id: ".menu"
-                        }
-                      ]
-                    }
-                  ]
-                })
-              }
-            ]
-          },
-          contextInfo: {
-            forwardedNewsletterMessageInfo: {
-              newsletterName: "Kirito Oficial",
-              newsletterJid: '120363XXXXXXX-XXXX@g.us'
-            }
-          }
-        }
-      }
-    }
-  }, {});
+let handler = async (m, { conn, args, text }) => {
+  if (!text) return m.reply('📽️ Escribe el texto para generar el video.\nEjemplo: *.videoai Un gato ninja corriendo en Tokio futurista*')
 
-  await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id });
+  m.reply('🎞️ Generando video con IA, espera 20-30 segundos...')
 
-  // Captura respuesta del botón (dentro del mismo handler)
-  conn.ev.once('messages.upsert', async ({ messages }) => {
-    const res = messages[0];
-    const selected = res?.message?.interactiveResponseMessage?.nativeFlowResponseMessage?.singleSelectReply?.selectedRowId;
+  try {
+    let res = await fetch('https://genmo-api-dummy.vercel.app/api/video', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: text })
+    })
 
-    if (selected === 'share_kirito') {
-      await conn.sendMessage(res.key.remoteJid, {
-        text: `🚀 ¡Gracias por compartir Kirito-Bot!\n\n✅ Enlace para obtenerlo:\nhttps://wa.me/504XXXXXXXX?text=Hola+quiero+el+bot+Kirito`
-      }, { quoted: res });
-    }
-  });
-};
+    let json = await res.json()
+    if (!json.url) return m.reply('❌ No se pudo generar el video.')
 
-handler.command = ['copilot'];
-handler.help = ['copilot'];
-handler.tags = ['tools'];
-handler.register = false;
-
-export default handler;
+    await conn.sendFile(m.chat, json.url, 'video.mp4', `📹 Video generado con IA para:\n"${text}"`, m)
+  } catch (e) {
+    console.log(e)
+    m.reply('❌ Error al generar el video.')
+  }
+}
+handler.command = /^videoai$/i
+export default handler
