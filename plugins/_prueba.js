@@ -1,55 +1,46 @@
-import fetch from 'node-fetch'
+import fetch from 'node-fetch';
 
 let handler = async (m, { conn, args }) => {
-  if (!m.quoted || !/image/.test(m.quoted.mimetype)) return m.reply('📸 Responde a una imagen para convertirla al estilo anime.')
-  let img = await m.quoted.download()
-
-const part1 = 'r8_d3b5';
-const part2 = 'AbrsvWXAXkfSiy2yihY0Bx';
-const part3 = 'RUeJM0jHHgM';
-
-const token = part1 + part2 + part3;
-  let api_token = token,
-
-  let body = {
-    version: "c826e480eddf51f3a1c5fd4b124d9e7ee4e65092ec1984a2c1b2599cbed7a214", // AnimeGANv2
-    input: {
-      image: `data:image/jpeg;base64,${img.toString('base64')}`
-    }
+  if (!args[0]) {
+    return conn.reply(m.chat, `🎥 *Enlace faltant*`, m);
   }
 
-  m.reply('🎨 Procesando imagen en estilo anime, espera unos segundos...')
+  const url = args[0];
+  const apiUrl = `https://mode-api-sigma.vercel.app/api/mp4?url=${encodeURIComponent(url)}`;
 
-  let res = await fetch('https://api.replicate.com/v1/predictions', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Token ${api_token}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(body)
-  })
+  try {
+    const res = await fetch(apiUrl);
+    const json = await res.json();
 
-  let json = await res.json()
-  let getResult = json?.urls?.get
-  if (!getResult) return m.reply('❌ Error al obtener la respuesta.')
-
-  // Esperar a que termine el procesamiento
-  let outputUrl = ''
-  for (let i = 0; i < 20; i++) {
-    let poll = await fetch(getResult, {
-      headers: { 'Authorization': `Token ${api_token}` }
-    })
-    let pollJson = await poll.json()
-    if (pollJson.status === 'succeeded') {
-      outputUrl = pollJson.output
-      break
+    if (!json.status || !json.video?.download?.url) {
+      throw new Error('❌ No se pudo descargar el contenido.');
     }
-    await new Promise(res => setTimeout(res, 3000))
+
+    const info = json.video;
+    const media = info.download;
+
+    const caption = `🎬 *Título:* ${info.title}\n👤 *Autor:* ${info.author}\n📦 *Tamaño:* ${media.size}\n🎚️ *Calidad:* ${media.quality}\n📁 *Tipo:* ${media.extension.toUpperCase()}`;
+
+    await conn.sendMessage(m.chat, { image: { url: info.image }, caption }, { quoted: m });
+
+    await conn.sendMessage(
+      m.chat,
+      {
+        video: { url: media.url },
+        mimetype: 'video/mp4',
+        fileName: media.filename || `${info.title}.mp4`,
+        caption: caption
+      },
+      { quoted: m }
+    );
+  } catch (e) {
+    console.error(e);
+    conn.reply(m.chat, `⚠️ *Error al descargar el video.*\nEs posible que el enlace esté roto o el video sea privado.`, m);
   }
+};
 
-  if (!outputUrl) return m.reply('⏳ Se tardó mucho. Intenta más tarde.')
+handler.help = ['ytmp4 <url>'];
+handler.tags = ['descargas'];
+handler.command = ['ytmp4'];
 
-  await conn.sendFile(m.chat, outputUrl, 'anime.jpg', '🎌 Aquí está tu imagen estilo anime', m)
-}
-handler.command = ['anim']
-export default handler
+export default handler;
