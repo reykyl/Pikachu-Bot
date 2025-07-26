@@ -32,10 +32,10 @@ let handler = async (m, { conn }) => {
     return m.reply(`🧢 Ya tienes un Pokémon: *${usuarios[userId].pokemon.nombre}*.\nUsa *.perfil* para verlo.`)
   }
 
-  const ataques = pokemones.ataques?.length
+ /* const ataques = pokemones.ataques?.length
     ? pokemones.ataques.map(a => `• ${a}`).join('\n')
     : 'No tiene ataques definidos.'
-
+ */
   const pokemon = pokemones[Math.floor(Math.random() * pokemones.length)]
 
   usuarios[userId] = {
@@ -57,7 +57,7 @@ let handler = async (m, { conn }) => {
   const texto = `🎉 Lanzaste una Pokébola y atrapaste a *${pokemon.nombre}*!\n\n` +
                 `📛 Tipo: ${pokemon.tipo.join(', ')}\n` +
                 `❤️ Vida: ${pokemon.vidaBase}\n\n` +
-                `🗡️ *Ataques:*\n${ataques}` +
+                `🗡️ *Ataques:*\n${pokemon.ataques}\n\n` +
                 `Usa *.perfil* para ver a tu mascota.`
 
   await conn.sendFile(m.chat, pokemon.imagen, 'pokemon.jpg', texto, m)
