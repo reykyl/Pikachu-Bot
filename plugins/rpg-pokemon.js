@@ -32,8 +32,8 @@ let handler = async (m, { conn }) => {
     return m.reply(`🧢 Ya tienes un Pokémon: *${usuarios[userId].pokemon.nombre}*.\nUsa *.perfil* para verlo.`)
   }
 
-  const ataques = pokeData?.ataques?.length
-    ? pokeData.ataques.map(a => `• ${a}`).join('\n')
+  const ataques = pokemones.ataques?.length
+    ? pokemones.ataques.map(a => `• ${a}`).join('\n')
     : 'No tiene ataques definidos.'
 
   const pokemon = pokemones[Math.floor(Math.random() * pokemones.length)]
